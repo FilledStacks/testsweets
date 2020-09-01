@@ -14,9 +14,6 @@ dependencies:
   freezed_annotation:
   json_annotation: ^3.0.1
 
-  testsweets:
-    path: ../testsweets/
-
 dev_dependencies:
   test:
   build_runner:
