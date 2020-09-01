@@ -1,21 +1,22 @@
 name: testsweets_generator
 description: A new Flutter package project.
 version: 0.0.1
-author:
-homepage:
+homepage: https://github.com/FilledStacks/testsweets
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  build:
-  source_gen:
-  analyzer:
-  freezed_annotation:
+  build: ^1.3.0
+  source_gen: ^0.9.6
+  analyzer: ^0.39.5
+  freezed_annotation: ^0.11.0+1
   json_annotation: ^3.0.1
+  glob: ^1.2.0
+  path: ^1.7.0
 
 dev_dependencies:
-  test:
-  build_runner:
-  freezed:
+  test: ^1.15.3
+  build_runner: 
+  freezed: ^0.11.6
   json_serializable: ^3.3.0
