@@ -1,0 +1,24 @@
+name: testsweets_generator
+description: A new Flutter package project.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  build:
+  source_gen:
+  analyzer:
+  freezed_annotation:
+  json_annotation: ^3.0.1
+
+  testsweets:
+    path: ../testsweets/
+
+dev_dependencies:
+  test:
+  build_runner:
+  freezed:
+  json_serializable: ^3.3.0

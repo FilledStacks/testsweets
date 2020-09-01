@@ -1,0 +1,13 @@
+name: testsweets
+description: A new Flutter package project.
+version: 0.0.1
+author:
+homepage:
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  http: ^0.12.1
+
+dev_dependencies:
