@@ -3,17 +3,15 @@ class KeyExtractor {
   const KeyExtractor();
 
   List<String> getKeysFromString(String value) {
-    //
+    // regex needs improvement to ignore commented out keys
     RegExp keyRegex = new RegExp(
-      r"(?:Key\('([0-9a-zA-z@]+)'\))",
+      r"(?:\sKey\('([0-9a-zA-z@]+)'\))",
       caseSensitive: false,
       multiLine: true,
     );
 
     var allMatchedKeys = keyRegex.allMatches(value);
 
-    return allMatchedKeys
-        .map((match) => match.group(0).substring(5, match.group(0).length - 2))
-        .toList();
+    return allMatchedKeys.map((match) => match.group(1)).toList();
   }
 }
