@@ -1,6 +1,6 @@
 builders:
   automation_key_generator:
-    import: "package:testsweets_generator/builder.dart"
+    import: "package:testsweets_generator/testsweets_generator.dart"
     builder_factories: ["automationKeyGenerator"]
     build_extensions: { "$lib$": ["all_files.txt"] }
     auto_apply: dependents
