@@ -3,10 +3,13 @@ class KeyExtractor {
   const KeyExtractor();
 
   List<String> getKeysFromString(String value) {
-    // regex needs improvement to ignore commented out keys
+    // remove all comments to filter out unwanted/commented out keys
+    RegExp commentsRegex = RegExp(r'\/\*[\s\S]*?\*\/|\/\/.*');
+    value = value.replaceAll(commentsRegex, '');
+
     RegExp keyRegex = new RegExp(
-      r"(?:\sKey\('([0-9a-zA-z@]+)'\))",
-      caseSensitive: false,
+      r"(?:[\s=:]Key\('([0-9a-zA-z@]+)'\))",
+      caseSensitive: true,
       multiLine: true,
     );
 

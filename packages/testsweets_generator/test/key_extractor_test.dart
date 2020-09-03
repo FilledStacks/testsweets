@@ -20,6 +20,15 @@ void main() {
         final keysInCodeWithNoKeys = [];
         expect(keys, keysInCodeWithNoKeys);
       });
+
+      test(
+          'When called with COMMENTED keys in string, should not return those keys',
+          () {
+        var extractor = KeyExtractor();
+        var keys = extractor.getKeysFromString(CodeWithCommentedKeys);
+        final keysInCodeWithTwoKeys = ['text_counter', 'touchable_counter'];
+        expect(keys, keysInCodeWithTwoKeys);
+      });
     });
   });
 }
