@@ -12,6 +12,6 @@ class KeyExtractor {
 
     var allMatchedKeys = keyRegex.allMatches(value);
 
-    return allMatchedKeys.map((match) => match.group(1)).toList();
+    return allMatchedKeys.map((match) => match.group(1)).toSet().toList();
   }
 }
