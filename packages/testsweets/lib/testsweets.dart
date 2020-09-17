@@ -1,7 +1,9 @@
 library testsweets;
 
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:testsweets/widget_inspector.dart';
 
 /// Uploads the automation Keys in the given list to the user project with the given
 /// [projectId].
@@ -56,5 +58,14 @@ Future<bool> _uploadAutomationKeys(
     print(
         '\u001b[36mTestSweets: Successfully uploaded automation keys.\u001b[0m');
     return true;
+  }
+}
+
+class TestSweets {
+  /// Creates an tranparent overlay which can be turned on 
+  /// to inspect widgets and their key names
+  static Widget builder(BuildContext context, Widget child,
+      {bool enabled = true}) {
+    return enabled ? WidgetInspectorView(child: child) : child;
   }
 }
