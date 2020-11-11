@@ -1,6 +1,7 @@
 library testsweets;
 
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:testsweets/widget_inspector.dart';
@@ -66,6 +67,6 @@ class TestSweets {
   /// to inspect widgets and their key names
   static Widget builder(BuildContext context, Widget child,
       {bool enabled = true}) {
-    return enabled ? WidgetInspectorView(child: child) : child;
+    return enabled && kDebugMode ? WidgetInspectorView(child: child) : child;
   }
 }
