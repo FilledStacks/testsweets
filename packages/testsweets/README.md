@@ -63,7 +63,7 @@ Next up we'll add the automation keys that will be used during the scripting. Th
 - **view**: This should ONLY be used for widgets that take up an entire navigation entry
 - **input**: This is an input field that takes user input from the keyboard
 
-We have a specific format for each widget key that is as follows, [viewName]_[widgetType]_[widgetName]. Lets go over those parts 1 by 1:
+We have a specific format for each widget key that is as follows, [viewName]\_[widgetType]\_[widgetName]. Lets go over those parts 1 by 1:
 
 - **viewName**: Is the name of the view without the word view in it. So if you're on the `LoginView` you'll write this as `login`.
 - **widgetType**: This is one of the 6 types of widgets as defined above.
