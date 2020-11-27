@@ -12,7 +12,7 @@ void main() {
       });
 
       test(
-          'When called with string with only 1 underscore, should throw exception with InvalidFormatExceptionMessage as message',
+          'When called with string with only 1 underscore and the last word is not "view", should throw exception with InvalidFormatExceptionMessage as message',
           () {
         var creator = const AutomationKeyCreator();
         var wrongKey = 'abc_abc';
@@ -23,6 +23,25 @@ void main() {
                 e.message ==
                     InvalidFormatExceptionMessage +
                         DynamicFormatMessage.replaceAll('{0}', wrongKey))));
+      });
+
+      test('When called with login_view should return login as VIEW', () {
+        var creator = const AutomationKeyCreator();
+        var automationkey = creator.getAutomationKeyFromKeyValue('login_view');
+
+        expect(automationkey.view, 'login');
+      });
+      test('When called with login_view should return view as TYPE', () {
+        var creator = const AutomationKeyCreator();
+        var automationkey = creator.getAutomationKeyFromKeyValue('login_view');
+
+        expect(automationkey.type, WidgetType.view);
+      });
+      test('When called with login_view should return login as NAME', () {
+        var creator = const AutomationKeyCreator();
+        var automationkey = creator.getAutomationKeyFromKeyValue('login_view');
+
+        expect(automationkey.name, 'login');
       });
 
       test(

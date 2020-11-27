@@ -2,6 +2,8 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:testsweets_generator/src/exceptions/key_format_exception.dart';
 
 import 'data_models/data_models.dart';
+import 'data_models/data_models.dart';
+import 'data_models/data_models.dart';
 
 const String InvalidFormatExceptionMessage =
     '''The key passed in is not in a valid format. Please check the documentation for correct format.
@@ -36,6 +38,14 @@ class AutomationKeyCreator {
     }
 
     var keyParts = key.split('_');
+    if (keyParts.length == 2 && keyParts.last.toLowerCase() == 'view') {
+      return AutomationKey(
+        view: keyParts.first,
+        type: WidgetType.view,
+        name: keyParts.first,
+      );
+    }
+
     if (keyParts.length != 3)
       throw KeyFormatException(InvalidFormatExceptionMessage +
           DynamicFormatMessage.replaceAll('{0}', key));
