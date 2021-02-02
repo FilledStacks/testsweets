@@ -52,8 +52,8 @@ class _BuildService implements BuildService {
     final runningFlutterProcess = await flutterProcess
         .startWith(args: ['build', appType, '--$buildMode']);
 
-    final processStdoutCollector = UtfCollectingStreamConsumer(stdout);
-    final processStderrCollector = UtfCollectingStreamConsumer(stderr);
+    final processStdoutCollector = Utf8CollectingStreamConsumer(stdout);
+    final processStderrCollector = Utf8CollectingStreamConsumer(stderr);
 
     await runningFlutterProcess.stdout.pipe(processStdoutCollector);
     await runningFlutterProcess.stderr.pipe(processStderrCollector);
@@ -95,9 +95,9 @@ class BuildError extends Error {
   int get hashCode => message.hashCode;
 }
 
-class UtfCollectingStreamConsumer implements StreamConsumer<List<int>> {
+class Utf8CollectingStreamConsumer implements StreamConsumer<List<int>> {
   final IOSink relayTo;
-  UtfCollectingStreamConsumer([this.relayTo]);
+  Utf8CollectingStreamConsumer([this.relayTo]);
 
   List<int> collectedCodeUnits = [];
 
@@ -110,7 +110,7 @@ class UtfCollectingStreamConsumer implements StreamConsumer<List<int>> {
   }
 
   @override
-  Future close() {}
+  Future close() async {}
 
   String collectAsString() {
     return utf8.decode(collectedCodeUnits);
