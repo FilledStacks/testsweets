@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
+import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:testsweets/src/locator.dart';
-import 'package:testsweets/src/services/build_service.dart';
-import 'package:testsweets/src/services/file_system_service.dart';
-import 'package:testsweets/src/services/runnable_process.dart';
+import '../bin/src/locator.dart';
+import '../bin/src/services/build_service.dart';
+import '../bin/src/services/file_system_service.dart';
+import '../bin/src/services/runnable_process.dart';
 
 class StubbedProcess implements Process {
   final int sExitCode;
@@ -179,7 +179,7 @@ void main() {
               sStdErr: '',
               sStdOut: "RunningGradle task 'assembleProfile'...\n"
                   "Running Gradle task 'assembleProfile'... Done           378,6s\n"
-                  r"Built build\app\outputs\flutter-apk\abc.apk"));
+                  r"Built build\app\outputs\flutter-apk\abc.apk."));
 
           final instance = BuildService.makeInstance();
           final buildInfo = await instance.build(

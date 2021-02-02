@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class BuildInfo {
   final String pathToBuild;
 
@@ -14,4 +12,14 @@ class BuildInfo {
   final String version;
 
   BuildInfo({this.pathToBuild, this.buildMode, this.appType, this.version});
+
+  @override
+  String toString() {
+    return {
+      'pathToBuild': pathToBuild,
+      'buildMode': buildMode,
+      'appType': appType,
+      'version': version,
+    }.toString();
+  }
 }

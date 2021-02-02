@@ -66,7 +66,7 @@ Future<bool> _uploadAutomationKeys(
 }
 
 class TestSweets {
-  /// Creates an tranparent overlay which can be turned on 
+  /// Creates an tranparent overlay which can be turned on
   /// to inspect widgets and their key names
   static Widget builder(BuildContext context, Widget child,
       {bool enabled = true}) {

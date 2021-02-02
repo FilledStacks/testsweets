@@ -2,11 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
-import 'package:testsweets/src/locator.dart';
-import 'package:testsweets/src/models/build_info.dart';
-import 'package:testsweets/src/services/file_system_service.dart';
-import 'package:testsweets/src/services/runnable_process.dart';
+import 'package:meta/meta.dart';
+
+import '../locator.dart';
+import '../models/build_info.dart';
+import 'file_system_service.dart';
+import 'runnable_process.dart';
 import 'package:yaml/yaml.dart';
 
 abstract class BuildService {
@@ -78,7 +79,10 @@ class _BuildService implements BuildService {
 
     if (match == null) throw BuildError('Could not find matches for $regexp');
 
-    return processStdout.substring(match.start, match.end);
+    final ret = processStdout.substring(match.start, match.end);
+    if (ret.endsWith('.')) return ret.substring(0, ret.length - 1);
+
+    return ret;
   }
 }
 
