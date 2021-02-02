@@ -11,4 +11,10 @@ dependencies:
     sdk: flutter
   http: ^0.12.1
   auto_size_text: ^2.1.0
+  yaml: ^2.2.1
+  path:
+  get_it:
 
+dev_dependencies:
+  mockito:
+  test: any
