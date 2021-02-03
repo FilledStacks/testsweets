@@ -8,6 +8,7 @@ import '../bin/src/locator.dart';
 import '../bin/src/services/build_service.dart';
 import '../bin/src/services/file_system_service.dart';
 import '../bin/src/services/runnable_process.dart';
+import 'helpers.dart';
 
 class StubbedProcess implements Process {
   final int sExitCode;
@@ -19,7 +20,6 @@ class StubbedProcess implements Process {
       @required this.sStdOut});
 
   @override
-  // TODO: implement exitCode
   Future<int> get exitCode async => sExitCode;
 
   @override
@@ -58,16 +58,6 @@ class StubbedRunnableProcess implements RunnableProcess {
     startedWithArgs = args;
     return main;
   }
-}
-
-class MockFileSystemService extends Mock implements FileSystemService {}
-
-class MockFlutterProcess extends Mock implements FlutterProcess {}
-
-void setUpLocatorForTesting() {
-  locator
-      .registerLazySingleton<FileSystemService>(() => MockFileSystemService());
-  locator.registerLazySingleton<FlutterProcess>(() => MockFlutterProcess());
 }
 
 const String ksPubspecFileWithNoVersion = """
