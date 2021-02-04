@@ -1,15 +1,9 @@
+import '../locator.dart';
+import 'http_service.dart';
+
 abstract class CloudFunctionsService {
-  /// Gets a signed url for PUTing data to a new build file in cloud storage.
-  ///
-  /// The build file has the name `$guid/application.build` and is an object of the
-  /// bucket with name `$projectId_testsweets_builds`. $guid is randomly generated
-  /// string that is unique for this build file.
-  ///
-  /// The bucket `$projectId_testsweets_builds` will be created if it does not
-  /// exist.
-  ///
-  /// The returned signed url expires after 20 minutes.
-  Future<String> getV4BuildUploadSignedUrl(String projectId, String apiKey);
+  Future<String> getV4BuildUploadSignedUrl(String projectId, String apiKey,
+      [Map extensionHeaders = const <String, String>{}]);
 
   factory CloudFunctionsService.makeInstance() {
     return _CloudFunctionsService();
@@ -17,9 +11,24 @@ abstract class CloudFunctionsService {
 }
 
 class _CloudFunctionsService implements CloudFunctionsService {
+  final httpService = locator<HttpService>();
+
   @override
-  Future<String> getV4BuildUploadSignedUrl(String projectId, String apiKey) {
-    // TODO: implement getV4BuildUploadSignedUrl
-    throw UnimplementedError();
+  Future<String> getV4BuildUploadSignedUrl(String projectId, String apiKey,
+      [Map extensionHeaders = const <String, String>{}]) async {
+    final endpoint =
+        'https://us-central1-testsweets-38348.cloudfunctions.net/getV4BuildUploadSignedUrl';
+    final ret = await httpService.postJson(to: endpoint, body: {
+      'projectId': projectId,
+      'apiKey': apiKey,
+      'extensionHeaders': extensionHeaders,
+    });
+
+    if (ret.statusCode == 500) {
+      throw ret.parseBodyAsJsonMap();
+    } else if (ret.statusCode == 200) {
+      return ret.parseBodyAsJsonMap()['url'];
+    } else
+      throw ret.body;
   }
 }

@@ -7,6 +7,7 @@ import 'services/runnable_process.dart';
 import 'services/http_service.dart';
 import 'services/time_service.dart';
 import 'services/cloud_functions_service.dart';
+import 'services/upload_service.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -22,4 +23,6 @@ void setupLocator() {
   locator.registerLazySingleton<TimeService>(() => TimeService());
   locator.registerLazySingleton<CloudFunctionsService>(
       () => CloudFunctionsService.makeInstance());
+  locator
+      .registerLazySingleton<UploadService>(() => UploadService.makeInstance());
 }

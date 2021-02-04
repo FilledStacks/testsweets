@@ -25,9 +25,6 @@ class _UploadService implements UploadService {
   @override
   Future<void> uploadBuild(
       BuildInfo buildInfo, String projectId, String apiKey) async {
-    final endpoint = await cloudFunctionsService.getV4BuildUploadSignedUrl(
-        projectId, apiKey);
-
     final buildFileContents =
         fileSystemService.readFileAsBytesSync(buildInfo.pathToBuild);
 
@@ -41,7 +38,12 @@ class _UploadService implements UploadService {
       'x-goog-meta-appType': buildInfo.appType,
     };
 
-    await httpService.putBinary(
+    final endpoint = await cloudFunctionsService.getV4BuildUploadSignedUrl(
+        projectId, apiKey, headers);
+
+    final ret = await httpService.putBinary(
         to: endpoint, data: buildFileContents, headers: headers);
+
+    if (ret.body.contains('<Error>')) throw ret.body;
   }
 }

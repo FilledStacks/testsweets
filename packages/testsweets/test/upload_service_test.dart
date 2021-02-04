@@ -46,7 +46,8 @@ void main() {
 
       setUp(() {
         final cloudFunctionsService = locator<CloudFunctionsService>();
-        when(cloudFunctionsService.getV4BuildUploadSignedUrl(projectId, apiKey))
+        when(cloudFunctionsService.getV4BuildUploadSignedUrl(
+                projectId, apiKey, expectedObjectHeaders))
             .thenAnswer((_) async => dummySignedUrl);
 
         final fileSystemService = locator<FileSystemService>();

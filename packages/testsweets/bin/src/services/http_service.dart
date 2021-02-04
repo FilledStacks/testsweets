@@ -10,12 +10,10 @@ abstract class HttpService {
   Future<SimpleHttpResponse> putBinary(
       {@required String to,
       @required Uint8List data,
-      Map<String, String> headers = const {}});
+      Map<String, String> headers});
 
   Future<SimpleHttpResponse> postJson(
-      {@required String to,
-      @required Map<String, dynamic> body,
-      headers = const {}});
+      {@required String to, @required Map<String, dynamic> body, headers});
 
   factory HttpService.makeInstance() {
     return _HttpService();
@@ -35,9 +33,8 @@ class SimpleHttpResponse {
 class _HttpService implements HttpService {
   @override
   Future<SimpleHttpResponse> putBinary(
-      {String to,
-      Uint8List data,
-      Map<String, String> headers = const {}}) async {
+      {String to, Uint8List data, Map<String, String> headers}) async {
+    headers = headers ?? Map<String, String>();
     headers.putIfAbsent(
         HttpHeaders.contentTypeHeader, () => 'application/octet-stream');
     final response = await http.put(to, body: data, headers: headers);
@@ -47,10 +44,12 @@ class _HttpService implements HttpService {
 
   @override
   Future<SimpleHttpResponse> postJson(
-      {String to, Map<String, dynamic> body, headers = const {}}) async {
+      {String to, Map<String, dynamic> body, headers}) async {
+    headers = headers ?? Map<String, String>();
     headers.putIfAbsent(
         HttpHeaders.contentTypeHeader, () => 'application/json');
-    final response = await http.put(to, body: body, headers: headers);
+    final response =
+        await http.put(to, body: json.encode(body), headers: headers);
 
     return SimpleHttpResponse(response.statusCode, response.body);
   }
