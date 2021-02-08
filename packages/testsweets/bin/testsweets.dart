@@ -16,8 +16,14 @@ Future<void> main(List<String> args) async {
   setupLocator();
   final flutterApp = locator<FileSystemService>().fullPathToWorkingDirectory;
 
-  final buildInfo = await locator<BuildService>()
-      .build(flutterApp: flutterApp, appType: args[1], buildMode: args[2]);
+  final extraArgs = args.length > 5 ? args.sublist(5) : <String>[];
+
+  final buildInfo = await locator<BuildService>().build(
+    flutterApp: flutterApp,
+    appType: args[1],
+    buildMode: args[2],
+    extraFlutterProcessArgs: extraArgs,
+  );
 
   print('Uploading build ...');
 

@@ -16,10 +16,12 @@ abstract class BuildService {
   /// The directory [flutterApp] must contain a `pubspec.yaml` file which
   /// must contain the `version` field. An error is thrown if the `version`
   /// is not given in the pubspec.yaml file.
-  Future<BuildInfo> build(
-      {@required String flutterApp,
-      @required String appType,
-      @required String buildMode});
+  Future<BuildInfo> build({
+    @required String flutterApp,
+    @required String appType,
+    @required String buildMode,
+    List<String> extraFlutterProcessArgs,
+  });
 
   factory BuildService.makeInstance() {
     return _BuildService();
@@ -32,7 +34,10 @@ class _BuildService implements BuildService {
 
   @override
   Future<BuildInfo> build(
-      {String flutterApp, String appType, String buildMode}) async {
+      {String flutterApp,
+      String appType,
+      String buildMode,
+      List<String> extraFlutterProcessArgs = const <String>[]}) async {
     final pathToPubspecFile = '$flutterApp\\pubspec.yaml';
     if (!fileSystemService.doesFileExist(pathToPubspecFile)) {
       throw BuildError(
@@ -49,8 +54,8 @@ class _BuildService implements BuildService {
           'Versions are used by Test Sweets to keep track of builds. Please add a version for this app.');
     }
 
-    final runningFlutterProcess = await flutterProcess
-        .startWith(args: ['build', appType, '--$buildMode']);
+    final runningFlutterProcess = await flutterProcess.startWith(
+        args: ['build', appType, '--$buildMode', ...extraFlutterProcessArgs]);
 
     final processStdoutCollector = Utf8CollectingStreamConsumer(stdout);
     final processStderrCollector = Utf8CollectingStreamConsumer(stderr);
