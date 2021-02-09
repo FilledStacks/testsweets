@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -37,9 +38,30 @@ class _HttpService implements HttpService {
     headers = headers ?? Map<String, String>();
     headers.putIfAbsent(
         HttpHeaders.contentTypeHeader, () => 'application/octet-stream');
-    final response = await http.put(to, body: data, headers: headers);
 
-    return SimpleHttpResponse(response.statusCode, response.body);
+    final client = HttpClient();
+    final request = await client.putUrl(Uri.parse(to));
+    headers.forEach((key, value) => request.headers.add(key, value));
+
+    int numberOfBytesWritten = 0;
+    Stopwatch counter = Stopwatch();
+    data.forEach((byte) {
+      counter.start();
+
+      numberOfBytesWritten++;
+      request.add([byte]);
+
+      if (counter.elapsed > Duration(seconds: 1)) {
+        counter.reset();
+        print(
+            "Uploaded ${(numberOfBytesWritten / data.length * 100).ceil()}% of ${data.length}");
+      }
+    });
+
+    final response = await request.close();
+
+    return SimpleHttpResponse(
+        response.statusCode, await response.transform(utf8.decoder).join());
   }
 
   @override
