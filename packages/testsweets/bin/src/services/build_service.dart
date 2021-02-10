@@ -98,6 +98,9 @@ class BuildError extends Error {
   operator ==(other) => other is BuildError && other.message == this.message;
 
   int get hashCode => message.hashCode;
+
+  @override
+  String toString() => '$BuildError: $message';
 }
 
 class Utf8CollectingStreamConsumer implements StreamConsumer<List<int>> {
