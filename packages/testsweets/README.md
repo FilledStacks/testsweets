@@ -156,7 +156,7 @@ Now you can open up the TestSweets Desktop application and start your scripting.
 
 ## Uploading builds to the Test Sweets application
 
-Once you have written your scripts you will need to upload a build to test with them. This is done by building your application in debug or profile mode and uploading it to the Test Sweets storage backend. To build and upload your application navigate to the folder containing your `pubspec.yaml` file and run the `testsweets` package as follows:
+Once you have written your scripts you will need to upload a build to test with them. This is done by building your application in debug or profile mode and uploading it to the Test Sweets backend. To build and upload your application navigate to the folder containing your `pubspec.yaml` file and run the `testsweets` package as follows:
 
 ```bat
 flutter pub run testsweets upload apk profile {projectId} {apiKey} -t lib/main_profile.dart
