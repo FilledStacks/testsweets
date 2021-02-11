@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
@@ -10,7 +9,8 @@ abstract class HttpService {
   /// Makes a PUT request to the endpoint given by [to].
   Future<SimpleHttpResponse> putBinary(
       {@required String to,
-      @required Uint8List data,
+      @required Stream<List<int>> data,
+      @required int contentLength,
       Map<String, String> headers});
 
   Future<SimpleHttpResponse> postJson(
@@ -34,31 +34,34 @@ class SimpleHttpResponse {
 class _HttpService implements HttpService {
   @override
   Future<SimpleHttpResponse> putBinary(
-      {String to, Uint8List data, Map<String, String> headers}) async {
+      {String to,
+      Stream<List<int>> data,
+      int contentLength,
+      Map<String, String> headers}) async {
     headers = headers ?? Map<String, String>();
     headers.putIfAbsent(
         HttpHeaders.contentTypeHeader, () => 'application/octet-stream');
 
-    final client = HttpClient();
-    final request = await client.putUrl(Uri.parse(to));
-    headers.forEach((key, value) => request.headers.add(key, value));
+    final request = await HttpClient().putUrl(Uri.parse(to));
+    headers.forEach((key, value) => request.headers.set(key, value));
 
     int numberOfBytesWritten = 0;
     Stopwatch counter = Stopwatch();
-    data.forEach((byte) {
+    final response = await data.map((chunk) {
       counter.start();
 
-      numberOfBytesWritten++;
-      request.add([byte]);
+      numberOfBytesWritten += chunk.length;
 
       if (counter.elapsed > Duration(seconds: 1)) {
         counter.reset();
         print(
-            "Uploaded ${(numberOfBytesWritten / data.length * 100).ceil()}% of ${data.length}");
+            "Uploaded ${(numberOfBytesWritten / contentLength * 100).ceil()}% of $contentLength");
       }
-    });
 
-    final response = await request.close();
+      return chunk;
+    }).pipe(StreamConsumerWithCallbacks(request, onFinalise: () {
+      print('Finalising upload...');
+    }));
 
     return SimpleHttpResponse(
         response.statusCode, await response.transform(utf8.decoder).join());
@@ -74,5 +77,22 @@ class _HttpService implements HttpService {
         await http.put(to, body: json.encode(body), headers: headers);
 
     return SimpleHttpResponse(response.statusCode, response.body);
+  }
+}
+
+class StreamConsumerWithCallbacks implements StreamConsumer<List<int>> {
+  final void Function() onFinalise;
+  final StreamConsumer relayTo;
+  StreamConsumerWithCallbacks(this.relayTo, {this.onFinalise});
+
+  @override
+  Future addStream(Stream stream) {
+    return relayTo?.addStream(stream);
+  }
+
+  @override
+  Future close() {
+    onFinalise();
+    return relayTo?.close();
   }
 }

@@ -7,7 +7,9 @@ abstract class FileSystemService {
 
   String readFileAsStringSync(String path);
 
-  Uint8List readFileAsBytesSync(String path);
+  Stream<List<int>> openFileForReading(String path);
+
+  int getFileSizeInBytes(String path);
 
   String get fullPathToWorkingDirectory;
 
@@ -25,8 +27,12 @@ class _FileSystemService implements FileSystemService {
     return File(path).readAsStringSync();
   }
 
-  Uint8List readFileAsBytesSync(String path) {
-    return File(path).readAsBytesSync();
+  int getFileSizeInBytes(String path) {
+    return File(path).lengthSync();
+  }
+
+  Stream<List<int>> openFileForReading(String path) {
+    return File(path).openRead();
   }
 
   String fullPathToWorkingDirectory = Directory.current.path;

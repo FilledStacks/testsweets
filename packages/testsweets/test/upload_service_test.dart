@@ -42,7 +42,11 @@ void main() {
         'x-goog-meta-appType': 'apk',
       };
 
-      final buildFileContents = Uint8List.fromList([0xaa, 0xbb]);
+      Stream<List<int>> makeBuildFile() async* {
+        yield [0xaa, 0xbb];
+      }
+
+      final buildFile = makeBuildFile();
 
       setUp(() {
         final cloudFunctionsService = locator<CloudFunctionsService>();
@@ -52,14 +56,16 @@ void main() {
 
         final fileSystemService = locator<FileSystemService>();
         when(fileSystemService.doesFileExist('abc.apk')).thenReturn(true);
-        when(fileSystemService.readFileAsBytesSync('abc.apk'))
-            .thenReturn(buildFileContents);
+        when(fileSystemService.openFileForReading('abc.apk'))
+            .thenAnswer((_) => buildFile);
+        when(fileSystemService.getFileSizeInBytes('abc.apk')).thenReturn(2);
 
         final httpService = locator<HttpService>();
         when(httpService.putBinary(
           to: dummySignedUrl,
-          data: buildFileContents,
+          data: buildFile,
           headers: expectedObjectHeaders,
+          contentLength: 2,
         )).thenAnswer((_) async => SimpleHttpResponse(200, ''));
 
         final timeService = locator<TimeService>();
@@ -76,8 +82,9 @@ void main() {
         final httpService = locator<HttpService>();
         verify(httpService.putBinary(
                 to: dummySignedUrl,
-                data: buildFileContents,
-                headers: expectedObjectHeaders))
+                data: buildFile,
+                headers: expectedObjectHeaders,
+                contentLength: 2))
             .called(1);
       });
     });

@@ -26,10 +26,12 @@ class _UploadService implements UploadService {
   Future<void> uploadBuild(
       BuildInfo buildInfo, String projectId, String apiKey) async {
     final buildFileContents =
-        fileSystemService.readFileAsBytesSync(buildInfo.pathToBuild);
+        fileSystemService.openFileForReading(buildInfo.pathToBuild);
+    final buildFileSize =
+        fileSystemService.getFileSizeInBytes(buildInfo.pathToBuild);
 
     final headers = <String, String>{
-      HttpHeaders.contentLengthHeader: buildFileContents.length.toString(),
+      HttpHeaders.contentLengthHeader: buildFileSize.toString(),
       HttpHeaders.contentTypeHeader: 'application/octet-stream',
       'Host': 'storage.googleapis.com',
       'Date': HttpDate.format(timeService.now()),
@@ -42,7 +44,10 @@ class _UploadService implements UploadService {
         projectId, apiKey, headers);
 
     final ret = await httpService.putBinary(
-        to: endpoint, data: buildFileContents, headers: headers);
+        to: endpoint,
+        data: buildFileContents,
+        contentLength: buildFileSize,
+        headers: headers);
 
     if (ret.body.contains('<Error>')) throw ret.body;
   }
