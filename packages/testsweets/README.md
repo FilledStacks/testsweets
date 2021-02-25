@@ -159,7 +159,7 @@ Now you can open up the TestSweets Desktop application and start your scripting.
 Once you have written your scripts you will need to upload a build to test with them. This is done by building your application in debug or profile mode and uploading it to the Test Sweets backend. To build and upload your application navigate to the folder containing your `pubspec.yaml` file and run the `testsweets` package as follows:
 
 ```bat
-flutter pub run testsweets upload apk profile {projectId} {apiKey} -t lib/main_profile.dart
+flutter pub run testsweets buildAndUpload apk profile {projectId} {apiKey} -t lib/main_profile.dart
 ```
 
 This will print an output similar to the following:
@@ -172,6 +172,14 @@ Done!
 ```
 
 You can also specify ipa for an ios build instead of apk. For a debug build specify `debug` instead of `profile`. Replace {projectId} and {apiKey} with the project id and api key for your project. These can be found in the settings for your Test Sweets project.
+
+In some cases you may want to build the application yourself and just tell the testsweets package to upload it. This
+can be achieved by using the `upload` command instead of `buildAndUpload`. You will need to pass the path to the
+build you want to upload with the `--path` or `-p` positional argument after the {apiKey}. For example:
+
+```bat
+flutter pub run testsweets upload apk profile {projectId} {apiKey} -p "path/to/build.apk"
+```
 
 ## Downloading your builds from Test Sweets
 
