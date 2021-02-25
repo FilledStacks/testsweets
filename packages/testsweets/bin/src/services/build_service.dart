@@ -11,7 +11,11 @@ import 'runnable_process.dart';
 import 'package:yaml/yaml.dart';
 
 abstract class BuildService {
-  /// Builds the flutter application in the directory [flutterApp].
+  /// Returns [BuildInfo] for the application in [flutterApp].
+  ///
+  /// The application will be build with `flutter build` if [pathToBuild] is
+  /// empty empty, else [pathToBuild] is returned as the pathToBuild
+  /// field in the returned build information.
   ///
   /// The directory [flutterApp] must contain a `pubspec.yaml` file which
   /// must contain the `version` field. An error is thrown if the `version`
@@ -21,6 +25,7 @@ abstract class BuildService {
     @required String appType,
     @required String buildMode,
     List<String> extraFlutterProcessArgs,
+    String pathToBuild,
   });
 
   factory BuildService.makeInstance() {
@@ -33,11 +38,13 @@ class _BuildService implements BuildService {
   final flutterProcess = locator<FlutterProcess>();
 
   @override
-  Future<BuildInfo> build(
-      {String flutterApp,
-      String appType,
-      String buildMode,
-      List<String> extraFlutterProcessArgs = const <String>[]}) async {
+  Future<BuildInfo> build({
+    String flutterApp,
+    String appType,
+    String buildMode,
+    List<String> extraFlutterProcessArgs = const <String>[],
+    String pathToBuild = '',
+  }) async {
     final pathToPubspecFile = '$flutterApp\\pubspec.yaml';
     if (!fileSystemService.doesFileExist(pathToPubspecFile)) {
       throw BuildError(
@@ -54,24 +61,27 @@ class _BuildService implements BuildService {
           'Versions are used by Test Sweets to keep track of builds. Please add a version for this app.');
     }
 
-    final runningFlutterProcess = await flutterProcess.startWith(
-        args: ['build', appType, '--$buildMode', ...extraFlutterProcessArgs]);
+    if (pathToBuild.isEmpty) {
+      final runningFlutterProcess = await flutterProcess.startWith(
+          args: ['build', appType, '--$buildMode', ...extraFlutterProcessArgs]);
 
-    final processStdoutCollector = Utf8CollectingStreamConsumer(stdout);
-    final processStderrCollector = Utf8CollectingStreamConsumer(stderr);
+      final processStdoutCollector = Utf8CollectingStreamConsumer(stdout);
+      final processStderrCollector = Utf8CollectingStreamConsumer(stderr);
 
-    await runningFlutterProcess.stdout.pipe(processStdoutCollector);
-    await runningFlutterProcess.stderr.pipe(processStderrCollector);
+      await runningFlutterProcess.stdout.pipe(processStdoutCollector);
+      await runningFlutterProcess.stderr.pipe(processStderrCollector);
 
-    final exitCode = await runningFlutterProcess.exitCode;
+      final exitCode = await runningFlutterProcess.exitCode;
 
-    if (exitCode != 0) {
-      throw BuildError(processStderrCollector.collectAsString());
+      if (exitCode != 0) {
+        throw BuildError(processStderrCollector.collectAsString());
+      }
+
+      final processStdoutString = processStdoutCollector.collectAsString();
+      pathToBuild = '$flutterApp\\' + findSubPathToBuild(processStdoutString);
     }
-
-    final processStdoutString = processStdoutCollector.collectAsString();
     return BuildInfo(
-      pathToBuild: '$flutterApp\\' + findSubPathToBuild(processStdoutString),
+      pathToBuild: pathToBuild,
       buildMode: buildMode,
       appType: appType,
       version: pubspec['version'],

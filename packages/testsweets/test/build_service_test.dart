@@ -148,6 +148,31 @@ void main() {
         verify(flutterProcess.startWith(args: ['build', 'apk', '--profile']))
             .called(1);
       });
+      test(
+          "Should not read the pathToBuild from the flutter process when it is given",
+          () async {
+        final directoryPath = 'myApp';
+        final pubspecFilePath = 'myApp\\pubspec.yaml';
+        final pathToBuild = 'abc';
+
+        final fileSystemService = locator<FileSystemService>();
+        when(fileSystemService.doesFileExist(pubspecFilePath)).thenReturn(true);
+        when(fileSystemService.readFileAsStringSync(pubspecFilePath))
+            .thenReturn(ksPubspecFileWithVersion);
+
+        final flutterProcess = locator<FlutterProcess>();
+
+        final instance = BuildService.makeInstance();
+        final buildInfo = await instance.build(
+          flutterApp: directoryPath,
+          appType: 'apk',
+          buildMode: 'profile',
+          pathToBuild: pathToBuild,
+        );
+
+        verifyNever(flutterProcess.startWith(args: anyNamed('args')));
+        expect(buildInfo.pathToBuild, pathToBuild);
+      });
       group("When the flutterProcess completes with an exit code of 0", () {
         test("Should return the correct build info", () async {
           final directoryPath = 'myApp';
