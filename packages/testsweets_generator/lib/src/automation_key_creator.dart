@@ -3,7 +3,6 @@ import 'package:testsweets_generator/src/exceptions/key_format_exception.dart';
 
 import 'data_models/data_models.dart';
 import 'data_models/data_models.dart';
-import 'data_models/data_models.dart';
 
 const String InvalidFormatExceptionMessage =
     '''The key passed in is not in a valid format. Please check the documentation for correct format.
@@ -19,6 +18,7 @@ const String InvalidTypeExceptionMessage =
   general: Any widget where you might want to check it's visibility
   view: The widget that's shown as the view in the navigation stack
   input: A widget that takes input
+  scrollable: A widget that can be scrolled
 ''';
 
 const String DynamicInvalidTypeException =

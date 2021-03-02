@@ -1,3 +1,7 @@
+## 0.1.0
+
+- Adds the scrollable widget type
+
 ## 0.0.2
 
 - Allows view keys to be 2 parts only

@@ -26,4 +26,5 @@ enum WidgetType {
   general,
   view,
   input,
+  scrollable,
 }
