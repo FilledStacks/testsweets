@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named
+// ignore_for_file: deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies
 
 part of 'data_models.dart';
 
@@ -12,9 +12,11 @@ AutomationKey _$AutomationKeyFromJson(Map<String, dynamic> json) {
   return _AutomationKey.fromJson(json);
 }
 
+/// @nodoc
 class _$AutomationKeyTearOff {
   const _$AutomationKeyTearOff();
 
+// ignore: unused_element
   _AutomationKey call({String name, WidgetType type, String view}) {
     return _AutomationKey(
       name: name,
@@ -22,20 +24,29 @@ class _$AutomationKeyTearOff {
       view: view,
     );
   }
+
+// ignore: unused_element
+  AutomationKey fromJson(Map<String, Object> json) {
+    return AutomationKey.fromJson(json);
+  }
 }
 
+/// @nodoc
 // ignore: unused_element
 const $AutomationKey = _$AutomationKeyTearOff();
 
+/// @nodoc
 mixin _$AutomationKey {
   String get name;
   WidgetType get type;
   String get view;
 
   Map<String, dynamic> toJson();
+  @JsonKey(ignore: true)
   $AutomationKeyCopyWith<AutomationKey> get copyWith;
 }
 
+/// @nodoc
 abstract class $AutomationKeyCopyWith<$Res> {
   factory $AutomationKeyCopyWith(
           AutomationKey value, $Res Function(AutomationKey) then) =
@@ -43,6 +54,7 @@ abstract class $AutomationKeyCopyWith<$Res> {
   $Res call({String name, WidgetType type, String view});
 }
 
+/// @nodoc
 class _$AutomationKeyCopyWithImpl<$Res>
     implements $AutomationKeyCopyWith<$Res> {
   _$AutomationKeyCopyWithImpl(this._value, this._then);
@@ -65,6 +77,7 @@ class _$AutomationKeyCopyWithImpl<$Res>
   }
 }
 
+/// @nodoc
 abstract class _$AutomationKeyCopyWith<$Res>
     implements $AutomationKeyCopyWith<$Res> {
   factory _$AutomationKeyCopyWith(
@@ -74,6 +87,7 @@ abstract class _$AutomationKeyCopyWith<$Res>
   $Res call({String name, WidgetType type, String view});
 }
 
+/// @nodoc
 class __$AutomationKeyCopyWithImpl<$Res>
     extends _$AutomationKeyCopyWithImpl<$Res>
     implements _$AutomationKeyCopyWith<$Res> {
@@ -99,6 +113,8 @@ class __$AutomationKeyCopyWithImpl<$Res>
 }
 
 @JsonSerializable()
+
+/// @nodoc
 class _$_AutomationKey extends _AutomationKey {
   _$_AutomationKey({this.name, this.type, this.view}) : super._();
 
@@ -136,6 +152,7 @@ class _$_AutomationKey extends _AutomationKey {
       const DeepCollectionEquality().hash(type) ^
       const DeepCollectionEquality().hash(view);
 
+  @JsonKey(ignore: true)
   @override
   _$AutomationKeyCopyWith<_AutomationKey> get copyWith =>
       __$AutomationKeyCopyWithImpl<_AutomationKey>(this, _$identity);
@@ -161,5 +178,6 @@ abstract class _AutomationKey extends AutomationKey {
   @override
   String get view;
   @override
+  @JsonKey(ignore: true)
   _$AutomationKeyCopyWith<_AutomationKey> get copyWith;
 }

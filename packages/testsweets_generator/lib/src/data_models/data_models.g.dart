@@ -59,4 +59,5 @@ const _$WidgetTypeEnumMap = {
   WidgetType.general: 'general',
   WidgetType.view: 'view',
   WidgetType.input: 'input',
+  WidgetType.scrollable: 'scrollable',
 };
