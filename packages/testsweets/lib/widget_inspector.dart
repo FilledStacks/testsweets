@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class WidgetInspectorView extends StatefulWidget {
   final Widget child;
 
-  const WidgetInspectorView({Key key, this.child}) : super(key: key);
+  const WidgetInspectorView({Key? key, required this.child}) : super(key: key);
   @override
   _WidgetInspectorViewState createState() => _WidgetInspectorViewState();
 }
@@ -74,7 +74,10 @@ class Overlay extends StatefulWidget {
   final bool showOverlay;
 
   const Overlay(
-      {Key key, @required this.child, this.onTap, this.showOverlay = false})
+      {Key? key,
+      required this.child,
+      required this.onTap,
+      this.showOverlay = false})
       : super(key: key);
   @override
   _OverlayState createState() => _OverlayState();
@@ -87,10 +90,10 @@ class _OverlayState extends State<Overlay> {
   void getElements(BuildContext context) {
     elements.clear();
     void visitor(Element element) {
-      Key key = element.widget.key;
+      Key? key = element.widget.key;
       if (key.toString().contains(RegExp(r'.*_.*_.*'))) {
         while (element.findRenderObject() is! RenderBox) {}
-        RenderBox box = element.findRenderObject();
+        RenderBox box = element.findRenderObject() as RenderBox;
 
         elements.add(WidgetInfo(
           size: box.size,
@@ -109,7 +112,7 @@ class _OverlayState extends State<Overlay> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) => getElements(context));
+    WidgetsBinding.instance?.addPostFrameCallback((_) => getElements(context));
     return Expanded(
       child: Stack(
         children: [
@@ -145,9 +148,9 @@ class _OverlayState extends State<Overlay> {
 class WidgetInfo {
   final Size size;
   final Offset offset;
-  final Key key;
+  final Key? key;
 
-  const WidgetInfo({this.size, this.offset, this.key});
+  const WidgetInfo({required this.size, required this.offset, this.key});
 
   @override
   String toString() {

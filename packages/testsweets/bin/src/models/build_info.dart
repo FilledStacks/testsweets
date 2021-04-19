@@ -11,7 +11,11 @@ class BuildInfo {
   /// `pubspec.yaml` file for the app.
   final String version;
 
-  BuildInfo({this.pathToBuild, this.buildMode, this.appType, this.version});
+  BuildInfo(
+      {required this.pathToBuild,
+      required this.buildMode,
+      required this.appType,
+      required this.version});
 
   @override
   String toString() {

@@ -15,9 +15,7 @@ class StubbedProcess implements Process {
   final String sStdErr;
   final String sStdOut;
   StubbedProcess(
-      {@required this.sExitCode,
-      @required this.sStdErr,
-      @required this.sStdOut});
+      {required this.sExitCode, required this.sStdErr, required this.sStdOut});
 
   @override
   Future<int> get exitCode async => sExitCode;
@@ -54,7 +52,7 @@ class StubbedRunnableProcess implements RunnableProcess {
   String get path => 'flutter';
 
   @override
-  Future<Process> startWith({List<String> args}) async {
+  Future<Process> startWith({required List<String> args}) async {
     startedWithArgs = args;
     return main;
   }
@@ -170,7 +168,8 @@ void main() {
           pathToBuild: pathToBuild,
         );
 
-        verifyNever(flutterProcess.startWith(args: anyNamed('args')));
+        verifyNever(
+            flutterProcess.startWith(args: anyNamed('args') as dynamic));
         expect(buildInfo.pathToBuild, pathToBuild);
       });
       group("When the flutterProcess completes with an exit code of 0", () {
