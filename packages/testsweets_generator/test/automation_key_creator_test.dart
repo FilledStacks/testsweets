@@ -27,19 +27,19 @@ void main() {
 
       test('When called with login_view should return login as VIEW', () {
         var creator = const AutomationKeyCreator();
-        var automationkey = creator.getAutomationKeyFromKeyValue('login_view');
+        var automationkey = creator.getAutomationKeyFromKeyValue('login_view')!;
 
         expect(automationkey.view, 'login');
       });
       test('When called with login_view should return view as TYPE', () {
         var creator = const AutomationKeyCreator();
-        var automationkey = creator.getAutomationKeyFromKeyValue('login_view');
+        var automationkey = creator.getAutomationKeyFromKeyValue('login_view')!;
 
         expect(automationkey.type, WidgetType.view);
       });
       test('When called with login_view should return login as NAME', () {
         var creator = const AutomationKeyCreator();
-        var automationkey = creator.getAutomationKeyFromKeyValue('login_view');
+        var automationkey = creator.getAutomationKeyFromKeyValue('login_view')!;
 
         expect(automationkey.name, 'login');
       });
@@ -66,7 +66,7 @@ void main() {
           () {
         var creator = const AutomationKeyCreator();
         var automationkey =
-            creator.getAutomationKeyFromKeyValue('home_input_email');
+            creator.getAutomationKeyFromKeyValue('home_input_email')!;
 
         expect(automationkey.view, 'home');
       });
@@ -74,7 +74,7 @@ void main() {
       test('When called with home_input_email should return input as TYPE', () {
         var creator = const AutomationKeyCreator();
         var automationkey =
-            creator.getAutomationKeyFromKeyValue('home_input_email');
+            creator.getAutomationKeyFromKeyValue('home_input_email')!;
 
         expect(automationkey.type, WidgetType.input);
       });
@@ -83,7 +83,7 @@ void main() {
           () {
         var creator = const AutomationKeyCreator();
         var automationkey =
-            creator.getAutomationKeyFromKeyValue('home_input_email');
+            creator.getAutomationKeyFromKeyValue('home_input_email')!;
 
         expect(automationkey.name, 'email');
       });

@@ -1,5 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
-// ignore_for_file: deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides
 
 part of 'data_models.dart';
 
@@ -8,6 +8,10 @@ part of 'data_models.dart';
 // **************************************************************************
 
 T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+
 AutomationKey _$AutomationKeyFromJson(Map<String, dynamic> json) {
   return _AutomationKey.fromJson(json);
 }
@@ -16,8 +20,8 @@ AutomationKey _$AutomationKeyFromJson(Map<String, dynamic> json) {
 class _$AutomationKeyTearOff {
   const _$AutomationKeyTearOff();
 
-// ignore: unused_element
-  _AutomationKey call({String name, WidgetType type, String view}) {
+  _AutomationKey call(
+      {required String name, required WidgetType type, required String view}) {
     return _AutomationKey(
       name: name,
       type: type,
@@ -25,25 +29,24 @@ class _$AutomationKeyTearOff {
     );
   }
 
-// ignore: unused_element
   AutomationKey fromJson(Map<String, Object> json) {
     return AutomationKey.fromJson(json);
   }
 }
 
 /// @nodoc
-// ignore: unused_element
 const $AutomationKey = _$AutomationKeyTearOff();
 
 /// @nodoc
 mixin _$AutomationKey {
-  String get name;
-  WidgetType get type;
-  String get view;
+  String get name => throw _privateConstructorUsedError;
+  WidgetType get type => throw _privateConstructorUsedError;
+  String get view => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson();
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $AutomationKeyCopyWith<AutomationKey> get copyWith;
+  $AutomationKeyCopyWith<AutomationKey> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -65,14 +68,23 @@ class _$AutomationKeyCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object name = freezed,
-    Object type = freezed,
-    Object view = freezed,
+    Object? name = freezed,
+    Object? type = freezed,
+    Object? view = freezed,
   }) {
     return _then(_value.copyWith(
-      name: name == freezed ? _value.name : name as String,
-      type: type == freezed ? _value.type : type as WidgetType,
-      view: view == freezed ? _value.view : view as String,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      type: type == freezed
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as WidgetType,
+      view: view == freezed
+          ? _value.view
+          : view // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -100,14 +112,23 @@ class __$AutomationKeyCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object name = freezed,
-    Object type = freezed,
-    Object view = freezed,
+    Object? name = freezed,
+    Object? type = freezed,
+    Object? view = freezed,
   }) {
     return _then(_AutomationKey(
-      name: name == freezed ? _value.name : name as String,
-      type: type == freezed ? _value.type : type as WidgetType,
-      view: view == freezed ? _value.view : view as String,
+      name: name == freezed
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      type: type == freezed
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as WidgetType,
+      view: view == freezed
+          ? _value.view
+          : view // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -116,7 +137,8 @@ class __$AutomationKeyCopyWithImpl<$Res>
 
 /// @nodoc
 class _$_AutomationKey extends _AutomationKey {
-  _$_AutomationKey({this.name, this.type, this.view}) : super._();
+  _$_AutomationKey({required this.name, required this.type, required this.view})
+      : super._();
 
   factory _$_AutomationKey.fromJson(Map<String, dynamic> json) =>
       _$_$_AutomationKeyFromJson(json);
@@ -164,20 +186,23 @@ class _$_AutomationKey extends _AutomationKey {
 }
 
 abstract class _AutomationKey extends AutomationKey {
+  factory _AutomationKey(
+      {required String name,
+      required WidgetType type,
+      required String view}) = _$_AutomationKey;
   _AutomationKey._() : super._();
-  factory _AutomationKey({String name, WidgetType type, String view}) =
-      _$_AutomationKey;
 
   factory _AutomationKey.fromJson(Map<String, dynamic> json) =
       _$_AutomationKey.fromJson;
 
   @override
-  String get name;
+  String get name => throw _privateConstructorUsedError;
   @override
-  WidgetType get type;
+  WidgetType get type => throw _privateConstructorUsedError;
   @override
-  String get view;
+  String get view => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$AutomationKeyCopyWith<_AutomationKey> get copyWith;
+  _$AutomationKeyCopyWith<_AutomationKey> get copyWith =>
+      throw _privateConstructorUsedError;
 }
