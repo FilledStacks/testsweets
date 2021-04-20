@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:testsweets_generator/src/exceptions/key_format_exception.dart';
 
 import 'data_models/data_models.dart';
-import 'data_models/data_models.dart';
 
 const String InvalidFormatExceptionMessage =
     '''The key passed in is not in a valid format. Please check the documentation for correct format.
@@ -28,11 +27,17 @@ class AutomationKeyCreator {
   const AutomationKeyCreator();
 
   List<AutomationKey> getAutomationKeysFromStrings(List<String> keyValues) {
-    return keyValues.map((e) => getAutomationKeyFromKeyValue(e)).toList();
+    List<AutomationKey> out = [];
+    for (var keyValue in keyValues) {
+      final automationKey = getAutomationKeyFromKeyValue(keyValue);
+      if (automationKey != null) out.add(automationKey);
+    }
+
+    return out;
   }
 
   @visibleForTesting
-  AutomationKey getAutomationKeyFromKeyValue(String key) {
+  AutomationKey? getAutomationKeyFromKeyValue(String? key) {
     if (key == null || key == '') {
       return null;
     }

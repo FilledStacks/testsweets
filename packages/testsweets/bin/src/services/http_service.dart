@@ -8,13 +8,13 @@ import 'package:http/http.dart' as http;
 abstract class HttpService {
   /// Makes a PUT request to the endpoint given by [to].
   Future<SimpleHttpResponse> putBinary(
-      {@required String to,
-      @required Stream<List<int>> data,
-      @required int contentLength,
+      {required String to,
+      required Stream<List<int>> data,
+      required int contentLength,
       Map<String, String> headers});
 
   Future<SimpleHttpResponse> postJson(
-      {@required String to, @required Map<String, dynamic> body, headers});
+      {required String to, required Map<String, dynamic> body, headers});
 
   factory HttpService.makeInstance() {
     return _HttpService();
@@ -27,18 +27,17 @@ class SimpleHttpResponse {
   SimpleHttpResponse(this.statusCode, this.body);
 
   Map<String, dynamic> parseBodyAsJsonMap() {
-    return json.decode(body) as Map;
+    return json.decode(body) as Map<String, dynamic>;
   }
 }
 
 class _HttpService implements HttpService {
   @override
   Future<SimpleHttpResponse> putBinary(
-      {String to,
-      Stream<List<int>> data,
-      int contentLength,
-      Map<String, String> headers}) async {
-    headers = headers ?? Map<String, String>();
+      {required String to,
+      required Stream<List<int>> data,
+      required int contentLength,
+      Map<String, String> headers = const {}}) async {
     headers.putIfAbsent(
         HttpHeaders.contentTypeHeader, () => 'application/octet-stream');
 
@@ -69,12 +68,13 @@ class _HttpService implements HttpService {
 
   @override
   Future<SimpleHttpResponse> postJson(
-      {String to, Map<String, dynamic> body, headers}) async {
-    headers = headers ?? Map<String, String>();
+      {required String to,
+      required Map<String, dynamic> body,
+      headers = const {}}) async {
     headers.putIfAbsent(
         HttpHeaders.contentTypeHeader, () => 'application/json');
-    final response =
-        await http.put(to, body: json.encode(body), headers: headers);
+    final response = await http.put(Uri.parse(to),
+        body: json.encode(body), headers: headers);
 
     return SimpleHttpResponse(response.statusCode, response.body);
   }
@@ -83,16 +83,16 @@ class _HttpService implements HttpService {
 class StreamConsumerWithCallbacks implements StreamConsumer<List<int>> {
   final void Function() onFinalise;
   final StreamConsumer relayTo;
-  StreamConsumerWithCallbacks(this.relayTo, {this.onFinalise});
+  StreamConsumerWithCallbacks(this.relayTo, {required this.onFinalise});
 
   @override
   Future addStream(Stream stream) {
-    return relayTo?.addStream(stream);
+    return relayTo.addStream(stream);
   }
 
   @override
   Future close() {
     onFinalise();
-    return relayTo?.close();
+    return relayTo.close();
   }
 }

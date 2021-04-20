@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:meta/meta.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 import '../bin/src/locator.dart';
 import '../bin/src/services/build_service.dart';
@@ -15,9 +14,7 @@ class StubbedProcess implements Process {
   final String sStdErr;
   final String sStdOut;
   StubbedProcess(
-      {@required this.sExitCode,
-      @required this.sStdErr,
-      @required this.sStdOut});
+      {required this.sExitCode, required this.sStdErr, required this.sStdOut});
 
   @override
   Future<int> get exitCode async => sExitCode;
@@ -54,7 +51,7 @@ class StubbedRunnableProcess implements RunnableProcess {
   String get path => 'flutter';
 
   @override
-  Future<Process> startWith({List<String> args}) async {
+  Future<Process> startWith({required List<String> args}) async {
     startedWithArgs = args;
     return main;
   }
@@ -91,7 +88,7 @@ void main() {
         final pubspecFilePath = 'myApp\\pubspec.yaml';
 
         final fileSystemService = locator<FileSystemService>();
-        when(fileSystemService.doesFileExist(pubspecFilePath))
+        when(() => fileSystemService.doesFileExist(pubspecFilePath))
             .thenReturn(false);
 
         final instance = BuildService.makeInstance();
@@ -110,8 +107,9 @@ void main() {
         final pubspecFilePath = 'myApp\\pubspec.yaml';
 
         final fileSystemService = locator<FileSystemService>();
-        when(fileSystemService.doesFileExist(pubspecFilePath)).thenReturn(true);
-        when(fileSystemService.readFileAsStringSync(pubspecFilePath))
+        when(() => fileSystemService.doesFileExist(pubspecFilePath))
+            .thenReturn(true);
+        when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
             .thenReturn(ksPubspecFileWithNoVersion);
 
         final instance = BuildService.makeInstance();
@@ -130,12 +128,14 @@ void main() {
         final pubspecFilePath = 'myApp\\pubspec.yaml';
 
         final fileSystemService = locator<FileSystemService>();
-        when(fileSystemService.doesFileExist(pubspecFilePath)).thenReturn(true);
-        when(fileSystemService.readFileAsStringSync(pubspecFilePath))
+        when(() => fileSystemService.doesFileExist(pubspecFilePath))
+            .thenReturn(true);
+        when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
             .thenReturn(ksPubspecFileWithVersion);
 
         final flutterProcess = locator<FlutterProcess>();
-        when(flutterProcess.startWith(args: ['build', 'apk', '--profile']))
+        when(() =>
+                flutterProcess.startWith(args: ['build', 'apk', '--profile']))
             .thenAnswer((_) async => StubbedProcess(
                 sExitCode: 0,
                 sStdErr: '',
@@ -145,7 +145,8 @@ void main() {
         await instance.build(
             flutterApp: directoryPath, appType: 'apk', buildMode: 'profile');
 
-        verify(flutterProcess.startWith(args: ['build', 'apk', '--profile']))
+        verify(() =>
+                flutterProcess.startWith(args: ['build', 'apk', '--profile']))
             .called(1);
       });
       test(
@@ -156,8 +157,9 @@ void main() {
         final pathToBuild = 'abc';
 
         final fileSystemService = locator<FileSystemService>();
-        when(fileSystemService.doesFileExist(pubspecFilePath)).thenReturn(true);
-        when(fileSystemService.readFileAsStringSync(pubspecFilePath))
+        when(() => fileSystemService.doesFileExist(pubspecFilePath))
+            .thenReturn(true);
+        when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
             .thenReturn(ksPubspecFileWithVersion);
 
         final flutterProcess = locator<FlutterProcess>();
@@ -170,7 +172,8 @@ void main() {
           pathToBuild: pathToBuild,
         );
 
-        verifyNever(flutterProcess.startWith(args: anyNamed('args')));
+        verifyNever(
+            () => flutterProcess.startWith(args: captureAny(named: 'args')));
         expect(buildInfo.pathToBuild, pathToBuild);
       });
       group("When the flutterProcess completes with an exit code of 0", () {
@@ -179,17 +182,18 @@ void main() {
           final pubspecFilePath = 'myApp\\pubspec.yaml';
 
           final fileSystemService = locator<FileSystemService>();
-          when(fileSystemService.doesFileExist(pubspecFilePath))
+          when(() => fileSystemService.doesFileExist(pubspecFilePath))
               .thenReturn(true);
-          when(fileSystemService.readFileAsStringSync(pubspecFilePath))
+          when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
               .thenReturn(ksPubspecFileWithVersion);
 
           final flutterProcess = locator<FlutterProcess>();
-          when(flutterProcess.startWith(args: [
-            'build',
-            'apk',
-            '--profile'
-          ])).thenAnswer((_) async => StubbedProcess(
+          when(
+              () => flutterProcess.startWith(args: [
+                    'build',
+                    'apk',
+                    '--profile'
+                  ])).thenAnswer((_) async => StubbedProcess(
               sExitCode: 0,
               sStdErr: '',
               sStdOut: "RunningGradle task 'assembleProfile'...\n"
@@ -215,13 +219,14 @@ void main() {
           final pubspecFilePath = 'myApp\\pubspec.yaml';
 
           final fileSystemService = locator<FileSystemService>();
-          when(fileSystemService.doesFileExist(pubspecFilePath))
+          when(() => fileSystemService.doesFileExist(pubspecFilePath))
               .thenReturn(true);
-          when(fileSystemService.readFileAsStringSync(pubspecFilePath))
+          when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
               .thenReturn(ksPubspecFileWithVersion);
 
           final flutterProcess = locator<FlutterProcess>();
-          when(flutterProcess.startWith(args: ['build', 'apk', '--profile']))
+          when(() =>
+                  flutterProcess.startWith(args: ['build', 'apk', '--profile']))
               .thenAnswer((_) async =>
                   StubbedProcess(sExitCode: -1, sStdErr: 'abc', sStdOut: ''));
 
