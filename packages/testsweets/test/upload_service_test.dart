@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:test/test.dart';
 
 import 'helpers.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import '../bin/src/locator.dart';
 import '../bin/src/services/file_system_service.dart';
 import '../bin/src/services/upload_service.dart';
@@ -50,26 +50,27 @@ void main() {
 
       setUp(() {
         final cloudFunctionsService = locator<CloudFunctionsService>();
-        when(cloudFunctionsService.getV4BuildUploadSignedUrl(
+        when(() => cloudFunctionsService.getV4BuildUploadSignedUrl(
                 projectId, apiKey, expectedObjectHeaders))
             .thenAnswer((_) async => dummySignedUrl);
 
         final fileSystemService = locator<FileSystemService>();
-        when(fileSystemService.doesFileExist('abc.apk')).thenReturn(true);
-        when(fileSystemService.openFileForReading('abc.apk'))
+        when(() => fileSystemService.doesFileExist('abc.apk')).thenReturn(true);
+        when(() => fileSystemService.openFileForReading('abc.apk'))
             .thenAnswer((_) => buildFile);
-        when(fileSystemService.getFileSizeInBytes('abc.apk')).thenReturn(2);
+        when(() => fileSystemService.getFileSizeInBytes('abc.apk'))
+            .thenReturn(2);
 
         final httpService = locator<HttpService>();
-        when(httpService.putBinary(
-          to: dummySignedUrl,
-          data: buildFile,
-          headers: expectedObjectHeaders,
-          contentLength: 2,
-        )).thenAnswer((_) async => SimpleHttpResponse(200, ''));
+        when(() => httpService.putBinary(
+              to: dummySignedUrl,
+              data: buildFile,
+              headers: expectedObjectHeaders,
+              contentLength: 2,
+            )).thenAnswer((_) async => SimpleHttpResponse(200, ''));
 
         final timeService = locator<TimeService>();
-        when(timeService.now())
+        when(() => timeService.now())
             .thenReturn(DateTime.parse("20210203T134714Z")); // ISO 8601
       });
       test(
@@ -80,12 +81,11 @@ void main() {
         await instance.uploadBuild(buildInfo, projectId, apiKey);
 
         final httpService = locator<HttpService>();
-        verify(httpService.putBinary(
-                to: dummySignedUrl,
-                data: buildFile,
-                headers: expectedObjectHeaders,
-                contentLength: 2))
-            .called(1);
+        verify(() => httpService.putBinary(
+            to: dummySignedUrl,
+            data: buildFile,
+            headers: expectedObjectHeaders,
+            contentLength: 2)).called(1);
       });
     });
   });

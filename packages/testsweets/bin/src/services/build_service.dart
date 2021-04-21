@@ -21,9 +21,9 @@ abstract class BuildService {
   /// must contain the `version` field. An error is thrown if the `version`
   /// is not given in the pubspec.yaml file.
   Future<BuildInfo> build({
-    @required String flutterApp,
-    @required String appType,
-    @required String buildMode,
+    required String flutterApp,
+    required String appType,
+    required String buildMode,
     List<String> extraFlutterProcessArgs,
     String pathToBuild,
   });
@@ -39,9 +39,9 @@ class _BuildService implements BuildService {
 
   @override
   Future<BuildInfo> build({
-    String flutterApp,
-    String appType,
-    String buildMode,
+    required String flutterApp,
+    required String appType,
+    required String buildMode,
     List<String> extraFlutterProcessArgs = const <String>[],
     String pathToBuild = '',
   }) async {
@@ -114,7 +114,7 @@ class BuildError extends Error {
 }
 
 class Utf8CollectingStreamConsumer implements StreamConsumer<List<int>> {
-  final IOSink relayTo;
+  final IOSink? relayTo;
   Utf8CollectingStreamConsumer([this.relayTo]);
 
   List<int> collectedCodeUnits = [];

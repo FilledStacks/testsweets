@@ -6,7 +6,7 @@ class RunnableProcess {
   final String path;
   RunnableProcess(this.path);
 
-  Future<Process> startWith({@required List<String> args}) {
+  Future<Process> startWith({required List<String> args}) {
     return Process.start(path, args);
   }
 }

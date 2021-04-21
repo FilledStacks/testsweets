@@ -7,9 +7,9 @@ part 'data_models.g.dart';
 abstract class AutomationKey implements _$AutomationKey {
   const AutomationKey._();
   factory AutomationKey({
-    String name,
-    WidgetType type,
-    String view,
+    required String name,
+    required WidgetType type,
+    required String view,
   }) = _AutomationKey;
 
   String toDartCode() {

@@ -15,6 +15,11 @@ class KeyExtractor {
 
     var allMatchedKeys = keyRegex.allMatches(value);
 
-    return allMatchedKeys.map((match) => match.group(1)).toSet().toList();
+    final keyValues =
+        allMatchedKeys.map((match) => match.group(1)).toSet().toList();
+    final out = <String>[];
+    for (var keyValue in keyValues) if (keyValue != null) out.add(keyValue);
+
+    return out;
   }
 }

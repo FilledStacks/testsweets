@@ -30,23 +30,23 @@ import 'package:testsweets/widget_inspector.dart';
 /// You must replace `YOUR_PROJECT_ID` and `YOUR_PROJECT_API_KEY` with the project id and api key of your project, respectively.
 /// These can be found in the project config tab in the test sweets application.
 Future<bool> syncAutomationKeys(
-    {String projectId,
-    String apiKey,
-    List<Map<String, String>> automationKeys}) {
+    {required String projectId,
+    required String apiKey,
+    required List<Map<String, String>> automationKeys}) {
   return _uploadAutomationKeys(
       projectId: projectId, apiKey: apiKey, automationKeys: automationKeys);
 }
 
 Future<bool> _uploadAutomationKeys(
-    {String projectId,
-    String apiKey,
-    List<Map<String, String>> automationKeys}) async {
+    {required String projectId,
+    required String apiKey,
+    required List<Map<String, String>> automationKeys}) async {
   const endpoint =
       'https://us-central1-testsweets-38348.cloudfunctions.net/saveAutomationKeys';
   print(
-      '\u001b[36mTestSweets: POSTING automation keys to ${endpoint}. Keys: ${automationKeys}\u001b[0m');
+      '\u001b[36mTestSweets: POSTING automation keys to $endpoint. Keys: $automationKeys\u001b[0m');
   var response = await http.post(
-    endpoint,
+    Uri.parse(endpoint),
     headers: {'Content-Type': 'application/json'},
     body: json.encode({
       'apiKey': apiKey,

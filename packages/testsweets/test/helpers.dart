@@ -1,4 +1,4 @@
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import '../bin/src/locator.dart';
 import '../bin/src/services/file_system_service.dart';
 import '../bin/src/services/runnable_process.dart';
