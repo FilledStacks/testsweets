@@ -11,10 +11,12 @@ abstract class HttpService {
       {required String to,
       required Stream<List<int>> data,
       required int contentLength,
-      Map<String, String> headers});
+      Map<String, String>? headers});
 
   Future<SimpleHttpResponse> postJson(
-      {required String to, required Map<String, dynamic> body, headers});
+      {required String to,
+      required Map<String, dynamic> body,
+      Map<String, String>? headers});
 
   factory HttpService.makeInstance() {
     return _HttpService();
@@ -37,7 +39,8 @@ class _HttpService implements HttpService {
       {required String to,
       required Stream<List<int>> data,
       required int contentLength,
-      Map<String, String> headers = const {}}) async {
+      Map<String, String>? headers}) async {
+    headers = headers ?? <String, String>{};
     headers.putIfAbsent(
         HttpHeaders.contentTypeHeader, () => 'application/octet-stream');
 
@@ -70,7 +73,8 @@ class _HttpService implements HttpService {
   Future<SimpleHttpResponse> postJson(
       {required String to,
       required Map<String, dynamic> body,
-      headers = const {}}) async {
+      Map<String, String>? headers}) async {
+    headers = headers ?? <String, String>{};
     headers.putIfAbsent(
         HttpHeaders.contentTypeHeader, () => 'application/json');
     final response = await http.put(Uri.parse(to),
