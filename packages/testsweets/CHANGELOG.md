@@ -1,3 +1,11 @@
+## 0.3.1
+
+- Fixes http immutable header bug
+
+## 0.3.0
+
+- Updates to null safety
+
 ## 0.2.1
 
 - Adds buildAndUpload command 

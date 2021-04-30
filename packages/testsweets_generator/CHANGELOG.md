@@ -1,3 +1,7 @@
+## 0.2.0
+
+- Adds null safety
+
 ## 0.1.0
 
 - Adds the scrollable widget type
