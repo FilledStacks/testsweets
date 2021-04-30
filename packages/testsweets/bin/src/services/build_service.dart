@@ -46,14 +46,29 @@ class _BuildService implements BuildService {
     String pathToBuild = '',
   }) async {
     final pathToPubspecFile = '$flutterApp\\pubspec.yaml';
+    final pathToAppAutomationKeys = '$flutterApp\\app_automation_keys.json';
+
     if (!fileSystemService.doesFileExist(pathToPubspecFile)) {
       throw BuildError(
           'The folder at $flutterApp does not contain a pubspec.yaml file. '
           'Please check if this is the correct folder or create the pubspec.yaml file.');
     }
 
+    if (!fileSystemService.doesFileExist(pathToAppAutomationKeys)) {
+      throw BuildError(
+          'We did not find the automation keys to upload. Please make sure you have added '
+          'the TestSweets generator into the pubspec. If you have then make sure you run '
+          'flutter pub run build_runner build --delete-conflicting-outputs before you attempt '
+          'to upload the build');
+    }
+
     final pubspec =
         loadYaml(fileSystemService.readFileAsStringSync(pathToPubspecFile));
+    final appAutomationKeysJson = (json.decode(
+                fileSystemService.readFileAsStringSync(pathToAppAutomationKeys))
+            as Iterable)
+        .map((e) => e as Map<String, dynamic>)
+        .toList();
 
     if (pubspec['version'] == null) {
       throw BuildError(
@@ -85,6 +100,7 @@ class _BuildService implements BuildService {
       buildMode: buildMode,
       appType: appType,
       version: pubspec['version'],
+      automationKeysJson: appAutomationKeysJson,
     );
   }
 
