@@ -46,6 +46,6 @@ class _CloudFunctionsService implements CloudFunctionsService {
       'automationKeys': automationKeys,
     });
 
-    if (ret.statusCode != 500) throw ret.body;
+    if (ret.statusCode != 200) throw ret.body;
   }
 }
