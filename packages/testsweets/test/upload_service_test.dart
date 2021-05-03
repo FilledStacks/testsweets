@@ -75,9 +75,33 @@ void main() {
         when(() => timeService.now())
             .thenReturn(DateTime.parse("20210203T134714Z")); // ISO 8601
       });
+
+      void whenCloudFunctions_doesBuildExistInProjectItShouldReturn(
+          bool valueToReturn) {
+        final cloudFunctionsService = locator<CloudFunctionsService>();
+        when(() => cloudFunctionsService.doesBuildExistInProject(captureAny(),
+                withVersion: captureAny(named: 'withVersion')))
+            .thenAnswer((invocation) async => valueToReturn);
+      }
+
+      test(
+          "Should throw BuildUploadError if there already exists a build with the same version number as the uploaded one",
+          () {
+        whenCloudFunctions_doesBuildExistInProjectItShouldReturn(true);
+        final instance = UploadService.makeInstance();
+
+        final run = () => instance.uploadBuild(buildInfo, projectId, apiKey);
+
+        expect(
+            run,
+            throwsA(BuildUploadError(
+                "You have already uploaded an APK with the version ${buildInfo.version}. Please update the version "
+                "of your application, rebuild and upload the new one.")));
+      });
       test(
           "Should upload the file with the correct data and headers to the signed endpoint returned by CloudFunctionsService.getV4BuildUploadSignedUrl",
           () async {
+        whenCloudFunctions_doesBuildExistInProjectItShouldReturn(false);
         final instance = UploadService.makeInstance();
 
         await instance.uploadBuild(buildInfo, projectId, apiKey);
