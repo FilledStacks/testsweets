@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'src/locator.dart';
 import 'src/services/build_service.dart';
+import 'src/services/cloud_functions_service.dart';
 import 'src/services/file_system_service.dart';
 import 'src/services/upload_service.dart';
 
@@ -73,6 +74,11 @@ For example:
     extraFlutterProcessArgs: extraArgs,
     pathToBuild: pathToBuild,
   );
+
+  print('Uploading automation keys ...');
+  await locator<CloudFunctionsService>()
+      .uploadAutomationKeys(projectId, apiKey, buildInfo.automationKeysJson);
+  print('Successfully uploaded automation keys!');
 
   print('Uploading build ...');
   await locator<UploadService>().uploadBuild(buildInfo, projectId, apiKey);

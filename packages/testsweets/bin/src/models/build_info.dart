@@ -7,15 +7,19 @@ class BuildInfo {
   /// Can be 'apk' or 'ipa'.
   final String appType;
 
-  /// Shoul;d be the same as the version found in the
+  /// Should be the same as the version found in the
   /// `pubspec.yaml` file for the app.
   final String version;
+
+  /// The parsed contents of the `app_automation_keys.json` file.
+  final List<Map<String, dynamic>> automationKeysJson;
 
   BuildInfo(
       {required this.pathToBuild,
       required this.buildMode,
       required this.appType,
-      required this.version});
+      required this.version,
+      required this.automationKeysJson});
 
   @override
   String toString() {
@@ -24,6 +28,7 @@ class BuildInfo {
       'buildMode': buildMode,
       'appType': appType,
       'version': version,
+      'automationKeysData': automationKeysJson,
     }.toString();
   }
 }

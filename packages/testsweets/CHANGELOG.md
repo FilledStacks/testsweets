@@ -1,3 +1,7 @@
+## 1.0.0
+
+- **Breaking Change**: Removes the `syncAutomationKeys` function. Automation keys are now uploaded with the build. See README.
+
 ## 0.3.1
 
 - Fixes http immutable header bug
@@ -8,12 +12,11 @@
 
 ## 0.2.1
 
-- Adds buildAndUpload command 
+- Adds buildAndUpload command
 
 ## 0.2.0
 
 **Automatic build integration**
-
 
 ## 0.1.1
 

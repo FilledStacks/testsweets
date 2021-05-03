@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:glob/glob.dart';
 import 'package:path/path.dart' as p;
 
@@ -17,7 +18,7 @@ class AutomationKeyGenerator implements Builder {
   static AssetId _allFileOutput(BuildStep buildStep) {
     return AssetId(
       buildStep.inputId.package,
-      p.join('lib', 'app_automation_keys.dart'),
+      'app_automation_keys.json',
     );
   }
 
@@ -41,23 +42,15 @@ class AutomationKeyGenerator implements Builder {
     }
 
     final outputFile = _allFileOutput(buildStep);
-    List<String> codeUnits =
-        appAutomationKeys.map((key) => key.toDartCode()).toList();
-    String dartCode =
-        '''// DO NOT EDIT, CODE GENERATED WITH TEST SWEETS GENERATOR on ${DateTime.now()}.
-
-const List<Map<String, String>> APP_AUTOMATION_KEYS = [
-${codeUnits.join(',\n')}
-];
-''';
-
-    return buildStep.writeAsString(outputFile, dartCode);
+    final encoder = JsonEncoder.withIndent('  ');
+    final jsonOut = encoder.convert(appAutomationKeys);
+    return buildStep.writeAsString(outputFile, jsonOut);
   }
 
   @override
   Map<String, List<String>> get buildExtensions {
     return const {
-      r'$lib$': const ['app_automation_keys.dart'],
+      r'$lib$': const ['../app_automation_keys.json'],
     };
   }
 }

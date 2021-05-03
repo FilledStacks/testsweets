@@ -12,10 +12,6 @@ abstract class AutomationKey implements _$AutomationKey {
     required String view,
   }) = _AutomationKey;
 
-  String toDartCode() {
-    return "  {'name': '${this.name}', 'type': '${this.type}', 'view': '${this.view}'}";
-  }
-
   factory AutomationKey.fromJson(Map<String, dynamic> json) =>
       _$AutomationKeyFromJson(json);
 }
