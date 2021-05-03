@@ -22,10 +22,12 @@ void main() {
   group("UploadService Tests", () {
     group("uploadBuild(buildInfo, projectId, apiKey)", () {
       final buildInfo = BuildInfo(
-          pathToBuild: 'abc.apk',
-          buildMode: 'debug',
-          appType: 'apk',
-          version: '1.2.0');
+        pathToBuild: 'abc.apk',
+        buildMode: 'debug',
+        appType: 'apk',
+        version: '1.2.0',
+        automationKeysJson: [],
+      );
 
       final projectId = 'testProjectId';
       final apiKey = 'testApiKey';
