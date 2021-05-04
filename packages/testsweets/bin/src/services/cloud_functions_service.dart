@@ -8,6 +8,9 @@ abstract class CloudFunctionsService {
   Future<void> uploadAutomationKeys(String projectId, String apiKey,
       List<Map<String, dynamic>> automationKeys);
 
+  Future<bool> doesBuildExistInProject(String projectId,
+      {required String withVersion});
+
   factory CloudFunctionsService.makeInstance() {
     return _CloudFunctionsService();
   }
@@ -47,5 +50,20 @@ class _CloudFunctionsService implements CloudFunctionsService {
     });
 
     if (ret.statusCode != 200) throw ret.body;
+  }
+
+  @override
+  Future<bool> doesBuildExistInProject(String projectId,
+      {required String withVersion}) async {
+    final endpoint =
+        'https://us-central1-testsweets-38348.cloudfunctions.net/doesBuildWithGivenVersionExist';
+    final ret = await httpService.postJson(to: endpoint, body: {
+      'projectId': projectId,
+      'version': withVersion,
+    });
+
+    if (ret.statusCode == 200) return ret.parseBodyAsJsonMap()['exists'];
+
+    throw ret.body;
   }
 }
