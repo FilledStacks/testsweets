@@ -25,6 +25,7 @@ class _UploadService implements UploadService {
   @override
   Future<void> uploadBuild(
       BuildInfo buildInfo, String projectId, String apiKey) async {
+    await throwIfBuildIsDuplicate(projectId, buildInfo);
     final buildFileContents =
         fileSystemService.openFileForReading(buildInfo.pathToBuild);
     final buildFileSize =
@@ -51,4 +52,28 @@ class _UploadService implements UploadService {
 
     if (ret.body.contains('<Error>')) throw ret.body;
   }
+
+  Future<void> throwIfBuildIsDuplicate(
+      String projectId, BuildInfo buildInfo) async {
+    final buildExists = await cloudFunctionsService
+        .doesBuildExistInProject(projectId, withVersion: buildInfo.version);
+    if (buildExists) {
+      throw BuildUploadError(
+          'You have already uploaded an ${buildInfo.appType.toUpperCase()} with the version ${buildInfo.version}. Please update the version '
+          'of your application, rebuild and upload the new one.');
+    }
+  }
+}
+
+class BuildUploadError {
+  final String message;
+  BuildUploadError([this.message = ""]);
+
+  @override
+  String toString() => "BuildUploadError: $message";
+
+  operator ==(other) =>
+      other is BuildUploadError && other.message == this.message;
+
+  int get hasCode => message.hashCode;
 }
