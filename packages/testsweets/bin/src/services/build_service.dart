@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:meta/meta.dart';
-
 import '../locator.dart';
 import '../models/build_info.dart';
 import 'file_system_service.dart';
@@ -101,6 +99,7 @@ class _BuildService implements BuildService {
       appType: appType,
       version: pubspec['version'],
       automationKeysJson: appAutomationKeysJson,
+      dynamicKeysJson: [],
     );
   }
 

@@ -8,6 +8,9 @@ abstract class CloudFunctionsService {
   Future<void> uploadAutomationKeys(String projectId, String apiKey,
       List<Map<String, dynamic>> automationKeys);
 
+  Future<void> uploadDynamicKeys(String projectId, String apiKey,
+      List<Map<String, dynamic>> automationKeys);
+
   Future<bool> doesBuildExistInProject(String projectId,
       {required String withVersion});
 
@@ -65,5 +68,12 @@ class _CloudFunctionsService implements CloudFunctionsService {
     if (ret.statusCode == 200) return ret.parseBodyAsJsonMap()['exists'];
 
     throw ret.body;
+  }
+
+  @override
+  Future<void> uploadDynamicKeys(String projectId, String apiKey,
+      List<Map<String, dynamic>> automationKeys) {
+    // TODO: implement uploadDynamicKeys
+    throw UnimplementedError();
   }
 }
