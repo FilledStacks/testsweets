@@ -4,6 +4,7 @@ import 'dart:io';
 
 import '../locator.dart';
 import '../models/build_info.dart';
+import 'dynamic_keys_generator_service.dart';
 import 'file_system_service.dart';
 import 'runnable_process.dart';
 import 'package:yaml/yaml.dart';
@@ -34,6 +35,7 @@ abstract class BuildService {
 class _BuildService implements BuildService {
   final fileSystemService = locator<FileSystemService>();
   final flutterProcess = locator<FlutterProcess>();
+  final dynamicKeysGeneratorService = locator<DynamicKeysGeneratorService>();
 
   @override
   Future<BuildInfo> build({
@@ -45,6 +47,7 @@ class _BuildService implements BuildService {
   }) async {
     final pathToPubspecFile = '$flutterApp\\pubspec.yaml';
     final pathToAppAutomationKeys = '$flutterApp\\app_automation_keys.json';
+    final pathToDynamicKeys = '$flutterApp\\dynamic_keys.json';
 
     if (!fileSystemService.doesFileExist(pathToPubspecFile)) {
       throw BuildError(
@@ -98,7 +101,9 @@ class _BuildService implements BuildService {
       buildMode: buildMode,
       appType: appType,
       version: pubspec['version'],
-      automationKeysJson: appAutomationKeysJson,
+      automationKeysJson: appAutomationKeysJson +
+          dynamicKeysGeneratorService
+              .generateAutomationKeysFromDynamicKeysFile(pathToDynamicKeys),
       dynamicKeysJson: [],
     );
   }

@@ -7,6 +7,7 @@ import '../bin/src/locator.dart';
 import '../bin/src/services/build_service.dart';
 import '../bin/src/services/file_system_service.dart';
 import '../bin/src/services/runnable_process.dart';
+import '../bin/src/services/dynamic_keys_generator_service.dart';
 import 'helpers.dart';
 
 class StubbedProcess implements Process {
@@ -80,18 +81,6 @@ const String ksAppAutomationKeysFile = """
     "type": "view",
     "view": "home"
   }
-]
-""";
-
-const String ksDynamicKeysFile = """
-[
-	{
-		"key": "orders_touchable_pending{index}"
-	},
-	{
-		"key": "orders_touchable_ready{index}",
-		"itemCount" : 50
-	},
 ]
 """;
 
@@ -262,6 +251,8 @@ void main() {
           final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
 
           fileSystemService = locator<FileSystemService>();
+          final dynamicKeysGeneratorService =
+              locator<DynamicKeysGeneratorService>();
           when(() => fileSystemService.doesFileExist(pubspecFilePath))
               .thenReturn(true);
           when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
@@ -270,6 +261,15 @@ void main() {
               .thenReturn(true);
           when(() => fileSystemService.readFileAsStringSync(
               appAutomationKeysFilePath)).thenReturn(ksAppAutomationKeysFile);
+          when(() => dynamicKeysGeneratorService
+              .generateAutomationKeysFromDynamicKeysFile(
+                  dynamicKeysFilePath)).thenReturn([
+            {
+              "name": "orders",
+              "type": "touchable",
+              "view": "ready",
+            }
+          ]);
 
           final flutterProcess = locator<FlutterProcess>();
           when(
@@ -306,45 +306,14 @@ void main() {
                 "name": "home",
                 "type": "view",
                 "view": "home",
+              },
+              {
+                "name": "orders",
+                "type": "touchable",
+                "view": "ready",
               }
             ],
           );
-        });
-
-        group("When the dynamic_keys.json file exists", () {
-          test(
-              "The returned build info should contain the dynamic_keys file contents",
-              () async {
-            when(() => fileSystemService.doesFileExist(dynamicKeysFilePath))
-                .thenReturn(true);
-
-            final instance = BuildService.makeInstance();
-            final buildInfo = await instance.build(
-                flutterApp: directoryPath,
-                appType: 'apk',
-                buildMode: 'profile');
-
-            expect(buildInfo.pathToBuild,
-                r'myApp\build\app\outputs\flutter-apk\abc.apk');
-            expect(buildInfo.buildMode, 'profile');
-            expect(buildInfo.appType, 'apk');
-            expect(buildInfo.version, '0.1.1');
-            expect(
-              buildInfo.automationKeysJson,
-              [
-                {
-                  "name": "home",
-                  "type": "view",
-                  "view": "home",
-                }
-              ],
-            );
-          });
-        });
-        group("When the dynamic_keys.json file does NOT exist", () {
-          test(
-              "The returned build info should have an empty list for dynamic keys json",
-              () {});
         });
       });
       group("When the flutterProcess completes with a non 0 exit code", () {

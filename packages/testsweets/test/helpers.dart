@@ -5,6 +5,7 @@ import '../bin/src/services/runnable_process.dart';
 import '../bin/src/services/http_service.dart';
 import '../bin/src/services/time_service.dart';
 import '../bin/src/services/cloud_functions_service.dart';
+import '../bin/src/services/dynamic_keys_generator_service.dart';
 
 class MockFileSystemService extends Mock implements FileSystemService {}
 
@@ -16,6 +17,9 @@ class MockTimeService extends Mock implements TimeService {}
 
 class MockCloudFunctionsService extends Mock implements CloudFunctionsService {}
 
+class MockDynamicKeysGeneratorService extends Mock
+    implements DynamicKeysGeneratorService {}
+
 void setUpLocatorForTesting() {
   locator
       .registerLazySingleton<FileSystemService>(() => MockFileSystemService());
@@ -24,4 +28,6 @@ void setUpLocatorForTesting() {
   locator.registerLazySingleton<TimeService>(() => MockTimeService());
   locator.registerLazySingleton<CloudFunctionsService>(
       () => MockCloudFunctionsService());
+  locator.registerLazySingleton<DynamicKeysGeneratorService>(
+      () => MockDynamicKeysGeneratorService());
 }
