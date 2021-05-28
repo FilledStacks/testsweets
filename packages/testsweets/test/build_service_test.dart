@@ -83,6 +83,18 @@ const String ksAppAutomationKeysFile = """
 ]
 """;
 
+const String ksDynamicKeysFile = """
+[
+	{
+		"key": "orders_touchable_pending{index}"
+	},
+	{
+		"key": "orders_touchable_ready{index}",
+		"itemCount" : 50
+	},
+]
+""";
+
 void main() {
   setUp(setUpLocatorForTesting);
   tearDown(() {
@@ -209,6 +221,7 @@ void main() {
           () async {
         final directoryPath = 'myApp';
         final pubspecFilePath = 'myApp\\pubspec.yaml';
+        final dynamicKeysFilePath = 'myApp\\dynamic_keys.json';
         final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
         final pathToBuild = 'abc';
 
@@ -218,6 +231,8 @@ void main() {
         when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
             .thenReturn(ksPubspecFileWithVersion);
 
+        when(() => fileSystemService.doesFileExist(dynamicKeysFilePath))
+            .thenReturn(false);
         when(() => fileSystemService.doesFileExist(appAutomationKeysFilePath))
             .thenReturn(true);
         when(() => fileSystemService.readFileAsStringSync(
@@ -238,17 +253,19 @@ void main() {
         expect(buildInfo.pathToBuild, pathToBuild);
       });
       group("When the flutterProcess completes with an exit code of 0", () {
-        test("Should return the correct build info", () async {
-          final directoryPath = 'myApp';
+        final directoryPath = 'myApp';
+        final dynamicKeysFilePath = 'myApp\\dynamic_keys.json';
+
+        late FileSystemService fileSystemService;
+        setUp(() {
           final pubspecFilePath = 'myApp\\pubspec.yaml';
           final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
 
-          final fileSystemService = locator<FileSystemService>();
+          fileSystemService = locator<FileSystemService>();
           when(() => fileSystemService.doesFileExist(pubspecFilePath))
               .thenReturn(true);
           when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
               .thenReturn(ksPubspecFileWithVersion);
-
           when(() => fileSystemService.doesFileExist(appAutomationKeysFilePath))
               .thenReturn(true);
           when(() => fileSystemService.readFileAsStringSync(
@@ -266,6 +283,12 @@ void main() {
               sStdOut: "RunningGradle task 'assembleProfile'...\n"
                   "Running Gradle task 'assembleProfile'... Done           378,6s\n"
                   r"Built build\app\outputs\flutter-apk\abc.apk."));
+        });
+        test(
+            "Should return the correct buildInfo pathToBuild, buildMode, appType, version, and automationKeysJson",
+            () async {
+          when(() => fileSystemService.doesFileExist(dynamicKeysFilePath))
+              .thenReturn(false);
 
           final instance = BuildService.makeInstance();
           final buildInfo = await instance.build(
@@ -286,6 +309,42 @@ void main() {
               }
             ],
           );
+        });
+
+        group("When the dynamic_keys.json file exists", () {
+          test(
+              "The returned build info should contain the dynamic_keys file contents",
+              () async {
+            when(() => fileSystemService.doesFileExist(dynamicKeysFilePath))
+                .thenReturn(true);
+
+            final instance = BuildService.makeInstance();
+            final buildInfo = await instance.build(
+                flutterApp: directoryPath,
+                appType: 'apk',
+                buildMode: 'profile');
+
+            expect(buildInfo.pathToBuild,
+                r'myApp\build\app\outputs\flutter-apk\abc.apk');
+            expect(buildInfo.buildMode, 'profile');
+            expect(buildInfo.appType, 'apk');
+            expect(buildInfo.version, '0.1.1');
+            expect(
+              buildInfo.automationKeysJson,
+              [
+                {
+                  "name": "home",
+                  "type": "view",
+                  "view": "home",
+                }
+              ],
+            );
+          });
+        });
+        group("When the dynamic_keys.json file does NOT exist", () {
+          test(
+              "The returned build info should have an empty list for dynamic keys json",
+              () {});
         });
       });
       group("When the flutterProcess completes with a non 0 exit code", () {

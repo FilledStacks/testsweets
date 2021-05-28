@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:get_it/get_it.dart';
 import 'services/build_service.dart';
+import 'services/dynamic_keys_generator_service.dart';
 import 'services/file_system_service.dart';
 import 'services/runnable_process.dart';
 import 'services/http_service.dart';
@@ -25,4 +26,6 @@ void setupLocator() {
       () => CloudFunctionsService.makeInstance());
   locator
       .registerLazySingleton<UploadService>(() => UploadService.makeInstance());
+  locator
+      .registerLazySingleton(() => DynamicKeysGeneratorService.makeInstance());
 }
