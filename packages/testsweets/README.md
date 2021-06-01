@@ -125,7 +125,7 @@ This will generate a new file next to the _pubspec.yaml_ file in your project ca
 
 Once that is in your code base you should be able to run the testsweets command to upload the automation keys. See the following section.
 
-## Index
+## Indexed keys
 
 In some cases you will need to generate widget keys dynamically during runtime. An example of such a situation is when you have to populate a list from a data source. To make sure each list item has a unique Key you might add the index of the item to the key. For example:
 
@@ -164,7 +164,7 @@ To have dynamic keys available for autocomplete in Test Sweets, we need to tell 
 
 When uploading a build, the package will read in this file and, for the first key, generate 50 automation keys where each automation key has "{index}" replaced with a unique value in the range [0, 49]. The same thing will be done for the second key but a default itemCount of 10 will be used. Once these keys are generated, the package will upload them with the rest of your automation keys.
 
-When viewing your automation keys in the Test Sweets app, these fake automation keys will also be listed and you should see them marked as "indexed". 
+When viewing your automation keys in the Test Sweets app, these fake automation keys will also be listed and you should see them marked as "indexed".
 
 ## Uploading automation keys and builds to the Test Sweets application
 
