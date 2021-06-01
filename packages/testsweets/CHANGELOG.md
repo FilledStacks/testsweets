@@ -1,3 +1,6 @@
+## 1.2.0
+- Adds functionality to allow the uploading of fake automation key entries for runtime generated keys.
+
 ## 1.1.0
 
 - The `upload` and `buildAndUpload` commands now check that there is no already uploaded build with the same version as the build being uploaded. It is an error to upload a build to an already existing version.
