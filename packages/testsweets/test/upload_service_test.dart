@@ -2,22 +2,14 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:test/test.dart';
+import 'package:testsweets/src/locator.dart';
+import 'package:testsweets/src/models/build_info.dart';
 
-import 'helpers.dart';
-import 'package:mocktail/mocktail.dart';
-import '../bin/src/locator.dart';
-import '../bin/src/services/file_system_service.dart';
-import '../bin/src/services/upload_service.dart';
-import '../bin/src/services/http_service.dart';
-import '../bin/src/models/build_info.dart';
-import '../bin/src/services/time_service.dart';
-import '../bin/src/services/cloud_functions_service.dart';
+import 'test_helpers.dart';
 
 void main() {
-  setUp(setUpLocatorForTesting);
-  tearDown(() {
-    locator.reset();
-  });
+  setUp(registerServices);
+  tearDown(() => locator.reset());
 
   group("UploadService Tests", () {
     group("uploadBuild(buildInfo, projectId, apiKey)", () {
@@ -52,29 +44,7 @@ void main() {
       final buildFile = makeBuildFile();
 
       setUp(() {
-        final cloudFunctionsService = locator<CloudFunctionsService>();
-        when(() => cloudFunctionsService.getV4BuildUploadSignedUrl(
-                projectId, apiKey, expectedObjectHeaders))
-            .thenAnswer((_) async => dummySignedUrl);
-
-        final fileSystemService = locator<FileSystemService>();
-        when(() => fileSystemService.doesFileExist('abc.apk')).thenReturn(true);
-        when(() => fileSystemService.openFileForReading('abc.apk'))
-            .thenAnswer((_) => buildFile);
-        when(() => fileSystemService.getFileSizeInBytes('abc.apk'))
-            .thenReturn(2);
-
-        final httpService = locator<HttpService>();
-        when(() => httpService.putBinary(
-              to: dummySignedUrl,
-              data: buildFile,
-              headers: expectedObjectHeaders,
-              contentLength: 2,
-            )).thenAnswer((_) async => SimpleHttpResponse(200, ''));
-
         final timeService = locator<TimeService>();
-        when(() => timeService.now())
-            .thenReturn(DateTime.parse("20210203T134714Z")); // ISO 8601
       });
 
       void whenCloudFunctions_doesBuildExistInProjectItShouldReturn(

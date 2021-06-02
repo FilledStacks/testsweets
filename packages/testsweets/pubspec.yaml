@@ -16,5 +16,6 @@ dependencies:
   get_it: ^6.0.0
 
 dev_dependencies:
-  mocktail: ^0.1.1
+  mockito:
   test: any
+  build_runner:

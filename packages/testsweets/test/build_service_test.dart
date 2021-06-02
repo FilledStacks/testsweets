@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:mocktail/mocktail.dart';
+import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import '../bin/src/locator.dart';
-import '../bin/src/services/build_service.dart';
-import '../bin/src/services/file_system_service.dart';
-import '../bin/src/services/runnable_process.dart';
-import '../bin/src/services/dynamic_keys_generator_service.dart';
-import 'helpers.dart';
+import 'package:testsweets/src/locator.dart';
+import 'package:testsweets/src/services/build_service.dart';
+import 'package:testsweets/src/services/dynamic_keys_generator_service.dart';
+import 'package:testsweets/src/services/file_system_service.dart';
+import 'package:testsweets/src/services/runnable_process.dart';
+import 'test_helpers.dart';
 
 class StubbedProcess implements Process {
   final int sExitCode;
@@ -85,28 +85,16 @@ const String ksAppAutomationKeysFile = """
 """;
 
 void main() {
-  setUp(setUpLocatorForTesting);
-  tearDown(() {
-    locator.reset();
-  });
-
   group("BuildService Tests", () {
+    setUp(registerServices);
+    tearDown(() => locator.reset());
     group("build", () {
       test(
           "Should throw BuildError if the given app directory does not contain a pubspec.yaml file",
           () {
         final directoryPath = 'myApp';
-        final pubspecFilePath = 'myApp\\pubspec.yaml';
-        final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
 
-        final fileSystemService = locator<FileSystemService>();
-        when(() => fileSystemService.doesFileExist(pubspecFilePath))
-            .thenReturn(false);
-
-        when(() => fileSystemService.doesFileExist(appAutomationKeysFilePath))
-            .thenReturn(true);
-        when(() => fileSystemService.readFileAsStringSync(
-            appAutomationKeysFilePath)).thenReturn(ksAppAutomationKeysFile);
+        getAndRegisterFileSystemService(doesFileExist: false);
 
         final instance = BuildService.makeInstance();
         final run = () => instance.build(
@@ -121,19 +109,11 @@ void main() {
           "Should throw BuildError if the pubspec.yaml file in the given app directory does not have a version",
           () {
         final directoryPath = 'myApp';
-        final pubspecFilePath = 'myApp\\pubspec.yaml';
-        final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
 
-        final fileSystemService = locator<FileSystemService>();
-        when(() => fileSystemService.doesFileExist(pubspecFilePath))
-            .thenReturn(true);
-        when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
-            .thenReturn(ksPubspecFileWithNoVersion);
-
-        when(() => fileSystemService.doesFileExist(appAutomationKeysFilePath))
-            .thenReturn(true);
-        when(() => fileSystemService.readFileAsStringSync(
-            appAutomationKeysFilePath)).thenReturn(ksAppAutomationKeysFile);
+        getAndRegisterFileSystemService(
+          doesFileExist: true,
+          readFileAsStringSyncResult: ksPubspecFileWithNoVersion,
+        );
 
         final instance = BuildService.makeInstance();
         final run = () => instance.build(
@@ -148,17 +128,11 @@ void main() {
           'Should throw BuildError if the given app directory does not contain an app_automation_keys.json file',
           () {
         final directoryPath = 'myApp';
-        final pubspecFilePath = 'myApp\\pubspec.yaml';
-        final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
 
-        final fileSystemService = locator<FileSystemService>();
-        when(() => fileSystemService.doesFileExist(pubspecFilePath))
-            .thenReturn(true);
-        when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
-            .thenReturn(ksPubspecFileWithVersion);
-
-        when(() => fileSystemService.doesFileExist(appAutomationKeysFilePath))
-            .thenReturn(false);
+        getAndRegisterFileSystemService(
+          doesFileExist: false,
+          readFileAsStringSyncResult: ksPubspecFileWithVersion,
+        );
 
         final instance = BuildService.makeInstance();
         final run = () => instance.build(
@@ -179,23 +153,13 @@ void main() {
         final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
 
         final fileSystemService = locator<FileSystemService>();
-        when(() => fileSystemService.doesFileExist(pubspecFilePath))
-            .thenReturn(true);
-        when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
-            .thenReturn(ksPubspecFileWithVersion);
+        getAndRegisterFileSystemService(
+            doesFileExist: true,
+            readFileAsStringSyncResult: ksAppAutomationKeysFile);
 
-        when(() => fileSystemService.doesFileExist(appAutomationKeysFilePath))
-            .thenReturn(true);
-        when(() => fileSystemService.readFileAsStringSync(
-            appAutomationKeysFilePath)).thenReturn(ksAppAutomationKeysFile);
+        getAndRegisterFlutterProcess();
 
         final flutterProcess = locator<FlutterProcess>();
-        when(() =>
-                flutterProcess.startWith(args: ['build', 'apk', '--profile']))
-            .thenAnswer((_) async => StubbedProcess(
-                sExitCode: 0,
-                sStdErr: '',
-                sStdOut: 'build\\app\\outputs\\flutter-apk\\abc.apk'));
 
         final instance = BuildService.makeInstance();
         await instance.build(
@@ -209,25 +173,9 @@ void main() {
           "Should not read the pathToBuild from the flutter process when it is given",
           () async {
         final directoryPath = 'myApp';
-        final pubspecFilePath = 'myApp\\pubspec.yaml';
-        final dynamicKeysFilePath = 'myApp\\dynamic_keys.json';
-        final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
         final pathToBuild = 'abc';
 
-        final fileSystemService = locator<FileSystemService>();
-        when(() => fileSystemService.doesFileExist(pubspecFilePath))
-            .thenReturn(true);
-        when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
-            .thenReturn(ksPubspecFileWithVersion);
-
-        when(() => fileSystemService.doesFileExist(dynamicKeysFilePath))
-            .thenReturn(false);
-        when(() => fileSystemService.doesFileExist(appAutomationKeysFilePath))
-            .thenReturn(true);
-        when(() => fileSystemService.readFileAsStringSync(
-            appAutomationKeysFilePath)).thenReturn(ksAppAutomationKeysFile);
-
-        final flutterProcess = locator<FlutterProcess>();
+        final flutterProcess = getAndRegisterFlutterProcess();
 
         final instance = BuildService.makeInstance();
         final buildInfo = await instance.build(
@@ -237,59 +185,15 @@ void main() {
           pathToBuild: pathToBuild,
         );
 
-        verifyNever(
-            () => flutterProcess.startWith(args: captureAny(named: 'args')));
+        verifyNever(() => flutterProcess.startWith(args: anyNamed('args')));
         expect(buildInfo.pathToBuild, pathToBuild);
       });
       group("When the flutterProcess completes with an exit code of 0", () {
         final directoryPath = 'myApp';
-        final dynamicKeysFilePath = 'myApp\\dynamic_keys.json';
 
-        late FileSystemService fileSystemService;
-        setUp(() {
-          final pubspecFilePath = 'myApp\\pubspec.yaml';
-          final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
-
-          fileSystemService = locator<FileSystemService>();
-          final dynamicKeysGeneratorService =
-              locator<DynamicKeysGeneratorService>();
-          when(() => fileSystemService.doesFileExist(pubspecFilePath))
-              .thenReturn(true);
-          when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
-              .thenReturn(ksPubspecFileWithVersion);
-          when(() => fileSystemService.doesFileExist(appAutomationKeysFilePath))
-              .thenReturn(true);
-          when(() => fileSystemService.readFileAsStringSync(
-              appAutomationKeysFilePath)).thenReturn(ksAppAutomationKeysFile);
-          when(() => dynamicKeysGeneratorService
-              .generateAutomationKeysFromDynamicKeysFile(
-                  dynamicKeysFilePath)).thenReturn([
-            {
-              "name": "orders",
-              "type": "touchable",
-              "view": "ready",
-            }
-          ]);
-
-          final flutterProcess = locator<FlutterProcess>();
-          when(
-              () => flutterProcess.startWith(args: [
-                    'build',
-                    'apk',
-                    '--profile'
-                  ])).thenAnswer((_) async => StubbedProcess(
-              sExitCode: 0,
-              sStdErr: '',
-              sStdOut: "RunningGradle task 'assembleProfile'...\n"
-                  "Running Gradle task 'assembleProfile'... Done           378,6s\n"
-                  r"Built build\app\outputs\flutter-apk\abc.apk."));
-        });
         test(
             "Should return the correct buildInfo pathToBuild, buildMode, appType, version, and automationKeysJson",
             () async {
-          when(() => fileSystemService.doesFileExist(dynamicKeysFilePath))
-              .thenReturn(false);
-
           final instance = BuildService.makeInstance();
           final buildInfo = await instance.build(
               flutterApp: directoryPath, appType: 'apk', buildMode: 'profile');
@@ -321,25 +225,6 @@ void main() {
             "Should throw BuildError with the contents of stderr of the flutter process as the message",
             () async {
           final directoryPath = 'myApp';
-          final pubspecFilePath = 'myApp\\pubspec.yaml';
-          final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
-
-          final fileSystemService = locator<FileSystemService>();
-          when(() => fileSystemService.doesFileExist(pubspecFilePath))
-              .thenReturn(true);
-          when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
-              .thenReturn(ksPubspecFileWithVersion);
-
-          when(() => fileSystemService.doesFileExist(appAutomationKeysFilePath))
-              .thenReturn(true);
-          when(() => fileSystemService.readFileAsStringSync(
-              appAutomationKeysFilePath)).thenReturn(ksAppAutomationKeysFile);
-
-          final flutterProcess = locator<FlutterProcess>();
-          when(() =>
-                  flutterProcess.startWith(args: ['build', 'apk', '--profile']))
-              .thenAnswer((_) async =>
-                  StubbedProcess(sExitCode: -1, sStdErr: 'abc', sStdOut: ''));
 
           final instance = BuildService.makeInstance();
           final run = () => instance.build(

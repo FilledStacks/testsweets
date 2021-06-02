@@ -1,14 +1,12 @@
-import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
+import 'package:testsweets/src/locator.dart';
+import 'package:testsweets/src/services/dynamic_keys_generator_service.dart';
 
-import 'helpers.dart';
-import '../bin/src/locator.dart';
-import '../bin/src/services/file_system_service.dart';
-import '../bin/src/services/dynamic_keys_generator_service.dart';
+import 'test_helpers.dart';
 
 void main() {
   group("DynamicKeysGeneratorService", () {
-    setUp(setUpLocatorForTesting);
+    setUp(registerServices);
     tearDown(() {
       locator.reset();
     });
@@ -66,25 +64,7 @@ void main() {
       final dynamicKeysFilePath = 'myApp\\dynamic_keys.json';
 
       group("When the dynamic_keys.json file exists", () {
-        setUp(() {
-          final fileSystemService = locator<FileSystemService>();
-
-          when(() => fileSystemService.doesFileExist(dynamicKeysFilePath))
-              .thenReturn(true);
-          when(() =>
-                  fileSystemService.readFileAsStringSync(dynamicKeysFilePath))
-              .thenReturn('''
-                    [
-                      {
-                        "key": "orders_touchable_pending"
-                      },
-                      {
-                        "key": "orders_touchable_ready",
-                        "itemCount" : 5
-                      }
-                    ]              
-              ''');
-        });
+        setUp(registerServices);
         test(
             "Should use a default itemCount value of 10 if itemCount is not given for a given key",
             () {
@@ -119,10 +99,7 @@ void main() {
       test(
           "Should return an empty list when the `dynamic_keys.json` file does NOT exist",
           () {
-        final fileSystemService = locator<FileSystemService>();
-
-        when(() => fileSystemService.doesFileExist(dynamicKeysFilePath))
-            .thenReturn(false);
+        getAndRegisterFileSystemService(doesFileExist: false);
 
         final instance = DynamicKeysGeneratorService.makeInstance();
         final ret = instance

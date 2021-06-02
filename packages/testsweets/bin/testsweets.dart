@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'src/locator.dart';
-import 'src/services/build_service.dart';
-import 'src/services/cloud_functions_service.dart';
-import 'src/services/file_system_service.dart';
-import 'src/services/upload_service.dart';
+import '../lib/src/locator.dart';
+import '../lib/src/services/build_service.dart';
+import '../lib/src/services/cloud_functions_service.dart';
+import '../lib/src/services/file_system_service.dart';
+import '../lib/src/services/upload_service.dart';
 
 Future<void> main(List<String> args) async {
   final errorMessage =
