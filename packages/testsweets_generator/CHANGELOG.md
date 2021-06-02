@@ -1,4 +1,4 @@
-## 1.0.0
+## 0.3.0
 
 - **Breaking Change**: The generator no longer outputs `lib/app_automation_keys.dart`, but `app_automation_keys.json` in the root folder of the project, i.e next to the pubspec file. The json file can be uploaded with the testsweets package.
 
