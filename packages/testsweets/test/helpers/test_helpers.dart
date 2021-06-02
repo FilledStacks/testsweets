@@ -8,16 +8,16 @@ import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/runnable_process.dart';
 import 'package:testsweets/src/services/time_service.dart';
 
-import 'build_service_test.dart';
+import '../build_service_test.dart';
 import 'test_helpers.mocks.dart';
 
 @GenerateMocks([], customMocks: [
-  MockSpec<FileSystemService>(),
-  MockSpec<FlutterProcess>(),
-  MockSpec<HttpService>(),
-  MockSpec<TimeService>(),
-  MockSpec<CloudFunctionsService>(),
-  MockSpec<DynamicKeysGeneratorService>(),
+  MockSpec<FileSystemService>(returnNullOnMissingStub: true),
+  MockSpec<FlutterProcess>(returnNullOnMissingStub: true),
+  MockSpec<HttpService>(returnNullOnMissingStub: true),
+  MockSpec<TimeService>(returnNullOnMissingStub: true),
+  MockSpec<CloudFunctionsService>(returnNullOnMissingStub: true),
+  MockSpec<DynamicKeysGeneratorService>(returnNullOnMissingStub: true),
 ])
 MockFileSystemService getAndRegisterFileSystemService({
   bool doesFileExist = false,
@@ -25,10 +25,11 @@ MockFileSystemService getAndRegisterFileSystemService({
 }) {
   _removeRegistrationIfExists<FileSystemService>();
   final service = MockFileSystemService();
-  when(() => service.doesFileExist(any)).thenReturn(() => doesFileExist);
 
-  when(() => service.readFileAsStringSync(any))
-      .thenReturn(() => readFileAsStringSyncResult);
+  when(service.doesFileExist(any)).thenReturn(doesFileExist);
+
+  when(service.readFileAsStringSync(any))
+      .thenReturn(readFileAsStringSyncResult);
 
   locator.registerSingleton<FileSystemService>(service);
   return service;
@@ -37,8 +38,8 @@ MockFileSystemService getAndRegisterFileSystemService({
 MockFlutterProcess getAndRegisterFlutterProcess() {
   _removeRegistrationIfExists<FlutterProcess>();
   final service = MockFlutterProcess();
-  when(() => service.startWith(args: anyNamed('args'))).thenAnswer((_) {
-    return () => Future.value(StubbedProcess(
+  when(service.startWith(args: anyNamed('args'))).thenAnswer((_) {
+    return Future.value(StubbedProcess(
         sExitCode: 0,
         sStdErr: '',
         sStdOut: 'build\\app\\outputs\\flutter-apk\\abc.apk'));
@@ -60,8 +61,8 @@ MockDynamicKeysGeneratorService getAndRegisterDynamicKeysGeneratorService(
   _removeRegistrationIfExists<DynamicKeysGeneratorService>();
   final service = MockDynamicKeysGeneratorService();
 
-  when(() => service.generateAutomationKeysFromDynamicKeysFile(any)).thenReturn(
-    () => generateAutomationKeysFromDynamicKeysFileResult,
+  when(service.generateAutomationKeysFromDynamicKeysFile(any)).thenReturn(
+    generateAutomationKeysFromDynamicKeysFileResult,
   );
 
   locator.registerSingleton<DynamicKeysGeneratorService>(service);
@@ -72,12 +73,12 @@ MockHttpService getAndRegisterHttpService() {
   _removeRegistrationIfExists<HttpService>();
   final service = MockHttpService();
 
-  when(() => service.putBinary(
-        to: any,
-        data: any,
-        headers: any,
-        contentLength: 2,
-      )).thenAnswer((_) => () async => SimpleHttpResponse(200, ''));
+  when(service.putBinary(
+    to: anyNamed('to'),
+    data: anyNamed('data'),
+    headers: anyNamed('headers'),
+    contentLength: anyNamed('contentLength'),
+  )).thenAnswer((_) async => SimpleHttpResponse(200, ''));
 
   locator.registerSingleton<HttpService>(service);
   return service;
@@ -91,14 +92,20 @@ MockTimeService getAndRegisterTimeService() {
 }
 
 MockCloudFunctionsService getAndRegisterCloudFunctionsService(
-    {String getV4BuildUploadSignedUrlResult = ''}) {
+    {String getV4BuildUploadSignedUrlResult = '',
+    bool doesBuildExistInProjectResult = true}) {
   _removeRegistrationIfExists<CloudFunctionsService>();
   final service = MockCloudFunctionsService();
-  when(() => service.getV4BuildUploadSignedUrl(
-        any,
-        any,
-        any,
-      )).thenAnswer((_) => () async => getV4BuildUploadSignedUrlResult);
+  when(service.getV4BuildUploadSignedUrl(
+    any,
+    any,
+    any,
+  )).thenAnswer((_) async => getV4BuildUploadSignedUrlResult);
+
+  when(service.doesBuildExistInProject(any,
+          withVersion: anyNamed('withVersion')))
+      .thenAnswer((invocation) async => doesBuildExistInProjectResult);
+
   locator.registerSingleton<CloudFunctionsService>(service);
   return service;
 }
@@ -109,6 +116,7 @@ void registerServices() {
   getAndRegisterHttpService();
   getAndRegisterTimeService();
   getAndRegisterCloudFunctionsService();
+  getAndRegisterDynamicKeysGeneratorService();
 }
 
 // Call this before any service registration helper. This is to ensure that if there

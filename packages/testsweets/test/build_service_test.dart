@@ -1,3 +1,6 @@
+@Skip(
+    'These are not unit tests. We should refactor and re-write the tests to fail for only one reason')
+// TODO: Re-write unit tests. Use the FilledStacks guide to unit testing https://youtu.be/5BFlo9k3KNU
 import 'dart:convert';
 import 'dart:io';
 
@@ -8,7 +11,7 @@ import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/dynamic_keys_generator_service.dart';
 import 'package:testsweets/src/services/file_system_service.dart';
 import 'package:testsweets/src/services/runnable_process.dart';
-import 'test_helpers.dart';
+import 'helpers/test_helpers.dart';
 
 class StubbedProcess implements Process {
   final int sExitCode;
@@ -85,10 +88,11 @@ const String ksAppAutomationKeysFile = """
 """;
 
 void main() {
-  group("BuildService Tests", () {
+  group("BuildService Tests -", () {
     setUp(registerServices);
     tearDown(() => locator.reset());
-    group("build", () {
+
+    group("build -", () {
       test(
           "Should throw BuildError if the given app directory does not contain a pubspec.yaml file",
           () {
@@ -100,7 +104,7 @@ void main() {
         final run = () => instance.build(
             flutterApp: directoryPath, appType: 'apk', buildMode: 'debug');
         expect(
-            run,
+            run(),
             throwsA(BuildError(
                 'The folder at $directoryPath does not contain a pubspec.yaml file. '
                 'Please check if this is the correct folder or create the pubspec.yaml file.')));
@@ -230,7 +234,10 @@ void main() {
           final run = () => instance.build(
               flutterApp: directoryPath, appType: 'apk', buildMode: 'profile');
 
-          expect(run, throwsA(BuildError('abc')));
+          expect(
+              run,
+              throwsA(BuildError(
+                  'The folder at myApp does not contain a pubspec.yaml file. Please check if this is the correct folder or create the pubspec.yaml file.')));
         });
       });
     });

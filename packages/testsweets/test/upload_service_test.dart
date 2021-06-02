@@ -1,18 +1,20 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/build_info.dart';
+import 'package:testsweets/src/services/upload_service.dart';
 
-import 'test_helpers.dart';
+import 'helpers/test_helpers.dart';
 
 void main() {
-  setUp(registerServices);
-  tearDown(() => locator.reset());
+  group("UploadService Tests -", () {
+    setUp(registerServices);
+    tearDown(() => locator.reset());
 
-  group("UploadService Tests", () {
-    group("uploadBuild(buildInfo, projectId, apiKey)", () {
+    group("uploadBuild(buildInfo, projectId, apiKey) -", () {
       final buildInfo = BuildInfo(
         pathToBuild: 'abc.apk',
         buildMode: 'debug',
@@ -43,22 +45,13 @@ void main() {
 
       final buildFile = makeBuildFile();
 
-      setUp(() {
-        final timeService = locator<TimeService>();
-      });
-
-      void whenCloudFunctions_doesBuildExistInProjectItShouldReturn(
-          bool valueToReturn) {
-        final cloudFunctionsService = locator<CloudFunctionsService>();
-        when(() => cloudFunctionsService.doesBuildExistInProject(captureAny(),
-                withVersion: captureAny(named: 'withVersion')))
-            .thenAnswer((invocation) async => valueToReturn);
-      }
+      setUp(registerServices);
 
       test(
           "Should throw BuildUploadError if there already exists a build with the same version number as the uploaded one",
           () {
-        whenCloudFunctions_doesBuildExistInProjectItShouldReturn(true);
+        getAndRegisterCloudFunctionsService(
+            doesBuildExistInProjectResult: true);
         final instance = UploadService.makeInstance();
 
         final run = () => instance.uploadBuild(buildInfo, projectId, apiKey);
@@ -72,12 +65,13 @@ void main() {
       test(
           "Should upload the file with the correct data and headers to the signed endpoint returned by CloudFunctionsService.getV4BuildUploadSignedUrl",
           () async {
-        whenCloudFunctions_doesBuildExistInProjectItShouldReturn(false);
+        getAndRegisterCloudFunctionsService(
+            doesBuildExistInProjectResult: false);
+        final httpService = getAndRegisterHttpService();
         final instance = UploadService.makeInstance();
 
         await instance.uploadBuild(buildInfo, projectId, apiKey);
 
-        final httpService = locator<HttpService>();
         verify(() => httpService.putBinary(
             to: dummySignedUrl,
             data: buildFile,
