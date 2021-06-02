@@ -125,6 +125,47 @@ This will generate a new file next to the _pubspec.yaml_ file in your project ca
 
 Once that is in your code base you should be able to run the testsweets command to upload the automation keys. See the following section.
 
+## Indexed keys
+
+In some cases you will need to generate widget keys dynamically during runtime. An example of such a situation is when you have to populate a list from a data source. To make sure each list item has a unique Key you might add the index of the item to the key. For example:
+
+```dart
+final List<String> restaurantNames = getRestaurantNames();
+
+ListView.builder(
+  padding: const EdgeInsets.all(8),
+  itemCount: restaurantNames.length,
+  itemBuilder: (BuildContext context, int index) {
+    return Container(
+      key: Key('browse_general_restaurantName$index');
+      height: 50,
+      color: Colors.blue,
+      child: Center(child: Text('Restaurant "${restaurantNames[index]}"')),
+    );
+  }
+);
+```
+
+Here the list will have items with the dynamically generated keys `browse_general_restaurantName0`, `browse_general_restaurantName1`, `browse_general_restaurantName2`, and so on. These keys will not be included in the generated `app_automation_keys.json` file and will, therefore, not be uploaded for autocomplete.
+
+To have dynamic keys available for autocomplete in Test Sweets, we need to tell the `testsweets` package to generate fake keys and make those fake keys available for autocomplete. To do this, add a file named `dynamic_keys.json` to the root folder of your project:
+
+```json
+[
+  {
+    "key": "browse_general_restaurantName{index}",
+    "itemCount": 50
+  },
+  {
+    "key": "orders_touchable_pending{index}"
+  }
+]
+```
+
+When uploading a build, the package will read in this file and, for the first key, generate 50 automation keys where each automation key has "{index}" replaced with a unique value in the range [0, 49]. The same thing will be done for the second key but a default itemCount of 10 will be used. Once these keys are generated, the package will upload them with the rest of your automation keys.
+
+When viewing your automation keys in the Test Sweets app, these fake automation keys will also be listed and you should see them marked as "indexed".
+
 ## Uploading automation keys and builds to the Test Sweets application
 
 Once you have written your scripts you will need to upload a build to test with them. This is done by building your application in debug or profile mode and uploading it to the Test Sweets backend. To make things more convenient, the process of uploading a build also uploads the automation keys. Therefore, before you start writing test cases for the first time you may want to upload a build so that your automation keys are available for autocomplete. To build and upload your application navigate to the folder containing your `pubspec.yaml` file and run the `testsweets` package as follows:

@@ -27,6 +27,7 @@ void main() {
         appType: 'apk',
         version: '1.2.0',
         automationKeysJson: [],
+        dynamicKeysJson: [],
       );
 
       final projectId = 'testProjectId';

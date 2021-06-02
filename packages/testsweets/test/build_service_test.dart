@@ -7,6 +7,7 @@ import '../bin/src/locator.dart';
 import '../bin/src/services/build_service.dart';
 import '../bin/src/services/file_system_service.dart';
 import '../bin/src/services/runnable_process.dart';
+import '../bin/src/services/dynamic_keys_generator_service.dart';
 import 'helpers.dart';
 
 class StubbedProcess implements Process {
@@ -209,6 +210,7 @@ void main() {
           () async {
         final directoryPath = 'myApp';
         final pubspecFilePath = 'myApp\\pubspec.yaml';
+        final dynamicKeysFilePath = 'myApp\\dynamic_keys.json';
         final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
         final pathToBuild = 'abc';
 
@@ -218,6 +220,8 @@ void main() {
         when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
             .thenReturn(ksPubspecFileWithVersion);
 
+        when(() => fileSystemService.doesFileExist(dynamicKeysFilePath))
+            .thenReturn(false);
         when(() => fileSystemService.doesFileExist(appAutomationKeysFilePath))
             .thenReturn(true);
         when(() => fileSystemService.readFileAsStringSync(
@@ -238,21 +242,34 @@ void main() {
         expect(buildInfo.pathToBuild, pathToBuild);
       });
       group("When the flutterProcess completes with an exit code of 0", () {
-        test("Should return the correct build info", () async {
-          final directoryPath = 'myApp';
+        final directoryPath = 'myApp';
+        final dynamicKeysFilePath = 'myApp\\dynamic_keys.json';
+
+        late FileSystemService fileSystemService;
+        setUp(() {
           final pubspecFilePath = 'myApp\\pubspec.yaml';
           final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
 
-          final fileSystemService = locator<FileSystemService>();
+          fileSystemService = locator<FileSystemService>();
+          final dynamicKeysGeneratorService =
+              locator<DynamicKeysGeneratorService>();
           when(() => fileSystemService.doesFileExist(pubspecFilePath))
               .thenReturn(true);
           when(() => fileSystemService.readFileAsStringSync(pubspecFilePath))
               .thenReturn(ksPubspecFileWithVersion);
-
           when(() => fileSystemService.doesFileExist(appAutomationKeysFilePath))
               .thenReturn(true);
           when(() => fileSystemService.readFileAsStringSync(
               appAutomationKeysFilePath)).thenReturn(ksAppAutomationKeysFile);
+          when(() => dynamicKeysGeneratorService
+              .generateAutomationKeysFromDynamicKeysFile(
+                  dynamicKeysFilePath)).thenReturn([
+            {
+              "name": "orders",
+              "type": "touchable",
+              "view": "ready",
+            }
+          ]);
 
           final flutterProcess = locator<FlutterProcess>();
           when(
@@ -266,6 +283,12 @@ void main() {
               sStdOut: "RunningGradle task 'assembleProfile'...\n"
                   "Running Gradle task 'assembleProfile'... Done           378,6s\n"
                   r"Built build\app\outputs\flutter-apk\abc.apk."));
+        });
+        test(
+            "Should return the correct buildInfo pathToBuild, buildMode, appType, version, and automationKeysJson",
+            () async {
+          when(() => fileSystemService.doesFileExist(dynamicKeysFilePath))
+              .thenReturn(false);
 
           final instance = BuildService.makeInstance();
           final buildInfo = await instance.build(
@@ -283,6 +306,11 @@ void main() {
                 "name": "home",
                 "type": "view",
                 "view": "home",
+              },
+              {
+                "name": "orders",
+                "type": "touchable",
+                "view": "ready",
               }
             ],
           );
