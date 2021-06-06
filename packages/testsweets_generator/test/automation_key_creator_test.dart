@@ -12,6 +12,13 @@ void main() {
       });
 
       test(
+          'When called with key that contains no underscored, should return null',
+          () {
+        var creator = const AutomationKeyCreator();
+        expect(creator.getAutomationKeyFromKeyValue('0'), null);
+      });
+
+      test(
           'When called with string with only 1 underscore and the last word is not "view", should throw exception with InvalidFormatExceptionMessage as message',
           () {
         var creator = const AutomationKeyCreator();
@@ -21,8 +28,8 @@ void main() {
             throwsA(predicate((e) =>
                 e is KeyFormatException &&
                 e.message ==
-                    InvalidFormatExceptionMessage +
-                        DynamicFormatMessage.replaceAll('{0}', wrongKey))));
+                    InvalidFormatExceptionMessage.replaceAll(
+                        '{0}', wrongKey))));
       });
 
       test('When called with login_view should return login as VIEW', () {

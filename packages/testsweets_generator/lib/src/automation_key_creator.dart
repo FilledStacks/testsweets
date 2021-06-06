@@ -4,7 +4,7 @@ import 'package:testsweets_generator/src/exceptions/key_format_exception.dart';
 import 'data_models/data_models.dart';
 
 const String InvalidFormatExceptionMessage =
-    '''The key passed in is not in a valid format. Please check the documentation for correct format.
+    '''The key {0} passed in is not in a valid format. Please check the documentation for correct format.
 A key has to be split into 3 parts [view]_[type]_[name]. The view is automatically added by the generator. 
 The key in your code should look as follows [type]_[name] .i.e. input_email.''';
 
@@ -38,7 +38,7 @@ class AutomationKeyCreator {
 
   @visibleForTesting
   AutomationKey? getAutomationKeyFromKeyValue(String? key) {
-    if (key == null || key == '') {
+    if (key == null || key == '' || !key.contains('_')) {
       return null;
     }
 
@@ -51,9 +51,10 @@ class AutomationKeyCreator {
       );
     }
 
-    if (keyParts.length != 3)
-      throw KeyFormatException(InvalidFormatExceptionMessage +
-          DynamicFormatMessage.replaceAll('{0}', key));
+    if (keyParts.length != 3) {
+      throw KeyFormatException(
+          InvalidFormatExceptionMessage.replaceAll('{0}', key));
+    }
 
     var keyTypeString = keyParts[1];
 
