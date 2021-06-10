@@ -1,4 +1,9 @@
+## 1.2.1
+
+- Updates the upload function to upload a list of Strings instead of a list of Automation Key models
+
 ## 1.2.0
+
 - Adds functionality to allow the uploading of fake automation key entries for runtime generated keys.
 
 ## 1.1.0
