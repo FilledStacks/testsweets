@@ -5,8 +5,11 @@ abstract class CloudFunctionsService {
   Future<String> getV4BuildUploadSignedUrl(String projectId, String apiKey,
       [Map extensionHeaders = const <String, String>{}]);
 
-  Future<void> uploadAutomationKeys(String projectId, String apiKey,
-      List<Map<String, dynamic>> automationKeys);
+  Future<void> uploadAutomationKeys(
+    String projectId,
+    String apiKey,
+    List<String> automationKeys,
+  );
 
   Future<bool> doesBuildExistInProject(String projectId,
       {required String withVersion});
@@ -39,12 +42,12 @@ class _CloudFunctionsService implements CloudFunctionsService {
   }
 
   @override
-  Future<void> uploadAutomationKeys(String projectId, String apiKey,
-      List<Map<String, dynamic>> automationKeys) async {
+  Future<void> uploadAutomationKeys(
+      String projectId, String apiKey, List<String> automationKeys) async {
     final endpoint =
-        'https://us-central1-testsweets-38348.cloudfunctions.net/saveAutomationKeys';
+        'http://localhost:5000/testsweets-38348/us-central1/projects-api/uploadAutomationKeys';
+
     final ret = await httpService.postJson(to: endpoint, body: {
-      'apiKey': apiKey,
       'projectId': projectId,
       'automationKeys': automationKeys,
     });

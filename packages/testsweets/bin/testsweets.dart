@@ -76,8 +76,11 @@ For example:
   );
 
   print('Uploading automation keys ...');
-  await locator<CloudFunctionsService>()
-      .uploadAutomationKeys(projectId, apiKey, buildInfo.automationKeysJson);
+  await locator<CloudFunctionsService>().uploadAutomationKeys(
+    projectId,
+    apiKey,
+    buildInfo.automationKeysJson,
+  );
   print('Successfully uploaded automation keys!');
 
   print('Uploading build ...');

@@ -76,7 +76,7 @@ class _HttpService implements HttpService {
     headers = headers ?? <String, String>{};
     headers.putIfAbsent(
         HttpHeaders.contentTypeHeader, () => 'application/json');
-    final response = await http.put(Uri.parse(to),
+    final response = await http.post(Uri.parse(to),
         body: json.encode(body), headers: headers);
 
     return SimpleHttpResponse(response.statusCode, response.body);

@@ -14,7 +14,7 @@ class BuildInfo {
   /// The parsed contents of the `app_automation_keys.json` file.
   ///
   /// This list also includes the automation keys generated
-  final List<Map<String, dynamic>> automationKeysJson;
+  final List<String> automationKeysJson;
 
   /// The parsed contents of the `dynamic_keys.json' file.
   final List<Map<String, dynamic>> dynamicKeysJson;

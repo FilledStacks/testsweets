@@ -25,7 +25,7 @@ class AutomationKeyGenerator implements Builder {
   @override
   FutureOr<void> build(BuildStep buildStep) async {
     // Will store all the files required for this build step
-    final appAutomationKeys = <AutomationKey>[];
+    final appAutomationKeys = <String>[];
 
     await for (final input in buildStep.findAssets(_allFilesInLib)) {
       var fileContent = await buildStep.readAsString(input);
@@ -35,10 +35,7 @@ class AutomationKeyGenerator implements Builder {
           .map((key) => '$key')
           .toList();
 
-      var automationKeys =
-          _keyCreator.getAutomationKeysFromStrings(extractedkeys);
-
-      appAutomationKeys.addAll(automationKeys);
+      appAutomationKeys.addAll(extractedkeys);
     }
 
     final outputFile = _allFileOutput(buildStep);

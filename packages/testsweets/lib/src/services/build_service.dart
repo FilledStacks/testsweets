@@ -65,10 +65,11 @@ class _BuildService implements BuildService {
 
     final pubspec =
         loadYaml(fileSystemService.readFileAsStringSync(pathToPubspecFile));
+
     final appAutomationKeysJson = (json.decode(
                 fileSystemService.readFileAsStringSync(pathToAppAutomationKeys))
             as Iterable)
-        .map((e) => e as Map<String, dynamic>)
+        .map((e) => e.toString())
         .toList();
 
     if (pubspec['version'] == null) {
@@ -101,9 +102,7 @@ class _BuildService implements BuildService {
       buildMode: buildMode,
       appType: appType,
       version: pubspec['version'],
-      automationKeysJson: appAutomationKeysJson +
-          dynamicKeysGeneratorService
-              .generateAutomationKeysFromDynamicKeysFile(pathToDynamicKeys),
+      automationKeysJson: appAutomationKeysJson,
       dynamicKeysJson: [],
     );
   }
