@@ -1,3 +1,7 @@
+## 0.3.2
+
+- Updates generator to produce a list of Strings to `lib/app_automation_keys.dart`
+
 ## 0.3.1
 
 - Fixes the build runner failing for non-matching keys issue
