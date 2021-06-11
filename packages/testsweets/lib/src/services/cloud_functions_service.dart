@@ -3,7 +3,7 @@ import 'http_service.dart';
 
 abstract class CloudFunctionsService {
   Future<String> getV4BuildUploadSignedUrl(String projectId, String apiKey,
-      [Map<String, String> extensionHeaders = const <String, String>{}]);
+      [Map extensionHeaders = const <String, String>{}]);
 
   Future<void> uploadAutomationKeys(
     String projectId,
@@ -24,15 +24,15 @@ class _CloudFunctionsService implements CloudFunctionsService {
 
   @override
   Future<String> getV4BuildUploadSignedUrl(String projectId, String apiKey,
-      [Map<String, String> extensionHeaders = const <String, String>{}]) async {
-    final queryParameters = extensionHeaders.keys.map(
-        (key) => '$key=${Uri.encodeQueryComponent(extensionHeaders[key]!)}');
-
+      [Map extensionHeaders = const <String, String>{}]) async {
     final endpoint =
-        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/getUploadUrlForBuild?projectId=$projectId&${queryParameters.join('&')}';
-    print('Get signed url from $endpoint');
-    print('');
-    final ret = await httpService.get(to: endpoint);
+        // 'http://localhost:5000/testsweets-38348/us-central1/projects-api/createUploadUrlForBuild';
+        'https://us-central1-testsweets-38348.cloudfunctions.net/getV4BuildUploadSignedUrl';
+    final ret = await httpService.postJson(to: endpoint, body: {
+      'projectId': projectId,
+      'apiKey': apiKey,
+      'extensionHeaders': extensionHeaders,
+    });
 
     if (ret.statusCode == 500) {
       throw ret.parseBodyAsJsonMap();

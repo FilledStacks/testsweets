@@ -43,8 +43,6 @@ class _HttpService implements HttpService {
       required int contentLength,
       Map<String, String>? headers}) async {
     headers = headers ?? <String, String>{};
-    headers.putIfAbsent(
-        HttpHeaders.contentTypeHeader, () => 'application/octet-stream');
 
     final request = await HttpClient().putUrl(Uri.parse(to));
     headers.forEach((key, value) => request.headers.set(key, value));
