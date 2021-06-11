@@ -26,7 +26,7 @@ class _CloudFunctionsService implements CloudFunctionsService {
   Future<String> getV4BuildUploadSignedUrl(String projectId, String apiKey,
       [Map extensionHeaders = const <String, String>{}]) async {
     final endpoint =
-        // 'http://localhost:5000/testsweets-38348/us-central1/projects-api/createUploadUrlForBuild';
+        // 'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/createUploadUrlForBuild';
         'https://us-central1-testsweets-38348.cloudfunctions.net/getV4BuildUploadSignedUrl';
     final ret = await httpService.postJson(to: endpoint, body: {
       'projectId': projectId,

@@ -1,3 +1,7 @@
+## 1.2.2
+
+- Updates the upload url for builds again to point to the old functionality
+
 ## 1.2.1
 
 - Updates the upload function to upload a list of Strings instead of a list of Automation Key models
