@@ -75,6 +75,8 @@ For example:
     pathToBuild: pathToBuild,
   );
 
+  print('BuildInfo collected: $buildInfo');
+
   print('Uploading automation keys ...');
   await locator<CloudFunctionsService>().uploadAutomationKeys(
     projectId,

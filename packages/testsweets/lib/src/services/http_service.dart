@@ -17,6 +17,9 @@ abstract class HttpService {
       required Map<String, dynamic> body,
       Map<String, String>? headers});
 
+  Future<SimpleHttpResponse> get(
+      {required String to, Map<String, String>? headers});
+
   factory HttpService.makeInstance() {
     return _HttpService();
   }
@@ -46,6 +49,8 @@ class _HttpService implements HttpService {
     final request = await HttpClient().putUrl(Uri.parse(to));
     headers.forEach((key, value) => request.headers.set(key, value));
 
+    // print('put binary headers: $headers');
+
     int numberOfBytesWritten = 0;
     Stopwatch counter = Stopwatch();
     final response = await data.map((chunk) {
@@ -56,7 +61,7 @@ class _HttpService implements HttpService {
       if (counter.elapsed > Duration(seconds: 1)) {
         counter.reset();
         print(
-            "Uploaded ${(numberOfBytesWritten / contentLength * 100).ceil()}% of $contentLength");
+            "Uploaded ${((numberOfBytesWritten / contentLength) * 100).ceil()}% of $contentLength");
       }
 
       return chunk;
@@ -78,6 +83,14 @@ class _HttpService implements HttpService {
         HttpHeaders.contentTypeHeader, () => 'application/json');
     final response = await http.post(Uri.parse(to),
         body: json.encode(body), headers: headers);
+
+    return SimpleHttpResponse(response.statusCode, response.body);
+  }
+
+  @override
+  Future<SimpleHttpResponse> get(
+      {required String to, Map<String, String>? headers}) async {
+    final response = await http.get(Uri.parse(to), headers: headers);
 
     return SimpleHttpResponse(response.statusCode, response.body);
   }

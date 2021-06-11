@@ -24,31 +24,59 @@ class _UploadService implements UploadService {
 
   @override
   Future<void> uploadBuild(
-      BuildInfo buildInfo, String projectId, String apiKey) async {
+    BuildInfo buildInfo,
+    String projectId,
+    String apiKey,
+  ) async {
     await throwIfBuildIsDuplicate(projectId, buildInfo);
     final buildFileContents =
         fileSystemService.openFileForReading(buildInfo.pathToBuild);
+
+    print('File ${buildInfo.pathToBuild} opened for reading ...');
+
     final buildFileSize =
         fileSystemService.getFileSizeInBytes(buildInfo.pathToBuild);
 
-    final headers = <String, String>{
+    print('File ${buildInfo.pathToBuild} size in bytes $buildFileSize');
+
+    final uploadTime = HttpDate.format(timeService.now());
+
+    final uploadUrlHeaders = <String, String>{
+      'contentLength': buildFileSize.toString(),
+      'contentType': 'application/octet-stream',
+      'date': uploadTime,
+      'buildMode': buildInfo.buildMode,
+      'version': buildInfo.version,
+      'appType': buildInfo.appType,
+    };
+
+    final endpoint = await cloudFunctionsService.getV4BuildUploadSignedUrl(
+      projectId,
+      apiKey,
+      uploadUrlHeaders,
+    );
+
+    print('Build upload url returned: $endpoint');
+
+    final uploadHeaders = <String, String>{
       HttpHeaders.contentLengthHeader: buildFileSize.toString(),
       HttpHeaders.contentTypeHeader: 'application/octet-stream',
       'Host': 'storage.googleapis.com',
-      'Date': HttpDate.format(timeService.now()),
+      'Date': uploadTime,
       'x-goog-meta-buildMode': buildInfo.buildMode,
       'x-goog-meta-version': buildInfo.version,
       'x-goog-meta-appType': buildInfo.appType,
     };
 
-    final endpoint = await cloudFunctionsService.getV4BuildUploadSignedUrl(
-        projectId, apiKey, headers);
+    print(
+        'Start the upload ... with size $buildFileSize and headers $uploadHeaders');
 
     final ret = await httpService.putBinary(
-        to: endpoint,
-        data: buildFileContents,
-        contentLength: buildFileSize,
-        headers: headers);
+      to: endpoint,
+      data: buildFileContents,
+      contentLength: buildFileSize,
+      headers: uploadHeaders,
+    );
 
     if (ret.body.contains('<Error>')) throw ret.body;
   }
