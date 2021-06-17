@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
+
 import '../lib/src/locator.dart';
 import '../lib/src/services/build_service.dart';
 import '../lib/src/services/cloud_functions_service.dart';
@@ -41,9 +43,6 @@ For example:
   final command = args[0];
   final appType = args[1];
   final buildMode = args[2];
-  final projectId = args[3];
-  final apiKey = args[4];
-  final extraArgs = args.length > 5 ? args.sublist(5) : <String>[];
 
   if (!['buildAndUpload', 'upload'].contains(command) ||
       buildMode == 'release') {
@@ -65,27 +64,50 @@ For example:
   }
 
   setupLocator();
-  final flutterApp = locator<FileSystemService>().fullPathToWorkingDirectory;
+
+  final fileSystemService = locator<FileSystemService>();
+  final flutterProjectFullPath = fileSystemService.fullPathToWorkingDirectory;
+
+  final pathToTestSweetsConfigsFile = '$flutterProjectFullPath\\.testsweets';
+
+  if (!fileSystemService.doesFileExist(pathToTestSweetsConfigsFile)) {
+    throw BuildError(
+        'The folder at $flutterProjectFullPath does not contain a pubspec.yaml file. '
+        'Please check if this is the correct folder or create the pubspec.yaml file.');
+  }
+  final testSweetsConfigsSrc =
+      fileSystemService.readFileAsStringSync(pathToTestSweetsConfigsFile);
+  TestSweetsConfigFileService testSweetsConfigFileService =
+      TestSweetsConfigFileServiceImplementaion(
+          testSweetsConfigsFileSrc: testSweetsConfigsSrc);
 
   final buildInfo = await locator<BuildService>().build(
-    flutterApp: flutterApp,
-    appType: appType,
-    buildMode: buildMode,
-    extraFlutterProcessArgs: extraArgs,
-    pathToBuild: pathToBuild,
-  );
+      flutterApp: flutterProjectFullPath,
+      appType: appType,
+      buildMode: buildMode,
+      pathToBuild: pathToBuild,
+      extraFlutterProcessArgs: testSweetsConfigFileService
+          .getValueFromConfigFileByKey(ConfigFileKeyType.FlutterBuildCommand)
+          .split(' '));
 
   print('BuildInfo collected: $buildInfo');
 
   print('Uploading automation keys ...');
   await locator<CloudFunctionsService>().uploadAutomationKeys(
-    projectId,
-    apiKey,
+    testSweetsConfigFileService
+        .getValueFromConfigFileByKey(ConfigFileKeyType.ProjectId),
+    testSweetsConfigFileService
+        .getValueFromConfigFileByKey(ConfigFileKeyType.ApiKey),
     buildInfo.automationKeysJson,
   );
   print('Successfully uploaded automation keys!');
 
   print('Uploading build ...');
-  await locator<UploadService>().uploadBuild(buildInfo, projectId, apiKey);
+  await locator<UploadService>().uploadBuild(
+      buildInfo,
+      testSweetsConfigFileService
+          .getValueFromConfigFileByKey(ConfigFileKeyType.ProjectId),
+      testSweetsConfigFileService
+          .getValueFromConfigFileByKey(ConfigFileKeyType.ApiKey));
   print("Done!");
 }
