@@ -9,7 +9,13 @@ import '../lib/src/services/file_system_service.dart';
 import '../lib/src/services/upload_service.dart';
 
 Future<void> main(List<String> args) async {
-  final errorMessage =
+  void quit(
+    String errorMsg,
+  ) {
+    throw BuildError('Error: $errorMsg');
+  }
+
+  final _buildArgumentsError =
       '''Expected arguments to have the form: buildAndUpload appType buildMode projectId apiKey
 
 Where:
@@ -33,20 +39,17 @@ For example:
   \$ testsweets upload apk profile myProjectId myApiKey --path 'path/to/my/build.apk'
 ''';
 
-  void quit() {
-    print('Error: $errorMessage');
-    exit(-1);
-  }
-
-  if (args.length < 5) quit();
+  if (args.length < 2) quit(_buildArgumentsError);
 
   final command = args[0];
   final appType = args[1];
-  final buildMode = args[2];
+  final buildMode = '';
 
   if (!['buildAndUpload', 'upload'].contains(command) ||
       buildMode == 'release') {
-    quit();
+    quit(
+      '$command is not a valid command, You can use either \'buildAndUpload\' or \'upload\'',
+    );
   }
 
   String pathToBuild = '';
@@ -55,9 +58,9 @@ For example:
     if (positionBeforePath == -1) positionBeforePath = args.indexOf('-p');
 
     if (positionBeforePath == -1 || positionBeforePath == args.length) {
-      print(
-          "When using 'upload' you must provide the path to your build with the --path or -p argument after the apiKey\n\n");
-      quit();
+      quit(
+        "When using 'upload' you must provide the path to your build with the --path or -p argument after the apiKey\n\n",
+      );
     }
 
     pathToBuild = args[positionBeforePath + 1];
@@ -77,9 +80,12 @@ For example:
   }
   final testSweetsConfigsSrc =
       fileSystemService.readFileAsStringSync(pathToTestSweetsConfigsFile);
-  TestSweetsConfigFileService testSweetsConfigFileService =
+
+  locator.registerSingleton<TestSweetsConfigFileService>(
       TestSweetsConfigFileServiceImplementaion(
-          testSweetsConfigsFileSrc: testSweetsConfigsSrc);
+          testSweetsConfigsFileSrc: testSweetsConfigsSrc));
+
+  final testSweetsConfigFileService = locator<TestSweetsConfigFileService>();
 
   final buildInfo = await locator<BuildService>().build(
       flutterApp: flutterProjectFullPath,

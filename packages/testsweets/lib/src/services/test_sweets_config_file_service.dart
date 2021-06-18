@@ -3,7 +3,11 @@ import 'dart:convert';
 enum ConfigFileKeyType { ProjectId, ApiKey, FlutterBuildCommand }
 
 extension ToString on ConfigFileKeyType {
-  String get string => toString().split('.').last;
+  String get string {
+    var lastPart = toString().split('.').last;
+    //convert to camelcase
+    return "${lastPart[0].toLowerCase()}${lastPart.substring(1)}";
+  }
 }
 
 abstract class TestSweetsConfigFileService {
@@ -22,31 +26,23 @@ class TestSweetsConfigFileServiceImplementaion
     return _deserializeConfigFileByKey(testSweetsConfigsFileSrc, keyType);
   }
 
-  static dynamic _deserializeConfigFileByKey(
-      String src, ConfigFileKeyType keyType) {
+  String _deserializeConfigFileByKey(String src, ConfigFileKeyType keyType) {
     final ls = LineSplitter();
     final testSweetsConfigsCommands = ls.convert(src);
 
     final map = _splittingStringOnEqualSign(testSweetsConfigsCommands);
 
-    switch (keyType) {
-      case ConfigFileKeyType.ProjectId:
-        return _getStringValueFromMapByKey(map, keyType);
-      case ConfigFileKeyType.ApiKey:
-        return _getStringValueFromMapByKey(map, keyType);
-      case ConfigFileKeyType.FlutterBuildCommand:
-        return _getStringValueFromMapByKey(map, keyType);
-      default:
-        return '';
-    }
+    return _getStringValueFromMapByKey(map, keyType);
   }
 
-  static String _getStringValueFromMapByKey(
+  String _getStringValueFromMapByKey(
       List<MapEntry<String, String>> map, ConfigFileKeyType keyType) {
+    print(
+        'key type: ${keyType.string}\n_getStringValueFromMapByKey: map = ${map.toString()}');
     return map.firstWhere((element) => element.key == keyType.string).value;
   }
 
-  static List<MapEntry<String, String>> _splittingStringOnEqualSign(
+  List<MapEntry<String, String>> _splittingStringOnEqualSign(
       List<String> testSweetsConfigsCommands) {
     var map = testSweetsConfigsCommands.map((line) {
       var listOfParts = line.split('=').map((part) => part.trim()).toList();
