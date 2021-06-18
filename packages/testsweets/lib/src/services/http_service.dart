@@ -47,7 +47,7 @@ class _HttpService implements HttpService {
     final request = await HttpClient().putUrl(Uri.parse(to));
     headers.forEach((key, value) => request.headers.set(key, value));
 
-    // print('put binary headers: $headers');
+    print('');
 
     int numberOfBytesWritten = 0;
     Stopwatch counter = Stopwatch();
@@ -58,8 +58,10 @@ class _HttpService implements HttpService {
 
       if (counter.elapsed > Duration(seconds: 1)) {
         counter.reset();
-        print(
-            "Uploaded ${((numberOfBytesWritten / contentLength) * 100).ceil()}% of $contentLength");
+        //remove old progress print to the console
+        stdout.write("\r\x1b[K");
+        var progress = ((numberOfBytesWritten / contentLength) * 100).ceil();
+        stdout.write("Uploaded $progress% of $contentLength ...");
       }
 
       return chunk;
