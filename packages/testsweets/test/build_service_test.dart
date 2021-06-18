@@ -101,8 +101,8 @@ void main() {
         getAndRegisterFileSystemService(doesFileExist: false);
 
         final instance = BuildService.makeInstance();
-        final run = () => instance.build(
-            flutterApp: directoryPath, appType: 'apk', buildMode: 'debug');
+        final run =
+            () => instance.build(flutterApp: directoryPath, appType: 'apk');
         expect(
             run(),
             throwsA(BuildError(
@@ -121,7 +121,9 @@ void main() {
 
         final instance = BuildService.makeInstance();
         final run = () => instance.build(
-            flutterApp: directoryPath, appType: 'apk', buildMode: 'debug');
+              flutterApp: directoryPath,
+              appType: 'apk',
+            );
         expect(
             run,
             throwsA(BuildError(
@@ -139,8 +141,8 @@ void main() {
         );
 
         final instance = BuildService.makeInstance();
-        final run = () => instance.build(
-            flutterApp: directoryPath, appType: 'apk', buildMode: 'debug');
+        final run =
+            () => instance.build(flutterApp: directoryPath, appType: 'apk');
         expect(
             run,
             throwsA(BuildError(
@@ -166,8 +168,7 @@ void main() {
         final flutterProcess = locator<FlutterProcess>();
 
         final instance = BuildService.makeInstance();
-        await instance.build(
-            flutterApp: directoryPath, appType: 'apk', buildMode: 'profile');
+        await instance.build(flutterApp: directoryPath, appType: 'apk');
 
         verify(() =>
                 flutterProcess.startWith(args: ['build', 'apk', '--profile']))
@@ -185,7 +186,6 @@ void main() {
         final buildInfo = await instance.build(
           flutterApp: directoryPath,
           appType: 'apk',
-          buildMode: 'profile',
           pathToBuild: pathToBuild,
         );
 
@@ -200,7 +200,9 @@ void main() {
             () async {
           final instance = BuildService.makeInstance();
           final buildInfo = await instance.build(
-              flutterApp: directoryPath, appType: 'apk', buildMode: 'profile');
+            flutterApp: directoryPath,
+            appType: 'apk',
+          );
 
           expect(buildInfo.pathToBuild,
               r'myApp\build\app\outputs\flutter-apk\abc.apk');
@@ -232,7 +234,9 @@ void main() {
 
           final instance = BuildService.makeInstance();
           final run = () => instance.build(
-              flutterApp: directoryPath, appType: 'apk', buildMode: 'profile');
+                flutterApp: directoryPath,
+                appType: 'apk',
+              );
 
           expect(
               run,
