@@ -22,7 +22,6 @@ abstract class BuildService {
   Future<BuildInfo> build({
     required String flutterApp,
     required String appType,
-    required String buildMode,
     List<String> extraFlutterProcessArgs,
     String pathToBuild,
   });
@@ -41,7 +40,6 @@ class _BuildService implements BuildService {
   Future<BuildInfo> build({
     required String flutterApp,
     required String appType,
-    required String buildMode,
     List<String> extraFlutterProcessArgs = const <String>[],
     String pathToBuild = '',
   }) async {
@@ -79,8 +77,8 @@ class _BuildService implements BuildService {
     }
 
     if (pathToBuild.isEmpty) {
-      final runningFlutterProcess = await flutterProcess.startWith(
-          args: ['build', appType, '--$buildMode', ...extraFlutterProcessArgs]);
+      final runningFlutterProcess = await flutterProcess
+          .startWith(args: ['build', appType, ...extraFlutterProcessArgs]);
 
       final processStdoutCollector = Utf8CollectingStreamConsumer(stdout);
       final processStderrCollector = Utf8CollectingStreamConsumer(stderr);
@@ -99,7 +97,7 @@ class _BuildService implements BuildService {
     }
     return BuildInfo(
       pathToBuild: pathToBuild,
-      buildMode: buildMode,
+      buildMode: extraFlutterProcessArgs.first,
       appType: appType,
       version: pubspec['version'],
       automationKeysJson: appAutomationKeysJson,

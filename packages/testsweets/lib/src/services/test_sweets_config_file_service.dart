@@ -37,8 +37,8 @@ class TestSweetsConfigFileServiceImplementaion
 
   String _getStringValueFromMapByKey(
       List<MapEntry<String, String>> map, ConfigFileKeyType keyType) {
-    print(
-        'key type: ${keyType.string}\n_getStringValueFromMapByKey: map = ${map.toString()}');
+    // print(
+    //     'key type: ${keyType.string}\n_getStringValueFromMapByKey: map = ${map.toString()}');
     return map.firstWhere((element) => element.key == keyType.string).value;
   }
 

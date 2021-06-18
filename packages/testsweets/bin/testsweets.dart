@@ -16,14 +16,12 @@ Future<void> main(List<String> args) async {
   }
 
   final _buildArgumentsError =
-      '''Expected arguments to have the form: buildAndUpload appType buildMode projectId apiKey
+      '''Expected arguments to have the form: buildAndUpload appType
 
 Where:
   appType can be apk or ipa
-  buildMode can be debug or profile
-  projectId is the id of the Test Sweets project you want to upload this build to
-  apiKey is the API key for the project you want to upload this build to
 
+you need to add .testsweets file at the root of your project containing the folowing parameters
 You can find both the API key and the project id for your project in the project
 settings tab in Test Sweets.
 
@@ -43,10 +41,8 @@ For example:
 
   final command = args[0];
   final appType = args[1];
-  final buildMode = '';
 
-  if (!['buildAndUpload', 'upload'].contains(command) ||
-      buildMode == 'release') {
+  if (!['buildAndUpload', 'upload'].contains(command)) {
     quit(
       '$command is not a valid command, You can use either \'buildAndUpload\' or \'upload\'',
     );
@@ -75,8 +71,10 @@ For example:
 
   if (!fileSystemService.doesFileExist(pathToTestSweetsConfigsFile)) {
     throw BuildError(
-        'The folder at $flutterProjectFullPath does not contain a pubspec.yaml file. '
-        'Please check if this is the correct folder or create the pubspec.yaml file.');
+        '''Project config is not created . If you forgot to setup your .testsweets file please
+           create one. It requires three values, your projectId (found in your project settings)
+           your apiKey (found in your project settings) and your flutterBuildCommand (the part
+           of the command after flutter pub build apk).''');
   }
   final testSweetsConfigsSrc =
       fileSystemService.readFileAsStringSync(pathToTestSweetsConfigsFile);
@@ -90,7 +88,6 @@ For example:
   final buildInfo = await locator<BuildService>().build(
       flutterApp: flutterProjectFullPath,
       appType: appType,
-      buildMode: buildMode,
       pathToBuild: pathToBuild,
       extraFlutterProcessArgs: testSweetsConfigFileService
           .getValueFromConfigFileByKey(ConfigFileKeyType.FlutterBuildCommand)
