@@ -10,8 +10,7 @@ import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/runnable_process.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/time_service.dart';
-
-import '../build_service_test.dart';
+import 'consts.dart';
 import 'stubed_proccess.dart';
 import 'test_helpers.mocks.dart';
 
@@ -111,13 +110,13 @@ BuildService getAndRegisterBuildServiceService() {
   _removeRegistrationIfExists<BuildService>();
   final service = MockBuildService();
   when(service.build(
-          appType: 'apk',
+          appType: appType,
           extraFlutterProcessArgs: ['--debug -t lib/main_profile.dart']))
       .thenAnswer(
     (_) => Future.value(BuildInfo(
       pathToBuild: 'abc.apk',
       buildMode: 'profile',
-      appType: 'apk',
+      appType: appType,
       version: '0.1.1',
       automationKeysJson: ['automationKeysJson'],
       dynamicKeysJson: [

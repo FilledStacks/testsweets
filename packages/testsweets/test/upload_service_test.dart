@@ -4,10 +4,9 @@ import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/file_system_service.dart';
 import 'package:testsweets/src/services/runnable_process.dart';
-import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
-import 'helpers/stubed_proccess.dart';
+import 'package:testsweets/utils/error_messages.dart';
+import 'helpers/consts.dart';
 import 'helpers/test_helpers.dart';
-import 'helpers/test_helpers.mocks.dart';
 
 void main() {
   group("BuildService Tests -", () {
@@ -18,24 +17,19 @@ void main() {
       test(
           "Should throw BuildError if the given app directory does not contain a pubspec.yaml file",
           () {
-        final directoryPath = 'myApp';
-
         getAndRegisterFileSystemService(doesFileExist: false);
 
         final instance = BuildServiceImplementaion();
         final run =
-            () => instance.build(flutterApp: directoryPath, appType: 'apk');
+            () => instance.build(flutterApp: directoryPath, appType: appType);
         expect(
             run(),
             throwsA(BuildError(
-                'The folder at $directoryPath does not contain a pubspec.yaml file. '
-                'Please check if this is the correct folder or create the pubspec.yaml file.')));
+                ErrorMessages.thereIsNoPubspecyamlFile(directoryPath))));
       });
       test(
           "Should throw BuildError if the pubspec.yaml file in the given app directory does not have a version",
           () {
-        final directoryPath = 'myApp';
-
         getAndRegisterFileSystemService(
           doesFileExist: true,
           readFileAsStringSyncResult: ksPubspecFileWithNoVersion,
@@ -44,19 +38,16 @@ void main() {
         final instance = BuildServiceImplementaion();
         final run = () => instance.build(
               flutterApp: directoryPath,
-              appType: 'apk',
+              appType: appType,
             );
         expect(
             run,
-            throwsA(BuildError(
-                'The pubspec.yaml file for this project does not define a version. '
-                'Versions are used by Test Sweets to keep track of builds. Please add a version for this app.')));
+            throwsA(
+                BuildError(ErrorMessages.thereIsNoVersionInPubspecyamlFile)));
       });
       test(
           'Should throw BuildError if the given app directory does not contain an app_automation_keys.json file',
           () {
-        final directoryPath = 'myApp';
-
         getAndRegisterFileSystemService(
           doesFileExist: false,
           readFileAsStringSyncResult: ksPubspecFileWithVersion,
@@ -64,19 +55,12 @@ void main() {
 
         final instance = BuildServiceImplementaion();
         final run =
-            () => instance.build(flutterApp: directoryPath, appType: 'apk');
-        expect(
-            run,
-            throwsA(BuildError(
-                'We did not find the automation keys to upload. Please make sure you have added '
-                'the TestSweets generator into the pubspec. If you have then make sure you run '
-                'flutter pub run build_runner build --delete-conflicting-outputs before you attempt '
-                'to upload the build')));
+            () => instance.build(flutterApp: directoryPath, appType: appType);
+        expect(run, throwsA(BuildError(ErrorMessages.notFoundAutomationKeys)));
       });
       test(
           "Should call the current flutterProcess with args [build, appType, --buildMode]",
           () async {
-        final directoryPath = 'myApp';
         final pubspecFilePath = 'myApp\\pubspec.yaml';
         final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
 
@@ -90,24 +74,21 @@ void main() {
         final flutterProcess = locator<FlutterProcess>();
 
         final instance = BuildServiceImplementaion();
-        await instance.build(flutterApp: directoryPath, appType: 'apk');
+        await instance.build(flutterApp: directoryPath, appType: appType);
 
         verify(() =>
-                flutterProcess.startWith(args: ['build', 'apk', '--profile']))
+                flutterProcess.startWith(args: ['build', appType, '--profile']))
             .called(1);
       });
       test(
           "Should not read the pathToBuild from the flutter process when it is given",
           () async {
-        final directoryPath = 'myApp';
-        final pathToBuild = 'abc';
-
         final flutterProcess = getAndRegisterFlutterProcess();
 
         final instance = BuildServiceImplementaion();
         final buildInfo = await instance.build(
           flutterApp: directoryPath,
-          appType: 'apk',
+          appType: appType,
           pathToBuild: pathToBuild,
         );
 
@@ -115,8 +96,6 @@ void main() {
         expect(buildInfo.pathToBuild, pathToBuild);
       });
       group("When the flutterProcess completes with an exit code of 0", () {
-        final directoryPath = 'myApp';
-
         test(
             "Should return the correct buildInfo pathToBuild, buildMode, appType, version, and automationKeysJson",
             () async {
@@ -126,7 +105,7 @@ void main() {
 
           // final buildInfo = await buildService.build(
           //     flutterApp: directoryPath,
-          //     appType: 'apk',
+          //     appType: appType,
           //     extraFlutterProcessArgs: testSweetsConfigFileService
           //         .getValueFromConfigFileByKey(
           //             ConfigFileKeyType.FlutterBuildCommand)
@@ -136,7 +115,7 @@ void main() {
           // expect(buildInfo.pathToBuild,
           //     r'myApp\build\app\outputs\flutter-apk\abc.apk');
           // expect(buildInfo.buildMode, 'profile');
-          // expect(buildInfo.appType, 'apk');
+          // expect(buildInfo.appType, appType);
           // expect(buildInfo.version, '0.1.1');
           // expect(
           //   buildInfo.dynamicKeysJson,
@@ -159,18 +138,16 @@ void main() {
         test(
             "Should throw BuildError with the contents of stderr of the flutter process as the message",
             () async {
-          final directoryPath = 'myApp';
-
           final instance = BuildServiceImplementaion();
           final run = () => instance.build(
                 flutterApp: directoryPath,
-                appType: 'apk',
+                appType: appType,
               );
 
           expect(
               run,
               throwsA(BuildError(
-                  'The folder at myApp does not contain a pubspec.yaml file. Please check if this is the correct folder or create the pubspec.yaml file.')));
+                  ErrorMessages.thereIsNoPubspecyamlFile(directoryPath))));
         });
       });
     });

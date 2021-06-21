@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:testsweets/utils/error_messages.dart';
+
 import '../locator.dart';
 import '../models/build_info.dart';
 import 'dynamic_keys_generator_service.dart';
@@ -44,17 +46,11 @@ class BuildServiceImplementaion implements BuildService {
     final pathToDynamicKeys = '$flutterApp\\dynamic_keys.json';
 
     if (!fileSystemService.doesFileExist(pathToPubspecFile)) {
-      throw BuildError(
-          'The folder at $flutterApp does not contain a pubspec.yaml file. '
-          'Please check if this is the correct folder or create the pubspec.yaml file.');
+      throw BuildError(ErrorMessages.thereIsNoPubspecyamlFile(flutterApp));
     }
 
     if (!fileSystemService.doesFileExist(pathToAppAutomationKeys)) {
-      throw BuildError(
-          'We did not find the automation keys to upload. Please make sure you have added '
-          'the TestSweets generator into the pubspec. If you have then make sure you run '
-          'flutter pub run build_runner build --delete-conflicting-outputs before you attempt '
-          'to upload the build');
+      throw BuildError(ErrorMessages.notFoundAutomationKeys);
     }
 
     final pubspec =
@@ -67,9 +63,7 @@ class BuildServiceImplementaion implements BuildService {
         .toList();
 
     if (pubspec['version'] == null) {
-      throw BuildError(
-          'The pubspec.yaml file for this project does not define a version. '
-          'Versions are used by Test Sweets to keep track of builds. Please add a version for this app.');
+      throw BuildError(ErrorMessages.thereIsNoVersionInPubspecyamlFile);
     }
 
     if (pathToBuild.isEmpty) {
