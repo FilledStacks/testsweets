@@ -25,13 +25,9 @@ abstract class BuildService {
     List<String> extraFlutterProcessArgs,
     String pathToBuild,
   });
-
-  factory BuildService.makeInstance() {
-    return _BuildService();
-  }
 }
 
-class _BuildService implements BuildService {
+class BuildServiceImplementaion implements BuildService {
   final fileSystemService = locator<FileSystemService>();
   final flutterProcess = locator<FlutterProcess>();
   final dynamicKeysGeneratorService = locator<DynamicKeysGeneratorService>();

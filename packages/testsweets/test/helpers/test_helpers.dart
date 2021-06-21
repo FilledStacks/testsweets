@@ -1,17 +1,23 @@
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/locator.dart';
+import 'package:testsweets/src/models/build_info.dart';
+import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
 import 'package:testsweets/src/services/dynamic_keys_generator_service.dart';
 import 'package:testsweets/src/services/file_system_service.dart';
 import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/runnable_process.dart';
+import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/time_service.dart';
 
 import '../build_service_test.dart';
+import 'stubed_proccess.dart';
 import 'test_helpers.mocks.dart';
 
 @GenerateMocks([], customMocks: [
+  MockSpec<TestSweetsConfigFileService>(returnNullOnMissingStub: true),
+  MockSpec<BuildService>(returnNullOnMissingStub: true),
   MockSpec<FileSystemService>(returnNullOnMissingStub: true),
   MockSpec<FlutterProcess>(returnNullOnMissingStub: true),
   MockSpec<HttpService>(returnNullOnMissingStub: true),
@@ -46,6 +52,16 @@ MockFlutterProcess getAndRegisterFlutterProcess() {
   });
 
   locator.registerSingleton<FlutterProcess>(service);
+  return service;
+}
+
+MockTestSweetsConfigFileService getAndRegisterTestSweetsConfigFileService() {
+  _removeRegistrationIfExists<TestSweetsConfigFileService>();
+  final service = MockTestSweetsConfigFileService();
+  when(service
+          .getValueFromConfigFileByKey(ConfigFileKeyType.FlutterBuildCommand))
+      .thenAnswer((realInvocation) => '--debug -t lib/main_profile.dart');
+  locator.registerSingleton<TestSweetsConfigFileService>(service);
   return service;
 }
 
@@ -91,6 +107,37 @@ MockTimeService getAndRegisterTimeService() {
   return service;
 }
 
+BuildService getAndRegisterBuildServiceService() {
+  _removeRegistrationIfExists<BuildService>();
+  final service = MockBuildService();
+  when(service.build(
+          appType: 'apk',
+          extraFlutterProcessArgs: ['--debug -t lib/main_profile.dart']))
+      .thenAnswer(
+    (_) => Future.value(BuildInfo(
+      pathToBuild: 'abc.apk',
+      buildMode: 'profile',
+      appType: 'apk',
+      version: '0.1.1',
+      automationKeysJson: ['automationKeysJson'],
+      dynamicKeysJson: [
+        {
+          "name": "home",
+          "type": "view",
+          "view": "home",
+        },
+        {
+          "name": "orders",
+          "type": "touchable",
+          "view": "ready",
+        }
+      ],
+    )),
+  );
+  locator.registerSingleton<BuildService>(service);
+  return service;
+}
+
 MockCloudFunctionsService getAndRegisterCloudFunctionsService(
     {String getV4BuildUploadSignedUrlResult = '',
     bool doesBuildExistInProjectResult = true}) {
@@ -117,6 +164,17 @@ void registerServices() {
   getAndRegisterTimeService();
   getAndRegisterCloudFunctionsService();
   getAndRegisterDynamicKeysGeneratorService();
+  getAndRegisterBuildServiceService();
+  // getAndRegisterTestSweetsConfigFileService();
+}
+
+void unregisterServices() {
+  locator.unregister<FileSystemService>();
+  locator.unregister<FlutterProcess>();
+  locator.unregister<HttpService>();
+  locator.unregister<TimeService>();
+  locator.unregister<CloudFunctionsService>();
+  locator.unregister<DynamicKeysGeneratorService>();
 }
 
 // Call this before any service registration helper. This is to ensure that if there

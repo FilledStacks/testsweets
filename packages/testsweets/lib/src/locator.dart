@@ -14,7 +14,7 @@ GetIt locator = GetIt.instance;
 
 void setupLocator() {
   locator
-      .registerLazySingleton<BuildService>(() => BuildService.makeInstance());
+      .registerLazySingleton<BuildService>(() => BuildServiceImplementaion());
   locator.registerLazySingleton<FlutterProcess>(
       () => FlutterProcess(Platform.isWindows ? 'flutter.bat' : 'flutter'));
   locator.registerLazySingleton<FileSystemService>(

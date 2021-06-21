@@ -1,82 +1,177 @@
-import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:testsweets/src/locator.dart';
-import 'package:testsweets/src/models/build_info.dart';
-import 'package:testsweets/src/services/upload_service.dart';
-
+import 'package:testsweets/src/services/build_service.dart';
+import 'package:testsweets/src/services/file_system_service.dart';
+import 'package:testsweets/src/services/runnable_process.dart';
+import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
+import 'helpers/stubed_proccess.dart';
 import 'helpers/test_helpers.dart';
+import 'helpers/test_helpers.mocks.dart';
 
 void main() {
-  group("UploadService Tests -", () {
+  group("BuildService Tests -", () {
     setUp(registerServices);
     tearDown(() => locator.reset());
 
-    group("uploadBuild(buildInfo, projectId, apiKey) -", () {
-      final buildInfo = BuildInfo(
-        pathToBuild: 'abc.apk',
-        buildMode: 'debug',
-        appType: 'apk',
-        version: '1.2.0',
-        automationKeysJson: [],
-        dynamicKeysJson: [],
-      );
-
-      final projectId = 'testProjectId';
-      final apiKey = 'testApiKey';
-      final dummySignedUrl =
-          'https://storage.googleapis.com/testProjectId/testGuid%2fapplication.build';
-
-      final expectedObjectHeaders = <String, String>{
-        HttpHeaders.contentLengthHeader: '2',
-        HttpHeaders.contentTypeHeader: 'application/octet-stream',
-        'Host': 'storage.googleapis.com',
-        'Date': "Wed, 03 Feb 2021 13:47:14 GMT",
-        'x-goog-meta-buildMode': 'debug',
-        'x-goog-meta-version': '1.2.0',
-        'x-goog-meta-appType': 'apk',
-      };
-
-      Stream<List<int>> makeBuildFile() async* {
-        yield [0xaa, 0xbb];
-      }
-
-      final buildFile = makeBuildFile();
-
-      setUp(registerServices);
-
+    group("build -", () {
       test(
-          "Should throw BuildUploadError if there already exists a build with the same version number as the uploaded one",
+          "Should throw BuildError if the given app directory does not contain a pubspec.yaml file",
           () {
-        getAndRegisterCloudFunctionsService(
-            doesBuildExistInProjectResult: true);
-        final instance = UploadService.makeInstance();
+        final directoryPath = 'myApp';
 
-        final run = () => instance.uploadBuild(buildInfo, projectId, apiKey);
+        getAndRegisterFileSystemService(doesFileExist: false);
 
+        final instance = BuildServiceImplementaion();
+        final run =
+            () => instance.build(flutterApp: directoryPath, appType: 'apk');
         expect(
-            run,
-            throwsA(BuildUploadError(
-                "You have already uploaded an APK with the version ${buildInfo.version}. Please update the version "
-                "of your application, rebuild and upload the new one.")));
+            run(),
+            throwsA(BuildError(
+                'The folder at $directoryPath does not contain a pubspec.yaml file. '
+                'Please check if this is the correct folder or create the pubspec.yaml file.')));
       });
       test(
-          "Should upload the file with the correct data and headers to the signed endpoint returned by CloudFunctionsService.getV4BuildUploadSignedUrl",
+          "Should throw BuildError if the pubspec.yaml file in the given app directory does not have a version",
+          () {
+        final directoryPath = 'myApp';
+
+        getAndRegisterFileSystemService(
+          doesFileExist: true,
+          readFileAsStringSyncResult: ksPubspecFileWithNoVersion,
+        );
+
+        final instance = BuildServiceImplementaion();
+        final run = () => instance.build(
+              flutterApp: directoryPath,
+              appType: 'apk',
+            );
+        expect(
+            run,
+            throwsA(BuildError(
+                'The pubspec.yaml file for this project does not define a version. '
+                'Versions are used by Test Sweets to keep track of builds. Please add a version for this app.')));
+      });
+      test(
+          'Should throw BuildError if the given app directory does not contain an app_automation_keys.json file',
+          () {
+        final directoryPath = 'myApp';
+
+        getAndRegisterFileSystemService(
+          doesFileExist: false,
+          readFileAsStringSyncResult: ksPubspecFileWithVersion,
+        );
+
+        final instance = BuildServiceImplementaion();
+        final run =
+            () => instance.build(flutterApp: directoryPath, appType: 'apk');
+        expect(
+            run,
+            throwsA(BuildError(
+                'We did not find the automation keys to upload. Please make sure you have added '
+                'the TestSweets generator into the pubspec. If you have then make sure you run '
+                'flutter pub run build_runner build --delete-conflicting-outputs before you attempt '
+                'to upload the build')));
+      });
+      test(
+          "Should call the current flutterProcess with args [build, appType, --buildMode]",
           () async {
-        getAndRegisterCloudFunctionsService(
-            doesBuildExistInProjectResult: false);
-        final httpService = getAndRegisterHttpService();
-        final instance = UploadService.makeInstance();
+        final directoryPath = 'myApp';
+        final pubspecFilePath = 'myApp\\pubspec.yaml';
+        final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
 
-        await instance.uploadBuild(buildInfo, projectId, apiKey);
+        final fileSystemService = locator<FileSystemService>();
+        getAndRegisterFileSystemService(
+            doesFileExist: true,
+            readFileAsStringSyncResult: ksAppAutomationKeysFile);
 
-        verify(() => httpService.putBinary(
-            to: dummySignedUrl,
-            data: buildFile,
-            headers: expectedObjectHeaders,
-            contentLength: 2)).called(1);
+        getAndRegisterFlutterProcess();
+
+        final flutterProcess = locator<FlutterProcess>();
+
+        final instance = BuildServiceImplementaion();
+        await instance.build(flutterApp: directoryPath, appType: 'apk');
+
+        verify(() =>
+                flutterProcess.startWith(args: ['build', 'apk', '--profile']))
+            .called(1);
+      });
+      test(
+          "Should not read the pathToBuild from the flutter process when it is given",
+          () async {
+        final directoryPath = 'myApp';
+        final pathToBuild = 'abc';
+
+        final flutterProcess = getAndRegisterFlutterProcess();
+
+        final instance = BuildServiceImplementaion();
+        final buildInfo = await instance.build(
+          flutterApp: directoryPath,
+          appType: 'apk',
+          pathToBuild: pathToBuild,
+        );
+
+        verifyNever(() => flutterProcess.startWith(args: anyNamed('args')));
+        expect(buildInfo.pathToBuild, pathToBuild);
+      });
+      group("When the flutterProcess completes with an exit code of 0", () {
+        final directoryPath = 'myApp';
+
+        test(
+            "Should return the correct buildInfo pathToBuild, buildMode, appType, version, and automationKeysJson",
+            () async {
+          getAndRegisterFileSystemService(doesFileExist: true);
+          // final buildService = MockBuildService();
+          // final testSweetsConfigFileService = MockTestSweetsConfigFileService();
+
+          // final buildInfo = await buildService.build(
+          //     flutterApp: directoryPath,
+          //     appType: 'apk',
+          //     extraFlutterProcessArgs: testSweetsConfigFileService
+          //         .getValueFromConfigFileByKey(
+          //             ConfigFileKeyType.FlutterBuildCommand)
+          //         .split(' '),
+          //     pathToBuild: r'myApp\build\app\outputs\flutter-apk\abc.apk');
+
+          // expect(buildInfo.pathToBuild,
+          //     r'myApp\build\app\outputs\flutter-apk\abc.apk');
+          // expect(buildInfo.buildMode, 'profile');
+          // expect(buildInfo.appType, 'apk');
+          // expect(buildInfo.version, '0.1.1');
+          // expect(
+          //   buildInfo.dynamicKeysJson,
+          //   [
+          //     {
+          //       "name": "home",
+          //       "type": "view",
+          //       "view": "home",
+          //     },
+          //     {
+          //       "name": "orders",
+          //       "type": "touchable",
+          //       "view": "ready",
+          //     }
+          //   ],
+          // );
+        });
+      });
+      group("When the flutterProcess completes with a non 0 exit code", () {
+        test(
+            "Should throw BuildError with the contents of stderr of the flutter process as the message",
+            () async {
+          final directoryPath = 'myApp';
+
+          final instance = BuildServiceImplementaion();
+          final run = () => instance.build(
+                flutterApp: directoryPath,
+                appType: 'apk',
+              );
+
+          expect(
+              run,
+              throwsA(BuildError(
+                  'The folder at myApp does not contain a pubspec.yaml file. Please check if this is the correct folder or create the pubspec.yaml file.')));
+        });
       });
     });
   });
