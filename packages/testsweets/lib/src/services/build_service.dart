@@ -43,7 +43,7 @@ class BuildServiceImplementaion implements BuildService {
   }) async {
     final pathToPubspecFile = '$flutterApp\\pubspec.yaml';
     final pathToAppAutomationKeys = '$flutterApp\\app_automation_keys.json';
-    final pathToDynamicKeys = '$flutterApp\\dynamic_keys.json';
+    // final pathToDynamicKeys = '$flutterApp\\dynamic_keys.json';
 
     if (!fileSystemService.doesFileExist(pathToPubspecFile)) {
       throw BuildError(ErrorMessages.thereIsNoPubspecyamlFile(flutterApp));
@@ -53,14 +53,17 @@ class BuildServiceImplementaion implements BuildService {
       throw BuildError(ErrorMessages.notFoundAutomationKeys);
     }
 
-    final pubspec =
+    YamlMap pubspec =
         loadYaml(fileSystemService.readFileAsStringSync(pathToPubspecFile));
-
-    final appAutomationKeysJson = (json.decode(
-                fileSystemService.readFileAsStringSync(pathToAppAutomationKeys))
-            as Iterable)
-        .map((e) => e.toString())
-        .toList();
+    List<String> appAutomationKeysJson = [];
+    try {
+      appAutomationKeysJson = (json.decode(fileSystemService
+              .readFileAsStringSync(pathToAppAutomationKeys)) as Iterable)
+          .map((e) => e.toString())
+          .toList();
+    } catch (e) {
+      //TODO(ebrahim): find a proper response to this case
+    }
 
     if (pubspec['version'] == null) {
       throw BuildError(ErrorMessages.thereIsNoVersionInPubspecyamlFile);
