@@ -11,7 +11,7 @@ import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/runnable_process.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/time_service.dart';
-import 'consts.dart';
+import 'test_consts.dart';
 import 'stubed_proccess.dart';
 import 'test_helpers.mocks.dart';
 

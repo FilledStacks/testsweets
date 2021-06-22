@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/runnable_process.dart';
 import 'package:testsweets/utils/error_messages.dart';
-import 'helpers/consts.dart';
+import 'helpers/test_consts.dart';
 import 'helpers/test_helpers.dart';
 
 void main() {
@@ -60,66 +62,70 @@ void main() {
       test(
           "Should call the current flutterProcess with args [build, appType, --buildMode]",
           () async {
+        //TODO: fix test name
         getAndRegisterFileSystemService(
             doesFileExist: true,
-            readFileAsStringSyncResult: ksAppAutomationKeysFile);
+            readFileAsStringSyncResult: ksPubspecFileWithVersion,
+            jsonFilesreadFileAsStringSyncResult: ksAppAutomationKeysFile,
+            jsonFilesDoesFileExist: true);
 
         getAndRegisterFlutterProcess();
 
         final flutterProcess = locator<FlutterProcess>();
 
         final instance = BuildServiceImplementaion();
-        await instance.build(flutterApp: directoryPath, appType: appType);
+        await instance.build(
+            flutterApp: directoryPath,
+            appType: appType,
+            extraFlutterProcessArgs: extraArgs);
 
-        verify(() =>
-                flutterProcess.startWith(args: ['build', appType, '--profile']))
+        verify(flutterProcess.startWith(args: ['build', appType, '--profile']))
             .called(1);
       });
       test(
           "Should not read the pathToBuild from the flutter process when it is given",
           () async {
         final flutterProcess = getAndRegisterFlutterProcess();
-
+        getAndRegisterFileSystemService(
+          doesFileExist: true,
+          readFileAsStringSyncResult: ksPubspecFileWithVersion,
+          jsonFilesreadFileAsStringSyncResult: ksAppAutomationKeysFile,
+        );
         final instance = BuildServiceImplementaion();
         final buildInfo = await instance.build(
-          flutterApp: directoryPath,
-          appType: appType,
-          pathToBuild: pathToBuild,
-        );
+            flutterApp: directoryPath,
+            appType: appType,
+            pathToBuild: pathToBuild,
+            extraFlutterProcessArgs: extraArgs);
 
-        verifyNever(() => flutterProcess.startWith(args: anyNamed('args')));
+        verifyNever(flutterProcess.startWith(args: anyNamed('args')));
         expect(buildInfo.pathToBuild, pathToBuild);
       });
 
       test(
           "When the flutterProcess completes with an exit code of 0, Should return the correct buildInfo pathToBuild, buildMode, appType, version, and automationKeysJson",
           () async {
+        getAndRegisterFileSystemService(
+          doesFileExist: true,
+          readFileAsStringSyncResult: ksPubspecFileWithVersion,
+          jsonFilesreadFileAsStringSyncResult: ksAppAutomationKeysFile,
+        );
         final instance = BuildServiceImplementaion();
         final buildInfo = await instance.build(
-          flutterApp: directoryPath,
-          appType: appType,
-        );
+            flutterApp: directoryPath,
+            appType: appType,
+            extraFlutterProcessArgs: extraArgs);
 
         expect(buildInfo.pathToBuild,
             r'myApp\build\app\outputs\flutter-apk\abc.apk');
-        expect(buildInfo.buildMode, 'profile');
+        expect(buildInfo.buildMode, extraArgs.first);
         expect(buildInfo.appType, appType);
         expect(buildInfo.version, '0.1.1');
         expect(
-          buildInfo.automationKeysJson,
-          [
-            {
-              "name": "home",
-              "type": "view",
-              "view": "home",
-            },
-            {
-              "name": "orders",
-              "type": "touchable",
-              "view": "ready",
-            }
-          ],
-        );
+            buildInfo.automationKeysJson,
+            (json.decode(ksAppAutomationKeysFile) as Iterable)
+                .map((e) => e.toString())
+                .toList());
       });
 
       test(

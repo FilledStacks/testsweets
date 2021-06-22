@@ -26,3 +26,4 @@ const String ksAppAutomationKeysFile = """
 const String directoryPath = 'myApp';
 const String pathToBuild = 'abc';
 const String appType = 'apk';
+const List<String> extraArgs = ['--profile'];
