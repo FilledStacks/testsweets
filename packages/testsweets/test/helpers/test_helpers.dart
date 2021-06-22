@@ -1,5 +1,6 @@
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:test/expect.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/build_info.dart';
 import 'package:testsweets/src/services/build_service.dart';
@@ -27,14 +28,30 @@ import 'test_helpers.mocks.dart';
 MockFileSystemService getAndRegisterFileSystemService({
   bool doesFileExist = false,
   String readFileAsStringSyncResult = ksAppAutomationKeysFile,
+  bool? jsonFilesDoesFileExist,
+  String? jsonFilesreadFileAsStringSyncResult,
 }) {
   _removeRegistrationIfExists<FileSystemService>();
   final service = MockFileSystemService();
-
-  when(service.doesFileExist(any)).thenReturn(doesFileExist);
-
-  when(service.readFileAsStringSync(any))
-      .thenReturn(readFileAsStringSyncResult);
+  // duo to multiple calls to this service in [BuildService],
+  // if you want to change the mock for just json files activate this field [jsonFilesDoesFileExist]
+  when(service.doesFileExist(any)).thenAnswer((realInvocation) {
+    var fileName = realInvocation.positionalArguments[0] as String;
+    if (jsonFilesDoesFileExist != null && fileName.endsWith('.json'))
+      return jsonFilesDoesFileExist;
+    else
+      return doesFileExist;
+  });
+  // duo to multiple calls to this service in [BuildService],
+  // if you want to change the mock for just json files activate this field [jsonFilesreadFileAsStringSyncResult]
+  when(service.readFileAsStringSync(any)).thenAnswer((realInvocation) {
+    var fileName = realInvocation.positionalArguments[0] as String;
+    if (jsonFilesreadFileAsStringSyncResult != null &&
+        fileName.endsWith('.json'))
+      return jsonFilesreadFileAsStringSyncResult;
+    else
+      return readFileAsStringSyncResult;
+  });
 
   locator.registerSingleton<FileSystemService>(service);
   return service;

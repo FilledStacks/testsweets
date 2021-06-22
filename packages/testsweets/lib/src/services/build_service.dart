@@ -62,7 +62,7 @@ class BuildServiceImplementaion implements BuildService {
           .map((e) => e.toString())
           .toList();
     } catch (e) {
-      //TODO(ebrahim): find a proper response to this case
+      throw BuildError(ErrorMessages.errorParsingAutomationKeys);
     }
 
     if (pubspec['version'] == null) {

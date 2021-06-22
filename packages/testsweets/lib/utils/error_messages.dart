@@ -10,4 +10,6 @@ class ErrorMessages {
       'the TestSweets generator into the pubspec. If you have then make sure you run '
       'flutter pub run build_runner build --delete-conflicting-outputs before you attempt '
       'to upload the build';
+  static const String errorParsingAutomationKeys =
+      "Error parsing automation keys";
 }

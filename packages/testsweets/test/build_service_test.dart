@@ -31,9 +31,9 @@ void main() {
           "Should throw BuildError if the pubspec.yaml file in the given app directory does not have a version",
           () {
         getAndRegisterFileSystemService(
-          doesFileExist: true,
-          readFileAsStringSyncResult: ksPubspecFileWithNoVersion,
-        );
+            doesFileExist: true,
+            readFileAsStringSyncResult: ksPubspecFileWithNoVersion,
+            jsonFilesreadFileAsStringSyncResult: ksAppAutomationKeysFile);
         final buildService = BuildServiceImplementaion();
 
         expect(
@@ -48,9 +48,9 @@ void main() {
           'Should throw BuildError if the given app directory does not contain an app_automation_keys.json file',
           () {
         getAndRegisterFileSystemService(
-          doesFileExist: false,
-          readFileAsStringSyncResult: ksPubspecFileWithVersion,
-        );
+            doesFileExist: true,
+            readFileAsStringSyncResult: ksPubspecFileWithVersion,
+            jsonFilesDoesFileExist: false);
 
         final instance = BuildServiceImplementaion();
         expect(
@@ -60,10 +60,6 @@ void main() {
       test(
           "Should call the current flutterProcess with args [build, appType, --buildMode]",
           () async {
-        // final pubspecFilePath = 'myApp\\pubspec.yaml';
-        // final appAutomationKeysFilePath = 'myApp\\app_automation_keys.json';
-
-        // final fileSystemService = locator<FileSystemService>();
         getAndRegisterFileSystemService(
             doesFileExist: true,
             readFileAsStringSyncResult: ksAppAutomationKeysFile);

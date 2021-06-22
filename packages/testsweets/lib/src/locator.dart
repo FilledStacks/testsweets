@@ -18,7 +18,7 @@ void setupLocator() {
   locator.registerLazySingleton<FlutterProcess>(
       () => FlutterProcess(Platform.isWindows ? 'flutter.bat' : 'flutter'));
   locator.registerLazySingleton<FileSystemService>(
-      () => FileSystemService.makeInstance());
+      () => FileSystemServiceImplementation());
 
   locator.registerLazySingleton<HttpService>(() => HttpService.makeInstance());
   locator.registerLazySingleton<TimeService>(() => TimeService());
