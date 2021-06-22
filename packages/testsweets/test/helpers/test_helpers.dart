@@ -33,8 +33,9 @@ MockFileSystemService getAndRegisterFileSystemService({
 }) {
   _removeRegistrationIfExists<FileSystemService>();
   final service = MockFileSystemService();
-  // duo to multiple calls to this service in [BuildService],
-  // if you want to change the mock for just json files activate this field [jsonFilesDoesFileExist]
+
+  /// duo to multiple calls to this service in [BuildService],if you want to change the mock for just json files
+  /// activate this fields(or one of them depends on your needs) [jsonFilesDoesFileExist,jsonFilesreadFileAsStringSyncResult]
   when(service.doesFileExist(any)).thenAnswer((realInvocation) {
     var fileName = realInvocation.positionalArguments[0] as String;
     if (jsonFilesDoesFileExist != null && fileName.endsWith('.json'))
@@ -42,8 +43,6 @@ MockFileSystemService getAndRegisterFileSystemService({
     else
       return doesFileExist;
   });
-  // duo to multiple calls to this service in [BuildService],
-  // if you want to change the mock for just json files activate this field [jsonFilesreadFileAsStringSyncResult]
   when(service.readFileAsStringSync(any)).thenAnswer((realInvocation) {
     var fileName = realInvocation.positionalArguments[0] as String;
     if (jsonFilesreadFileAsStringSyncResult != null &&
@@ -52,6 +51,8 @@ MockFileSystemService getAndRegisterFileSystemService({
     else
       return readFileAsStringSyncResult;
   });
+  when(service.openFileForReading(any)).thenAnswer((_) => testDataStream);
+  when(service.getFileSizeInBytes(any)).thenReturn(testContentLength);
 
   locator.registerSingleton<FileSystemService>(service);
   return service;
@@ -119,6 +120,7 @@ MockHttpService getAndRegisterHttpService() {
 MockTimeService getAndRegisterTimeService() {
   _removeRegistrationIfExists<TimeService>();
   final service = MockTimeService();
+  when(service.now()).thenReturn(testDateTime);
   locator.registerSingleton<TimeService>(service);
   return service;
 }
@@ -127,13 +129,13 @@ BuildService getAndRegisterBuildServiceService() {
   _removeRegistrationIfExists<BuildService>();
   final service = MockBuildService();
   when(service.build(
-          appType: appType,
+          appType: testAppType,
           extraFlutterProcessArgs: ['--debug -t lib/main_profile.dart']))
       .thenAnswer(
     (_) => Future.value(BuildInfo(
       pathToBuild: 'abc.apk',
       buildMode: 'profile',
-      appType: appType,
+      appType: testAppType,
       version: '0.1.1',
       automationKeysJson: ['automationKeysJson'],
       dynamicKeysJson: [

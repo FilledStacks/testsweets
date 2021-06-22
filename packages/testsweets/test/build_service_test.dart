@@ -22,12 +22,12 @@ void main() {
             getAndRegisterFileSystemService(doesFileExist: false);
         final buildService = BuildServiceImplementaion();
 
-        expect(mockFileSystemService.doesFileExist(directoryPath), false);
+        expect(mockFileSystemService.doesFileExist(testDirectoryPath), false);
         expect(
-            () =>
-                buildService.build(flutterApp: directoryPath, appType: appType),
+            () => buildService.build(
+                flutterApp: testDirectoryPath, appType: testAppType),
             throwsA(BuildError(
-                ErrorMessages.thereIsNoPubspecyamlFile(directoryPath))));
+                ErrorMessages.thereIsNoPubspecyamlFile(testDirectoryPath))));
       });
       test(
           "Should throw BuildError if the pubspec.yaml file in the given app directory does not have a version",
@@ -40,8 +40,8 @@ void main() {
 
         expect(
             () => buildService.build(
-                  flutterApp: directoryPath,
-                  appType: appType,
+                  flutterApp: testDirectoryPath,
+                  appType: testAppType,
                 ),
             throwsA(
                 BuildError(ErrorMessages.thereIsNoVersionInPubspecyamlFile)));
@@ -56,7 +56,8 @@ void main() {
 
         final instance = BuildServiceImplementaion();
         expect(
-            () => instance.build(flutterApp: directoryPath, appType: appType),
+            () => instance.build(
+                flutterApp: testDirectoryPath, appType: testAppType),
             throwsA(BuildError(ErrorMessages.notFoundAutomationKeys)));
       });
       test(
@@ -75,12 +76,12 @@ void main() {
 
         final instance = BuildServiceImplementaion();
         await instance.build(
-            flutterApp: directoryPath,
-            appType: appType,
-            extraFlutterProcessArgs: extraArgs);
+            flutterApp: testDirectoryPath,
+            appType: testAppType,
+            extraFlutterProcessArgs: testExtraArgs);
 
-        verify(flutterProcess.startWith(args: ['build', appType, '--profile']))
-            .called(1);
+        verify(flutterProcess
+            .startWith(args: ['build', testAppType, '--profile'])).called(1);
       });
       test(
           "Should not read the pathToBuild from the flutter process when it is given",
@@ -93,13 +94,13 @@ void main() {
         );
         final instance = BuildServiceImplementaion();
         final buildInfo = await instance.build(
-            flutterApp: directoryPath,
-            appType: appType,
-            pathToBuild: pathToBuild,
-            extraFlutterProcessArgs: extraArgs);
+            flutterApp: testDirectoryPath,
+            appType: testAppType,
+            pathToBuild: testPathToBuild,
+            extraFlutterProcessArgs: testExtraArgs);
 
         verifyNever(flutterProcess.startWith(args: anyNamed('args')));
-        expect(buildInfo.pathToBuild, pathToBuild);
+        expect(buildInfo.pathToBuild, testPathToBuild);
       });
 
       test(
@@ -112,14 +113,14 @@ void main() {
         );
         final instance = BuildServiceImplementaion();
         final buildInfo = await instance.build(
-            flutterApp: directoryPath,
-            appType: appType,
-            extraFlutterProcessArgs: extraArgs);
+            flutterApp: testDirectoryPath,
+            appType: testAppType,
+            extraFlutterProcessArgs: testExtraArgs);
 
         expect(buildInfo.pathToBuild,
             r'myApp\build\app\outputs\flutter-apk\abc.apk');
-        expect(buildInfo.buildMode, extraArgs.first);
-        expect(buildInfo.appType, appType);
+        expect(buildInfo.buildMode, testExtraArgs.first);
+        expect(buildInfo.appType, testAppType);
         expect(buildInfo.version, '0.1.1');
         expect(
             buildInfo.automationKeysJson,
@@ -133,14 +134,14 @@ void main() {
           () async {
         final instance = BuildServiceImplementaion();
         final run = () => instance.build(
-              flutterApp: directoryPath,
-              appType: appType,
+              flutterApp: testDirectoryPath,
+              appType: testAppType,
             );
 
         expect(
             run,
             throwsA(BuildError(
-                ErrorMessages.thereIsNoPubspecyamlFile(directoryPath))));
+                ErrorMessages.thereIsNoPubspecyamlFile(testDirectoryPath))));
       });
     });
   });

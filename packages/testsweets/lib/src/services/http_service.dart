@@ -19,10 +19,6 @@ abstract class HttpService {
 
   Future<SimpleHttpResponse> get(
       {required String to, Map<String, String>? headers});
-
-  factory HttpService.makeInstance() {
-    return _HttpService();
-  }
 }
 
 class SimpleHttpResponse {
@@ -35,7 +31,7 @@ class SimpleHttpResponse {
   }
 }
 
-class _HttpService implements HttpService {
+class HttpServiceImplementation implements HttpService {
   @override
   Future<SimpleHttpResponse> putBinary(
       {required String to,

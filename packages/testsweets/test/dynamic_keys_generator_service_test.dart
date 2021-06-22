@@ -1,10 +1,8 @@
-@Skip(
-    'These are not unit tests and are failing for reasons other than the unit of work. Needs updating')
-// TODO: Update tests to be unit tests. We should follow the guides as laid out by FilledStacks https://youtu.be/5BFlo9k3KNU
 import 'package:test/test.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/services/dynamic_keys_generator_service.dart';
 
+import 'helpers/test_consts.dart';
 import 'helpers/test_helpers.dart';
 
 void main() {
@@ -18,7 +16,7 @@ void main() {
       test(
           "Given the key `orders_touchable_pending` and 1 numberOfAutomationKeysToGenerate, it should return an automation key with view=orders, type=touchable, and name=pending",
           () {
-        final instance = DynamicKeysGeneratorService.makeInstance();
+        final instance = DynamicKeysGeneratorServiceImplementation();
         final ret = instance.generateAutomationKeysForDynamicKey(
             key: "orders_touchable_pending",
             numberOfAutomationKeysToGenerate: 1);
@@ -32,7 +30,7 @@ void main() {
       test(
           "Given the key `orders_view` and 1 numberOfAutomationKeysToGenerate, it should return an automation key with view=orders, type=view, and name=orders",
           () {
-        final instance = DynamicKeysGeneratorService.makeInstance();
+        final instance = DynamicKeysGeneratorServiceImplementation();
         final ret = instance.generateAutomationKeysForDynamicKey(
             key: "orders_view", numberOfAutomationKeysToGenerate: 1);
 
@@ -44,7 +42,7 @@ void main() {
       test(
           "Given the key `orders_touchable_pending{index}Item` and 2 numberOfAutomationKeysToGenerate, it should return 2 automation keys both with view=orders, type=touchable but the first one have a name=pending0Item, and othe other have name=pending1Item",
           () {
-        final instance = DynamicKeysGeneratorService.makeInstance();
+        final instance = DynamicKeysGeneratorServiceImplementation();
         final ret = instance.generateAutomationKeysForDynamicKey(
             key: "orders_touchable_pending{index}Item",
             numberOfAutomationKeysToGenerate: 2);
@@ -62,44 +60,48 @@ void main() {
     });
 
     final dynamicKeysFilePath = 'myApp\\dynamic_keys.json';
-    group("generateAutomationKeysFromDynamicKeysFile(String appPath) -", () {
-      test(
-          "Should use a default itemCount value of 10 if itemCount is not given for a given key",
-          () {
-        final instance = DynamicKeysGeneratorService.makeInstance();
-        final ret = instance
-            .generateAutomationKeysFromDynamicKeysFile(dynamicKeysFilePath);
+    // group("generateAutomationKeysFromDynamicKeysFile(String appPath) -", () {
+    //   test(
+    //       "Should use a default itemCount value of 10 if itemCount is not given for a given key",
+    //       () {
+    //     getAndRegisterFileSystemService(
+    //       doesFileExist: true,
+    //       readFileAsStringSyncResult: ksAppAutomationKeysForG,
+    //     );
+    //     final instance = DynamicKeysGeneratorServiceImplementation();
+    //     final ret = instance
+    //         .generateAutomationKeysFromDynamicKeysFile(ksAppAutomationKeysForG);
 
-        expect(ret, hasLength(15));
-        for (var automationKey in ret.take(10)) {
-          expect(automationKey['view'], 'orders');
-          expect(automationKey['type'], 'touchable');
-          expect(automationKey['name'], 'pending');
-        }
-      });
+    //     expect(ret, hasLength(15));
+    //     for (var automationKey in ret.take(10)) {
+    //       expect(automationKey['view'], 'orders');
+    //       expect(automationKey['type'], 'touchable');
+    //       expect(automationKey['name'], 'pending');
+    //     }
+    //   });
 
-      test(
-          "Should use the given item count for a given key if the itemCount is given",
-          () {
-        final instance = DynamicKeysGeneratorService.makeInstance();
-        final ret = instance
-            .generateAutomationKeysFromDynamicKeysFile(dynamicKeysFilePath);
+    //   test(
+    //       "Should use the given item count for a given key if the itemCount is given",
+    //       () {
+    //     final instance = DynamicKeysGeneratorServiceImplementation();
+    //     final ret = instance
+    //         .generateAutomationKeysFromDynamicKeysFile(dynamicKeysFilePath);
 
-        expect(ret, hasLength(15));
-        for (var automationKey in ret.reversed.take(5)) {
-          expect(automationKey['view'], 'orders');
-          expect(automationKey['type'], 'touchable');
-          expect(automationKey['name'], 'ready');
-        }
-      });
-    });
+    //     expect(ret, hasLength(15));
+    //     for (var automationKey in ret.reversed.take(5)) {
+    //       expect(automationKey['view'], 'orders');
+    //       expect(automationKey['type'], 'touchable');
+    //       expect(automationKey['name'], 'ready');
+    //     }
+    //   });
+    // });
 
     test(
         "Should return an empty list when the `dynamic_keys.json` file does NOT exist",
         () {
       getAndRegisterFileSystemService(doesFileExist: false);
 
-      final instance = DynamicKeysGeneratorService.makeInstance();
+      final instance = DynamicKeysGeneratorServiceImplementation();
       final ret = instance
           .generateAutomationKeysFromDynamicKeysFile(dynamicKeysFilePath);
 

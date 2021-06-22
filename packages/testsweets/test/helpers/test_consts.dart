@@ -23,7 +23,11 @@ const String ksAppAutomationKeysFile = """
   }
 ]
 """;
-const String directoryPath = 'myApp';
-const String pathToBuild = 'abc';
-const String appType = 'apk';
-const List<String> extraArgs = ['--profile'];
+
+const String testDirectoryPath = 'myApp';
+const String testPathToBuild = 'abc';
+const String testAppType = 'apk';
+const List<String> testExtraArgs = ['--profile'];
+const int testContentLength = 2;
+final testDataStream = Stream.value([1, 2, 3]);
+final testDateTime = DateTime.utc(1993, 12, 12, 12);

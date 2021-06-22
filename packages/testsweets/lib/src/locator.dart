@@ -20,12 +20,12 @@ void setupLocator() {
   locator.registerLazySingleton<FileSystemService>(
       () => FileSystemServiceImplementation());
 
-  locator.registerLazySingleton<HttpService>(() => HttpService.makeInstance());
+  locator.registerLazySingleton<HttpService>(() => HttpServiceImplementation());
   locator.registerLazySingleton<TimeService>(() => TimeService());
   locator.registerLazySingleton<CloudFunctionsService>(
-      () => CloudFunctionsService.makeInstance());
-  locator
-      .registerLazySingleton<UploadService>(() => UploadService.makeInstance());
-  locator
-      .registerLazySingleton(() => DynamicKeysGeneratorService.makeInstance());
+      () => CloudFunctionsServiceImplementation());
+  locator.registerLazySingleton<UploadService>(
+      () => UploadServiceImplementation());
+  locator.registerLazySingleton<DynamicKeysGeneratorService>(
+      () => DynamicKeysGeneratorServiceImplementation());
 }
