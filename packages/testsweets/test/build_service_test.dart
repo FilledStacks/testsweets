@@ -24,8 +24,7 @@ void main() {
 
         expect(mockFileSystemService.doesFileExist(testDirectoryPath), false);
         expect(
-            () => buildService.build(
-                flutterApp: testDirectoryPath, appType: testAppType),
+            () => buildService.build(appType: testAppType),
             throwsA(BuildError(
                 ErrorMessages.thereIsNoPubspecyamlFile(testDirectoryPath))));
       });
@@ -40,7 +39,6 @@ void main() {
 
         expect(
             () => buildService.build(
-                  flutterApp: testDirectoryPath,
                   appType: testAppType,
                 ),
             throwsA(
@@ -55,9 +53,7 @@ void main() {
             jsonFilesDoesFileExist: false);
 
         final instance = BuildServiceImplementaion();
-        expect(
-            () => instance.build(
-                flutterApp: testDirectoryPath, appType: testAppType),
+        expect(() => instance.build(appType: testAppType),
             throwsA(BuildError(ErrorMessages.notFoundAutomationKeys)));
       });
       test(
@@ -76,9 +72,7 @@ void main() {
 
         final instance = BuildServiceImplementaion();
         await instance.build(
-            flutterApp: testDirectoryPath,
-            appType: testAppType,
-            extraFlutterProcessArgs: testExtraArgs);
+            appType: testAppType, extraFlutterProcessArgs: testExtraArgs);
 
         verify(flutterProcess
             .startWith(args: ['build', testAppType, '--profile'])).called(1);
@@ -94,7 +88,6 @@ void main() {
         );
         final instance = BuildServiceImplementaion();
         final buildInfo = await instance.build(
-            flutterApp: testDirectoryPath,
             appType: testAppType,
             pathToBuild: testPathToBuild,
             extraFlutterProcessArgs: testExtraArgs);
@@ -113,9 +106,7 @@ void main() {
         );
         final instance = BuildServiceImplementaion();
         final buildInfo = await instance.build(
-            flutterApp: testDirectoryPath,
-            appType: testAppType,
-            extraFlutterProcessArgs: testExtraArgs);
+            appType: testAppType, extraFlutterProcessArgs: testExtraArgs);
 
         expect(buildInfo.pathToBuild,
             r'myApp\build\app\outputs\flutter-apk\abc.apk');
@@ -134,7 +125,6 @@ void main() {
           () async {
         final instance = BuildServiceImplementaion();
         final run = () => instance.build(
-              flutterApp: testDirectoryPath,
               appType: testAppType,
             );
 

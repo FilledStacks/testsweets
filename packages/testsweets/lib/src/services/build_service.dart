@@ -22,7 +22,6 @@ abstract class BuildService {
   /// must contain the `version` field. An error is thrown if the `version`
   /// is not given in the pubspec.yaml file.
   Future<BuildInfo> build({
-    required String flutterApp,
     required String appType,
     List<String> extraFlutterProcessArgs,
     String pathToBuild,
@@ -36,11 +35,11 @@ class BuildServiceImplementaion implements BuildService {
 
   @override
   Future<BuildInfo> build({
-    required String flutterApp,
     required String appType,
     List<String> extraFlutterProcessArgs = const <String>[],
     String pathToBuild = '',
   }) async {
+    final flutterApp = fileSystemService.fullPathToWorkingDirectory;
     final pathToPubspecFile = '$flutterApp\\pubspec.yaml';
     final pathToAppAutomationKeys = '$flutterApp\\app_automation_keys.json';
     // final pathToDynamicKeys = '$flutterApp\\dynamic_keys.json';
