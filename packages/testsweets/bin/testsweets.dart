@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
+import 'package:testsweets/utils/error_messages.dart';
 
 import '../lib/src/locator.dart';
 import '../lib/src/services/build_service.dart';
@@ -11,40 +12,17 @@ import '../lib/src/services/upload_service.dart';
 Future<void> main(List<String> args) async {
   void quit(
     String errorMsg,
-  ) {
-    throw BuildError('Error: $errorMsg');
-  }
+  ) =>
+      throw BuildError('Error: $errorMsg');
 
-  final _buildArgumentsError =
-      '''Expected arguments to have the form: buildAndUpload appType
-
-Where:
-  appType can be apk or ipa
-
-you need to add .testsweets file at the root of your project containing the folowing parameters
-You can find both the API key and the project id for your project in the project
-settings tab in Test Sweets.
-
-The 'buildAndUpload' command will build your application with `flutter build`. Normal
-positional `flutter build` arguments, like --flavor, can be passed to the command just after
-the apiKey.
-
-You can use the 'upload' command if you already have a build (apk or ipa) and all you want
-to do is upload it. The path to the build must be specified with the '--path' positional
-argument after the apiKey.
-
-For example:
-  \$ testsweets upload apk profile myProjectId myApiKey --path 'path/to/my/build.apk'
-''';
-
-  if (args.length < 2) quit(_buildArgumentsError);
+  if (args.length < 2) quit(ErrorMessages.buildArgumentsError);
 
   final command = args[0];
   final appType = args[1];
 
   if (!['buildAndUpload', 'upload'].contains(command)) {
     quit(
-      '$command is not a valid command, You can use either \'buildAndUpload\' or \'upload\'',
+      ErrorMessages.notValidCommand(command),
     );
   }
 
@@ -55,7 +33,7 @@ For example:
 
     if (positionBeforePath == -1 || positionBeforePath == args.length) {
       quit(
-        "When using 'upload' you must provide the path to your build with the --path or -p argument after the apiKey\n\n",
+        ErrorMessages.uploadCommandeMissingPath,
       );
     }
 
@@ -70,11 +48,7 @@ For example:
   final pathToTestSweetsConfigsFile = '$flutterProjectFullPath\\.testsweets';
 
   if (!fileSystemService.doesFileExist(pathToTestSweetsConfigsFile)) {
-    throw BuildError(
-        '''Project config is not created . If you forgot to setup your .testsweets file please
-           create one. It requires three values, your projectId (found in your project settings)
-           your apiKey (found in your project settings) and your flutterBuildCommand (the part
-           of the command after flutter pub build apk).''');
+    throw BuildError(ErrorMessages.projectConfigNotCreated);
   }
   final testSweetsConfigsSrc =
       fileSystemService.readFileAsStringSync(pathToTestSweetsConfigsFile);
