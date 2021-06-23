@@ -170,8 +170,15 @@ When viewing your automation keys in the Test Sweets app, these fake automation 
 
 Once you have written your scripts you will need to upload a build to test with them. This is done by building your application in debug or profile mode and uploading it to the Test Sweets backend. To make things more convenient, the process of uploading a build also uploads the automation keys. Therefore, before you start writing test cases for the first time you may want to upload a build so that your automation keys are available for autocomplete. To build and upload your application navigate to the folder containing your `pubspec.yaml` file and run the `testsweets` package as follows:
 
+1- create a new .testsweets file at the root of your project, this file must include three paramaters `projectId`,`apiKey`,`flutterBuildCommand`.
+----example file:
+    projectId=3OezzTovG9xxxxxxxxx
+    apiKey=e3747a0e-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+    flutterBuildCommand=--debug -t lib/main_profile.dart
+
+2- excecute the following in the terminal:
 ```bat
-flutter pub run testsweets buildAndUpload apk profile {projectId} {apiKey} -t lib/main_profile.dart
+flutter pub run testsweets buildAndUpload apk
 ```
 
 This will print an output similar to the following:
@@ -192,7 +199,7 @@ can be achieved by using the `upload` command instead of `buildAndUpload`. You w
 build you want to upload with the `--path` or `-p` positional argument after the {apiKey}. For example:
 
 ```bat
-flutter pub run testsweets upload apk profile {projectId} {apiKey} -p "path/to/build.apk"
+flutter pub run testsweets upload apk "path/to/build.apk"
 ```
 
 ## Downloading your builds from Test Sweets
