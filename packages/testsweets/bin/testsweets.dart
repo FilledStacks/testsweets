@@ -1,13 +1,9 @@
-import 'dart:io';
-
+import 'package:testsweets/src/locator.dart';
+import 'package:testsweets/src/services/build_service.dart';
+import 'package:testsweets/src/services/cloud_functions_service.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
+import 'package:testsweets/src/services/upload_service.dart';
 import 'package:testsweets/utils/error_messages.dart';
-
-import '../lib/src/locator.dart';
-import '../lib/src/services/build_service.dart';
-import '../lib/src/services/cloud_functions_service.dart';
-import '../lib/src/services/file_system_service.dart';
-import '../lib/src/services/upload_service.dart';
 
 Future<void> main(List<String> args) async {
   void quit(
@@ -39,37 +35,17 @@ Future<void> main(List<String> args) async {
 
     pathToBuild = args[positionBeforePath + 1];
   }
-
-  setupLocator();
-
-  final fileSystemService = locator<FileSystemService>();
-  final flutterProjectFullPath = fileSystemService.fullPathToWorkingDirectory;
-
-  final pathToTestSweetsConfigsFile = '$flutterProjectFullPath\\.testsweets';
-
-  if (!fileSystemService.doesFileExist(pathToTestSweetsConfigsFile)) {
-    throw BuildError(ErrorMessages.projectConfigNotCreated);
-  }
-  final testSweetsConfigsSrc =
-      fileSystemService.readFileAsStringSync(pathToTestSweetsConfigsFile);
-
-  locator.registerSingleton<TestSweetsConfigFileService>(
-      TestSweetsConfigFileServiceImplementaion(
-          testSweetsConfigsFileSrc: testSweetsConfigsSrc));
-
+  await setupLocator();
   final testSweetsConfigFileService = locator<TestSweetsConfigFileService>();
 
   final buildInfo = await locator<BuildService>().build(
-      flutterApp: flutterProjectFullPath,
       appType: appType,
       pathToBuild: pathToBuild,
       extraFlutterProcessArgs: testSweetsConfigFileService
           .getValueFromConfigFileByKey(ConfigFileKeyType.FlutterBuildCommand)
           .split(' '));
 
-  print('BuildInfo collected: $buildInfo');
-
-  print('Uploading automation keys ...');
+  print("BuildInfo collected: $buildInfo \n Uploading automation keys ...");
   await locator<CloudFunctionsService>().uploadAutomationKeys(
     testSweetsConfigFileService
         .getValueFromConfigFileByKey(ConfigFileKeyType.ProjectId),
@@ -77,9 +53,8 @@ Future<void> main(List<String> args) async {
         .getValueFromConfigFileByKey(ConfigFileKeyType.ApiKey),
     buildInfo.automationKeysJson,
   );
-  print('Successfully uploaded automation keys!');
 
-  print('Uploading build ...');
+  print('Successfully uploaded automation keys! \nUploading build ...');
   await locator<UploadService>().uploadBuild(
       buildInfo,
       testSweetsConfigFileService

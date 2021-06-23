@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:get_it/get_it.dart';
+import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'services/build_service.dart';
 import 'services/dynamic_keys_generator_service.dart';
 import 'services/file_system_service.dart';
@@ -12,7 +13,7 @@ import 'services/upload_service.dart';
 
 GetIt locator = GetIt.instance;
 
-void setupLocator() {
+Future<void> setupLocator() async {
   locator
       .registerLazySingleton<BuildService>(() => BuildServiceImplementaion());
   locator.registerLazySingleton<FlutterProcess>(
@@ -28,4 +29,6 @@ void setupLocator() {
       () => UploadServiceImplementation());
   locator.registerLazySingleton<DynamicKeysGeneratorService>(
       () => DynamicKeysGeneratorServiceImplementation());
+  locator.registerLazySingleton<TestSweetsConfigFileService>(
+      () => TestSweetsConfigFileServiceImplementaion());
 }
