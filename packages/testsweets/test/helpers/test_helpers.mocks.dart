@@ -56,13 +56,11 @@ class MockTestSweetsConfigFileService extends _i1.Mock
 class MockBuildService extends _i1.Mock implements _i6.BuildService {
   @override
   _i7.Future<_i2.BuildInfo> build(
-          {String? flutterApp,
-          String? appType,
+          {String? appType,
           List<String>? extraFlutterProcessArgs,
           String? pathToBuild}) =>
       (super.noSuchMethod(
               Invocation.method(#build, [], {
-                #flutterApp: flutterApp,
                 #appType: appType,
                 #extraFlutterProcessArgs: extraFlutterProcessArgs,
                 #pathToBuild: pathToBuild

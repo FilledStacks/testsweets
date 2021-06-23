@@ -53,7 +53,7 @@ MockFileSystemService getAndRegisterFileSystemService({
   });
   when(service.openFileForReading(any)).thenAnswer((_) => testDataStream);
   when(service.getFileSizeInBytes(any)).thenReturn(testContentLength);
-
+  when(service.fullPathToWorkingDirectory).thenReturn(testDirectoryPath);
   locator.registerSingleton<FileSystemService>(service);
   return service;
 }
@@ -183,7 +183,7 @@ void registerServices() {
   getAndRegisterCloudFunctionsService();
   getAndRegisterDynamicKeysGeneratorService();
   getAndRegisterBuildServiceService();
-  // getAndRegisterTestSweetsConfigFileService();
+  getAndRegisterTestSweetsConfigFileService();
 }
 
 void unregisterServices() {
@@ -193,6 +193,7 @@ void unregisterServices() {
   locator.unregister<TimeService>();
   locator.unregister<CloudFunctionsService>();
   locator.unregister<DynamicKeysGeneratorService>();
+  locator.unregister<TestSweetsConfigFileService>();
 }
 
 // Call this before any service registration helper. This is to ensure that if there

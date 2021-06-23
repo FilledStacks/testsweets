@@ -25,6 +25,21 @@ const String ksAppAutomationKeysFile = """
 """;
 
 const String testDirectoryPath = 'myApp';
+
+const testsweetFileContentRaw = """
+  projectId=3OezzTovG9xFTE5Xw2w1
+  apiKey=e3747a0e-8449-42ec-b50f-748d80c3f52e
+  flutterBuildCommand=--debug -t lib/main_profile.dart""";
+const testsweetFileContent = [
+  "projectId=3OezzTovG9xFTE5Xw2w1",
+  "apiKey=e3747a0e-8449-42ec-b50f-748d80c3f52e",
+  "flutterBuildCommand=--debug -t lib/main_profile.dart",
+];
+const testsweetFileContentListOfMapEntries = [
+  MapEntry("projectId", "3OezzTovG9xFTE5Xw2w1"),
+  MapEntry("apiKey", "e3747a0e-8449-42ec-b50f-748d80c3f52e"),
+  MapEntry("flutterBuildCommand", "--debug -t lib/main_profile.dart")
+];
 const String testPathToBuild = 'abc';
 const String testAppType = 'apk';
 const List<String> testExtraArgs = ['--profile'];
