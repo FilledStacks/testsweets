@@ -14,13 +14,10 @@ abstract class DynamicKeysGeneratorService {
       String dynamicKeysFilePath);
   List<Map<String, String>> generateAutomationKeysForDynamicKey(
       {required String key, required int numberOfAutomationKeysToGenerate});
-
-  factory DynamicKeysGeneratorService.makeInstance() {
-    return _DynamicKeysGeneratorService();
-  }
 }
 
-class _DynamicKeysGeneratorService implements DynamicKeysGeneratorService {
+class DynamicKeysGeneratorServiceImplementation
+    implements DynamicKeysGeneratorService {
   final fileSystemService = locator<FileSystemService>();
 
   @override
@@ -52,7 +49,6 @@ class _DynamicKeysGeneratorService implements DynamicKeysGeneratorService {
 
     final fileJson = json
         .decode(fileSystemService.readFileAsStringSync(dynamicKeysFilePath));
-
     final out = <Map<String, String>>[];
     for (var dynamicKey in (fileJson as Iterable)) {
       out.addAll(generateAutomationKeysForDynamicKey(

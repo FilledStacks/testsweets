@@ -7,6 +7,7 @@ import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/build_info.dart';
 import 'package:testsweets/src/services/upload_service.dart';
 
+import 'helpers/test_consts.dart';
 import 'helpers/test_helpers.dart';
 
 void main() {
@@ -26,33 +27,13 @@ void main() {
 
       final projectId = 'testProjectId';
       final apiKey = 'testApiKey';
-      final dummySignedUrl =
-          'https://storage.googleapis.com/testProjectId/testGuid%2fapplication.build';
-
-      final expectedObjectHeaders = <String, String>{
-        HttpHeaders.contentLengthHeader: '2',
-        HttpHeaders.contentTypeHeader: 'application/octet-stream',
-        'Host': 'storage.googleapis.com',
-        'Date': "Wed, 03 Feb 2021 13:47:14 GMT",
-        'x-goog-meta-buildMode': 'debug',
-        'x-goog-meta-version': '1.2.0',
-        'x-goog-meta-appType': 'apk',
-      };
-
-      Stream<List<int>> makeBuildFile() async* {
-        yield [0xaa, 0xbb];
-      }
-
-      final buildFile = makeBuildFile();
-
-      setUp(registerServices);
 
       test(
           "Should throw BuildUploadError if there already exists a build with the same version number as the uploaded one",
           () {
         getAndRegisterCloudFunctionsService(
             doesBuildExistInProjectResult: true);
-        final instance = UploadService.makeInstance();
+        final instance = UploadServiceImplementation();
 
         final run = () => instance.uploadBuild(buildInfo, projectId, apiKey);
 
@@ -65,18 +46,37 @@ void main() {
       test(
           "Should upload the file with the correct data and headers to the signed endpoint returned by CloudFunctionsService.getV4BuildUploadSignedUrl",
           () async {
+        final dummySignedUrl =
+            'https://storage.googleapis.com/testProjectId/testGuid%2fapplication.build';
+        Stream<List<int>> makeDataStream() async* {
+          yield [1, 2, 3];
+        }
+
+        final dataStream = makeDataStream();
+
         getAndRegisterCloudFunctionsService(
+            getV4BuildUploadSignedUrlResult: dummySignedUrl,
             doesBuildExistInProjectResult: false);
+
         final httpService = getAndRegisterHttpService();
-        final instance = UploadService.makeInstance();
+        final instance = UploadServiceImplementation();
 
         await instance.uploadBuild(buildInfo, projectId, apiKey);
 
-        verify(() => httpService.putBinary(
-            to: dummySignedUrl,
-            data: buildFile,
-            headers: expectedObjectHeaders,
-            contentLength: 2)).called(1);
+        verify(httpService.putBinary(
+                to: dummySignedUrl,
+                data: dataStream,
+                headers: {
+                  HttpHeaders.contentLengthHeader: testContentLength.toString(),
+                  HttpHeaders.contentTypeHeader: 'application/octet-stream',
+                  'Host': 'storage.googleapis.com',
+                  'Date': HttpDate.format(testDateTime),
+                  'x-goog-meta-buildMode': 'debug',
+                  'x-goog-meta-version': '1.2.0',
+                  'x-goog-meta-appType': 'apk',
+                },
+                contentLength: testContentLength))
+            .called(1);
       });
     });
   });

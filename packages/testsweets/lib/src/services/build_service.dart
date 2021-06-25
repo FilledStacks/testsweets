@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:testsweets/utils/error_messages.dart';
+
 import '../locator.dart';
 import '../models/build_info.dart';
 import 'dynamic_keys_generator_service.dart';
@@ -20,60 +22,50 @@ abstract class BuildService {
   /// must contain the `version` field. An error is thrown if the `version`
   /// is not given in the pubspec.yaml file.
   Future<BuildInfo> build({
-    required String flutterApp,
     required String appType,
     List<String> extraFlutterProcessArgs,
     String pathToBuild,
   });
-
-  factory BuildService.makeInstance() {
-    return _BuildService();
-  }
 }
 
-class _BuildService implements BuildService {
+class BuildServiceImplementaion implements BuildService {
   final fileSystemService = locator<FileSystemService>();
   final flutterProcess = locator<FlutterProcess>();
   final dynamicKeysGeneratorService = locator<DynamicKeysGeneratorService>();
 
   @override
   Future<BuildInfo> build({
-    required String flutterApp,
     required String appType,
     List<String> extraFlutterProcessArgs = const <String>[],
     String pathToBuild = '',
   }) async {
+    final flutterApp = fileSystemService.fullPathToWorkingDirectory;
     final pathToPubspecFile = '$flutterApp\\pubspec.yaml';
     final pathToAppAutomationKeys = '$flutterApp\\app_automation_keys.json';
-    final pathToDynamicKeys = '$flutterApp\\dynamic_keys.json';
+    // final pathToDynamicKeys = '$flutterApp\\dynamic_keys.json';
 
     if (!fileSystemService.doesFileExist(pathToPubspecFile)) {
-      throw BuildError(
-          'The folder at $flutterApp does not contain a pubspec.yaml file. '
-          'Please check if this is the correct folder or create the pubspec.yaml file.');
+      throw BuildError(ErrorMessages.thereIsNoPubspecyamlFile(flutterApp));
     }
 
     if (!fileSystemService.doesFileExist(pathToAppAutomationKeys)) {
-      throw BuildError(
-          'We did not find the automation keys to upload. Please make sure you have added '
-          'the TestSweets generator into the pubspec. If you have then make sure you run '
-          'flutter pub run build_runner build --delete-conflicting-outputs before you attempt '
-          'to upload the build');
+      throw BuildError(ErrorMessages.notFoundAutomationKeys);
     }
 
-    final pubspec =
+    YamlMap pubspec =
         loadYaml(fileSystemService.readFileAsStringSync(pathToPubspecFile));
-
-    final appAutomationKeysJson = (json.decode(
-                fileSystemService.readFileAsStringSync(pathToAppAutomationKeys))
-            as Iterable)
-        .map((e) => e.toString())
-        .toList();
+    List<String> appAutomationKeysJson = [];
+    try {
+      appAutomationKeysJson = (json.decode(fileSystemService
+              .readFileAsStringSync(pathToAppAutomationKeys)) as Iterable)
+          .map((e) => e.toString())
+          .toList();
+    } catch (e) {
+      throw BuildError(ErrorMessages.errorParsingAutomationKeys);
+    }
 
     if (pubspec['version'] == null) {
-      throw BuildError(
-          'The pubspec.yaml file for this project does not define a version. '
-          'Versions are used by Test Sweets to keep track of builds. Please add a version for this app.');
+      throw BuildError(ErrorMessages.thereIsNoVersionInPubspecyamlFile);
     }
 
     if (pathToBuild.isEmpty) {

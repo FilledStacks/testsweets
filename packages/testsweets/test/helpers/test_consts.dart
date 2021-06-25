@@ -1,0 +1,48 @@
+const String ksPubspecFileWithNoVersion = """
+name: myApp
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+""";
+
+const String ksPubspecFileWithVersion = """
+name: myApp
+
+version: 0.1.1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+""";
+
+const String ksAppAutomationKeysFile = """
+[
+  {
+    "name": "home",
+    "type": "view",
+    "view": "home"
+  }
+]
+""";
+
+const String testDirectoryPath = 'myApp';
+
+const testsweetFileContentRaw = """
+  projectId=3OezzTovG9xFTE5Xw2w1
+  apiKey=e3747a0e-8449-42ec-b50f-748d80c3f52e
+  flutterBuildCommand=--debug -t lib/main_profile.dart""";
+const testsweetFileContent = [
+  "projectId=3OezzTovG9xFTE5Xw2w1",
+  "apiKey=e3747a0e-8449-42ec-b50f-748d80c3f52e",
+  "flutterBuildCommand=--debug -t lib/main_profile.dart",
+];
+const testsweetFileContentListOfMapEntries = [
+  MapEntry("projectId", "3OezzTovG9xFTE5Xw2w1"),
+  MapEntry("apiKey", "e3747a0e-8449-42ec-b50f-748d80c3f52e"),
+  MapEntry("flutterBuildCommand", "--debug -t lib/main_profile.dart")
+];
+const String testPathToBuild = 'abc';
+const String testAppType = 'apk';
+const List<String> testExtraArgs = ['--profile'];
+const int testContentLength = 2;
+final testDataStream = Stream.value([1, 2, 3]);
+final testDateTime = DateTime.utc(1993, 12, 12, 12);

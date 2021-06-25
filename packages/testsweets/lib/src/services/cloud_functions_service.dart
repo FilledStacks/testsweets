@@ -13,13 +13,9 @@ abstract class CloudFunctionsService {
 
   Future<bool> doesBuildExistInProject(String projectId,
       {required String withVersion});
-
-  factory CloudFunctionsService.makeInstance() {
-    return _CloudFunctionsService();
-  }
 }
 
-class _CloudFunctionsService implements CloudFunctionsService {
+class CloudFunctionsServiceImplementation implements CloudFunctionsService {
   final httpService = locator<HttpService>();
 
   @override

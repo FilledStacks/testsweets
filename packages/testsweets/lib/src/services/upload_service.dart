@@ -10,13 +10,9 @@ import 'http_service.dart';
 abstract class UploadService {
   Future<void> uploadBuild(
       BuildInfo buildInfo, String projectId, String apiKey);
-
-  factory UploadService.makeInstance() {
-    return _UploadService();
-  }
 }
 
-class _UploadService implements UploadService {
+class UploadServiceImplementation implements UploadService {
   final cloudFunctionsService = locator<CloudFunctionsService>();
   final timeService = locator<TimeService>();
   final fileSystemService = locator<FileSystemService>();
@@ -57,7 +53,6 @@ class _UploadService implements UploadService {
       contentLength: buildFileSize,
       headers: headers,
     );
-
     if (ret.body.contains('<Error>')) throw ret.body;
   }
 
