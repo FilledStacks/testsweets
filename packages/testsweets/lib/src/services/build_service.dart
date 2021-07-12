@@ -6,7 +6,7 @@ import 'package:testsweets/utils/error_messages.dart';
 
 import '../locator.dart';
 import '../models/build_info.dart';
-import 'dynamic_keys_generator_service.dart';
+import 'dynamic_keys_generator.dart';
 import 'file_system_service.dart';
 import 'runnable_process.dart';
 import 'package:yaml/yaml.dart';
@@ -31,7 +31,7 @@ abstract class BuildService {
 class BuildServiceImplementaion implements BuildService {
   final fileSystemService = locator<FileSystemService>();
   final flutterProcess = locator<FlutterProcess>();
-  final dynamicKeysGeneratorService = locator<DynamicKeysGeneratorService>();
+  final dynamicKeysGeneratorService = locator<DynamicKeysGenerator>();
 
   @override
   Future<BuildInfo> build({
@@ -42,7 +42,7 @@ class BuildServiceImplementaion implements BuildService {
     final flutterApp = fileSystemService.fullPathToWorkingDirectory;
     final pathToPubspecFile = '$flutterApp\\pubspec.yaml';
     final pathToAppAutomationKeys = '$flutterApp\\app_automation_keys.json';
-    // final pathToDynamicKeys = '$flutterApp\\dynamic_keys.json';
+    final pathToDynamicKeysFile = '$flutterApp\\dynamic_keys.json';
 
     if (!fileSystemService.doesFileExist(pathToPubspecFile)) {
       throw BuildError(ErrorMessages.thereIsNoPubspecyamlFile(flutterApp));
@@ -54,12 +54,21 @@ class BuildServiceImplementaion implements BuildService {
 
     YamlMap pubspec =
         loadYaml(fileSystemService.readFileAsStringSync(pathToPubspecFile));
+
     List<String> appAutomationKeysJson = [];
+
+    final dynamicKeys = dynamicKeysGeneratorService
+        .generateAutomationKeysFromDynamicKeysFile(pathToDynamicKeysFile);
+
+    appAutomationKeysJson.addAll(dynamicKeys);
+
     try {
-      appAutomationKeysJson = (json.decode(fileSystemService
+      final generatedKeys = (json.decode(fileSystemService
               .readFileAsStringSync(pathToAppAutomationKeys)) as Iterable)
           .map((e) => e.toString())
           .toList();
+
+      appAutomationKeysJson.addAll(generatedKeys);
     } catch (e) {
       throw BuildError(ErrorMessages.errorParsingAutomationKeys);
     }
@@ -93,7 +102,6 @@ class BuildServiceImplementaion implements BuildService {
       appType: appType,
       version: pubspec['version'],
       automationKeysJson: appAutomationKeysJson,
-      dynamicKeysJson: [],
     );
   }
 

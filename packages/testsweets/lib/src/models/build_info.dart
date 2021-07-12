@@ -16,16 +16,13 @@ class BuildInfo {
   /// This list also includes the automation keys generated
   final List<String> automationKeysJson;
 
-  /// The parsed contents of the `dynamic_keys.json' file.
-  final List<Map<String, dynamic>> dynamicKeysJson;
-
-  BuildInfo(
-      {required this.pathToBuild,
-      required this.buildMode,
-      required this.appType,
-      required this.version,
-      required this.automationKeysJson,
-      required this.dynamicKeysJson});
+  BuildInfo({
+    required this.pathToBuild,
+    required this.buildMode,
+    required this.appType,
+    required this.version,
+    required this.automationKeysJson,
+  });
 
   @override
   String toString() {
@@ -35,7 +32,6 @@ class BuildInfo {
       'appType': appType,
       'version': version,
       'automationKeysData': automationKeysJson,
-      'dynamicKeysData': dynamicKeysJson,
     }.toString();
   }
 }

@@ -1,3 +1,7 @@
+## 1.3.1
+
+- Adds dynamic key generation to be included into automation keys
+
 ## 1.3.0
 
 - Replace parameters in command with a .testsweets config file

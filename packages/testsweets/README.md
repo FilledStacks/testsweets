@@ -166,7 +166,7 @@ When uploading a build, the package will read in this file and, for the first ke
 
 When viewing your automation keys in the Test Sweets app, these fake automation keys will also be listed and you should see them marked as "indexed".
 
-## Uploading automation keys and builds to the Test Sweets application
+## Uploading automation keys and builds to the Test Sweets service
 
 Once you have written your scripts you will need to upload a build to test with them. This is done by building your application in debug or profile mode and uploading it to the Test Sweets backend. To make things more convenient, the process of uploading a build also uploads the automation keys. Therefore, before you start writing test cases for the first time you may want to upload a build so that your automation keys are available for autocomplete. To build and upload your application navigate to the folder containing your `pubspec.yaml` file and run the `testsweets` package as follows:
 

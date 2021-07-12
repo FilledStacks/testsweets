@@ -1,0 +1,9 @@
+[
+  {
+    "key": "home_touchable_item{index}",
+    "itemCount": 15
+  },
+  {
+    "key": "home_text_itemTitle{index}"
+  }
+]

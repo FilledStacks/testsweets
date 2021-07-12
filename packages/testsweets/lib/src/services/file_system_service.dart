@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'dart:typed_data';
-
 abstract class FileSystemService {
   bool doesFileExist(String path);
 

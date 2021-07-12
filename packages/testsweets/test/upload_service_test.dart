@@ -65,7 +65,7 @@ void main() {
 
         verify(httpService.putBinary(
                 to: dummySignedUrl,
-                data: dataStream,
+                data: anyNamed('data'),
                 headers: {
                   HttpHeaders.contentLengthHeader: testContentLength.toString(),
                   HttpHeaders.contentTypeHeader: 'application/octet-stream',

@@ -5,7 +5,7 @@ import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/build_info.dart';
 import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
-import 'package:testsweets/src/services/dynamic_keys_generator_service.dart';
+import 'package:testsweets/src/services/dynamic_keys_generator.dart';
 import 'package:testsweets/src/services/file_system_service.dart';
 import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/runnable_process.dart';
@@ -23,7 +23,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<HttpService>(returnNullOnMissingStub: true),
   MockSpec<TimeService>(returnNullOnMissingStub: true),
   MockSpec<CloudFunctionsService>(returnNullOnMissingStub: true),
-  MockSpec<DynamicKeysGeneratorService>(returnNullOnMissingStub: true),
+  MockSpec<DynamicKeysGenerator>(returnNullOnMissingStub: true),
 ])
 MockFileSystemService getAndRegisterFileSystemService({
   bool doesFileExist = false,
@@ -82,23 +82,18 @@ MockTestSweetsConfigFileService getAndRegisterTestSweetsConfigFileService() {
   return service;
 }
 
-MockDynamicKeysGeneratorService getAndRegisterDynamicKeysGeneratorService(
-    {List<Map<String, String>> generateAutomationKeysFromDynamicKeysFileResult =
-        const [
-      {
-        "name": "orders",
-        "type": "touchable",
-        "view": "ready",
-      }
+MockDynamicKeysGenerator getAndRegisterDynamicKeysGeneratorService(
+    {List<String> generateAutomationKeysFromDynamicKeysFileResult = const [
+      'orders_touchable_ready'
     ]}) {
-  _removeRegistrationIfExists<DynamicKeysGeneratorService>();
-  final service = MockDynamicKeysGeneratorService();
+  _removeRegistrationIfExists<DynamicKeysGenerator>();
+  final service = MockDynamicKeysGenerator();
 
   when(service.generateAutomationKeysFromDynamicKeysFile(any)).thenReturn(
     generateAutomationKeysFromDynamicKeysFileResult,
   );
 
-  locator.registerSingleton<DynamicKeysGeneratorService>(service);
+  locator.registerSingleton<DynamicKeysGenerator>(service);
   return service;
 }
 
@@ -192,7 +187,7 @@ void unregisterServices() {
   locator.unregister<HttpService>();
   locator.unregister<TimeService>();
   locator.unregister<CloudFunctionsService>();
-  locator.unregister<DynamicKeysGeneratorService>();
+  locator.unregister<DynamicKeysGenerator>();
   locator.unregister<TestSweetsConfigFileService>();
 }
 

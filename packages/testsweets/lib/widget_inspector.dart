@@ -55,7 +55,7 @@ class _WidgetInspectorViewState extends State<WidgetInspectorView> {
                         fontWeight: FontWeight.bold),
                   ),
                 ),
-                FlatButton(
+                MaterialButton(
                   child: Text(_showOverlay ? 'Turn OFF' : 'Turn ON'),
                   onPressed: toggleOverlay,
                 )
@@ -86,7 +86,6 @@ class Overlay extends StatefulWidget {
 class _OverlayState extends State<Overlay> {
   List<WidgetInfo> elements = [];
 
-  // TODO: Optimise for widget rebuilds
   void getElements(BuildContext context) {
     elements.clear();
     void visitor(Element element) {
