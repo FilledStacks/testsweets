@@ -1,3 +1,7 @@
+## 1.3.0
+
+- Replace parameters in command with a .testsweets config file
+
 ## 1.2.2
 
 - Updates the upload url for builds again to point to the old functionality
