@@ -133,18 +133,6 @@ BuildService getAndRegisterBuildServiceService() {
       appType: testAppType,
       version: '0.1.1',
       automationKeysJson: ['automationKeysJson'],
-      dynamicKeysJson: [
-        {
-          "name": "home",
-          "type": "view",
-          "view": "home",
-        },
-        {
-          "name": "orders",
-          "type": "touchable",
-          "view": "ready",
-        }
-      ],
     )),
   );
   locator.registerSingleton<BuildService>(service);
