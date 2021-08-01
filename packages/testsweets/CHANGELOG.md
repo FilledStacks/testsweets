@@ -1,3 +1,7 @@
+## 1.3.2+1
+
+- Updates readme instructions
+
 ## 1.3.2
 
 - Bumps http and get_it versions

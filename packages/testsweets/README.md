@@ -50,6 +50,49 @@ If you want to add the profile to your run profiles you can add the following co
     },
 ```
 
+## Connecting your Project to TestSweets
+
+To make things more convenient, the process of uploading a build also uploads your automation keys (more on that below). Therefore, before you start writing test cases for the first time you may want to upload a build so that your automation keys are available for autocomplete. To build and upload your application navigate to the folder containing your `pubspec.yaml` and create a new file called `.testsweets`.
+
+In this file we will provide a key value pair for the following keys:
+
+- `projectId`: Found in the project settings of your TestSweets project
+- `apiKey`: Found in the project settings of your TestSweets project
+- `flutterBuildCommand`: the command to pass to the `flutter build` command. Whatever you need to pass to flutter build is what you put there. See example below
+
+```js
+projectId=3OezzTovG9xxxxxxxxx
+apiKey=e3747a0e-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+flutterBuildCommand=--debug -t lib/main_profile.dart
+```
+
+Then excecute the following in the terminal:
+
+```bat
+flutter pub run testsweets buildAndUpload apk
+```
+
+This will print an output similar to the following:
+
+```text
+Running Gradle task 'assembleProfile'...                          180,4s
+√ Built build\app\outputs\flutter-apk\app-profile.apk (28.1MB).
+Uploading automation keys ...
+Successfully uploaded automation keys!
+Uploading build ...
+Done!
+```
+
+You can also specify ipa for an ios build instead of apk. For a debug build specify `debug` instead of `profile`. Replace {projectId} and {apiKey} with the project id and api key for your project. These can be found in the settings for your Test Sweets project.
+
+In some cases you may want to build the application yourself and just tell the testsweets package to upload it. This
+can be achieved by using the `upload` command instead of `buildAndUpload`. You will need to pass the path to the
+build you want to upload with the `--path` or `-p` positional argument after the {apiKey}. For example:
+
+```bat
+flutter pub run testsweets upload apk "path/to/build.apk"
+```
+
 ## Creating your Keys to Sync
 
 Next up we'll add the automation keys that will be used during the scripting. These are normal Flutter `Key` objects where the `String` value is formatted in a certain way. Go to your first view that will be shown in the app and we'll add a few keys to walk you through the process. Before we add the keys I want to share with you the format that we use to identify keys in your code base. There are 6 different widget types at this point.
@@ -165,42 +208,6 @@ To have dynamic keys available for autocomplete in Test Sweets, we need to tell 
 When uploading a build, the package will read in this file and, for the first key, generate 50 automation keys where each automation key has "{index}" replaced with a unique value in the range [0, 49]. The same thing will be done for the second key but a default itemCount of 10 will be used. Once these keys are generated, the package will upload them with the rest of your automation keys.
 
 When viewing your automation keys in the Test Sweets app, these fake automation keys will also be listed and you should see them marked as "indexed".
-
-## Uploading automation keys and builds to the Test Sweets service
-
-Once you have written your scripts you will need to upload a build to test with them. This is done by building your application in debug or profile mode and uploading it to the Test Sweets backend. To make things more convenient, the process of uploading a build also uploads the automation keys. Therefore, before you start writing test cases for the first time you may want to upload a build so that your automation keys are available for autocomplete. To build and upload your application navigate to the folder containing your `pubspec.yaml` file and run the `testsweets` package as follows:
-
-1- create a new .testsweets file at the root of your project, this file must include three paramaters `projectId`,`apiKey`,`flutterBuildCommand`.
-----example file:
-    projectId=3OezzTovG9xxxxxxxxx
-    apiKey=e3747a0e-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-    flutterBuildCommand=--debug -t lib/main_profile.dart
-
-2- excecute the following in the terminal:
-```bat
-flutter pub run testsweets buildAndUpload apk
-```
-
-This will print an output similar to the following:
-
-```text
-Running Gradle task 'assembleProfile'...                          180,4s
-√ Built build\app\outputs\flutter-apk\app-profile.apk (28.1MB).
-Uploading automation keys ...
-Successfully uploaded automation keys!
-Uploading build ...
-Done!
-```
-
-You can also specify ipa for an ios build instead of apk. For a debug build specify `debug` instead of `profile`. Replace {projectId} and {apiKey} with the project id and api key for your project. These can be found in the settings for your Test Sweets project.
-
-In some cases you may want to build the application yourself and just tell the testsweets package to upload it. This
-can be achieved by using the `upload` command instead of `buildAndUpload`. You will need to pass the path to the
-build you want to upload with the `--path` or `-p` positional argument after the {apiKey}. For example:
-
-```bat
-flutter pub run testsweets upload apk "path/to/build.apk"
-```
 
 ## Downloading your builds from Test Sweets
 
