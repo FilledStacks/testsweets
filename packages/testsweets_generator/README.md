@@ -1,5 +1,3 @@
-# testsweets_generator [![Pub Version](https://img.shields.io/pub/v/testsweets_generator)](https://pub.dev/packages/testsweets_generator)
+# TestSweets Generator
 
-A new Flutter package project.
-
-## Getting Started
+a generator that extracts your keys into a place where it can be synced with the TestSweets service.

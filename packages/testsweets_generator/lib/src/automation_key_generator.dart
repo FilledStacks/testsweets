@@ -1,19 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:glob/glob.dart';
-import 'package:path/path.dart' as p;
+import 'dart:io';
 
 import 'package:build/build.dart';
-import 'package:testsweets_generator/src/data_models/data_models.dart';
+import 'package:testsweets_generator/src/constants/app_constants.dart';
 
-import 'automation_key_creator.dart';
 import 'key_extractor.dart';
 
 class AutomationKeyGenerator implements Builder {
-  // TODO: To make it faster allow user to pass in a path to their top level view folder
-  static final _allFilesInLib = new Glob('lib/**');
+  final BuilderOptions options;
+
   final _keyExtractor = const KeyExtractor();
-  final _keyCreator = const AutomationKeyCreator();
+
+  AutomationKeyGenerator(this.options);
 
   static AssetId _allFileOutput(BuildStep buildStep) {
     return AssetId(
@@ -24,18 +23,43 @@ class AutomationKeyGenerator implements Builder {
 
   @override
   FutureOr<void> build(BuildStep buildStep) async {
-    // Will store all the files required for this build step
     final appAutomationKeys = <String>[];
 
-    await for (final input in buildStep.findAssets(_allFilesInLib)) {
-      var fileContent = await buildStep.readAsString(input);
+    final pathsToCheck = [
+      Directory.current.absolute.path,
+    ];
 
-      var extractedkeys = _keyExtractor
-          .getKeysFromString(fileContent)
-          .map((key) => '$key')
+    if (options.config.containsKey(AdditionalPathsConfigKey)) {
+      final paths = (options.config[AdditionalPathsConfigKey] as List)
+          .cast<String>()
+          .map((e) => '${Directory.current.absolute.path}/$e');
+      pathsToCheck.addAll(paths);
+    }
+
+    print('AutomationKeyGenerator | Check for keys in paths: $pathsToCheck');
+
+    for (var path in pathsToCheck) {
+      final dir = Directory('$path');
+      final allFilePaths = await dir
+          .list(recursive: true)
+          .where((entity) => entity.absolute.path.endsWith('.dart'))
+          .map((entity) => entity.absolute.path)
           .toList();
 
-      appAutomationKeys.addAll(extractedkeys);
+      for (var path in allFilePaths) {
+        if (path.contains('.dart')) {
+          final file = File(path);
+
+          final content = file.readAsStringSync();
+
+          var extractedkeys = _keyExtractor
+              .getKeysFromString(content)
+              .map((key) => '$key')
+              .toList();
+
+          appAutomationKeys.addAll(extractedkeys);
+        }
+      }
     }
 
     final outputFile = _allFileOutput(buildStep);

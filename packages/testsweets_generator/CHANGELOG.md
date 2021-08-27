@@ -1,3 +1,7 @@
+## 0.4.0
+
+- Allows configuring the scraping of multiple paths / packages for keys incase you have a multi key
+
 ## 0.3.2
 
 - Updates generator to produce a list of Strings to `lib/app_automation_keys.dart`

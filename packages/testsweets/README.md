@@ -93,6 +93,23 @@ build you want to upload with the `--path` or `-p` positional argument after the
 flutter pub run testsweets upload apk "path/to/build.apk"
 ```
 
+### Multi package Key collection
+
+If your project is split into multiple packages then most likely you'll look in the project you created and see that it only added keys from the current project into the `app_automation_keys.json` file. Fear not, there is a way to do multi package scraping. In your projects root folder add a new file called `build.yaml`. In that file you will pass in `additional_paths` to the `automation_key_generator` and give it a list of additional pats to go look in and find keys. This is how that looks.
+
+```yaml
+targets:
+  $default:
+    builders:
+      testsweets_generator|automation_key_generator:
+        options:
+          # Replace the strings in he list below with additional paths to other packages you wan
+          # to scrape
+          additional_paths: ["../shared/example_ui"]
+```
+
+In the example above the generator will look at the current project's dart files and also in the shared folder inside the `example_ui` project and add those keys to the `app_automation_keys.json` file as well.
+
 ## Creating your Keys to Sync
 
 Next up we'll add the automation keys that will be used during the scripting. These are normal Flutter `Key` objects where the `String` value is formatted in a certain way. Go to your first view that will be shown in the app and we'll add a few keys to walk you through the process. Before we add the keys I want to share with you the format that we use to identify keys in your code base. There are 6 different widget types at this point.

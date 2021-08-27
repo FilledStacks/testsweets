@@ -1,0 +1,8 @@
+# This is how you point the generator to multiple packages if your project is
+# split over multiple packages
+# targets:
+#   $default:
+#     builders:
+#       testsweets_generator|automation_key_generator:
+#         options:
+#           additional_paths: ["../shared/example_ui"]

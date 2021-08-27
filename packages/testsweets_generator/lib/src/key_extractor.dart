@@ -18,7 +18,8 @@ class KeyExtractor {
     final keyValues =
         allMatchedKeys.map((match) => match.group(1)).toSet().toList();
     final out = <String>[];
-    for (var keyValue in keyValues) if (keyValue != null) out.add(keyValue);
+    for (var keyValue in keyValues)
+      if (keyValue != null && keyValue.split('_').length > 1) out.add(keyValue);
 
     return out;
   }

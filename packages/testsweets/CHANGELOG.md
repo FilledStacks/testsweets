@@ -1,3 +1,7 @@
+## 1.3.2+2
+
+- Adds readme instructions for new multi package scraping
+
 ## 1.3.2+1
 
 - Updates readme instructions
