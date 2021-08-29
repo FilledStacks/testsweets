@@ -40,7 +40,9 @@ class TestSweetsConfigFileServiceImplementaion
 
     final testSweetsConfigUtils = TestSweetsConfigUtils();
     return testSweetsConfigUtils.deserializeConfigFileByKey(
-        testSweetsConfigsSrc, keyType);
+      testSweetsConfigsSrc,
+      keyType,
+    );
   }
 }
 
@@ -48,10 +50,14 @@ class TestSweetsConfigUtils {
   String deserializeConfigFileByKey(String src, ConfigFileKeyType keyType) {
     final ls = LineSplitter();
     final testSweetsConfigsCommands = ls.convert(src);
-
+    // print(
+    //     'deserializeConfigFileByKey|testSweetsConfigsCommands:$testSweetsConfigsCommands');
     final map = splittingStringOnEqualSign(testSweetsConfigsCommands);
-
-    return getStringValueFromMapByKey(map, keyType);
+    // print('deserializeConfigFileByKey|map:$map');
+    final stringValueFromMapByKey = getStringValueFromMapByKey(map, keyType);
+    // print(
+    //     'deserializeConfigFileByKey|stringValueFromMapByKey:$stringValueFromMapByKey');
+    return stringValueFromMapByKey;
   }
 
   String getStringValueFromMapByKey(
@@ -62,7 +68,8 @@ class TestSweetsConfigUtils {
       List<String> testSweetsConfigsCommands) {
     var map = testSweetsConfigsCommands.map((line) {
       var listOfParts = line.split('=').map((part) => part.trim()).toList();
-      return MapEntry(listOfParts[0], listOfParts[1]);
+      return MapEntry(listOfParts[0],
+          listOfParts.getRange(1, listOfParts.length).join('='));
     }).toList();
 
     return map;

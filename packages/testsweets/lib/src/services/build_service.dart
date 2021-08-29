@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:testsweets/utils/error_messages.dart';
+import 'package:yaml/yaml.dart';
 
 import '../locator.dart';
 import '../models/build_info.dart';
 import 'dynamic_keys_generator.dart';
 import 'file_system_service.dart';
 import 'runnable_process.dart';
-import 'package:yaml/yaml.dart';
 
 abstract class BuildService {
   /// Returns [BuildInfo] for the application in [flutterApp].
@@ -78,8 +78,11 @@ class BuildServiceImplementaion implements BuildService {
     }
 
     if (pathToBuild.isEmpty) {
-      final runningFlutterProcess = await flutterProcess
-          .startWith(args: ['build', appType, ...extraFlutterProcessArgs]);
+      final flutterArgs = ['build', appType, ...extraFlutterProcessArgs];
+      print('flutterArgs: $flutterArgs');
+      final runningFlutterProcess = await flutterProcess.startWith(
+        args: flutterArgs,
+      );
 
       final processStdoutCollector = Utf8CollectingStreamConsumer(stdout);
       final processStderrCollector = Utf8CollectingStreamConsumer(stderr);

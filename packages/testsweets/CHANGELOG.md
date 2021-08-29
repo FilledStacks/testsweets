@@ -1,3 +1,7 @@
+## 1.3.3
+
+- Fixes dart-define arguments going missing when building the app
+
 ## 1.3.2+2
 
 - Adds readme instructions for new multi package scraping
