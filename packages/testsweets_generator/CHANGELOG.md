@@ -1,3 +1,8 @@
+## 0.4.1
+
+- Adds functionality to supply keys with "
+- Adds functionality to read keys defined on a new line
+
 ## 0.4.0
 
 - Allows configuring the scraping of multiple paths / packages for keys incase you have a multi key
