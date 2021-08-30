@@ -21,7 +21,7 @@ dev_dependencies:
 
 ## Setup
 
-After the packages have been added we have to setup the code. TestSweets makes use of Flutter Driver to drive the test cases that we write. This means we have to enable flutter driver for the version of the app that we build that goes through automation. Flutter driver disables certain things like the on screen keyboard so to keep it all separate we'll create a new main file titled main_profile.dart. In this file we will enable Flutter driver. Once you've created the file main_profile.dart in the same location as you original main.dart file you can add the following code.
+After the packages have been added we have to setup the code. TestSweets makes use of Flutter Driver to drive the test cases that we write. This means we have to enable flutter driver for the version of the app that we build that goes through automation. Flutter driver disables certain things like the on screen keyboard 
 
 ```dart
 ...
@@ -29,26 +29,22 @@ After the packages have been added we have to setup the code. TestSweets makes u
 import 'package:flutter_driver/driver_extension.dart';
 
 void main() {
-  // 2. Enables flutter driver
-  enableFlutterDriverExtension();
+  // 2. Get the FLUTTER_DRIVER from the command line environment  
+  const FLUTTER_DRIVER = bool.fromEnvironment(
+    'FLUTTER_DRIVER',
+    defaultValue: false,
+  );
+  // 3. Enables flutter driver if the FLUTTER_DRIVER enviroment is True
+  if (FLUTTER_DRIVER) {
+    enableFlutterDriverExtension();
+  }
 
   ...
   runApp(MyApp());
 }
 ```
 
-We start off by importing the required files, driver_extension.dart. In the main function we enable the flutter driver extension with the call to `enableFlutterDriverExtension()`.
 
-If you want to add the profile to your run profiles you can add the following configuration into your VSCode configurations
-
-```json
-   {
-      "name": "profile",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main_profile.dart",
-    },
-```
 
 ## Connecting your Project to TestSweets
 
@@ -58,12 +54,12 @@ In this file we will provide a key value pair for the following keys:
 
 - `projectId`: Found in the project settings of your TestSweets project
 - `apiKey`: Found in the project settings of your TestSweets project
-- `flutterBuildCommand`: the command to pass to the `flutter build` command. Whatever you need to pass to flutter build is what you put there. See example below
+- `flutterBuildCommand`: the command to pass to the `flutter build` command. Whatever you need to pass to flutter build is what you put there, and finally you should enable the flutter driver by setting the `--dart-define=FLUTTER_DRIVER=true` at the end of the flutterBuildCommand. See example below
 
-```js
+```bat
 projectId=3OezzTovG9xxxxxxxxx
 apiKey=e3747a0e-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-flutterBuildCommand=--debug -t lib/main_profile.dart
+flutterBuildCommand=--debug -t lib/main.dart --dart-define=FLUTTER_DRIVER=true
 ```
 
 Then excecute the following in the terminal:
