@@ -28,17 +28,19 @@ After the packages have been added we have to setup the code. TestSweets makes u
 // 1. Import flutter driver extension to enable flutter driver
 import 'package:flutter_driver/driver_extension.dart';
 
-void main() {
-  // 2. Get the FLUTTER_DRIVER from the command line environment  
+// 2. Get the FLUTTER_DRIVER from the command line environment  
   const FLUTTER_DRIVER = bool.fromEnvironment(
     'FLUTTER_DRIVER',
     defaultValue: false,
-  );
+  );  
+  
+void main() {
+
   // 3. Enables flutter driver if the FLUTTER_DRIVER enviroment is True
   if (FLUTTER_DRIVER) {
     enableFlutterDriverExtension();
   }
-
+  
   ...
   runApp(MyApp());
 }
@@ -59,7 +61,7 @@ In this file we will provide a key value pair for the following keys:
 ```bat
 projectId=3OezzTovG9xxxxxxxxx
 apiKey=e3747a0e-xxxx-xxxx-xxxx-xxxxxxxxxxxx
-flutterBuildCommand=--debug -t lib/main.dart --dart-define=FLUTTER_DRIVER=true
+flutterBuildCommand=--debug --dart-define=FLUTTER_DRIVER=true
 ```
 
 Then excecute the following in the terminal:
