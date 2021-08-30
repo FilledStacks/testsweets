@@ -6,7 +6,6 @@ class KeyExtractor {
     // remove all comments to filter out unwanted/commented out keys
     RegExp commentsRegex = RegExp(r'\/\*[\s\S]*?\*\/|\/\/.*');
     value = value.replaceAll(commentsRegex, '');
-    print(value);
     RegExp keyRegex = new RegExp(
       r"""(?:[\s=:]Key\([\s\n]*['|"]([0-9a-zA-z@]+)['|"]\))""",
       caseSensitive: true,
