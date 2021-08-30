@@ -152,10 +152,10 @@ And you can also add a key to the button the user would tap to login.
 
 ```dart
  AppButton(
-  buttonKey: Key('login_touchable_login'),
-  title: 'Login',
+  buttonKey: Key('login_touchable_signup'),
+  title: 'Signup',
   busy: model.isBusy,
-  onPressed: () => model.login(
+  onPressed: () => model.signup(
     userName: email.text,
     password: password.text,
   ),
@@ -172,10 +172,10 @@ This will generate a new file next to the _pubspec.yaml_ file in your project ca
 
 ```dart
 [
-  { "name": "login", "type": "view", "view": "login" },
-  { "name": "email", "type": "input", "view": "login" },
-  { "name": "password", "type": "input", "view": "login" },
-  { "name": "login", "type": "touchable", "view": "login" }
+  "login_view",
+  "login_input_email",
+  "login_input_password",
+  "login_touchable_signup"
 ]
 ```
 
