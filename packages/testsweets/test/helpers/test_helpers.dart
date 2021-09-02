@@ -1,8 +1,6 @@
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/expect.dart';
 import 'package:testsweets/src/locator.dart';
-import 'package:testsweets/src/models/build_info.dart';
 import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
 import 'package:testsweets/src/services/dynamic_keys_generator.dart';
@@ -11,8 +9,10 @@ import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/runnable_process.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/time_service.dart';
-import 'test_consts.dart';
+import 'package:testsweets/src/services/upload_service.dart';
+
 import 'stubed_proccess.dart';
+import 'test_consts.dart';
 import 'test_helpers.mocks.dart';
 
 @GenerateMocks([], customMocks: [
@@ -24,6 +24,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<TimeService>(returnNullOnMissingStub: true),
   MockSpec<CloudFunctionsService>(returnNullOnMissingStub: true),
   MockSpec<DynamicKeysGenerator>(returnNullOnMissingStub: true),
+  MockSpec<UploadService>(returnNullOnMissingStub: true),
 ])
 MockFileSystemService getAndRegisterFileSystemService({
   bool doesFileExist = false,
@@ -75,9 +76,9 @@ MockFlutterProcess getAndRegisterFlutterProcess() {
 MockTestSweetsConfigFileService getAndRegisterTestSweetsConfigFileService() {
   _removeRegistrationIfExists<TestSweetsConfigFileService>();
   final service = MockTestSweetsConfigFileService();
-  when(service
-          .getValueFromConfigFileByKey(ConfigFileKeyType.FlutterBuildCommand))
-      .thenAnswer((realInvocation) => '--debug -t lib/main_profile.dart');
+  when(service.getValueFromConfigFileByKey(any))
+      .thenAnswer((realInvocation) => testExtraFlutterProcessArgsWithDebug[0]);
+
   locator.registerSingleton<TestSweetsConfigFileService>(service);
   return service;
 }
@@ -124,17 +125,13 @@ BuildService getAndRegisterBuildServiceService() {
   _removeRegistrationIfExists<BuildService>();
   final service = MockBuildService();
   when(service.build(
-          appType: testAppType,
-          extraFlutterProcessArgs: ['--debug -t lib/main_profile.dart']))
+          pathToBuild: anyNamed('pathToBuild'),
+          appType: anyNamed('appType'),
+          extraFlutterProcessArgs: anyNamed('extraFlutterProcessArgs')))
       .thenAnswer(
-    (_) => Future.value(BuildInfo(
-      pathToBuild: 'abc.apk',
-      buildMode: 'profile',
-      appType: testAppType,
-      version: '0.1.1',
-      automationKeysJson: ['automationKeysJson'],
-    )),
+    (_) => Future.value(testBuildInfo),
   );
+
   locator.registerSingleton<BuildService>(service);
   return service;
 }
@@ -153,8 +150,18 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService(
   when(service.doesBuildExistInProject(any,
           withVersion: anyNamed('withVersion')))
       .thenAnswer((invocation) async => doesBuildExistInProjectResult);
-
+  when(service.uploadAutomationKeys(any, any, any))
+      .thenAnswer((realInvocation) => Future.value());
   locator.registerSingleton<CloudFunctionsService>(service);
+  return service;
+}
+
+UploadService getAndRegisterUploadService() {
+  _removeRegistrationIfExists<UploadService>();
+  final service = MockUploadService();
+  when(service.uploadBuild(any, any, any))
+      .thenAnswer((realInvocation) => Future.value());
+  locator.registerSingleton<UploadService>(service);
   return service;
 }
 
@@ -167,6 +174,7 @@ void registerServices() {
   getAndRegisterDynamicKeysGeneratorService();
   getAndRegisterBuildServiceService();
   getAndRegisterTestSweetsConfigFileService();
+  getAndRegisterUploadService();
 }
 
 void unregisterServices() {
@@ -176,7 +184,9 @@ void unregisterServices() {
   locator.unregister<TimeService>();
   locator.unregister<CloudFunctionsService>();
   locator.unregister<DynamicKeysGenerator>();
+  locator.unregister<BuildService>();
   locator.unregister<TestSweetsConfigFileService>();
+  locator.unregister<UploadService>();
 }
 
 // Call this before any service registration helper. This is to ensure that if there

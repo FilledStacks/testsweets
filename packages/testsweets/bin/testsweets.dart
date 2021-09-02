@@ -5,12 +5,14 @@ import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/upload_service.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
-Future<void> main(List<String> args) async {
-  void quit(
-    String errorMsg,
-  ) =>
-      throw BuildError('Error: $errorMsg');
-
+Future<void> quit(
+  String errorMsg,
+) =>
+    throw BuildError('Error: $errorMsg');
+Future<void> main(
+  List<String> args, {
+  BuildService? buildServiceMock,
+}) async {
   if (args.length < 2) quit(ErrorMessages.buildArgumentsError);
 
   final command = args[0];
@@ -35,10 +37,10 @@ Future<void> main(List<String> args) async {
 
     pathToBuild = args[positionBeforePath + 1];
   }
-  await setupLocator();
+  if (buildServiceMock == null) await setupLocator();
   final testSweetsConfigFileService = locator<TestSweetsConfigFileService>();
 
-  final buildInfo = await locator<BuildService>().build(
+  final buildInfo = await (buildServiceMock ?? locator<BuildService>()).build(
       appType: appType,
       pathToBuild: pathToBuild,
       extraFlutterProcessArgs: testSweetsConfigFileService
