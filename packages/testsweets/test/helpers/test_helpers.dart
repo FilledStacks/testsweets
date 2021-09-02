@@ -30,7 +30,7 @@ import 'test_helpers.mocks.dart';
 ])
 MockFileSystemService getAndRegisterFileSystemService({
   bool doesFileExist = false,
-  String readFileAsStringSyncResult = ksAppAutomationKeysFile,
+  String readFileAsStringSyncResult = appAutomationKeysFile,
   bool? jsonFilesDoesFileExist,
   String? jsonFilesreadFileAsStringSyncResult,
 }) {

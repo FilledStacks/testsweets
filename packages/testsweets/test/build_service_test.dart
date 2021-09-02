@@ -31,7 +31,7 @@ void main() {
         getAndRegisterFileSystemService(
             doesFileExist: true,
             readFileAsStringSyncResult: ksPubspecFileWithNoVersion,
-            jsonFilesreadFileAsStringSyncResult: ksAppAutomationKeysFile);
+            jsonFilesreadFileAsStringSyncResult: appAutomationKeysFile);
         final buildService = BuildServiceImplementaion();
 
         expect(
@@ -49,7 +49,7 @@ void main() {
         getAndRegisterFileSystemService(
             doesFileExist: true,
             readFileAsStringSyncResult: ksPubspecFileWithVersion,
-            jsonFilesreadFileAsStringSyncResult: ksAppAutomationKeysFile,
+            jsonFilesreadFileAsStringSyncResult: appAutomationKeysFile,
             jsonFilesDoesFileExist: true);
 
         getAndRegisterFlutterProcess();
@@ -70,7 +70,7 @@ void main() {
         getAndRegisterFileSystemService(
           doesFileExist: true,
           readFileAsStringSyncResult: ksPubspecFileWithVersion,
-          jsonFilesreadFileAsStringSyncResult: ksAppAutomationKeysFile,
+          jsonFilesreadFileAsStringSyncResult: appAutomationKeysFile,
         );
         final instance = BuildServiceImplementaion();
         final buildInfo = await instance.build(
@@ -88,7 +88,7 @@ void main() {
         getAndRegisterFileSystemService(
           doesFileExist: true,
           readFileAsStringSyncResult: ksPubspecFileWithVersion,
-          jsonFilesreadFileAsStringSyncResult: ksAppAutomationKeysFile,
+          jsonFilesreadFileAsStringSyncResult: appAutomationKeysFile,
         );
         final instance = BuildServiceImplementaion();
         final buildInfo = await instance.build(

@@ -65,7 +65,8 @@ void main() {
           testExtraFlutterProcessArgsWithDebug[0],
         ));
       });
-      test('When first args is uploadKeys, Should not call build the app or ',
+      test(
+          'When first item in args is "uploadKeys", Should not call build the app or uploadapp',
           () async {
         final uploadService = getAndRegisterUploadService();
         final buildService = getAndRegisterBuildServiceService();
@@ -81,6 +82,11 @@ void main() {
             appType: testAppType,
             extraFlutterProcessArgs:
                 testExtraFlutterProcessArgsWithDebug[0].split(' ')));
+      });
+      group('onlyUploadAutomationKeys -', () {
+        test('When passing "uploadKeys", Should be true', () async {
+          expect(ts.onlyUploadAutomationKeys('uploadKeys'), true);
+        });
       });
     });
   });

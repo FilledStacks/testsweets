@@ -16,15 +16,6 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 """;
 
-const String ksAppAutomationKeysFile = """
-[
-  {
-    "name": "home",
-    "type": "view",
-    "view": "home"
-  }
-]
-""";
 const String appAutomationKeysFile = """
 [
   "home_general_guestDialog",
