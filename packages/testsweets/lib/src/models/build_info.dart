@@ -11,17 +11,11 @@ class BuildInfo {
   /// `pubspec.yaml` file for the app.
   final String version;
 
-  /// The parsed contents of the `app_automation_keys.json` file.
-  ///
-  /// This list also includes the automation keys generated
-  final List<String> automationKeysJson;
-
   BuildInfo({
     required this.pathToBuild,
     required this.buildMode,
     required this.appType,
     required this.version,
-    required this.automationKeysJson,
   });
 
   @override
@@ -31,7 +25,6 @@ class BuildInfo {
       'buildMode': buildMode,
       'appType': appType,
       'version': version,
-      'automationKeysData': automationKeysJson,
     }.toString();
   }
 }

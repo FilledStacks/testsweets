@@ -1,6 +1,7 @@
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/locator.dart';
+import 'package:testsweets/src/services/automation_keys_service.dart';
 import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
 import 'package:testsweets/src/services/dynamic_keys_generator.dart';
@@ -25,6 +26,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<CloudFunctionsService>(returnNullOnMissingStub: true),
   MockSpec<DynamicKeysGenerator>(returnNullOnMissingStub: true),
   MockSpec<UploadService>(returnNullOnMissingStub: true),
+  MockSpec<AutomationKeysService>(returnNullOnMissingStub: true),
 ])
 MockFileSystemService getAndRegisterFileSystemService({
   bool doesFileExist = false,
@@ -84,14 +86,13 @@ MockTestSweetsConfigFileService getAndRegisterTestSweetsConfigFileService() {
 }
 
 MockDynamicKeysGenerator getAndRegisterDynamicKeysGeneratorService(
-    {List<String> generateAutomationKeysFromDynamicKeysFileResult = const [
-      'orders_touchable_ready'
-    ]}) {
+    {List<String>? generateAutomationKeysFromDynamicKeysFileResult}) {
   _removeRegistrationIfExists<DynamicKeysGenerator>();
   final service = MockDynamicKeysGenerator();
 
   when(service.generateAutomationKeysFromDynamicKeysFile(any)).thenReturn(
-    generateAutomationKeysFromDynamicKeysFileResult,
+    generateAutomationKeysFromDynamicKeysFileResult ??
+        testDynamicAutomationKeys,
   );
 
   locator.registerSingleton<DynamicKeysGenerator>(service);
@@ -170,6 +171,14 @@ UploadService getAndRegisterUploadService() {
   return service;
 }
 
+AutomationKeysService getAndRegisterAutomationKeysService() {
+  _removeRegistrationIfExists<AutomationKeysService>();
+  final service = MockAutomationKeysService();
+  when(service.extractKeysListFromJson()).thenReturn(testAutomationKeys);
+  locator.registerSingleton<AutomationKeysService>(service);
+  return service;
+}
+
 void registerServices() {
   getAndRegisterFileSystemService();
   getAndRegisterFlutterProcess();
@@ -180,6 +189,7 @@ void registerServices() {
   getAndRegisterBuildServiceService();
   getAndRegisterTestSweetsConfigFileService();
   getAndRegisterUploadService();
+  getAndRegisterAutomationKeysService();
 }
 
 void unregisterServices() {
@@ -192,6 +202,7 @@ void unregisterServices() {
   locator.unregister<BuildService>();
   locator.unregister<TestSweetsConfigFileService>();
   locator.unregister<UploadService>();
+  locator.unregister<AutomationKeysService>();
 }
 
 // Call this before any service registration helper. This is to ensure that if there

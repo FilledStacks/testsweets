@@ -1,4 +1,5 @@
 import 'package:testsweets/src/locator.dart';
+import 'package:testsweets/src/services/automation_keys_service.dart';
 import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
@@ -18,7 +19,7 @@ Future<void> main(
   final command = args[0];
   final appType = args[1];
 
-  if (!['buildAndUpload', 'upload'].contains(command)) {
+  if (!['buildAndUpload', 'upload', 'UploadKeys'].contains(command)) {
     quit(
       ErrorMessages.notValidCommand(command),
     );
@@ -53,7 +54,7 @@ Future<void> main(
         .getValueFromConfigFileByKey(ConfigFileKeyType.ProjectId),
     testSweetsConfigFileService
         .getValueFromConfigFileByKey(ConfigFileKeyType.ApiKey),
-    buildInfo.automationKeysJson,
+    locator<AutomationKeysService>().extractKeysListFromJson(),
   );
 
   print('Successfully uploaded automation keys! \nUploading build ...');

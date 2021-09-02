@@ -1,6 +1,5 @@
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
@@ -11,8 +10,7 @@ import 'helpers/test_helpers.dart';
 void main() {
   group('Testsweets test -', () {
     setUp(registerServices);
-    tearDown(locator.reset);
-
+    tearDown(unregisterServices);
     group('main -', () {
       test('When args are less than two, should throw BuildError', () {
         expect(() => ts.main(['arg1']),
@@ -53,7 +51,7 @@ void main() {
         verify(cloudFunctionsService.uploadAutomationKeys(
           testExtraFlutterProcessArgsWithDebug[0],
           testExtraFlutterProcessArgsWithDebug[0],
-          testBuildInfo.automationKeysJson,
+          testAutomationKeys,
         ));
       });
       test(
@@ -66,6 +64,9 @@ void main() {
           testExtraFlutterProcessArgsWithDebug[0],
           testExtraFlutterProcessArgsWithDebug[0],
         ));
+      });
+      test('When first is uploadKeys, Should ', () async {
+        // await ts.main(['uploadKeys', testAppType], isMocking: true);
       });
     });
   });

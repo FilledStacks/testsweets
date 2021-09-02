@@ -25,6 +25,13 @@ const String ksAppAutomationKeysFile = """
   }
 ]
 """;
+const String appAutomationKeysFile = """
+[
+  "home_general_guestDialog",
+  "home_touchable_email",
+  "home_touchable_google"
+]
+""";
 
 const String testDirectoryPath = 'myApp';
 
@@ -48,13 +55,18 @@ final BuildInfo testBuildInfo = BuildInfo(
   buildMode: 'profile',
   appType: testAppType,
   version: '0.1.1',
-  automationKeysJson: ['automationKeysJson'],
 );
 const String testAppType = 'apk';
 const List<String> testExtraArgs = ['--profile'];
 const List<String> testExtraFlutterProcessArgsWithDebug = [
   '--debug -t lib/main_profile.dart'
 ];
+const List<String> testAutomationKeys = [
+  "home_general_guestDialog",
+  "home_touchable_email",
+  "home_touchable_google"
+];
+const List<String> testDynamicAutomationKeys = ['orders_touchable_ready'];
 const int testContentLength = 2;
 final testDataStream = Stream.value([1, 2, 3]);
 final testDateTime = DateTime.utc(1993, 12, 12, 12);
