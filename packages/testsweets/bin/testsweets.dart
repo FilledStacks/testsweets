@@ -15,19 +15,18 @@ Future<void> main(
   List<String> args, {
   bool isMocking = false,
 }) async {
-  if (args.length < 2) quit(ErrorMessages.buildArgumentsError);
+  if (args.length < 1) quit(ErrorMessages.buildArgumentsError);
 
   final command = args[0];
-  final appType = args[1];
 
-  if (!['buildAndUpload', 'upload', 'uploadKeys'].contains(command)) {
+  if (!['buildAndUpload', 'uploadApp', 'uploadKeys'].contains(command)) {
     quit(
       ErrorMessages.notValidCommand(command),
     );
   }
 
   String pathToBuild = '';
-  if (command == 'upload') {
+  if (command == 'uploadApp') {
     int positionBeforePath = args.indexOf('--path');
     if (positionBeforePath == -1) positionBeforePath = args.indexOf('-p');
 
@@ -47,6 +46,8 @@ Future<void> main(
   print('Successfully uploaded automation keys!');
 
   if (!onlyUploadAutomationKeys(command)) {
+    final appType = args[1];
+
     print('Start building $appType ...');
     BuildInfo buildInfo =
         await buildApp(appType, pathToBuild, testSweetsConfigFileService);

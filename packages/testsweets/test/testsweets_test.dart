@@ -12,8 +12,8 @@ void main() {
     setUp(registerServices);
     tearDown(unregisterServices);
     group('main -', () {
-      test('When args are less than two, should throw BuildError', () {
-        expect(() => ts.main(['arg1']),
+      test('When args are less than one, should throw BuildError', () {
+        expect(() => ts.main([]),
             throwsA(BuildError('Error: ${ErrorMessages.buildArgumentsError}')));
       });
       test(
@@ -25,10 +25,10 @@ void main() {
                 BuildError('Error: ${ErrorMessages.notValidCommand('arg1')}')));
       });
       test(
-          'If upload command missing path, Should throw uploadCommandeMissingPath error',
+          'If uploadApp command missing path, Should throw uploadCommandeMissingPath error',
           () {
         expect(
-            () => ts.main(['upload', 'arg2']),
+            () => ts.main(['uploadApp', 'arg2']),
             throwsA(BuildError(
                 'Error: ${ErrorMessages.uploadCommandeMissingPath}')));
       });
