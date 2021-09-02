@@ -38,8 +38,7 @@ void main() {
           'If buildAndUpload command, Should call build function from build service',
           () async {
         final buildService = getAndRegisterBuildServiceService();
-        await ts.main(['buildAndUpload', testAppType],
-            buildServiceMock: buildService);
+        await ts.main(['buildAndUpload', testAppType], isMocking: true);
         verify(buildService.build(
             pathToBuild: '',
             appType: testAppType,

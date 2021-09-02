@@ -11,7 +11,7 @@ Future<void> quit(
     throw BuildError('Error: $errorMsg');
 Future<void> main(
   List<String> args, {
-  BuildService? buildServiceMock,
+  bool isMocking = false,
 }) async {
   if (args.length < 2) quit(ErrorMessages.buildArgumentsError);
 
@@ -37,10 +37,10 @@ Future<void> main(
 
     pathToBuild = args[positionBeforePath + 1];
   }
-  if (buildServiceMock == null) await setupLocator();
+  if (!isMocking) await setupLocator();
   final testSweetsConfigFileService = locator<TestSweetsConfigFileService>();
 
-  final buildInfo = await (buildServiceMock ?? locator<BuildService>()).build(
+  final buildInfo = await locator<BuildService>().build(
       appType: appType,
       pathToBuild: pathToBuild,
       extraFlutterProcessArgs: testSweetsConfigFileService
