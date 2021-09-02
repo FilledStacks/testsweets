@@ -32,7 +32,7 @@ Future<void> main(
 
     if (positionBeforePath == -1 || positionBeforePath == args.length) {
       quit(
-        ErrorMessages.uploadCommandeMissingPath,
+        ErrorMessages.uploadAppCommandeMissingPath,
       );
     }
 

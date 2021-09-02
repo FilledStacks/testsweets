@@ -17,20 +17,20 @@ void main() {
             throwsA(BuildError('Error: ${ErrorMessages.buildArgumentsError}')));
       });
       test(
-          '''If the first argument of args list doesn\'t have one of these two words ['buildAndUpload', 'upload'], Shuold throw notValidCommand error''',
+          '''If the first argument of args list doesn\'t have one of these two words ['buildAndUpload', 'uploadApp','uploadKey'], Shuold throw notValidCommand error''',
           () {
         expect(
-            () => ts.main(['arg1', 'arg2']),
-            throwsA(
-                BuildError('Error: ${ErrorMessages.notValidCommand('arg1')}')));
+            () => ts.main(['upload', 'arg2']),
+            throwsA(BuildError(
+                'Error: ${ErrorMessages.notValidCommand('upload')}')));
       });
       test(
-          'If uploadApp command missing path, Should throw uploadCommandeMissingPath error',
+          'If uploadApp command missing path, Should throw uploadAppCommandeMissingPath error',
           () {
         expect(
             () => ts.main(['uploadApp', 'arg2']),
             throwsA(BuildError(
-                'Error: ${ErrorMessages.uploadCommandeMissingPath}')));
+                'Error: ${ErrorMessages.uploadAppCommandeMissingPath}')));
       });
       test(
           'If buildAndUpload command, Should call build function from build service',
