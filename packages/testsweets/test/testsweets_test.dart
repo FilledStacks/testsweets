@@ -44,7 +44,7 @@ void main() {
                 testExtraFlutterProcessArgsWithDebug[0].split(' ')));
       });
       test(
-          'If buildAndUpload command, Should call uploadBuild function from UploadService',
+          'If buildAndUpload command, Should call uploadAutomationKeys function from cloudFunctionsService',
           () async {
         final cloudFunctionsService = getAndRegisterCloudFunctionsService();
         await ts.main(['buildAndUpload', testAppType], isMocking: true);
@@ -65,8 +65,22 @@ void main() {
           testExtraFlutterProcessArgsWithDebug[0],
         ));
       });
-      test('When first is uploadKeys, Should ', () async {
-        // await ts.main(['uploadKeys', testAppType], isMocking: true);
+      test('When first args is uploadKeys, Should not call build the app or ',
+          () async {
+        final uploadService = getAndRegisterUploadService();
+        final buildService = getAndRegisterBuildServiceService();
+
+        await ts.main(['uploadKeys', testAppType], isMocking: true);
+        verifyNever(uploadService.uploadBuild(
+          testBuildInfo,
+          testExtraFlutterProcessArgsWithDebug[0],
+          testExtraFlutterProcessArgsWithDebug[0],
+        ));
+        verifyNever(buildService.build(
+            pathToBuild: '',
+            appType: testAppType,
+            extraFlutterProcessArgs:
+                testExtraFlutterProcessArgsWithDebug[0].split(' ')));
       });
     });
   });
