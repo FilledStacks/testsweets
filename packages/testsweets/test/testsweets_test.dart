@@ -45,6 +45,28 @@ void main() {
             extraFlutterProcessArgs:
                 testExtraFlutterProcessArgsWithDebug[0].split(' ')));
       });
+      test(
+          'If buildAndUpload command, Should call uploadBuild function from UploadService',
+          () async {
+        final cloudFunctionsService = getAndRegisterCloudFunctionsService();
+        await ts.main(['buildAndUpload', testAppType], isMocking: true);
+        verify(cloudFunctionsService.uploadAutomationKeys(
+          testExtraFlutterProcessArgsWithDebug[0],
+          testExtraFlutterProcessArgsWithDebug[0],
+          testBuildInfo.automationKeysJson,
+        ));
+      });
+      test(
+          'If buildAndUpload command, Should call uploadBuild function from UploadService',
+          () async {
+        final uploadService = getAndRegisterUploadService();
+        await ts.main(['buildAndUpload', testAppType], isMocking: true);
+        verify(uploadService.uploadBuild(
+          testBuildInfo,
+          testExtraFlutterProcessArgsWithDebug[0],
+          testExtraFlutterProcessArgsWithDebug[0],
+        ));
+      });
     });
   });
 }

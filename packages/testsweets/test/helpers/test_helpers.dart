@@ -141,6 +141,11 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService(
     bool doesBuildExistInProjectResult = true}) {
   _removeRegistrationIfExists<CloudFunctionsService>();
   final service = MockCloudFunctionsService();
+  when(service.uploadAutomationKeys(
+    any,
+    any,
+    any,
+  )).thenAnswer((_) => Future.value());
   when(service.getV4BuildUploadSignedUrl(
     any,
     any,
