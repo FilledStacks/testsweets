@@ -1,3 +1,8 @@
+## 1.3.4
+
+- Add new `uploadKeys` command  
+- Replace the old `upload` command with `uploadApp`
+- More unit tests
 ## 1.3.3
 
 - Fixes dart-define arguments going missing when building the app
