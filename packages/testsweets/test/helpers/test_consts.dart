@@ -1,3 +1,5 @@
+import 'package:testsweets/src/models/build_info.dart';
+
 const String ksPubspecFileWithNoVersion = """
 name: myApp
 
@@ -14,13 +16,11 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 """;
 
-const String ksAppAutomationKeysFile = """
+const String appAutomationKeysFile = """
 [
-  {
-    "name": "home",
-    "type": "view",
-    "view": "home"
-  }
+  "home_general_guestDialog",
+  "home_touchable_email",
+  "home_touchable_google"
 ]
 """;
 
@@ -41,8 +41,23 @@ const testsweetFileContentListOfMapEntries = [
   MapEntry("flutterBuildCommand", "--debug -t lib/main_profile.dart")
 ];
 const String testPathToBuild = 'abc';
+final BuildInfo testBuildInfo = BuildInfo(
+  pathToBuild: 'abc.apk',
+  buildMode: 'profile',
+  appType: testAppType,
+  version: '0.1.1',
+);
 const String testAppType = 'apk';
 const List<String> testExtraArgs = ['--profile'];
+const List<String> testExtraFlutterProcessArgsWithDebug = [
+  '--debug -t lib/main_profile.dart'
+];
+const List<String> testAutomationKeys = [
+  "home_general_guestDialog",
+  "home_touchable_email",
+  "home_touchable_google"
+];
+const List<String> testDynamicAutomationKeys = ['orders_touchable_ready'];
 const int testContentLength = 2;
 final testDataStream = Stream.value([1, 2, 3]);
 final testDateTime = DateTime.utc(1993, 12, 12, 12);

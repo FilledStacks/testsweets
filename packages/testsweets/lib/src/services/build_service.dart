@@ -7,7 +7,6 @@ import 'package:yaml/yaml.dart';
 
 import '../locator.dart';
 import '../models/build_info.dart';
-import 'dynamic_keys_generator.dart';
 import 'file_system_service.dart';
 import 'runnable_process.dart';
 
@@ -31,7 +30,6 @@ abstract class BuildService {
 class BuildServiceImplementaion implements BuildService {
   final fileSystemService = locator<FileSystemService>();
   final flutterProcess = locator<FlutterProcess>();
-  final dynamicKeysGeneratorService = locator<DynamicKeysGenerator>();
 
   @override
   Future<BuildInfo> build({
@@ -41,37 +39,13 @@ class BuildServiceImplementaion implements BuildService {
   }) async {
     final flutterApp = fileSystemService.fullPathToWorkingDirectory;
     final pathToPubspecFile = '$flutterApp\\pubspec.yaml';
-    final pathToAppAutomationKeys = '$flutterApp\\app_automation_keys.json';
-    final pathToDynamicKeysFile = '$flutterApp\\dynamic_keys.json';
 
     if (!fileSystemService.doesFileExist(pathToPubspecFile)) {
       throw BuildError(ErrorMessages.thereIsNoPubspecyamlFile(flutterApp));
     }
 
-    if (!fileSystemService.doesFileExist(pathToAppAutomationKeys)) {
-      throw BuildError(ErrorMessages.notFoundAutomationKeys);
-    }
-
     YamlMap pubspec =
         loadYaml(fileSystemService.readFileAsStringSync(pathToPubspecFile));
-
-    List<String> appAutomationKeysJson = [];
-
-    final dynamicKeys = dynamicKeysGeneratorService
-        .generateAutomationKeysFromDynamicKeysFile(pathToDynamicKeysFile);
-
-    appAutomationKeysJson.addAll(dynamicKeys);
-
-    try {
-      final generatedKeys = (json.decode(fileSystemService
-              .readFileAsStringSync(pathToAppAutomationKeys)) as Iterable)
-          .map((e) => e.toString())
-          .toList();
-
-      appAutomationKeysJson.addAll(generatedKeys);
-    } catch (e) {
-      throw BuildError(ErrorMessages.errorParsingAutomationKeys);
-    }
 
     if (pubspec['version'] == null) {
       throw BuildError(ErrorMessages.thereIsNoVersionInPubspecyamlFile);
@@ -104,7 +78,6 @@ class BuildServiceImplementaion implements BuildService {
       buildMode: extraFlutterProcessArgs.first,
       appType: appType,
       version: pubspec['version'],
-      automationKeysJson: appAutomationKeysJson,
     );
   }
 

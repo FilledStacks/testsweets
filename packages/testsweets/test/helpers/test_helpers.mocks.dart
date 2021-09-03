@@ -7,6 +7,7 @@ import 'dart:io' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:testsweets/src/models/build_info.dart' as _i2;
+import 'package:testsweets/src/services/automation_keys_service.dart' as _i14;
 import 'package:testsweets/src/services/build_service.dart' as _i7;
 import 'package:testsweets/src/services/cloud_functions_service.dart' as _i11;
 import 'package:testsweets/src/services/dynamic_keys_generator.dart' as _i12;
@@ -16,6 +17,7 @@ import 'package:testsweets/src/services/runnable_process.dart' as _i9;
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart'
     as _i6;
 import 'package:testsweets/src/services/time_service.dart' as _i10;
+import 'package:testsweets/src/services/upload_service.dart' as _i13;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: comment_references
@@ -215,5 +217,29 @@ class MockDynamicKeysGenerator extends _i1.Mock
       (super.noSuchMethod(
           Invocation.method(#generateAutomationKeysFromDynamicKeysFile,
               [dynamicKeysFilePath]),
+          returnValue: <String>[]) as List<String>);
+}
+
+/// A class which mocks [UploadService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockUploadService extends _i1.Mock implements _i13.UploadService {
+  @override
+  _i8.Future<void> uploadBuild(
+          _i2.BuildInfo? buildInfo, String? projectId, String? apiKey) =>
+      (super.noSuchMethod(
+          Invocation.method(#uploadBuild, [buildInfo, projectId, apiKey]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future.value()) as _i8.Future<void>);
+}
+
+/// A class which mocks [AutomationKeysService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAutomationKeysService extends _i1.Mock
+    implements _i14.AutomationKeysService {
+  @override
+  List<String> extractKeysListFromJson() =>
+      (super.noSuchMethod(Invocation.method(#extractKeysListFromJson, []),
           returnValue: <String>[]) as List<String>);
 }

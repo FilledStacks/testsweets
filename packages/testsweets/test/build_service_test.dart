@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/runnable_process.dart';
 import 'package:testsweets/utils/error_messages.dart';
+
 import 'helpers/test_consts.dart';
 import 'helpers/test_helpers.dart';
 
@@ -18,11 +17,9 @@ void main() {
       test(
           "Should throw BuildError if the given app directory does not contain a pubspec.yaml file",
           () async {
-        final mockFileSystemService =
-            getAndRegisterFileSystemService(doesFileExist: false);
         final buildService = BuildServiceImplementaion();
 
-        expect(mockFileSystemService.doesFileExist(testDirectoryPath), false);
+        ;
         expect(
             () => buildService.build(appType: testAppType),
             throwsA(BuildError(
@@ -34,7 +31,7 @@ void main() {
         getAndRegisterFileSystemService(
             doesFileExist: true,
             readFileAsStringSyncResult: ksPubspecFileWithNoVersion,
-            jsonFilesreadFileAsStringSyncResult: ksAppAutomationKeysFile);
+            jsonFilesreadFileAsStringSyncResult: appAutomationKeysFile);
         final buildService = BuildServiceImplementaion();
 
         expect(
@@ -44,18 +41,7 @@ void main() {
             throwsA(
                 BuildError(ErrorMessages.thereIsNoVersionInPubspecyamlFile)));
       });
-      test(
-          'Should throw BuildError if the given app directory does not contain an app_automation_keys.json file',
-          () {
-        getAndRegisterFileSystemService(
-            doesFileExist: true,
-            readFileAsStringSyncResult: ksPubspecFileWithVersion,
-            jsonFilesDoesFileExist: false);
 
-        final instance = BuildServiceImplementaion();
-        expect(() => instance.build(appType: testAppType),
-            throwsA(BuildError(ErrorMessages.notFoundAutomationKeys)));
-      });
       test(
           "Should call the current flutterProcess with args [build, appType, --buildMode]",
           () async {
@@ -63,7 +49,7 @@ void main() {
         getAndRegisterFileSystemService(
             doesFileExist: true,
             readFileAsStringSyncResult: ksPubspecFileWithVersion,
-            jsonFilesreadFileAsStringSyncResult: ksAppAutomationKeysFile,
+            jsonFilesreadFileAsStringSyncResult: appAutomationKeysFile,
             jsonFilesDoesFileExist: true);
 
         getAndRegisterFlutterProcess();
@@ -84,7 +70,7 @@ void main() {
         getAndRegisterFileSystemService(
           doesFileExist: true,
           readFileAsStringSyncResult: ksPubspecFileWithVersion,
-          jsonFilesreadFileAsStringSyncResult: ksAppAutomationKeysFile,
+          jsonFilesreadFileAsStringSyncResult: appAutomationKeysFile,
         );
         final instance = BuildServiceImplementaion();
         final buildInfo = await instance.build(
@@ -102,7 +88,7 @@ void main() {
         getAndRegisterFileSystemService(
           doesFileExist: true,
           readFileAsStringSyncResult: ksPubspecFileWithVersion,
-          jsonFilesreadFileAsStringSyncResult: ksAppAutomationKeysFile,
+          jsonFilesreadFileAsStringSyncResult: appAutomationKeysFile,
         );
         final instance = BuildServiceImplementaion();
         final buildInfo = await instance.build(

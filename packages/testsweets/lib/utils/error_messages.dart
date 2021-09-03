@@ -3,7 +3,7 @@ class ErrorMessages {
       'The folder at $appPath does not contain a pubspec.yaml file. '
       'Please check if this is the correct folder or create the pubspec.yaml file.';
   static String notValidCommand(String command) =>
-      '$command is not a valid command, You can use either \'buildAndUpload\' or \'upload\'';
+      '$command is not a valid command, You can use either \'buildAndUpload\' or \'uploadApp\' or \'uploadKeys\'';
   static const String thereIsNoVersionInPubspecyamlFile =
       'The pubspec.yaml file for this project does not define a version. '
       'Versions are used by Test Sweets to keep track of builds. Please add a version for this app.';
@@ -19,8 +19,8 @@ class ErrorMessages {
            create one. It requires three values, your projectId (found in your project settings)
            your apiKey (found in your project settings) and your flutterBuildCommand (the part
            of the command after flutter pub build apk).''';
-  static const String uploadCommandeMissingPath =
-      "When using 'upload' you must provide the path to your build with the --path or -p argument after the apiKey\n\n";
+  static const String uploadAppCommandeMissingPath =
+      "When using 'uploadApp' you must provide the path to your build with the --path or -p argument after the apiKey\n\n";
   static const String buildArgumentsError = '''
 Expected arguments to have the form: buildAndUpload appType
 
@@ -39,7 +39,7 @@ The 'buildAndUpload' command will build your application with `flutter build`. N
 positional `flutter build` arguments, like --flavor, can be passed to the command just after
 the apiKey.
 
-You can use the 'upload' command if you already have a build (apk or ipa) and all you want
+You can use the 'uploadApp' command if you already have a build (apk or ipa) and all you want
 to do is upload it. The path to the build must be specified with the '--path' positional
 argument after the apiKey.
 
