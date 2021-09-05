@@ -29,6 +29,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   testsweets:
     path: ../
+  stacked:
+  stacked_services:
+  logger:
 
 dev_dependencies:
   flutter_test:
@@ -37,6 +40,8 @@ dev_dependencies:
   build_runner:
   testsweets_generator:
     path: ../../testsweets_generator
+
+  stacked_generator:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
