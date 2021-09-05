@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:testsweets/src/models/application_models.dart';
 
 import '../locator.dart';
@@ -79,6 +81,25 @@ class CloudFunctionsService {
         'uploadWidgetDescriptionToProject response. ${response.statusCode} - ${response.body}');
 
     if (response.statusCode == 200) return response.parseBodyAsJsonMap()['id'];
+
+    throw Exception(response.body);
+  }
+
+  Future<List<WidgetDescription>> getWidgetDescriptionForProject({
+    required String projectId,
+  }) async {
+    final endpoint =
+        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/getWidgetDescriptionsForProject';
+    final response = await httpService.get(to: endpoint);
+
+    if (response.statusCode == 200) {
+      print('getWidgetDescriptionForProject | fetch success! Lets serialise');
+      final jsonContent = response.body;
+      final descriptionsJson = json.decode(jsonContent) as Iterable;
+      return descriptionsJson
+          .map((e) => WidgetDescription.fromJson(e))
+          .toList();
+    }
 
     throw Exception(response.body);
   }

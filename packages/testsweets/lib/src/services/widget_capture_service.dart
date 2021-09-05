@@ -8,8 +8,8 @@ class WidgetCaptureService {
   final _cloudFunctionsService = locator<CloudFunctionsService>();
   final _testSweetsConfigFileService = locator<TestSweetsConfigFileService>();
 
-  final Map<String, WidgetDescription> widgetDescriptionMap =
-      Map<String, WidgetDescription>();
+  final Map<String, List<WidgetDescription>> widgetDescriptionMap =
+      Map<String, List<WidgetDescription>>();
   final bool verbose;
 
   WidgetCaptureService({this.verbose = false});
@@ -29,8 +29,25 @@ class WidgetCaptureService {
 
     log('descriptionId from Cloud: $descriptionId');
 
-    widgetDescriptionMap[description.viewName] =
-        description.copyWith(id: descriptionId);
+    addWidgetDescriptionToMap(description.copyWith(id: descriptionId));
+  }
+
+  /// Gets all the widget descriptions the project and stores them in a map
+  Future<void> loadWidgetDescriptions({required String projectId}) async {
+    final widgetDescriptions = await _cloudFunctionsService
+        .getWidgetDescriptionForProject(projectId: projectId);
+
+    for (final description in widgetDescriptions) {
+      addWidgetDescriptionToMap(description);
+    }
+  }
+
+  void addWidgetDescriptionToMap(WidgetDescription description) {
+    if (widgetDescriptionMap.containsKey(description.viewName)) {
+      widgetDescriptionMap[description.viewName]?.add(description);
+    } else {
+      widgetDescriptionMap[description.viewName] = [description];
+    }
   }
 
   void log(String message) {

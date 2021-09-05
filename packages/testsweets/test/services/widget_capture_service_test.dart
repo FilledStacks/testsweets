@@ -12,6 +12,68 @@ void main() {
     setUp(() => registerServices());
     tearDown(() => locator.reset());
 
+    group('loadWidgetDescriptions -', () {
+      test(
+          'When called, should get all the widget descriptions from the CloudFunctionsService',
+          () async {
+        final cloudFunctionsService = getAndRegisterCloudFunctionsService();
+        final service = WidgetCaptureService();
+        await service.loadWidgetDescriptions(projectId: 'proj');
+        verify(cloudFunctionsService.getWidgetDescriptionForProject(
+          projectId: 'proj',
+        ));
+      });
+
+      test(
+          'When called and descriptions are returned with 1 description for login and 1 for sign up, should populat map with key login and signup',
+          () async {
+        getAndRegisterCloudFunctionsService(
+            getWidgetDescriptionForProjectResult: [
+              WidgetDescription(
+                viewName: 'login',
+                name: 'loginButton',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+              WidgetDescription(
+                viewName: 'signUp',
+                name: 'loginButton',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+            ]);
+        final service = WidgetCaptureService();
+        await service.loadWidgetDescriptions(projectId: 'proj');
+
+        expect(service.widgetDescriptionMap.containsKey('login'), true);
+        expect(service.widgetDescriptionMap.containsKey('signUp'), true);
+      });
+
+      test(
+          'When called and descriptions are returned with 2 descriptions for login, should have 2 in login key',
+          () async {
+        getAndRegisterCloudFunctionsService(
+            getWidgetDescriptionForProjectResult: [
+              WidgetDescription(
+                viewName: 'login',
+                name: 'loginButton',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+              WidgetDescription(
+                viewName: 'login',
+                name: 'loginButton2',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+            ]);
+        final service = WidgetCaptureService();
+        await service.loadWidgetDescriptions(projectId: 'proj');
+
+        expect(service.widgetDescriptionMap['login']?.length, 2);
+      });
+    });
+
     group('captureWidgetDescription -', () {
       test(
           'When called, should capture the widget description passed in to the backed',
@@ -58,7 +120,7 @@ void main() {
             description: description, projectId: 'prodj');
 
         expect(
-          service.widgetDescriptionMap[description.viewName]?.id,
+          service.widgetDescriptionMap[description.viewName]?.first.id,
           idToReturn,
         );
       });

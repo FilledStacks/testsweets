@@ -1,6 +1,7 @@
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/locator.dart';
+import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/automation_keys_service.dart';
 import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
@@ -152,6 +153,7 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
   String getV4BuildUploadSignedUrlResult = '',
   bool doesBuildExistInProjectResult = true,
   String addWidgetDescritpionToProjectResult = 'default_id',
+  List<WidgetDescription> getWidgetDescriptionForProjectResult = const [],
 }) {
   _removeRegistrationIfExists<CloudFunctionsService>();
   final service = MockCloudFunctionsService();
@@ -180,6 +182,10 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
           description: anyNamed('description')))
       .thenAnswer((realInvocation) =>
           Future.value(addWidgetDescritpionToProjectResult));
+
+  when(service.getWidgetDescriptionForProject(projectId: anyNamed('projectId')))
+      .thenAnswer((realInvocation) =>
+          Future.value(getWidgetDescriptionForProjectResult));
 
   locator.registerSingleton<CloudFunctionsService>(service);
   return service;
