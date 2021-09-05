@@ -7,21 +7,8 @@
         {
             "name": "testsweets",
             "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "testsweets (profile mode)",
-            "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "cwd": "example/",
         },
-        {
-            "name": "Dart: Run all Tests",
-            "request": "launch",
-            "type": "dart",
-            "program": "./test/",
-            
-        },
-    
     ]
 }
