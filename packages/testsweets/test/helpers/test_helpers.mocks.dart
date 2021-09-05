@@ -6,18 +6,20 @@ import 'dart:async' as _i8;
 import 'dart:io' as _i3;
 
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:testsweets/src/models/application_models.dart' as _i12;
 import 'package:testsweets/src/models/build_info.dart' as _i2;
-import 'package:testsweets/src/services/automation_keys_service.dart' as _i14;
+import 'package:testsweets/src/services/automation_keys_service.dart' as _i15;
 import 'package:testsweets/src/services/build_service.dart' as _i7;
 import 'package:testsweets/src/services/cloud_functions_service.dart' as _i11;
-import 'package:testsweets/src/services/dynamic_keys_generator.dart' as _i12;
+import 'package:testsweets/src/services/dynamic_keys_generator.dart' as _i13;
 import 'package:testsweets/src/services/file_system_service.dart' as _i5;
 import 'package:testsweets/src/services/http_service.dart' as _i4;
 import 'package:testsweets/src/services/runnable_process.dart' as _i9;
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart'
     as _i6;
 import 'package:testsweets/src/services/time_service.dart' as _i10;
-import 'package:testsweets/src/services/upload_service.dart' as _i13;
+import 'package:testsweets/src/services/upload_service.dart' as _i14;
+import 'package:testsweets/src/services/widget_capture_service.dart' as _i16;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: comment_references
@@ -39,6 +41,8 @@ class _FakeDateTime extends _i1.Fake implements DateTime {
   @override
   String toString() => super.toString();
 }
+
+class _FakeHttpService extends _i1.Fake implements _i4.HttpService {}
 
 class _FakeFileSystemService extends _i1.Fake implements _i5.FileSystemService {
 }
@@ -169,6 +173,10 @@ class MockTimeService extends _i1.Mock implements _i10.TimeService {
 class MockCloudFunctionsService extends _i1.Mock
     implements _i11.CloudFunctionsService {
   @override
+  _i4.HttpService get httpService =>
+      (super.noSuchMethod(Invocation.getter(#httpService),
+          returnValue: _FakeHttpService()) as _i4.HttpService);
+  @override
   _i8.Future<String> getV4BuildUploadSignedUrl(
           String? projectId, String? apiKey,
           [Map<dynamic, dynamic>? extensionHeaders = const {}]) =>
@@ -191,13 +199,20 @@ class MockCloudFunctionsService extends _i1.Mock
           Invocation.method(#doesBuildExistInProject, [projectId],
               {#withVersion: withVersion}),
           returnValue: Future<bool>.value(false)) as _i8.Future<bool>);
+  @override
+  _i8.Future<String> uploadWidgetDescriptionToProject(
+          {String? projectId, _i12.WidgetDescription? description}) =>
+      (super.noSuchMethod(
+          Invocation.method(#uploadWidgetDescriptionToProject, [],
+              {#projectId: projectId, #description: description}),
+          returnValue: Future<String>.value('')) as _i8.Future<String>);
 }
 
 /// A class which mocks [DynamicKeysGenerator].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDynamicKeysGenerator extends _i1.Mock
-    implements _i12.DynamicKeysGenerator {
+    implements _i13.DynamicKeysGenerator {
   @override
   _i5.FileSystemService get fileSystemService =>
       (super.noSuchMethod(Invocation.getter(#fileSystemService),
@@ -223,7 +238,7 @@ class MockDynamicKeysGenerator extends _i1.Mock
 /// A class which mocks [UploadService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockUploadService extends _i1.Mock implements _i13.UploadService {
+class MockUploadService extends _i1.Mock implements _i14.UploadService {
   @override
   _i8.Future<void> uploadBuild(
           _i2.BuildInfo? buildInfo, String? projectId, String? apiKey) =>
@@ -237,9 +252,37 @@ class MockUploadService extends _i1.Mock implements _i13.UploadService {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockAutomationKeysService extends _i1.Mock
-    implements _i14.AutomationKeysService {
+    implements _i15.AutomationKeysService {
   @override
   List<String> extractKeysListFromJson() =>
       (super.noSuchMethod(Invocation.method(#extractKeysListFromJson, []),
           returnValue: <String>[]) as List<String>);
+}
+
+/// A class which mocks [WidgetCaptureService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockWidgetCaptureService extends _i1.Mock
+    implements _i16.WidgetCaptureService {
+  @override
+  Map<String, _i12.WidgetDescription> get widgetDescriptionMap =>
+      (super.noSuchMethod(Invocation.getter(#widgetDescriptionMap),
+              returnValue: <String, _i12.WidgetDescription>{})
+          as Map<String, _i12.WidgetDescription>);
+  @override
+  bool get verbose =>
+      (super.noSuchMethod(Invocation.getter(#verbose), returnValue: false)
+          as bool);
+  @override
+  _i8.Future<void> captureWidgetDescription(
+          {_i12.WidgetDescription? description}) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #captureWidgetDescription, [], {#description: description}),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future.value()) as _i8.Future<void>);
+  @override
+  void log(String? message) =>
+      super.noSuchMethod(Invocation.method(#log, [message]),
+          returnValueForMissingStub: null);
 }

@@ -26,7 +26,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton<HttpService>(() => HttpServiceImplementation());
   locator.registerLazySingleton<TimeService>(() => TimeService());
   locator.registerLazySingleton<CloudFunctionsService>(
-      () => CloudFunctionsServiceImplementation());
+      () => CloudFunctionsService());
   locator.registerLazySingleton<UploadService>(
       () => UploadServiceImplementation());
   locator.registerLazySingleton(() => DynamicKeysGenerator());

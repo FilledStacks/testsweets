@@ -11,6 +11,7 @@ import 'package:testsweets/src/services/runnable_process.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/time_service.dart';
 import 'package:testsweets/src/services/upload_service.dart';
+import 'package:testsweets/src/services/widget_capture_service.dart';
 
 import 'stubed_proccess.dart';
 import 'test_consts.dart';
@@ -27,6 +28,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<DynamicKeysGenerator>(returnNullOnMissingStub: true),
   MockSpec<UploadService>(returnNullOnMissingStub: true),
   MockSpec<AutomationKeysService>(returnNullOnMissingStub: true),
+  MockSpec<WidgetCaptureService>(returnNullOnMissingStub: true),
 ])
 MockFileSystemService getAndRegisterFileSystemService({
   bool doesFileExist = false,
@@ -61,6 +63,13 @@ MockFileSystemService getAndRegisterFileSystemService({
   return service;
 }
 
+MockWidgetCaptureService getAndRegisterWidgetCaptureService() {
+  _removeRegistrationIfExists<WidgetCaptureService>();
+  final service = MockWidgetCaptureService();
+  locator.registerSingleton<WidgetCaptureService>(service);
+  return service;
+}
+
 MockFlutterProcess getAndRegisterFlutterProcess() {
   _removeRegistrationIfExists<FlutterProcess>();
   final service = MockFlutterProcess();
@@ -75,11 +84,13 @@ MockFlutterProcess getAndRegisterFlutterProcess() {
   return service;
 }
 
-MockTestSweetsConfigFileService getAndRegisterTestSweetsConfigFileService() {
+MockTestSweetsConfigFileService getAndRegisterTestSweetsConfigFileService(
+    {String? valueFromConfigFileByKey}) {
   _removeRegistrationIfExists<TestSweetsConfigFileService>();
   final service = MockTestSweetsConfigFileService();
-  when(service.getValueFromConfigFileByKey(any))
-      .thenAnswer((realInvocation) => testExtraFlutterProcessArgsWithDebug[0]);
+
+  when(service.getValueFromConfigFileByKey(any)).thenReturn(
+      valueFromConfigFileByKey ?? testExtraFlutterProcessArgsWithDebug[0]);
 
   locator.registerSingleton<TestSweetsConfigFileService>(service);
   return service;
@@ -137,16 +148,20 @@ BuildService getAndRegisterBuildServiceService() {
   return service;
 }
 
-MockCloudFunctionsService getAndRegisterCloudFunctionsService(
-    {String getV4BuildUploadSignedUrlResult = '',
-    bool doesBuildExistInProjectResult = true}) {
+MockCloudFunctionsService getAndRegisterCloudFunctionsService({
+  String getV4BuildUploadSignedUrlResult = '',
+  bool doesBuildExistInProjectResult = true,
+  String addWidgetDescritpionToProjectResult = 'default_id',
+}) {
   _removeRegistrationIfExists<CloudFunctionsService>();
   final service = MockCloudFunctionsService();
+
   when(service.uploadAutomationKeys(
     any,
     any,
     any,
   )).thenAnswer((_) => Future.value());
+
   when(service.getV4BuildUploadSignedUrl(
     any,
     any,
@@ -156,8 +171,16 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService(
   when(service.doesBuildExistInProject(any,
           withVersion: anyNamed('withVersion')))
       .thenAnswer((invocation) async => doesBuildExistInProjectResult);
+
   when(service.uploadAutomationKeys(any, any, any))
       .thenAnswer((realInvocation) => Future.value());
+
+  when(service.uploadWidgetDescriptionToProject(
+          projectId: anyNamed('projectId'),
+          description: anyNamed('description')))
+      .thenAnswer((realInvocation) =>
+          Future.value(addWidgetDescritpionToProjectResult));
+
   locator.registerSingleton<CloudFunctionsService>(service);
   return service;
 }

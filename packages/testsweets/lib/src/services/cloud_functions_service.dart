@@ -1,24 +1,11 @@
+import 'package:testsweets/src/models/application_models.dart';
+
 import '../locator.dart';
 import 'http_service.dart';
 
-abstract class CloudFunctionsService {
-  Future<String> getV4BuildUploadSignedUrl(String projectId, String apiKey,
-      [Map extensionHeaders = const <String, String>{}]);
-
-  Future<void> uploadAutomationKeys(
-    String projectId,
-    String apiKey,
-    List<String> automationKeys,
-  );
-
-  Future<bool> doesBuildExistInProject(String projectId,
-      {required String withVersion});
-}
-
-class CloudFunctionsServiceImplementation implements CloudFunctionsService {
+class CloudFunctionsService {
   final httpService = locator<HttpService>();
 
-  @override
   Future<String> getV4BuildUploadSignedUrl(String projectId, String apiKey,
       [Map extensionHeaders = const <String, String>{}]) async {
     final endpoint =
@@ -38,9 +25,11 @@ class CloudFunctionsServiceImplementation implements CloudFunctionsService {
       throw ret.body;
   }
 
-  @override
   Future<void> uploadAutomationKeys(
-      String projectId, String apiKey, List<String> automationKeys) async {
+    String projectId,
+    String apiKey,
+    List<String> automationKeys,
+  ) async {
     final endpoint =
         'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/uploadAutomationKeys';
 
@@ -52,17 +41,40 @@ class CloudFunctionsServiceImplementation implements CloudFunctionsService {
     if (ret.statusCode != 200) throw ret.body;
   }
 
-  @override
-  Future<bool> doesBuildExistInProject(String projectId,
-      {required String withVersion}) async {
+  Future<bool> doesBuildExistInProject(
+    String projectId, {
+    required String withVersion,
+  }) async {
     final endpoint =
         'https://us-central1-testsweets-38348.cloudfunctions.net/doesBuildWithGivenVersionExist';
-    final ret = await httpService.postJson(to: endpoint, body: {
-      'projectId': projectId,
-      'version': withVersion,
-    });
+    final ret = await httpService.postJson(
+      to: endpoint,
+      body: {
+        'projectId': projectId,
+        'version': withVersion,
+      },
+    );
 
     if (ret.statusCode == 200) return ret.parseBodyAsJsonMap()['exists'];
+
+    throw ret.body;
+  }
+
+  Future<String> uploadWidgetDescriptionToProject({
+    required String projectId,
+    required WidgetDescription description,
+  }) async {
+    final endpoint =
+        'https://us-central1-testsweets-38348.cloudfunctions.net/uploadWidgetDescription';
+    final ret = await httpService.postJson(
+      to: endpoint,
+      body: {
+        'projectId': projectId,
+        'widgetDescription': description.toJson(),
+      },
+    );
+
+    if (ret.statusCode == 200) return ret.parseBodyAsJsonMap()['id'];
 
     throw ret.body;
   }
