@@ -1,10 +1,12 @@
-import 'package:example/app/app.locator.dart';
-import 'package:example/app/app.router.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/testsweets.dart';
 
-void main() {
+import 'app/app.locator.dart';
+import 'app/app.router.dart';
+
+Future<void> main() async {
+  await setupTestSweets();
   setupLocator();
   runApp(MyApp());
 }
@@ -18,6 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       builder: (context, child) => WidgetCaptureView(
+        projectId: '5EEL6eC4M7DK80Tu49bd',
         child: child!,
       ),
       initialRoute: Routes.signUpView,

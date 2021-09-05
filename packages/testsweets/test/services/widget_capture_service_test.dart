@@ -29,7 +29,8 @@ void main() {
         );
 
         final service = WidgetCaptureService();
-        await service.captureWidgetDescription(description: description);
+        await service.captureWidgetDescription(
+            description: description, projectId: 'proj');
 
         verify(cloudFunctionsService.uploadWidgetDescriptionToProject(
           projectId: 'projectId',
@@ -53,7 +54,8 @@ void main() {
             addWidgetDescritpionToProjectResult: idToReturn);
 
         final service = WidgetCaptureService();
-        await service.captureWidgetDescription(description: description);
+        await service.captureWidgetDescription(
+            description: description, projectId: 'prodj');
 
         expect(
           service.widgetDescriptionMap[description.viewName]?.id,

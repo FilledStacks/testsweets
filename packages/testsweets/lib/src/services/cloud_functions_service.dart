@@ -65,8 +65,9 @@ class CloudFunctionsService {
     required WidgetDescription description,
   }) async {
     final endpoint =
-        'https://us-central1-testsweets-38348.cloudfunctions.net/uploadWidgetDescription';
-    final ret = await httpService.postJson(
+        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/uploadWidgetDescription';
+
+    final response = await httpService.postJson(
       to: endpoint,
       body: {
         'projectId': projectId,
@@ -74,8 +75,11 @@ class CloudFunctionsService {
       },
     );
 
-    if (ret.statusCode == 200) return ret.parseBodyAsJsonMap()['id'];
+    print(
+        'uploadWidgetDescriptionToProject response. ${response.statusCode} - ${response.body}');
 
-    throw ret.body;
+    if (response.statusCode == 200) return response.parseBodyAsJsonMap()['id'];
+
+    throw Exception(response.body);
   }
 }

@@ -1,12 +1,9 @@
-import 'dart:convert';
-
-import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/services/build_service.dart';
-import 'package:testsweets/src/services/runnable_process.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/utils/error_messages.dart';
+
 import 'helpers/test_consts.dart';
 import 'helpers/test_helpers.dart';
 
@@ -18,7 +15,7 @@ void main() {
         "Should throw BuildError if the given app directory does not contain a .testsweets file",
         () async {
       getAndRegisterFileSystemService(doesFileExist: false);
-      final configFileService = TestSweetsConfigFileServiceImplementaion();
+      final configFileService = TestSweetsConfigFileService();
 
       expect(
           () => configFileService

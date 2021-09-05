@@ -3,6 +3,7 @@ import 'package:testsweets/src/app/app.logger.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
+import 'package:testsweets/src/services/widget_capture_service.dart';
 
 import 'widget_capture_view.form.dart';
 
@@ -11,9 +12,17 @@ const double WidgetDiscriptionVisualSize = 40;
 class WidgetCaptureViewModel extends FormViewModel {
   final log = getLogger('WidgetCaptureViewModel');
 
+  final String projectId;
+
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
+  final _widgetCaptureService = locator<WidgetCaptureService>();
 
   WidgetDescription? _widgetDescription;
+  bool _hasWidgetNameFocus = false;
+
+  WidgetCaptureViewModel({required this.projectId});
+
+  bool get hasWidgetNameFocus => _hasWidgetNameFocus;
 
   WidgetDescription get widgetDescription => _widgetDescription!;
 
@@ -35,7 +44,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void updateDescriptionPosition(double x, double y) {
-    log.i('x:$x y:$y');
+    // log.i('x:$x y:$y');
     _widgetDescription = _widgetDescription!.copyWith(
       position: WidgetPosition(
         x: _widgetDescription!.position.x + x,
@@ -53,10 +62,27 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<void> saveWidgetDescription() async {
-    final descriptionToSave = _widgetDescription?.copyWith(
+    _widgetDescription = _widgetDescription?.copyWith(
       viewName: _testSweetsRouteTracker.currentRoute,
     );
 
-    log.i('descriptionToSave:$descriptionToSave');
+    log.i('descriptionToSave:$_widgetDescription');
+
+    try {
+      await _widgetCaptureService.captureWidgetDescription(
+        description: _widgetDescription!,
+        projectId: projectId,
+      );
+
+      _widgetDescription = null;
+      notifyListeners();
+    } catch (e) {
+      log.e('Couldn\'t save the widget. $e');
+    }
+  }
+
+  void setWidgetNameFocused(bool hasFocus) {
+    _hasWidgetNameFocus = hasFocus;
+    notifyListeners();
   }
 }

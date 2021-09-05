@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "testsweets",
+            "name": "Testsweets Example",
             "request": "launch",
             "type": "dart",
             "cwd": "example/",

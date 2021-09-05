@@ -12,6 +12,11 @@ class LoginView extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         body: Center(
           child: MaterialButton(
+            color: Colors.blue,
+            child: Text(
+              'Go to Home',
+              style: TextStyle(color: Colors.red),
+            ),
             onPressed: model.navigateToOtherView,
           ),
         ),

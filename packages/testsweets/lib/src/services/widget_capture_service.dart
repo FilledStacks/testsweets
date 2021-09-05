@@ -17,11 +17,9 @@ class WidgetCaptureService {
   /// Captures a widgets description to the backend as well as locally in the [widgetDescriptionMap]
   Future<void> captureWidgetDescription({
     required WidgetDescription description,
+    required String projectId,
   }) async {
-    log('description: $description');
-
-    final projectId = _testSweetsConfigFileService
-        .getValueFromConfigFileByKey(ConfigFileKeyType.ProjectId);
+    log('description:$description projectId:$projectId');
 
     final descriptionId =
         await _cloudFunctionsService.uploadWidgetDescriptionToProject(

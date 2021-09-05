@@ -1,7 +1,14 @@
 import 'package:flutter/cupertino.dart';
 
-/// Keeps track of the current that is active
 class TestSweetsRouteTracker extends ChangeNotifier {
+  static TestSweetsRouteTracker? _instance;
+  static TestSweetsRouteTracker get instance {
+    if (_instance == null) {
+      _instance = TestSweetsRouteTracker();
+    }
+    return _instance!;
+  }
+
   String _currentRoute = '';
   String get currentRoute => _currentRoute;
 

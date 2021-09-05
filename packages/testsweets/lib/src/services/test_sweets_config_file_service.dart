@@ -18,15 +18,9 @@ extension ToString on ConfigFileKeyType {
   }
 }
 
-abstract class TestSweetsConfigFileService {
-  String getValueFromConfigFileByKey(ConfigFileKeyType keyType);
-}
-
-class TestSweetsConfigFileServiceImplementaion
-    implements TestSweetsConfigFileService {
+class TestSweetsConfigFileService {
   final fileSystemService = locator<FileSystemService>();
 
-  @override
   String getValueFromConfigFileByKey(ConfigFileKeyType keyType) {
     final flutterProjectFullPath = fileSystemService.fullPathToWorkingDirectory;
 
