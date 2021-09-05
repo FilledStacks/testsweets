@@ -32,19 +32,15 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                 builder: (context) => Stack(
                       children: [
                         child,
-                        if (!model.hasWidgetDesription)
+                        if (!model.hasWidgetDesription &&
+                            model.captureViewEnabled)
                           _WidgetDescriptionCaptureLayer(),
-                        if (model.hasWidgetDesription)
+                        if (model.hasWidgetDesription &&
+                            model.captureViewEnabled)
                           Positioned.fill(
                             child: Container(
                               width: double.infinity,
                               height: double.infinity,
-                              child: MaterialButton(
-                                color: Colors.pinkAccent,
-                                onPressed: model.saveWidgetDescription,
-                              ),
-                              alignment: Alignment.bottomRight,
-                              padding: const EdgeInsets.all(15),
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   color: Colors.pink,
@@ -53,7 +49,8 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                               ),
                             ),
                           ),
-                        if (model.hasWidgetDesription)
+                        if (model.hasWidgetDesription &&
+                            model.captureViewEnabled)
                           Positioned(
                               top: model.descriptionTop,
                               left: model.descriptionLeft,
@@ -72,7 +69,8 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                   ),
                                 ),
                               )),
-                        if (model.hasWidgetDesription)
+                        if (model.hasWidgetDesription &&
+                            model.captureViewEnabled)
                           AnimatedPositioned(
                             duration: const Duration(milliseconds: 500),
                             curve: Curves.easeInCubic,
@@ -88,7 +86,42 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                     hintText: 'Enter widget name'),
                               ),
                             ),
-                          )
+                          ),
+                        Positioned(
+                            bottom: 20,
+                            right: 20,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                if (!model.captureViewEnabled)
+                                  MaterialButton(
+                                    onPressed: model.toggleCaptureView,
+                                    color: Colors.green,
+                                    child: Text('Capture Widget'),
+                                  ),
+                                if (model.captureViewEnabled)
+                                  Column(
+                                    children: [
+                                      MaterialButton(
+                                        onPressed: model.toggleCaptureView,
+                                        color: Colors.red,
+                                        child: Text('Stop Capture'),
+                                      ),
+                                      if (model.captureViewEnabled &&
+                                          model.hasWidgetDesription)
+                                        MaterialButton(
+                                          color: Colors.pinkAccent,
+                                          child: model.isBusy
+                                              ? CircularProgressIndicator()
+                                              : Text('Save Widget'),
+                                          onPressed:
+                                              model.saveWidgetDescription,
+                                        )
+                                    ],
+                                  ),
+                              ],
+                            ))
                       ],
                     ))
           ],
@@ -114,7 +147,6 @@ class _WidgetDescriptionCaptureLayer
       child: Container(
         width: double.infinity,
         height: double.infinity,
-        child: Text('Capture Mode Active'),
         alignment: Alignment.bottomRight,
         padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(

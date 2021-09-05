@@ -19,8 +19,11 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   WidgetDescription? _widgetDescription;
   bool _hasWidgetNameFocus = false;
+  bool _captureViewEnabled = false;
 
   WidgetCaptureViewModel({required this.projectId});
+
+  bool get captureViewEnabled => _captureViewEnabled;
 
   bool get hasWidgetNameFocus => _hasWidgetNameFocus;
 
@@ -43,6 +46,11 @@ class WidgetCaptureViewModel extends FormViewModel {
     notifyListeners();
   }
 
+  void toggleCaptureView() {
+    _captureViewEnabled = !_captureViewEnabled;
+    notifyListeners();
+  }
+
   void updateDescriptionPosition(double x, double y) {
     // log.i('x:$x y:$y');
     _widgetDescription = _widgetDescription!.copyWith(
@@ -62,6 +70,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<void> saveWidgetDescription() async {
+    setBusy(true);
     _widgetDescription = _widgetDescription?.copyWith(
       viewName: _testSweetsRouteTracker.currentRoute,
     );
@@ -79,6 +88,8 @@ class WidgetCaptureViewModel extends FormViewModel {
     } catch (e) {
       log.e('Couldn\'t save the widget. $e');
     }
+
+    setBusy(false);
   }
 
   void setWidgetNameFocused(bool hasFocus) {
