@@ -1,12 +1,13 @@
+import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
-import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 
 /// A service that facilitates the capturing of widgets on device
 class WidgetCaptureService {
+  final log = getLogger('WidgetCaptureService');
+
   final _cloudFunctionsService = locator<CloudFunctionsService>();
-  final _testSweetsConfigFileService = locator<TestSweetsConfigFileService>();
 
   final Map<String, List<WidgetDescription>> widgetDescriptionMap =
       Map<String, List<WidgetDescription>>();
@@ -19,7 +20,7 @@ class WidgetCaptureService {
     required WidgetDescription description,
     required String projectId,
   }) async {
-    log('description:$description projectId:$projectId');
+    log.i('description:$description projectId:$projectId');
 
     final descriptionId =
         await _cloudFunctionsService.uploadWidgetDescriptionToProject(
@@ -27,7 +28,7 @@ class WidgetCaptureService {
       description: description,
     );
 
-    log('descriptionId from Cloud: $descriptionId');
+    log.i('descriptionId from Cloud: $descriptionId');
 
     addWidgetDescriptionToMap(description.copyWith(id: descriptionId));
   }
@@ -50,7 +51,11 @@ class WidgetCaptureService {
     }
   }
 
-  void log(String message) {
-    if (verbose) print('captureWidgetDescription | $message');
+  List<WidgetDescription> getDescriptionsForView({
+    required String currentRoute,
+  }) {
+    final viewDescriptions = widgetDescriptionMap[currentRoute];
+    log.v('currentRoute:$currentRoute viewDescriptions:$viewDescriptions');
+    return viewDescriptions ?? [];
   }
 }

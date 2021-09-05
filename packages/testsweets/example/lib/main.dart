@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      builder: (context, child) => WidgetCaptureView(
+      builder: (context, child) => TestSweetsOverlayView(
         projectId: '5EEL6eC4M7DK80Tu49bd',
         child: child!,
       ),
