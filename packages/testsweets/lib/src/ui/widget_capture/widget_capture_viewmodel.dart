@@ -19,12 +19,16 @@ class WidgetCaptureViewModel extends FormViewModel {
   WidgetDescription? _widgetDescription;
   bool _hasWidgetNameFocus = false;
   bool _captureViewEnabled = false;
+  bool _widgetTypeContainerSelectorEnable = false;
 
   WidgetCaptureViewModel({required this.projectId});
 
   bool get captureViewEnabled => _captureViewEnabled;
 
   bool get hasWidgetNameFocus => _hasWidgetNameFocus;
+
+  bool get widgetTypeContainerSelectorEnable =>
+      _widgetTypeContainerSelectorEnable;
 
   WidgetDescription get widgetDescription => _widgetDescription!;
 
@@ -93,6 +97,18 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void setWidgetNameFocused(bool hasFocus) {
     _hasWidgetNameFocus = hasFocus;
+    notifyListeners();
+  }
+
+  void activateCaptureView() {}
+
+  void closeWidgetsContainer() {
+    _widgetTypeContainerSelectorEnable = false;
+    notifyListeners();
+  }
+
+  void openWidgetsContainer() {
+    _widgetTypeContainerSelectorEnable = true;
     notifyListeners();
   }
 }

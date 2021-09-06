@@ -3,10 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
-import 'package:testsweets/src/ui/shared/app_colors.dart';
-import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
+
+import 'widget_capture_widgets/capture_view_layout.dart';
+import 'widget_capture_widgets/main_view_layout.dart';
+import 'widget_capture_widgets/widget_description_capture_layer.dart';
 
 @FormView(fields: [FormTextField(name: 'widgetName')])
 class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
@@ -30,7 +32,6 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
         });
       },
       builder: (context, model, _) => ScreenUtilInit(
-          key: Key(MediaQuery.of(context).size.toString()),
           builder: () => Overlay(
                 initialEntries: [
                   OverlayEntry(
@@ -39,7 +40,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                               child,
                               if (!model.hasWidgetDesription &&
                                   model.captureViewEnabled)
-                                _WidgetDescriptionCaptureLayer(),
+                                WidgetDescriptionCaptureLayer(),
                               if (model.hasWidgetDesription &&
                                   model.captureViewEnabled) ...[
                                 Positioned.fill(
@@ -103,9 +104,9 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         if (!model.captureViewEnabled)
-                                          _MainViewLayout(),
+                                          MainViewLayout(),
                                         if (model.captureViewEnabled)
-                                          _CaptureViewLayout(),
+                                          CaptureViewLayout(),
                                       ],
                                     ),
                                   ))
@@ -115,96 +116,5 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
               )),
       viewModelBuilder: () => WidgetCaptureViewModel(projectId: projectId),
     );
-  }
-}
-
-class _MainViewLayout extends ViewModelWidget<WidgetCaptureViewModel> {
-  const _MainViewLayout({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetCaptureViewModel model) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        CtaButton(
-          title: 'Inspect View',
-          fillColor: kcPrimaryFuchsia,
-          onTap: model.toggleCaptureView,
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        CtaButton(
-          title: 'Start Capture',
-          fillColor: kcPrimaryPurple,
-          onTap: model.toggleCaptureView,
-        ),
-      ],
-    );
-  }
-}
-
-class _CaptureViewLayout extends ViewModelWidget<WidgetCaptureViewModel> {
-  const _CaptureViewLayout({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetCaptureViewModel model) {
-    return Expanded(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          CtaButton(
-            title: 'Add Widget',
-            fillColor: kcPassedTestGreenColor,
-            onTap: model.toggleCaptureView,
-          ),
-          CtaButton(
-            title: 'Exit Capture',
-            fillColor: kcPrimaryPurple,
-            onTap: model.toggleCaptureView,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// The widget that sits at the top and allows you to tap on screen and add a [WidgetDescription]
-/// to the view
-class _WidgetDescriptionCaptureLayer
-    extends ViewModelWidget<WidgetCaptureViewModel> {
-  const _WidgetDescriptionCaptureLayer({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context, WidgetCaptureViewModel model) {
-    return Positioned.fill(
-        child: GestureDetector(
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        alignment: Alignment.bottomRight,
-        padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
-            border: Border.all(
-          color: Colors.blue,
-          width: 5,
-        )),
-      ),
-      onTapUp: (touchEvent) {
-        var localTouchPosition = (context.findRenderObject() as RenderBox)
-            .globalToLocal(touchEvent.globalPosition);
-
-        model.addWidgetAtTap(
-          x: localTouchPosition.dx,
-          y: localTouchPosition.dy,
-        );
-      },
-    ));
   }
 }

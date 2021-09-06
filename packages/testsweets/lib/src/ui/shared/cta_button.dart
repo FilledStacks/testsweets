@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 import 'shared_styles.dart';
@@ -21,7 +22,8 @@ class CtaButton extends StatelessWidget {
       onPressed: onTap,
       color: fillColor,
       padding: buttonPadding,
-      child: Text(title, style: tsNormal().copyWith(color: Colors.white)),
+      child: AutoSizeText(title,
+          maxLines: 1, style: tsNormal().copyWith(color: Colors.white)),
     );
   }
 }
