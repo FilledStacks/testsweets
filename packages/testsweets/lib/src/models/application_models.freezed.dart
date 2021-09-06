@@ -194,13 +194,14 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_WidgetDescription implements _WidgetDescription {
+class _$_WidgetDescription extends _WidgetDescription {
   _$_WidgetDescription(
       {this.id,
       required this.viewName,
       required this.name,
       required this.widgetType,
-      required this.position});
+      required this.position})
+      : super._();
 
   factory _$_WidgetDescription.fromJson(Map<String, dynamic> json) =>
       _$_$_WidgetDescriptionFromJson(json);
@@ -270,13 +271,14 @@ class _$_WidgetDescription implements _WidgetDescription {
   }
 }
 
-abstract class _WidgetDescription implements WidgetDescription {
+abstract class _WidgetDescription extends WidgetDescription {
   factory _WidgetDescription(
       {String? id,
       required String viewName,
       required String name,
       required WidgetType widgetType,
       required WidgetPosition position}) = _$_WidgetDescription;
+  _WidgetDescription._() : super._();
 
   factory _WidgetDescription.fromJson(Map<String, dynamic> json) =
       _$_WidgetDescription.fromJson;

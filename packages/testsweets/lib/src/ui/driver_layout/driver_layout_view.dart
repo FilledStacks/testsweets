@@ -21,30 +21,58 @@ class DriverLayoutView extends StatelessWidget {
     return ViewModelBuilder<DriverLayoutViewModel>.reactive(
       onModelReady: (model) =>
           SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
-        model.registerForRouteChanges();
+        model.initialise();
       }),
-      builder: (context, model, _) => HittableStack(
-        children: [
-          child,
-          ...model.descriptionsForView.map(
-            (description) => Positioned(
-              top: description.position.x,
-              left: description.position.y,
-              child: Container(
-                key: Key(description.name),
-                width: WidgetDiscriptionVisualSize,
-                height: WidgetDiscriptionVisualSize,
-                decoration: BoxDecoration(
-                  color: Color(0x01000000),
-                  border: Border.all(color: Colors.red),
-                  borderRadius: BorderRadius.circular(5),
+      builder: (context, model, _) => Expanded(
+        child: HittableStack(
+          children: [
+            child,
+            if (model.isBusy)
+              Positioned.fill(
+                child: Center(
+                  child: Container(
+                    child: Column(
+                      children: [
+                        Text('Busy fetching driver keys'),
+                        SizedBox(height: 4),
+                        SizedBox(
+                          width: 10,
+                          height: 10,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        )
+                      ],
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    decoration: BoxDecoration(
+                        color: Color(0xff181818),
+                        borderRadius: BorderRadius.circular(5)),
+                  ),
                 ),
               ),
-            ),
-          )
-        ],
+            ...model.descriptionsForView.map(
+              (description) => Positioned(
+                top: description.position.y - (WidgetDiscriptionVisualSize / 2),
+                left:
+                    description.position.x - (WidgetDiscriptionVisualSize / 2),
+                child: Container(
+                  key: Key(description.automationKey),
+                  width: WidgetDiscriptionVisualSize,
+                  height: WidgetDiscriptionVisualSize,
+                  decoration: BoxDecoration(
+                    color: Color(0x01000000),
+                    border: Border.all(color: Colors.red),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
-      viewModelBuilder: () => DriverLayoutViewModel(),
+      viewModelBuilder: () => DriverLayoutViewModel(projectId: projectId),
     );
   }
 }

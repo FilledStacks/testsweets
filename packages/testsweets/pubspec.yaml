@@ -18,6 +18,7 @@ dependencies:
   json_annotation:
   stacked:
   logger:
+  recase:
 
 dev_dependencies:
   mockito:

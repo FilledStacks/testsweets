@@ -42,9 +42,9 @@ class _FakeSimpleHttpResponse_3 extends _i1.Fake
 
 class _FakeDateTime_4 extends _i1.Fake implements DateTime {}
 
-class _FakeHttpService_5 extends _i1.Fake implements _i5.HttpService {}
+class _FakeLogger_5 extends _i1.Fake implements _i6.Logger {}
 
-class _FakeLogger_6 extends _i1.Fake implements _i6.Logger {}
+class _FakeHttpService_6 extends _i1.Fake implements _i5.HttpService {}
 
 /// A class which mocks [TestSweetsConfigFileService].
 ///
@@ -188,9 +188,13 @@ class MockTimeService extends _i1.Mock implements _i11.TimeService {
 class MockCloudFunctionsService extends _i1.Mock
     implements _i12.CloudFunctionsService {
   @override
+  _i6.Logger get log =>
+      (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_5())
+          as _i6.Logger);
+  @override
   _i5.HttpService get httpService =>
       (super.noSuchMethod(Invocation.getter(#httpService),
-          returnValue: _FakeHttpService_5()) as _i5.HttpService);
+          returnValue: _FakeHttpService_6()) as _i5.HttpService);
   @override
   _i9.Future<String> getV4BuildUploadSignedUrl(
           String? projectId, String? apiKey,
@@ -298,7 +302,7 @@ class MockWidgetCaptureService extends _i1.Mock
     implements _i17.WidgetCaptureService {
   @override
   _i6.Logger get log =>
-      (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_6())
+      (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_5())
           as _i6.Logger);
   @override
   Map<String, List<_i13.WidgetDescription>> get widgetDescriptionMap =>
@@ -318,10 +322,10 @@ class MockWidgetCaptureService extends _i1.Mock
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i9.Future<void> loadWidgetDescriptions({String? projectId}) =>
+  _i9.Future<void> loadWidgetDescriptionsForProject({String? projectId}) =>
       (super.noSuchMethod(
           Invocation.method(
-              #loadWidgetDescriptions, [], {#projectId: projectId}),
+              #loadWidgetDescriptionsForProject, [], {#projectId: projectId}),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override

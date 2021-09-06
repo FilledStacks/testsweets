@@ -7,6 +7,8 @@ part 'application_models.g.dart';
 /// Describes a widget that we will use to driver the app with
 @freezed
 class WidgetDescription with _$WidgetDescription {
+  const WidgetDescription._();
+
   factory WidgetDescription({
     /// The Id from the firebase backend
     String? id,
@@ -34,6 +36,8 @@ class WidgetDescription with _$WidgetDescription {
 
   factory WidgetDescription.fromJson(Map<String, dynamic> json) =>
       _$WidgetDescriptionFromJson(json);
+
+  String get automationKey => '$viewName\_$widgetType\_$name';
 }
 
 /// The position of the widget as we captured it on device

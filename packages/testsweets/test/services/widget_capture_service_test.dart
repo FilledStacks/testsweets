@@ -18,7 +18,7 @@ void main() {
           () async {
         final cloudFunctionsService = getAndRegisterCloudFunctionsService();
         final service = WidgetCaptureService();
-        await service.loadWidgetDescriptions(projectId: 'proj');
+        await service.loadWidgetDescriptionsForProject(projectId: 'proj');
         verify(cloudFunctionsService.getWidgetDescriptionForProject(
           projectId: 'proj',
         ));
@@ -43,7 +43,7 @@ void main() {
               ),
             ]);
         final service = WidgetCaptureService();
-        await service.loadWidgetDescriptions(projectId: 'proj');
+        await service.loadWidgetDescriptionsForProject(projectId: 'proj');
 
         expect(service.widgetDescriptionMap.containsKey('login'), true);
         expect(service.widgetDescriptionMap.containsKey('signUp'), true);
@@ -68,7 +68,7 @@ void main() {
               ),
             ]);
         final service = WidgetCaptureService();
-        await service.loadWidgetDescriptions(projectId: 'proj');
+        await service.loadWidgetDescriptionsForProject(projectId: 'proj');
 
         expect(service.widgetDescriptionMap['login']?.length, 2);
       });

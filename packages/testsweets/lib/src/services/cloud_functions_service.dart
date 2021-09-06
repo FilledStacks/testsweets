@@ -1,11 +1,13 @@
 import 'dart:convert';
 
+import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/models/application_models.dart';
 
 import '../locator.dart';
 import 'http_service.dart';
 
 class CloudFunctionsService {
+  final log = getLogger('CloudFunctionsService');
   final httpService = locator<HttpService>();
 
   Future<String> getV4BuildUploadSignedUrl(String projectId, String apiKey,
@@ -87,9 +89,12 @@ class CloudFunctionsService {
 
   Future<List<WidgetDescription>> getWidgetDescriptionForProject({
     required String projectId,
-  }) async {
+  }) async { 
+    log.i('projectId:$projectId');
+
     final endpoint =
-        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/getWidgetDescriptionsForProject';
+        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/getWidgetDescriptionsForProject?projectId=$projectId';
+
     final response = await httpService.get(to: endpoint);
 
     if (response.statusCode == 200) {

@@ -34,7 +34,7 @@ class WidgetCaptureService {
   }
 
   /// Gets all the widget descriptions the project and stores them in a map
-  Future<void> loadWidgetDescriptions({required String projectId}) async {
+  Future<void> loadWidgetDescriptionsForProject({required String projectId}) async {
     final widgetDescriptions = await _cloudFunctionsService
         .getWidgetDescriptionForProject(projectId: projectId);
 
