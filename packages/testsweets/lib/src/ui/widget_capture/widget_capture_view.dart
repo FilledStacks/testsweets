@@ -41,7 +41,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                   model.captureViewEnabled)
                                 _WidgetDescriptionCaptureLayer(),
                               if (model.hasWidgetDesription &&
-                                  model.captureViewEnabled)
+                                  model.captureViewEnabled) ...[
                                 Positioned.fill(
                                   child: Container(
                                     width: double.infinity,
@@ -54,8 +54,6 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                     ),
                                   ),
                                 ),
-                              if (model.hasWidgetDesription &&
-                                  model.captureViewEnabled)
                                 Positioned(
                                     top: model.descriptionTop,
                                     left: model.descriptionLeft,
@@ -75,6 +73,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                         ),
                                       ),
                                     )),
+                              ],
                               if (model.hasWidgetDesription &&
                                   model.captureViewEnabled)
                                 AnimatedPositioned(
@@ -104,48 +103,9 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         if (!model.captureViewEnabled)
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              CtaButton(
-                                                title: 'Inspect View',
-                                                fillColor: kcPrimaryFuchsia,
-                                                onTap: model.toggleCaptureView,
-                                              ),
-                                              const SizedBox(
-                                                height: 16,
-                                              ),
-                                              CtaButton(
-                                                title: 'Start Capture',
-                                                fillColor: kcPrimaryPurple,
-                                                onTap: model.toggleCaptureView,
-                                              ),
-                                            ],
-                                          ),
+                                          _MainViewLayout(),
                                         if (model.captureViewEnabled)
-                                          Expanded(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                CtaButton(
-                                                  title: 'Add Widget',
-                                                  fillColor:
-                                                      kcPassedTestGreenColor,
-                                                  onTap:
-                                                      model.toggleCaptureView,
-                                                ),
-                                                CtaButton(
-                                                  title: 'Exit Capture',
-                                                  fillColor: kcPrimaryPurple,
-                                                  onTap:
-                                                      model.toggleCaptureView,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
+                                          _CaptureViewLayout(),
                                       ],
                                     ),
                                   ))
@@ -154,6 +114,61 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                 ],
               )),
       viewModelBuilder: () => WidgetCaptureViewModel(projectId: projectId),
+    );
+  }
+}
+
+class _MainViewLayout extends ViewModelWidget<WidgetCaptureViewModel> {
+  const _MainViewLayout({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetCaptureViewModel model) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        CtaButton(
+          title: 'Inspect View',
+          fillColor: kcPrimaryFuchsia,
+          onTap: model.toggleCaptureView,
+        ),
+        const SizedBox(
+          height: 16,
+        ),
+        CtaButton(
+          title: 'Start Capture',
+          fillColor: kcPrimaryPurple,
+          onTap: model.toggleCaptureView,
+        ),
+      ],
+    );
+  }
+}
+
+class _CaptureViewLayout extends ViewModelWidget<WidgetCaptureViewModel> {
+  const _CaptureViewLayout({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetCaptureViewModel model) {
+    return Expanded(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          CtaButton(
+            title: 'Add Widget',
+            fillColor: kcPassedTestGreenColor,
+            onTap: model.toggleCaptureView,
+          ),
+          CtaButton(
+            title: 'Exit Capture',
+            fillColor: kcPrimaryPurple,
+            onTap: model.toggleCaptureView,
+          ),
+        ],
+      ),
     );
   }
 }
