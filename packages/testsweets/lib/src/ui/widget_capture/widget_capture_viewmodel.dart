@@ -20,7 +20,11 @@ class WidgetCaptureViewModel extends FormViewModel {
   WidgetDescription? _widgetDescription;
   bool _hasWidgetNameFocus = false;
   bool _captureViewEnabled = false;
-  bool _widgetTypeContainerSelectorEnable = false;
+  bool _widgetContainerEnabled = false;
+
+  String _nameInputErrorMessage = '';
+
+  String get nameInputErrorMessage => _nameInputErrorMessage;
 
   WidgetCaptureViewModel({required this.projectId});
 
@@ -28,8 +32,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   bool get hasWidgetNameFocus => _hasWidgetNameFocus;
 
-  bool get widgetTypeContainerSelectorEnable =>
-      _widgetTypeContainerSelectorEnable;
+  bool get widgetContainerEnabled => _widgetContainerEnabled;
 
   WidgetDescription get widgetDescription => _widgetDescription!;
 
@@ -65,26 +68,32 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<void> saveWidgetDescription() async {
-    setBusy(true);
-    _widgetDescription = _widgetDescription?.copyWith(
-      viewName: _testSweetsRouteTracker.currentRoute,
-    );
-
-    log.i('descriptionToSave:$_widgetDescription');
-
-    try {
-      await _widgetCaptureService.captureWidgetDescription(
-        description: _widgetDescription!,
-        projectId: projectId,
+    if (widgetNameValue?.isNotEmpty ?? false) {
+      _nameInputErrorMessage = '';
+      setBusy(true);
+      _widgetDescription = _widgetDescription?.copyWith(
+        viewName: _testSweetsRouteTracker.currentRoute,
       );
 
-      _widgetDescription = null;
-      notifyListeners();
-    } catch (e) {
-      log.e('Couldn\'t save the widget. $e');
-    }
+      log.i('descriptionToSave:$_widgetDescription');
 
-    setBusy(false);
+      try {
+        await _widgetCaptureService.captureWidgetDescription(
+          description: _widgetDescription!,
+          projectId: projectId,
+        );
+
+        _widgetDescription = null;
+        notifyListeners();
+      } catch (e) {
+        log.e('Couldn\'t save the widget. $e');
+      }
+
+      setBusy(false);
+    } else {
+      _nameInputErrorMessage = 'Widget name must not be empty';
+      notifyListeners();
+    }
   }
 
   void setWidgetNameFocused(bool hasFocus) {
@@ -93,12 +102,12 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void closeWidgetsContainer() {
-    _widgetTypeContainerSelectorEnable = false;
+    _widgetContainerEnabled = false;
     notifyListeners();
   }
 
   void openWidgetsContainer() {
-    _widgetTypeContainerSelectorEnable = true;
+    _widgetContainerEnabled = true;
     notifyListeners();
   }
 
@@ -119,5 +128,9 @@ class WidgetCaptureViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  void saveWidget() {}
+  void closeWidgetNameInput() {
+    _widgetContainerEnabled = true;
+    _widgetDescription = null;
+    notifyListeners();
+  }
 }

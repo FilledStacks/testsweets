@@ -33,8 +33,8 @@ Future<void> setupLocator() async {
       () => UploadServiceImplementation());
   locator.registerLazySingleton(() => DynamicKeysGenerator());
 
-  locator
-      .registerLazySingleton<TestSweetsConfigFileService>(()=> TestSweetsConfigFileService());
+  locator.registerLazySingleton<TestSweetsConfigFileService>(
+      () => TestSweetsConfigFileService());
 
   locator.registerLazySingleton<AutomationKeysService>(
       () => AutomationKeysServiceImplementation());

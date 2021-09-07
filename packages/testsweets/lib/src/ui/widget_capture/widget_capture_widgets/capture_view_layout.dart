@@ -26,7 +26,7 @@ class CaptureViewLayout extends ViewModelWidget<WidgetCaptureViewModel> {
               child: child,
             ),
             duration: const Duration(milliseconds: 350),
-            child: model.widgetTypeContainerSelectorEnable
+            child: model.widgetContainerEnabled
                 ? WidgetsContainer()
                 : CtaButton(
                     title: 'Add Widget',
