@@ -55,8 +55,6 @@ class FadeInWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      switchInCurve: Curves.easeInCubic,
-      switchOutCurve: Curves.easeInCubic,
       duration: const Duration(milliseconds: 500),
       child: isVisible ? child : const SizedBox(),
     );

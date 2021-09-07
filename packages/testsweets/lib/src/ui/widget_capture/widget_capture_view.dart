@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
+import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
@@ -76,25 +77,31 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                       ),
                                     )),
                               ],
-                              if (model.hasWidgetDesription &&
-                                  model.captureViewEnabled)
-                                AnimatedAlign(
-                                  duration: const Duration(milliseconds: 500),
-                                  curve: Curves.easeInCubic,
-                                  alignment: model.widgetNameInputPositionIsDown
-                                      ? Alignment.bottomCenter
-                                      : Alignment.topCenter,
-                                  widthFactor: 1,
-                                  child: WidgetNameInput(
-                                    errorMessage: model.nameInputErrorMessage,
-                                    closeWidget: model.closeWidgetNameInput,
-                                    saveWidget: model.saveWidgetDescription,
-                                    switchPositionTap:
-                                        model.switchWidgetNameInputPosition,
-                                    focusNode: widgetNameFocusNode,
-                                    textEditingController: widgetNameController,
+                              FadeInWidget(
+                                  child: AnimatedAlign(
+                                    duration: const Duration(milliseconds: 500),
+                                    curve: Curves.easeInCubic,
+                                    alignment:
+                                        model.widgetNameInputPositionIsDown
+                                            ? Alignment.bottomCenter
+                                            : Alignment.topCenter,
+                                    widthFactor: 1,
+                                    child: WidgetNameInput(
+                                      errorMessage: model.nameInputErrorMessage,
+                                      closeWidget: () {
+                                        widgetNameController.clear();
+                                        model.closeWidgetNameInput();
+                                      },
+                                      saveWidget: model.saveWidgetDescription,
+                                      switchPositionTap:
+                                          model.switchWidgetNameInputPosition,
+                                      focusNode: widgetNameFocusNode,
+                                      textEditingController:
+                                          widgetNameController,
+                                    ),
                                   ),
-                                ),
+                                  isVisible: model.hasWidgetDesription &&
+                                      model.captureViewEnabled),
                               Positioned(
                                   bottom: 20,
                                   child: Container(
