@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
+import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
@@ -119,7 +120,21 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                           CaptureViewLayout(),
                                       ],
                                     ),
-                                  ))
+                                  )),
+                              if (model.isBusy)
+                                Container(
+                                  color: kcBackground.withOpacity(0.3),
+                                  child: Center(
+                                    child: Container(
+                                      padding: const EdgeInsets.all(16),
+                                      decoration: blackBoxDecoration,
+                                      child: CircularProgressIndicator(
+                                        valueColor: AlwaysStoppedAnimation(
+                                            kcPrimaryPurple),
+                                      ),
+                                    ),
+                                  ),
+                                )
                             ],
                           ))
                 ],

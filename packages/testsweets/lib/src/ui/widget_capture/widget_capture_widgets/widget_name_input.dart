@@ -117,7 +117,11 @@ class WidgetNameInput extends StatelessWidget {
                     CtaButton(
                       title: 'Save Widget',
                       fillColor: kcSecondaryGreen,
-                      onTap: saveWidget,
+                      onTap: () {
+                        saveWidget();
+                        focusNode?.unfocus();
+                        textEditingController?.clear();
+                      },
                       maxWidth: 100.w,
                     ),
                   ],
