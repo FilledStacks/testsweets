@@ -101,7 +101,8 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                           widgetNameController,
                                     ),
                                   ),
-                                  isVisible: model.hasWidgetDesription &&
+                                  isVisible: !model.isBusy &&
+                                      model.hasWidgetDesription &&
                                       model.captureViewEnabled),
                               Positioned(
                                   bottom: 20,

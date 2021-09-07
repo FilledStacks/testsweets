@@ -21,6 +21,9 @@ class WidgetCaptureViewModel extends FormViewModel {
   bool _hasWidgetNameFocus = false;
   bool _captureViewEnabled = false;
   bool _widgetContainerEnabled = false;
+  bool _viewAlreadyCaptured = true;
+
+  bool get viewAlreadyCaptured => _viewAlreadyCaptured;
 
   String _nameInputErrorMessage = '';
 
@@ -50,7 +53,6 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void updateDescriptionPosition(double x, double y) {
-    // log.i('x:$x y:$y');
     _widgetDescription = _widgetDescription!.copyWith(
       position: WidgetPosition(
         x: _widgetDescription!.position.x + x,
@@ -77,22 +79,34 @@ class WidgetCaptureViewModel extends FormViewModel {
 
       log.i('descriptionToSave:$_widgetDescription');
 
-      try {
-        await _widgetCaptureService.captureWidgetDescription(
-          description: _widgetDescription!,
-          projectId: projectId,
-        );
+      await sendWidgetDescriptionToFirestore();
 
-        _widgetDescription = null;
-        notifyListeners();
-      } catch (e) {
-        log.e('Couldn\'t save the widget. $e');
-      }
+      setBusy(false);
+    } else if (_widgetDescription?.widgetType == WidgetType.view) {
+      setBusy(true);
+      _widgetDescription = _widgetDescription?.copyWith(
+        viewName: _testSweetsRouteTracker.currentRoute,
+      );
 
+      await sendWidgetDescriptionToFirestore();
       setBusy(false);
     } else {
       _nameInputErrorMessage = 'Widget name must not be empty';
       notifyListeners();
+    }
+  }
+
+  Future<void> sendWidgetDescriptionToFirestore() async {
+    try {
+      await _widgetCaptureService.captureWidgetDescription(
+        description: _widgetDescription!,
+        projectId: projectId,
+      );
+
+      _widgetDescription = null;
+      notifyListeners();
+    } catch (e) {
+      log.e('Couldn\'t save the widget. $e');
     }
   }
 
@@ -112,14 +126,15 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void addNewWidget(WidgetType widgetType, {WidgetPosition? widgetPosition}) {
-    _addWidgetToScreen(widgetType, widgetPosition: widgetPosition);
-    closeWidgetsContainer();
-  }
-
-  void _addWidgetToScreen(WidgetType widgetType,
-      {WidgetPosition? widgetPosition}) {
-    _widgetDescription = WidgetDescription.addAtPosition(
-        widgetType: widgetType, widgetPosition: widgetPosition);
+    if (widgetType == WidgetType.view) {
+      _widgetDescription =
+          WidgetDescription.addView(_testSweetsRouteTracker.currentRoute);
+      saveWidgetDescription();
+    } else {
+      _widgetDescription = WidgetDescription.addAtPosition(
+          widgetType: widgetType, widgetPosition: widgetPosition);
+      closeWidgetsContainer();
+    }
   }
 
   bool widgetNameInputPositionIsDown = true;
