@@ -64,6 +64,15 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void toggleCaptureView() {
     _captureViewEnabled = !_captureViewEnabled;
+    _inspectLayoutEnable = false;
+    notifyListeners();
+  }
+
+  bool _inspectLayoutEnable = false;
+  bool get inspectLayoutEnable => _inspectLayoutEnable;
+
+  void toggleInspectLayout() {
+    _inspectLayoutEnable = !_inspectLayoutEnable;
     notifyListeners();
   }
 
