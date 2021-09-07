@@ -30,7 +30,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
           model.setWidgetNameFocused(widgetNameFocusNode.hasFocus);
         });
         SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
-          model.initialise(projectId);
+          model.initialise(projectId: projectId);
         });
       },
       builder: (context, model, _) => Overlay(
