@@ -3,6 +3,7 @@ import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/models/enums/widget_type.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 
@@ -119,6 +120,38 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void setWidgetNameFocused(bool hasFocus) {
     _hasWidgetNameFocus = hasFocus;
+    notifyListeners();
+  }
+
+  bool _showDescription = false;
+  bool get showDescription => _showDescription;
+
+  String _activeWidgetId = '';
+  String get activeWidgetId => _activeWidgetId;
+
+  bool _ignorePointer = false;
+  bool get ignorePointer => _ignorePointer;
+
+  WidgetDescription _activeWidgetDescription = WidgetDescription(
+    name: '',
+    position: WidgetPosition(x: 0, y: 0),
+    viewName: '',
+    widgetType: WidgetType.touchable,
+  );
+  WidgetDescription get activeWidgetDescription => _activeWidgetDescription;
+
+  void showWidgetDescription(WidgetDescription description) {
+    _activeWidgetDescription = description;
+    _activeWidgetId = description.id ?? '';
+    _showDescription = !_showDescription;
+    _ignorePointer = !_ignorePointer;
+    notifyListeners();
+  }
+
+  void closeWidgetDescription() {
+    _activeWidgetId = '';
+    _showDescription = false;
+    _ignorePointer = false;
     notifyListeners();
   }
 }
