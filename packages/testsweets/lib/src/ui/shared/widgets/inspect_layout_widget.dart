@@ -13,64 +13,62 @@ class InspectLayoutView extends ViewModelWidget<WidgetCaptureViewModel> {
 
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
-    return Expanded(
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                  border: Border.all(
-                color: kcLightPink,
-                width: 5,
-              )),
-            ),
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            padding: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+                border: Border.all(
+              color: kcLightPink,
+              width: 5,
+            )),
           ),
-          ...model.descriptionsForView.map(
-            (description) => Positioned(
-              top: description.position.y - (WidgetDescriptionVisualSize / 2),
-              left: description.position.x - (WidgetDescriptionVisualSize / 2),
-              child: IgnorePointer(
-                ignoring: model.ignorePointer,
-                child: GestureDetector(
-                  onTap: () {
-                    model.showWidgetDescription(description);
-                  },
-                  child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 300),
-                    opacity: model.activeWidgetId != description.id &&
-                            model.showDescription
-                        ? 0.25
-                        : 1,
-                    child: Container(
-                      key: Key(description.automationKey),
-                      width: WidgetDescriptionVisualSize,
-                      height: WidgetDescriptionVisualSize,
-                      decoration: BoxDecoration(
-                        color: description.widgetType == WidgetType.touchable
-                            ? kcLightPink
-                            : description.widgetType == WidgetType.input
-                                ? kcMainButton
-                                : Colors.red,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: description.widgetType == WidgetType.input
-                          ? Text('I')
-                          : description.widgetType == WidgetType.touchable
-                              ? Text('T',
-                                  textAlign: TextAlign.center,
-                                  style: positionWidgetStyle)
-                              : null,
+        ),
+        ...model.descriptionsForView.map(
+          (description) => Positioned(
+            top: description.position.y - (WidgetDescriptionVisualSize / 2),
+            left: description.position.x - (WidgetDescriptionVisualSize / 2),
+            child: IgnorePointer(
+              ignoring: model.ignorePointer,
+              child: GestureDetector(
+                onTap: () {
+                  model.showWidgetDescription(description);
+                },
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 300),
+                  opacity: model.activeWidgetId != description.id &&
+                          model.showDescription
+                      ? 0.25
+                      : 1,
+                  child: Container(
+                    key: Key(description.automationKey),
+                    width: WidgetDescriptionVisualSize,
+                    height: WidgetDescriptionVisualSize,
+                    decoration: BoxDecoration(
+                      color: description.widgetType == WidgetType.touchable
+                          ? kcLightPink
+                          : description.widgetType == WidgetType.input
+                              ? kcMainButton
+                              : Colors.red,
+                      borderRadius: BorderRadius.circular(20),
                     ),
+                    child: description.widgetType == WidgetType.input
+                        ? Text('I')
+                        : description.widgetType == WidgetType.touchable
+                            ? Text('T',
+                                textAlign: TextAlign.center,
+                                style: positionWidgetStyle)
+                            : null,
                   ),
                 ),
               ),
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }
