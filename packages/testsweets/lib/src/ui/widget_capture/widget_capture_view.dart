@@ -81,7 +81,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                               FadeInWidget(
                                   child: AnimatedAlign(
                                     duration: const Duration(milliseconds: 500),
-                                    curve: Curves.easeInCubic,
+                                    curve: Curves.easeOutCubic,
                                     alignment:
                                         model.widgetNameInputPositionIsDown
                                             ? Alignment.bottomCenter

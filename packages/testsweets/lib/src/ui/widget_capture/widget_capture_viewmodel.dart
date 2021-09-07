@@ -21,15 +21,19 @@ class WidgetCaptureViewModel extends FormViewModel {
   bool _hasWidgetNameFocus = false;
   bool _captureViewEnabled = false;
   bool _widgetContainerEnabled = false;
-  bool _viewAlreadyCaptured = true;
 
-  bool get viewAlreadyCaptured => _viewAlreadyCaptured;
+  bool get viewAlreadyCaptured => _widgetCaptureService
+      .checkCurrentViewIfAlreadyCaptured(_testSweetsRouteTracker.currentRoute);
 
   String _nameInputErrorMessage = '';
 
   String get nameInputErrorMessage => _nameInputErrorMessage;
 
-  WidgetCaptureViewModel({required this.projectId});
+  WidgetCaptureViewModel({required this.projectId}) {
+    _widgetCaptureService.loadWidgetDescriptionsForProject(
+        projectId: projectId);
+    notifyListeners();
+  }
 
   bool get captureViewEnabled => _captureViewEnabled;
 
@@ -104,6 +108,7 @@ class WidgetCaptureViewModel extends FormViewModel {
       );
 
       _widgetDescription = null;
+
       notifyListeners();
     } catch (e) {
       log.e('Couldn\'t save the widget. $e');

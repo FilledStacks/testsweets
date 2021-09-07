@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:testsweets/src/ui/shared/app_colors.dart';
 
 import 'shared_styles.dart';
 
@@ -8,12 +9,14 @@ class CtaButton extends StatelessWidget {
   final Color fillColor;
   final String title;
   final double? maxWidth;
+  final bool isDisabled;
   const CtaButton(
       {Key? key,
       required this.onTap,
       required this.fillColor,
       required this.title,
-      this.maxWidth})
+      this.maxWidth,
+      this.isDisabled = false})
       : super(key: key);
 
   @override
@@ -21,9 +24,10 @@ class CtaButton extends StatelessWidget {
     return SizedBox(
       width: maxWidth,
       child: MaterialButton(
+        disabledColor: kcBackground,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(crButtonCornerRadius())),
-        onPressed: onTap,
+        onPressed: isDisabled ? null : onTap,
         color: fillColor,
         padding: buttonPadding,
         child: AutoSizeText(title,

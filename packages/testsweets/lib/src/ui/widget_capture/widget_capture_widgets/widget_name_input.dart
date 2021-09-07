@@ -82,7 +82,7 @@ class WidgetNameInput extends StatelessWidget {
                         style: tsNormal().copyWith(color: kcPrimaryWhite),
                         decoration: InputDecoration(
                             hintStyle: tsNormal().copyWith(
-                              color: kcPrimaryWhite,
+                              color: kcSecondaryWhite,
                             ),
                             fillColor: kcBackground,
                             filled: true,

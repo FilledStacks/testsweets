@@ -34,7 +34,8 @@ class WidgetCaptureService {
   }
 
   /// Gets all the widget descriptions the project and stores them in a map
-  Future<void> loadWidgetDescriptionsForProject({required String projectId}) async {
+  Future<void> loadWidgetDescriptionsForProject(
+      {required String projectId}) async {
     final widgetDescriptions = await _cloudFunctionsService
         .getWidgetDescriptionForProject(projectId: projectId);
 
@@ -57,5 +58,14 @@ class WidgetCaptureService {
     final viewDescriptions = widgetDescriptionMap[currentRoute];
     log.v('currentRoute:$currentRoute viewDescriptions:$viewDescriptions');
     return viewDescriptions ?? [];
+  }
+
+  bool checkCurrentViewIfAlreadyCaptured(String viewName) {
+    if (widgetDescriptionMap.containsKey(viewName)) {
+      return widgetDescriptionMap[viewName]
+              ?.any((element) => element.name == viewName) ??
+          false;
+    } else
+      return false;
   }
 }

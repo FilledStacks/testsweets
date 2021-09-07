@@ -47,6 +47,7 @@ class WidgetsContainer extends ViewModelWidget<WidgetCaptureViewModel> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 12.w),
             child: CtaButton(
+              isDisabled: model.viewAlreadyCaptured,
               title: 'Capture View',
               fillColor: kcSecondaryGreen,
               onTap: () => model.addNewWidget(WidgetType.view),
