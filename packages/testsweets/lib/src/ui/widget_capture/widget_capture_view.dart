@@ -151,16 +151,11 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                 ),
                 AnimatedPositioned(
                   duration: Duration(milliseconds: 500),
-                  child: AnimatedSwitcher(
-                      duration: Duration(milliseconds: 500),
-                      switchInCurve: Curves.bounceIn,
-                      switchOutCurve: Curves.bounceOut,
-                      child: model.showDescription
-                          ? WidgetDescriptionDialog(
-                              description: model.activeWidgetDescription,
-                              onPressed: model.closeWidgetDescription,
-                            )
-                          : SizedBox.shrink()),
+                  bottom: model.showDescription ? 20 : -300,
+                  child: WidgetDescriptionDialog(
+                    description: model.activeWidgetDescription,
+                    onPressed: model.closeWidgetDescription,
+                  ),
                 )
               ],
             ),
