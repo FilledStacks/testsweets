@@ -5,6 +5,11 @@ import 'app_colors.dart';
 
 TextStyle tsNormal() => TextStyle(
       fontFamily: "Roboto",
+      fontWeight: FontWeight.w400,
+      fontSize: 16.sp,
+    );
+TextStyle tsMedium() => TextStyle(
+      fontFamily: "Roboto",
       fontWeight: FontWeight.w500,
       fontSize: 16.sp,
     );

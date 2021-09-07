@@ -7,23 +7,31 @@ class CtaButton extends StatelessWidget {
   final VoidCallback onTap;
   final Color fillColor;
   final String title;
+  final double? maxWidth;
   const CtaButton(
       {Key? key,
       required this.onTap,
       required this.fillColor,
-      required this.title})
+      required this.title,
+      this.maxWidth})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(crButtonCornerRadius())),
-      onPressed: onTap,
-      color: fillColor,
-      padding: buttonPadding,
-      child: AutoSizeText(title,
-          maxLines: 1, style: tsNormal().copyWith(color: Colors.white)),
+    return SizedBox(
+      width: maxWidth,
+      child: MaterialButton(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(crButtonCornerRadius())),
+        onPressed: onTap,
+        color: fillColor,
+        padding: buttonPadding,
+        child: AutoSizeText(title,
+            maxLines: 1,
+            style: tsMedium().copyWith(
+              color: Colors.white,
+            )),
+      ),
     );
   }
 }

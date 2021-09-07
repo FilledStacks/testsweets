@@ -86,6 +86,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                       : Alignment.topCenter,
                                   widthFactor: 1,
                                   child: WidgetNameInput(
+                                    saveWidget: model.saveWidget,
                                     switchPositionTap:
                                         model.switchWidgetNameInputPosition,
                                     focusNode: widgetNameFocusNode,

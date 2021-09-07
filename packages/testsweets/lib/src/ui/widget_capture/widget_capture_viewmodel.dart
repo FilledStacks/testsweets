@@ -118,4 +118,6 @@ class WidgetCaptureViewModel extends FormViewModel {
     widgetNameInputPositionIsDown = !widgetNameInputPositionIsDown;
     notifyListeners();
   }
+
+  void saveWidget() {}
 }
