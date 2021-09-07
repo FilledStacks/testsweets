@@ -22,7 +22,7 @@ class WidgetCaptureViewModel extends FormViewModel {
         currentRoute: _testSweetsRouteTracker.currentRoute,
       );
 
-  Future<void> initialise(String projectId) async {
+  Future<void> initialise({required String projectId}) async {
     setBusy(true);
     try {
       await _widgetCaptureService.loadWidgetDescriptionsForProject(
