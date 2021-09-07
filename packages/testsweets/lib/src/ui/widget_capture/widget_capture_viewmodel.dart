@@ -3,6 +3,7 @@ import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/models/enums/widget_type.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 
@@ -39,15 +40,6 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   double get descriptionLeft =>
       _widgetDescription!.position.x - (WidgetDiscriptionVisualSize / 2);
-
-  void addWidgetAtTap({required double x, required double y}) {
-    log.i('x:$x y:$y');
-
-    _widgetDescription =
-        WidgetDescription.positionOnly(position: WidgetPosition(x: x, y: y));
-
-    notifyListeners();
-  }
 
   void toggleCaptureView() {
     _captureViewEnabled = !_captureViewEnabled;
@@ -100,8 +92,6 @@ class WidgetCaptureViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  void activateCaptureView() {}
-
   void closeWidgetsContainer() {
     _widgetTypeContainerSelectorEnable = false;
     notifyListeners();
@@ -110,5 +100,16 @@ class WidgetCaptureViewModel extends FormViewModel {
   void openWidgetsContainer() {
     _widgetTypeContainerSelectorEnable = true;
     notifyListeners();
+  }
+
+  void addNewWidget(WidgetType widgetType, {WidgetPosition? widgetPosition}) {
+    _addWidgetToScreen(widgetType, widgetPosition: widgetPosition);
+    closeWidgetsContainer();
+  }
+
+  void _addWidgetToScreen(WidgetType widgetType,
+      {WidgetPosition? widgetPosition}) {
+    _widgetDescription = WidgetDescription.addAtPosition(
+        widgetType: widgetType, widgetPosition: widgetPosition);
   }
 }

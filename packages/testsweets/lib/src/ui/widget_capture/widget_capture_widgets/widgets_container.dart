@@ -2,6 +2,8 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
+import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/models/enums/widget_type.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
@@ -30,14 +32,20 @@ class WidgetsContainer extends ViewModelWidget<WidgetCaptureViewModel> {
             height: 24.w,
           ),
           _WidgetTypeButton(
-            onTap: selectInputWidget,
+            onTap: () => model.addNewWidget(WidgetType.touchable,
+                widgetPosition: WidgetPosition(
+                    x: ScreenUtil().screenWidth / 2,
+                    y: ScreenUtil().screenHeight / 2)),
             title: 'Touchable',
           ),
           SizedBox(
             height: 16.w,
           ),
           _WidgetTypeButton(
-            onTap: selectInputWidget,
+            onTap: () => model.addNewWidget(WidgetType.input,
+                widgetPosition: WidgetPosition(
+                    x: ScreenUtil().screenWidth / 2,
+                    y: ScreenUtil().screenHeight / 2)),
             title: 'Input',
           ),
           SizedBox(
@@ -48,7 +56,7 @@ class WidgetsContainer extends ViewModelWidget<WidgetCaptureViewModel> {
             child: CtaButton(
               title: 'Capture View',
               fillColor: kcSecondaryGreen,
-              onTap: model.activateCaptureView,
+              onTap: () => model.addNewWidget(WidgetType.view),
             ),
           ),
           SizedBox(
@@ -85,8 +93,6 @@ class WidgetsContainer extends ViewModelWidget<WidgetCaptureViewModel> {
       ),
     );
   }
-
-  void selectInputWidget() {}
 }
 
 class _WidgetTypeButton extends StatelessWidget {

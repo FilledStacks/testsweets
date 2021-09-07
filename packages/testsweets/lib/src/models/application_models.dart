@@ -26,12 +26,13 @@ class WidgetDescription with _$WidgetDescription {
     required WidgetPosition position,
   }) = _WidgetDescription;
 
-  factory WidgetDescription.positionOnly({required WidgetPosition position}) {
+  factory WidgetDescription.addAtPosition(
+      {required WidgetType widgetType, WidgetPosition? widgetPosition}) {
     return WidgetDescription(
         viewName: '',
         name: '',
-        widgetType: WidgetType.touchable,
-        position: position);
+        widgetType: widgetType,
+        position: widgetPosition ?? WidgetPosition(x: 0, y: 0));
   }
 
   factory WidgetDescription.fromJson(Map<String, dynamic> json) =>

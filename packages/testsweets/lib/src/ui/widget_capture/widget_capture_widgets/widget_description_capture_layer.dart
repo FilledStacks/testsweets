@@ -14,27 +14,16 @@ class WidgetDescriptionCaptureLayer
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
     return Positioned.fill(
-        child: GestureDetector(
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        alignment: Alignment.bottomRight,
-        padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
-            border: Border.all(
-          color: Colors.blue,
-          width: 5,
-        )),
-      ),
-      onTapUp: (touchEvent) {
-        var localTouchPosition = (context.findRenderObject() as RenderBox)
-            .globalToLocal(touchEvent.globalPosition);
-
-        model.addWidgetAtTap(
-          x: localTouchPosition.dx,
-          y: localTouchPosition.dy,
-        );
-      },
+        child: Container(
+      width: double.infinity,
+      height: double.infinity,
+      alignment: Alignment.bottomRight,
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+          border: Border.all(
+        color: Colors.blue,
+        width: 5,
+      )),
     ));
   }
 }
