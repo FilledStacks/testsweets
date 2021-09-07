@@ -140,6 +140,7 @@ class WidgetCaptureViewModel extends FormViewModel {
           widgetType: widgetType, widgetPosition: widgetPosition);
       closeWidgetsContainer();
     }
+    openWidgetsContainer();
   }
 
   bool widgetNameInputPositionIsDown = true;
