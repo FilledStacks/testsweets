@@ -5,6 +5,7 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/ui/shared/shared_colors.dart';
 import 'package:testsweets/src/ui/shared/widgets/inspect_layout_widget.dart';
+import 'package:testsweets/src/ui/shared/widgets/widget_description_dialog_widget.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
@@ -148,6 +149,19 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                     ],
                   ),
                 ),
+                AnimatedPositioned(
+                  duration: Duration(milliseconds: 500),
+                  child: AnimatedSwitcher(
+                      duration: Duration(milliseconds: 500),
+                      switchInCurve: Curves.bounceIn,
+                      switchOutCurve: Curves.bounceOut,
+                      child: model.showDescription
+                          ? WidgetDescriptionDialog(
+                              description: model.activeWidgetDescription,
+                              onPressed: model.closeWidgetDescription,
+                            )
+                          : SizedBox.shrink()),
+                )
               ],
             ),
           ),
