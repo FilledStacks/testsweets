@@ -16,6 +16,23 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
 
+  List<WidgetDescription> get descriptionsForView =>
+      _widgetCaptureService.getDescriptionsForView(
+        currentRoute: _testSweetsRouteTracker.currentRoute,
+      );
+
+  Future<void> initialise(String projectId) async {
+    setBusy(true);
+    try {
+      await _widgetCaptureService.loadWidgetDescriptionsForProject(
+        projectId: projectId,
+      );
+    } catch (e) {
+      log.e('Could not get widgetDescriptions: $e');
+    }
+    setBusy(false);
+  }
+
   WidgetDescription? _widgetDescription;
   bool _hasWidgetNameFocus = false;
   bool _captureViewEnabled = false;
@@ -28,13 +45,13 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   WidgetDescription get widgetDescription => _widgetDescription!;
 
-  bool get hasWidgetDesription => _widgetDescription != null;
+  bool get hasWidgetDescription => _widgetDescription != null;
 
   double get descriptionTop =>
-      _widgetDescription!.position.y - (WidgetDiscriptionVisualSize / 2);
+      _widgetDescription!.position.y - (WidgetDescriptionVisualSize / 2);
 
   double get descriptionLeft =>
-      _widgetDescription!.position.x - (WidgetDiscriptionVisualSize / 2);
+      _widgetDescription!.position.x - (WidgetDescriptionVisualSize / 2);
 
   void addWidgetAtTap({required double x, required double y}) {
     log.i('x:$x y:$y');
