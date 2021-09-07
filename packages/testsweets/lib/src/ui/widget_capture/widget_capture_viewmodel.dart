@@ -112,4 +112,10 @@ class WidgetCaptureViewModel extends FormViewModel {
     _widgetDescription = WidgetDescription.addAtPosition(
         widgetType: widgetType, widgetPosition: widgetPosition);
   }
+
+  bool widgetNameInputPositionIsDown = true;
+  void switchWidgetNameInputPosition() {
+    widgetNameInputPositionIsDown = !widgetNameInputPositionIsDown;
+    notifyListeners();
+  }
 }

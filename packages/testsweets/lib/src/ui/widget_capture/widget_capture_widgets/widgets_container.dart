@@ -9,22 +9,15 @@ import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
+import 'close_circular_button.dart';
+
 class WidgetsContainer extends ViewModelWidget<WidgetCaptureViewModel> {
   const WidgetsContainer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
     return Container(
-      decoration: BoxDecoration(
-        color: kcCard,
-        boxShadow: [
-          BoxShadow(
-              blurRadius: 8,
-              offset: Offset(3, 4),
-              color: Colors.black.withOpacity(0.25))
-        ],
-        borderRadius: BorderRadius.all(crButtonCornerRadius()),
-      ),
+      decoration: blackBoxDecoration,
       width: 136.w,
       child: Column(
         children: [
@@ -70,24 +63,7 @@ class WidgetsContainer extends ViewModelWidget<WidgetCaptureViewModel> {
           MaterialButton(
             minWidth: 136.w,
             onPressed: model.closeWidgetsContainer,
-            child: SizedBox(
-              height: 100.w,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Icon(
-                    Icons.circle,
-                    color: kcSubtext,
-                    size: 28.w,
-                  ),
-                  Icon(
-                    Icons.close,
-                    color: kcCard,
-                    size: 14.w,
-                  ),
-                ],
-              ),
-            ),
+            child: SizedBox(height: 100.w, child: CloseCircularButton()),
           )
         ],
       ),

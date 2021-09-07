@@ -9,6 +9,7 @@ import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'widget_capture_widgets/capture_view_layout.dart';
 import 'widget_capture_widgets/main_view_layout.dart';
 import 'widget_capture_widgets/widget_description_capture_layer.dart';
+import 'widget_capture_widgets/widget_name_input.dart';
 
 @FormView(fields: [FormTextField(name: 'widgetName')])
 class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
@@ -77,20 +78,18 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                               ],
                               if (model.hasWidgetDesription &&
                                   model.captureViewEnabled)
-                                AnimatedPositioned(
+                                AnimatedAlign(
                                   duration: const Duration(milliseconds: 500),
                                   curve: Curves.easeInCubic,
-                                  left: 10,
-                                  bottom: model.hasWidgetNameFocus ? null : 20,
-                                  top: model.hasWidgetNameFocus ? 20 : null,
-                                  child: SizedBox(
-                                    width: 150,
-                                    child: TextField(
-                                      focusNode: widgetNameFocusNode,
-                                      controller: widgetNameController,
-                                      decoration: InputDecoration(
-                                          hintText: 'Enter widget name'),
-                                    ),
+                                  alignment: model.widgetNameInputPositionIsDown
+                                      ? Alignment.bottomCenter
+                                      : Alignment.topCenter,
+                                  widthFactor: 1,
+                                  child: WidgetNameInput(
+                                    switchPositionTap:
+                                        model.switchWidgetNameInputPosition,
+                                    focusNode: widgetNameFocusNode,
+                                    textEditingController: widgetNameController,
                                   ),
                                 ),
                               Positioned(
@@ -105,7 +104,8 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                       children: [
                                         if (!model.captureViewEnabled)
                                           MainViewLayout(),
-                                        if (model.captureViewEnabled)
+                                        if (model.captureViewEnabled &&
+                                            !model.hasWidgetDesription)
                                           CaptureViewLayout(),
                                       ],
                                     ),
