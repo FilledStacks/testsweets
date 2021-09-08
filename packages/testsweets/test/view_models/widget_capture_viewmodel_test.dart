@@ -18,8 +18,6 @@ void main() {
 
         final model = WidgetCaptureViewModel(projectId: projectId);
 
-        model.initialise(projectId: projectId);
-
         expect(model.isBusy, true);
       });
       test('When called, should get all widget description for project',
@@ -27,9 +25,7 @@ void main() {
         final service = getAndRegisterWidgetCaptureService();
         final projectId = 'testSweets Id';
 
-        final model = WidgetCaptureViewModel(projectId: projectId);
-
-        await model.initialise(projectId: projectId);
+        WidgetCaptureViewModel(projectId: projectId);
 
         verify(service.loadWidgetDescriptionsForProject(projectId: projectId));
       });

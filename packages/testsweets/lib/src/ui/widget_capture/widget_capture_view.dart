@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -35,9 +34,6 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
         listenToFormUpdated(model);
         widgetNameFocusNode.addListener(() {
           model.setWidgetNameFocused(widgetNameFocusNode.hasFocus);
-        });
-        SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
-          model.initialise(projectId: projectId);
         });
       },
       builder: (context, model, _) => ScreenUtilInit(

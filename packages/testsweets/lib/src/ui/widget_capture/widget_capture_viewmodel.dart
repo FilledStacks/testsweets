@@ -47,8 +47,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   String get nameInputErrorMessage => _nameInputErrorMessage;
 
   WidgetCaptureViewModel({required this.projectId}) {
-    _widgetCaptureService.loadWidgetDescriptionsForProject(
-        projectId: projectId);
+    initialise(projectId: projectId);
     notifyListeners();
   }
 
