@@ -1,1 +1,1 @@
-const double WidgetDiscriptionVisualSize = 40;
+const double WidgetDescriptionVisualSize = 40;

@@ -54,13 +54,13 @@ class DriverLayoutView extends StatelessWidget {
               ),
             ...model.descriptionsForView.map(
               (description) => Positioned(
-                top: description.position.y - (WidgetDiscriptionVisualSize / 2),
+                top: description.position.y - (WidgetDescriptionVisualSize / 2),
                 left:
-                    description.position.x - (WidgetDiscriptionVisualSize / 2),
+                    description.position.x - (WidgetDescriptionVisualSize / 2),
                 child: Container(
                   key: Key(description.automationKey),
-                  width: WidgetDiscriptionVisualSize,
-                  height: WidgetDiscriptionVisualSize,
+                  width: WidgetDescriptionVisualSize,
+                  height: WidgetDescriptionVisualSize,
                   decoration: BoxDecoration(
                     color: Color(0x01000000),
                     border: Border.all(color: Colors.red),

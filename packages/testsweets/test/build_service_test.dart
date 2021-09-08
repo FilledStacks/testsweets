@@ -17,7 +17,7 @@ void main() {
       test(
           "Should throw BuildError if the given app directory does not contain a pubspec.yaml file",
           () async {
-        final buildService = BuildServiceImplementaion();
+        final buildService = BuildServiceImplementation();
 
         ;
         expect(
@@ -32,7 +32,7 @@ void main() {
             doesFileExist: true,
             readFileAsStringSyncResult: ksPubspecFileWithNoVersion,
             jsonFilesreadFileAsStringSyncResult: appAutomationKeysFile);
-        final buildService = BuildServiceImplementaion();
+        final buildService = BuildServiceImplementation();
 
         expect(
             () => buildService.build(
@@ -56,7 +56,7 @@ void main() {
 
         final flutterProcess = locator<FlutterProcess>();
 
-        final instance = BuildServiceImplementaion();
+        final instance = BuildServiceImplementation();
         await instance.build(
             appType: testAppType, extraFlutterProcessArgs: testExtraArgs);
 
@@ -72,7 +72,7 @@ void main() {
           readFileAsStringSyncResult: ksPubspecFileWithVersion,
           jsonFilesreadFileAsStringSyncResult: appAutomationKeysFile,
         );
-        final instance = BuildServiceImplementaion();
+        final instance = BuildServiceImplementation();
         final buildInfo = await instance.build(
             appType: testAppType,
             pathToBuild: testPathToBuild,
@@ -90,7 +90,7 @@ void main() {
           readFileAsStringSyncResult: ksPubspecFileWithVersion,
           jsonFilesreadFileAsStringSyncResult: appAutomationKeysFile,
         );
-        final instance = BuildServiceImplementaion();
+        final instance = BuildServiceImplementation();
         final buildInfo = await instance.build(
             appType: testAppType, extraFlutterProcessArgs: testExtraArgs);
 
@@ -105,7 +105,7 @@ void main() {
       test(
           "When the flutterProcess completes with a non 0 exit code, Should throw BuildError with the contents of stderr of the flutter process as the message",
           () async {
-        final instance = BuildServiceImplementaion();
+        final instance = BuildServiceImplementation();
         final run = () => instance.build(
               appType: testAppType,
             );
