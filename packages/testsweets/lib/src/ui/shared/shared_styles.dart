@@ -18,6 +18,16 @@ TextStyle tsMedium() => TextStyle(
       fontWeight: FontWeight.w500,
       fontSize: 16.sp,
     );
+const boldStyle =
+    TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white);
+
+const lightStyle = TextStyle(fontSize: 18, color: Colors.white);
+
+const positionWidgetStyle = TextStyle(
+    fontSize: 40,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+    height: 1.2);
 
 Radius crButtonCornerRadius() => Radius.circular(8);
 Radius crTextFieldCornerRadius() => Radius.circular(8.w);
@@ -70,7 +80,6 @@ extension CapExtension on String {
 
   String get allInCaps => this.isEmpty ? '' : this.toUpperCase();
 
-  String get capitalizeFirstofEach => this == null || this.isEmpty
-      ? ''
-      : this.split(" ").map((str) => str.inCaps).join(" ");
+  String get capitalizeFirstofEach =>
+      this.isEmpty ? '' : this.split(" ").map((str) => str.inCaps).join(" ");
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
-import 'package:testsweets/src/ui/shared/shared_text_style.dart';
 
 class WidgetDescriptionDialog extends StatelessWidget {
   final WidgetDescription description;
