@@ -27,7 +27,7 @@ abstract class BuildService {
   });
 }
 
-class BuildServiceImplementaion implements BuildService {
+class BuildServiceImplementation implements BuildService {
   final fileSystemService = locator<FileSystemService>();
   final flutterProcess = locator<FlutterProcess>();
 

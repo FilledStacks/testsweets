@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
-import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
+import 'package:testsweets/src/ui/shared/widgets/inspect_layout_widget.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
@@ -33,6 +34,9 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
         widgetNameFocusNode.addListener(() {
           model.setWidgetNameFocused(widgetNameFocusNode.hasFocus);
         });
+        SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
+          model.initialise(projectId: projectId);
+        });
       },
       builder: (context, model, _) => ScreenUtilInit(
           builder: () => Overlay(
@@ -41,11 +45,15 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                       builder: (context) => Stack(
                             children: [
                               child,
-                              if (!model.hasWidgetDesription &&
-                                  model.captureViewEnabled)
+                              if (model.inspectLayoutEnable)
+                                InspectLayoutView(),
+                              if (!model.hasWidgetDescription &&
+                                  model.captureViewEnabled &&
+                                  !model.inspectLayoutEnable)
                                 WidgetDescriptionCaptureLayer(),
-                              if (model.hasWidgetDesription &&
-                                  model.captureViewEnabled) ...[
+                              if (model.hasWidgetDescription &&
+                                  model.captureViewEnabled &&
+                                  !model.inspectLayoutEnable) ...[
                                 Positioned.fill(
                                   child: Container(
                                     width: double.infinity,
@@ -68,8 +76,6 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                         model.updateDescriptionPosition(x, y);
                                       },
                                       child: Container(
-                                        width: WidgetDiscriptionVisualSize,
-                                        height: WidgetDiscriptionVisualSize,
                                         decoration: BoxDecoration(
                                           color: Colors.pink,
                                           borderRadius:
@@ -102,8 +108,9 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                     ),
                                   ),
                                   isVisible: !model.isBusy &&
-                                      model.hasWidgetDesription &&
-                                      model.captureViewEnabled),
+                                      model.hasWidgetDescription &&
+                                      model.captureViewEnabled &&
+                                      !model.inspectLayoutEnable),
                               Positioned(
                                   bottom: 20,
                                   child: Container(
@@ -115,13 +122,33 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         if (!model.captureViewEnabled)
-                                          MainViewLayout(),
+                                          if (!model.captureViewEnabled)
+                                            MainViewLayout(),
                                         if (model.captureViewEnabled &&
-                                            !model.hasWidgetDesription)
+                                            !model.hasWidgetDescription)
                                           CaptureViewLayout(),
                                       ],
                                     ),
                                   )),
+                              if (model.captureViewEnabled)
+                                Column(
+                                  children: [
+                                    MaterialButton(
+                                      onPressed: model.toggleCaptureView,
+                                      color: Colors.red,
+                                      child: Text('Stop Capture'),
+                                    ),
+                                    if (model.captureViewEnabled &&
+                                        model.hasWidgetDescription)
+                                      MaterialButton(
+                                        color: Colors.pinkAccent,
+                                        child: model.isBusy
+                                            ? CircularProgressIndicator()
+                                            : Text('Save Widget'),
+                                        onPressed: model.saveWidgetDescription,
+                                      )
+                                  ],
+                                ),
                               if (model.isBusy)
                                 Container(
                                   color: kcBackground.withOpacity(0.3),

@@ -4,6 +4,7 @@
 
 import 'dart:async' as _i9;
 import 'dart:io' as _i4;
+import 'dart:ui' as _i19;
 
 import 'package:logger/src/logger.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
@@ -18,6 +19,7 @@ import 'package:testsweets/src/services/http_service.dart' as _i5;
 import 'package:testsweets/src/services/runnable_process.dart' as _i10;
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart'
     as _i7;
+import 'package:testsweets/src/services/testsweets_route_tracker.dart' as _i18;
 import 'package:testsweets/src/services/time_service.dart' as _i11;
 import 'package:testsweets/src/services/upload_service.dart' as _i15;
 import 'package:testsweets/src/services/widget_capture_service.dart' as _i17;
@@ -340,6 +342,42 @@ class MockWidgetCaptureService extends _i1.Mock
                   #getDescriptionsForView, [], {#currentRoute: currentRoute}),
               returnValue: <_i13.WidgetDescription>[])
           as List<_i13.WidgetDescription>);
+  @override
+  String toString() => super.toString();
+}
+
+/// A class which mocks [TestSweetsRouteTracker].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockTestSweetsRouteTracker extends _i1.Mock
+    implements _i18.TestSweetsRouteTracker {
+  @override
+  String get currentRoute =>
+      (super.noSuchMethod(Invocation.getter(#currentRoute), returnValue: '')
+          as String);
+  @override
+  bool get hasListeners =>
+      (super.noSuchMethod(Invocation.getter(#hasListeners), returnValue: false)
+          as bool);
+  @override
+  void setCurrentRoute(String? route) =>
+      super.noSuchMethod(Invocation.method(#setCurrentRoute, [route]),
+          returnValueForMissingStub: null);
+  @override
+  void addListener(_i19.VoidCallback? listener) =>
+      super.noSuchMethod(Invocation.method(#addListener, [listener]),
+          returnValueForMissingStub: null);
+  @override
+  void removeListener(_i19.VoidCallback? listener) =>
+      super.noSuchMethod(Invocation.method(#removeListener, [listener]),
+          returnValueForMissingStub: null);
+  @override
+  void dispose() => super.noSuchMethod(Invocation.method(#dispose, []),
+      returnValueForMissingStub: null);
+  @override
+  void notifyListeners() =>
+      super.noSuchMethod(Invocation.method(#notifyListeners, []),
+          returnValueForMissingStub: null);
   @override
   String toString() => super.toString();
 }

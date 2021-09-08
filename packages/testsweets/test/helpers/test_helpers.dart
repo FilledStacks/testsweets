@@ -10,6 +10,7 @@ import 'package:testsweets/src/services/file_system_service.dart';
 import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/runnable_process.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
+import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/time_service.dart';
 import 'package:testsweets/src/services/upload_service.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
@@ -30,6 +31,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<UploadService>(returnNullOnMissingStub: true),
   MockSpec<AutomationKeysService>(returnNullOnMissingStub: true),
   MockSpec<WidgetCaptureService>(returnNullOnMissingStub: true),
+  MockSpec<TestSweetsRouteTracker>(returnNullOnMissingStub: true),
 ])
 MockFileSystemService getAndRegisterFileSystemService({
   bool doesFileExist = false,
@@ -208,6 +210,13 @@ AutomationKeysService getAndRegisterAutomationKeysService() {
   return service;
 }
 
+MockTestSweetsRouteTracker getAndRegisterTestSweetsRouteTracker() {
+  _removeRegistrationIfExists<TestSweetsRouteTracker>();
+  final service = MockTestSweetsRouteTracker();
+  locator.registerSingleton<TestSweetsRouteTracker>(service);
+  return service;
+}
+
 void registerServices() {
   getAndRegisterFileSystemService();
   getAndRegisterFlutterProcess();
@@ -219,6 +228,8 @@ void registerServices() {
   getAndRegisterTestSweetsConfigFileService();
   getAndRegisterUploadService();
   getAndRegisterAutomationKeysService();
+  getAndRegisterTestSweetsRouteTracker();
+  getAndRegisterWidgetCaptureService();
 }
 
 void unregisterServices() {
@@ -232,6 +243,8 @@ void unregisterServices() {
   locator.unregister<TestSweetsConfigFileService>();
   locator.unregister<UploadService>();
   locator.unregister<AutomationKeysService>();
+  locator.unregister<TestSweetsRouteTracker>();
+  locator.unregister<WidgetCaptureService>();
 }
 
 // Call this before any service registration helper. This is to ensure that if there
