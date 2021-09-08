@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/models/application_models.dart';
-import 'package:testsweets/src/ui/shared/shared_text_style.dart';
+import 'package:testsweets/src/ui/shared/shared_styles.dart';
 
 class WidgetDescriptionDialog extends StatelessWidget {
   final WidgetDescription description;
@@ -26,25 +25,25 @@ class WidgetDescriptionDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text('Widget Description', style: boldStyle),
-          IconButton(
-            icon: Icon(
-              Icons.cancel,
-              color: Colors.grey,
-              size: 32,
-            ),
-            onPressed: onPressed,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Widget Description', style: boldStyle),
+              IconButton(
+                icon: Icon(
+                  Icons.cancel,
+                  color: Colors.grey,
+                  size: 32,
+                ),
+                onPressed: onPressed,
+              ),
+            ],
           ),
-        ],
-      ),
-      Text('View Name: ${description.viewName}', style: lightStyle),
-      Text('Name: ${description.name}', style: lightStyle),
-      Text('Widget Type: ${widgetType.capitalizeFirst}',
-          style: lightStyle),
-      Text('Position: (x:$positionX, y:$positionY)', style: lightStyle),
+          Text('View Name: ${description.viewName}', style: lightStyle),
+          Text('Name: ${description.name}', style: lightStyle),
+          Text('Widget Type: ${widgetType.capitalizeFirstofEach}',
+              style: lightStyle),
+          Text('Position: (x:$positionX, y:$positionY)', style: lightStyle),
         ],
       ),
       decoration: BoxDecoration(
