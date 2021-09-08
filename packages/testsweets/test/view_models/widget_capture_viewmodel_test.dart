@@ -11,15 +11,17 @@ void main() {
   group('WidgetCaptureViewModelTest -', () {
     setUp(() => registerServices());
     tearDown(() => locator.reset());
-
-    group('initialize -', () {
-      test('When called, should set viewmodel busy', () async {
+    group('constructer -', () {
+      test('When called, should call initialize and set viewmodel busy',
+          () async {
         final projectId = 'testSweets Id';
 
         final model = WidgetCaptureViewModel(projectId: projectId);
 
         expect(model.isBusy, true);
       });
+    });
+    group('initialize -', () {
       test('When called, should get all widget description for project',
           () async {
         final service = getAndRegisterWidgetCaptureService();
