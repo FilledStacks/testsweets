@@ -63,10 +63,10 @@ class WidgetCaptureViewModel extends FormViewModel {
   bool get hasWidgetDescription => _widgetDescription != null;
 
   double get descriptionTop =>
-      _widgetDescription!.position.y - (WidgetDescriptionVisualSize / 2);
+      _widgetDescription!.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
 
   double get descriptionLeft =>
-      _widgetDescription!.position.x - (WidgetDescriptionVisualSize / 2);
+      _widgetDescription!.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
 
   void toggleCaptureView() {
     _captureViewEnabled = !_captureViewEnabled;
@@ -178,6 +178,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   void closeWidgetNameInput() {
     _widgetContainerEnabled = true;
     _widgetDescription = null;
+    notifyListeners();
   }
 
   bool _showDescription = false;

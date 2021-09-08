@@ -18,7 +18,7 @@ class MainViewLayout extends ViewModelWidget<WidgetCaptureViewModel> {
         CtaButton(
           title: 'Inspect View',
           fillColor: kcPrimaryFuchsia,
-          onTap: model.toggleCaptureView,
+          onTap: model.toggleInspectLayout,
         ),
         const SizedBox(
           height: 16,

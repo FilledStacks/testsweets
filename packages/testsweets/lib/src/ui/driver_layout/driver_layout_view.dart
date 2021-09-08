@@ -23,54 +23,53 @@ class DriverLayoutView extends StatelessWidget {
           SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
         model.initialise();
       }),
-      builder: (context, model, _) => Expanded(
-        child: HittableStack(
-          children: [
-            child,
-            if (model.isBusy)
-              Positioned.fill(
-                child: Center(
-                  child: Container(
-                    child: Column(
-                      children: [
-                        Text('Busy fetching driver keys'),
-                        SizedBox(height: 4),
-                        SizedBox(
-                          width: 10,
-                          height: 10,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                          ),
-                        )
-                      ],
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                        color: Color(0xff181818),
-                        borderRadius: BorderRadius.circular(5)),
-                  ),
-                ),
-              ),
-            ...model.descriptionsForView.map(
-              (description) => Positioned(
-                top: description.position.y - (WidgetDescriptionVisualSize / 2),
-                left:
-                    description.position.x - (WidgetDescriptionVisualSize / 2),
+      builder: (context, model, _) => HittableStack(
+        children: [
+          child,
+          if (model.isBusy)
+            Positioned.fill(
+              child: Center(
                 child: Container(
-                  key: Key(description.automationKey),
-                  width: WidgetDescriptionVisualSize,
-                  height: WidgetDescriptionVisualSize,
-                  decoration: BoxDecoration(
-                    color: Color(0x01000000),
-                    border: Border.all(color: Colors.red),
-                    borderRadius: BorderRadius.circular(5),
+                  child: Column(
+                    children: [
+                      Text('Busy fetching driver keys'),
+                      SizedBox(height: 4),
+                      SizedBox(
+                        width: 10,
+                        height: 10,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                    ],
                   ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                      color: Color(0xff181818),
+                      borderRadius: BorderRadius.circular(5)),
                 ),
               ),
-            )
-          ],
-        ),
+            ),
+          ...model.descriptionsForView.map(
+            (description) => Positioned(
+              top:
+                  description.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
+              left:
+                  description.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
+              child: Container(
+                key: Key(description.automationKey),
+                width: WIDGET_DESCRIPTION_VISUAL_SIZE,
+                height: WIDGET_DESCRIPTION_VISUAL_SIZE,
+                decoration: BoxDecoration(
+                  color: Color(0x01000000),
+                  border: Border.all(color: Colors.red),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+              ),
+            ),
+          )
+        ],
       ),
       viewModelBuilder: () => DriverLayoutViewModel(projectId: projectId),
     );

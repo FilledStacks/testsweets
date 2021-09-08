@@ -29,8 +29,8 @@ class InspectLayoutView extends ViewModelWidget<WidgetCaptureViewModel> {
         ),
         ...model.descriptionsForView.map(
           (description) => Positioned(
-            top: description.position.y - (WidgetDescriptionVisualSize / 2),
-            left: description.position.x - (WidgetDescriptionVisualSize / 2),
+            top: description.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
+            left: description.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
             child: IgnorePointer(
               ignoring: model.ignorePointer,
               child: GestureDetector(
@@ -45,8 +45,8 @@ class InspectLayoutView extends ViewModelWidget<WidgetCaptureViewModel> {
                       : 1,
                   child: Container(
                     key: Key(description.automationKey),
-                    width: WidgetDescriptionVisualSize,
-                    height: WidgetDescriptionVisualSize,
+                    width: WIDGET_DESCRIPTION_VISUAL_SIZE,
+                    height: WIDGET_DESCRIPTION_VISUAL_SIZE,
                     decoration: BoxDecoration(
                       color: description.widgetType == WidgetType.touchable
                           ? kcLightPink
