@@ -13,7 +13,6 @@ class WidgetCaptureViewModel extends FormViewModel {
   final log = getLogger('WidgetCaptureViewModel');
 
   final String projectId;
-
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
 
@@ -38,18 +37,32 @@ class WidgetCaptureViewModel extends FormViewModel {
   bool _hasWidgetNameFocus = false;
   bool _captureViewEnabled = false;
   bool _widgetContainerEnabled = false;
-
-  bool get viewAlreadyCaptured => _widgetCaptureService
-      .checkCurrentViewIfAlreadyCaptured(_testSweetsRouteTracker.currentRoute);
-
+  bool _showDescription = false;
+  String _activeWidgetId = '';
+  bool _ignorePointer = false;
+  bool widgetNameInputPositionIsDown = true;
   String _nameInputErrorMessage = '';
 
-  String get nameInputErrorMessage => _nameInputErrorMessage;
+  bool _inspectLayoutEnable = false;
 
-  WidgetCaptureViewModel({required this.projectId}) {
-    initialise(projectId: projectId);
-    notifyListeners();
-  }
+  WidgetDescription _activeWidgetDescription = WidgetDescription(
+    name: '',
+    position: WidgetPosition(x: 0, y: 0),
+    viewName: '',
+    widgetType: WidgetType.touchable,
+  );
+
+  WidgetDescription get activeWidgetDescription => _activeWidgetDescription;
+
+  bool get inspectLayoutEnable => _inspectLayoutEnable;
+
+  bool get showDescription => _showDescription;
+
+  String get activeWidgetId => _activeWidgetId;
+
+  bool get ignorePointer => _ignorePointer;
+  bool get viewAlreadyCaptured => _widgetCaptureService
+      .checkCurrentViewIfAlreadyCaptured(_testSweetsRouteTracker.currentRoute);
 
   bool get captureViewEnabled => _captureViewEnabled;
 
@@ -67,14 +80,18 @@ class WidgetCaptureViewModel extends FormViewModel {
   double get descriptionLeft =>
       _widgetDescription!.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
 
+  String get nameInputErrorMessage => _nameInputErrorMessage;
+
+  WidgetCaptureViewModel({required this.projectId}) {
+    initialise(projectId: projectId);
+    notifyListeners();
+  }
+
   void toggleCaptureView() {
     _captureViewEnabled = !_captureViewEnabled;
     _inspectLayoutEnable = false;
     notifyListeners();
   }
-
-  bool _inspectLayoutEnable = false;
-  bool get inspectLayoutEnable => _inspectLayoutEnable;
 
   void toggleInspectLayout() {
     _inspectLayoutEnable = !_inspectLayoutEnable;
@@ -168,7 +185,6 @@ class WidgetCaptureViewModel extends FormViewModel {
     openWidgetsContainer();
   }
 
-  bool widgetNameInputPositionIsDown = true;
   void switchWidgetNameInputPosition() {
     widgetNameInputPositionIsDown = !widgetNameInputPositionIsDown;
     notifyListeners();
@@ -179,23 +195,6 @@ class WidgetCaptureViewModel extends FormViewModel {
     _widgetDescription = null;
     notifyListeners();
   }
-
-  bool _showDescription = false;
-  bool get showDescription => _showDescription;
-
-  String _activeWidgetId = '';
-  String get activeWidgetId => _activeWidgetId;
-
-  bool _ignorePointer = false;
-  bool get ignorePointer => _ignorePointer;
-
-  WidgetDescription _activeWidgetDescription = WidgetDescription(
-    name: '',
-    position: WidgetPosition(x: 0, y: 0),
-    viewName: '',
-    widgetType: WidgetType.touchable,
-  );
-  WidgetDescription get activeWidgetDescription => _activeWidgetDescription;
 
   void showWidgetDescription(WidgetDescription description) {
     _activeWidgetDescription = description;

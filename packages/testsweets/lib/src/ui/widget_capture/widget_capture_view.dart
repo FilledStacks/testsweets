@@ -5,12 +5,12 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
-import 'package:testsweets/src/ui/shared/widgets/inspect_layout_widget.dart';
-import 'package:testsweets/src/ui/shared/widgets/widget_description_dialog_widget.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_description_dialog_widget.dart';
 
 import 'widget_capture_widgets/capture_view_layout.dart';
+import 'widget_capture_widgets/inspect_layout_widget.dart';
 import 'widget_capture_widgets/main_view_layout.dart';
 import 'widget_capture_widgets/widget_description_capture_layer.dart';
 import 'widget_capture_widgets/widget_name_input.dart';
