@@ -73,6 +73,10 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
 
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
       .thenReturn(listOfWidgetDescription);
+  // when(service.captureWidgetDescription(
+  //     description: anyNamed('description'), projectId: anyNamed('projectId')));
+  when(service.captureWidgetDescription(
+      description: anyNamed('description'), projectId: anyNamed('projectId')));
   locator.registerSingleton<WidgetCaptureService>(service);
   return service;
 }
@@ -215,7 +219,7 @@ AutomationKeysService getAndRegisterAutomationKeysService() {
 }
 
 MockTestSweetsRouteTracker getAndRegisterTestSweetsRouteTracker(
-    {String currentRoute = ''}) {
+    {String currentRoute = 'current route'}) {
   _removeRegistrationIfExists<TestSweetsRouteTracker>();
   final service = MockTestSweetsRouteTracker();
   when(service.currentRoute).thenReturn(currentRoute);

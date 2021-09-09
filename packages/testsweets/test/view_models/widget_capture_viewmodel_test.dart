@@ -3,6 +3,7 @@ import 'package:test/test.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
 import '../helpers/test_helpers.dart';
@@ -210,6 +211,38 @@ void main() {
         model.toggleInspectLayout();
         expect(
             model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.inspectMode);
+      });
+    });
+    group('updateDescriptionPosition -', () {
+      test(
+          'When called, Shuold add the difference to widgetDescription position',
+          () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        //initilise it cause it default to null
+        model.addNewWidget(WidgetType.touchable,
+            widgetPosition: WidgetPosition(x: 1, y: 1));
+        model.updateDescriptionPosition(2, 2);
+        expect(model.widgetDescription!.position.x, 3);
+        expect(model.widgetDescription!.position.y, 3);
+      });
+    });
+    group('saveWidgetDescription -', () {
+      test(
+          'When called and widget name textfield is empty, Should update nameInputErrorMessage with the following message "Widget name must not be empty"',
+          () async {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = '';
+        await model.saveWidgetDescription();
+        expect(model.nameInputErrorMessage, "Widget name must not be empty");
+      });
+      test(
+          'When called and widget name textfield is not empty, Should empty nameInputErrorMessage and add the current route as the view name of widgetDescription',
+          () async {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'my widget name';
+        await model.saveWidgetDescription();
+        expect(model.nameInputErrorMessage, isEmpty);
+        expect(model.widgetDescription!.viewName, 'current route');
       });
     });
   });

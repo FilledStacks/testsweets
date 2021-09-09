@@ -106,7 +106,19 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<void> saveWidgetDescription() async {
-    if (widgetNameValue?.isNotEmpty ?? false) {
+    if (widgetNameValue?.isEmpty ?? false) {
+      _inputErrorMessage = 'Widget name must not be empty';
+      notifyListeners();
+    } else if (_widgetDescription?.widgetType == WidgetType.view) {
+      _inputErrorMessage = '';
+      setBusy(true);
+
+      _widgetDescription = _widgetDescription?.copyWith(
+        viewName: _testSweetsRouteTracker.currentRoute,
+      );
+      await sendWidgetDescriptionToFirestore();
+      setBusy(false);
+    } else {
       _inputErrorMessage = '';
       setBusy(true);
       _widgetDescription = _widgetDescription?.copyWith(
@@ -118,17 +130,6 @@ class WidgetCaptureViewModel extends FormViewModel {
       await sendWidgetDescriptionToFirestore();
 
       setBusy(false);
-    } else if (_widgetDescription?.widgetType == WidgetType.view) {
-      setBusy(true);
-      _widgetDescription = _widgetDescription?.copyWith(
-        viewName: _testSweetsRouteTracker.currentRoute,
-      );
-
-      await sendWidgetDescriptionToFirestore();
-      setBusy(false);
-    } else {
-      _inputErrorMessage = 'Widget name must not be empty';
-      notifyListeners();
     }
   }
 
