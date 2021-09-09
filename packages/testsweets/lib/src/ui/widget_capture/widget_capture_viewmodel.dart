@@ -70,8 +70,6 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   WidgetDescription get widgetDescription => _widgetDescription!;
 
-  // bool get hasWidgetDescription => _widgetDescription != null;
-
   double get descriptionTop =>
       _widgetDescription!.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
 

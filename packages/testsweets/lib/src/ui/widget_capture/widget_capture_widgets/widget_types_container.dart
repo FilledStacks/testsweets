@@ -11,8 +11,8 @@ import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
 import 'close_circular_button.dart';
 
-class WidgetsContainer extends ViewModelWidget<WidgetCaptureViewModel> {
-  const WidgetsContainer({Key? key}) : super(key: key);
+class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
+  const WidgetsTypesContainer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {

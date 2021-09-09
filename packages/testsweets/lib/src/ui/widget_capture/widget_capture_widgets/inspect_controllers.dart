@@ -7,8 +7,8 @@ import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
-class InspectLayoutView extends ViewModelWidget<WidgetCaptureViewModel> {
-  const InspectLayoutView({
+class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
+  const InspectControllers({
     Key? key,
   }) : super(key: key);
 
