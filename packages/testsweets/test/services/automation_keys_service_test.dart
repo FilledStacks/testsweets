@@ -1,8 +1,8 @@
 import 'package:test/test.dart';
 import 'package:testsweets/src/services/automation_keys_service.dart';
 
-import 'helpers/test_consts.dart';
-import 'helpers/test_helpers.dart';
+import '../helpers/test_consts.dart';
+import '../helpers/test_helpers.dart';
 
 void main() {
   group('AutomationKeysService -', () {

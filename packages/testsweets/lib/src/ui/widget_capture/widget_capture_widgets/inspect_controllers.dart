@@ -24,9 +24,7 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
               ignoring: model.captureWidgetStatusEnum ==
                   CaptureWidgetStatusEnum.inspectModeDialogShow,
               child: GestureDetector(
-                onTap: () {
-                  model.showWidgetDescription(description);
-                },
+                onTap: () => model.showWidgetDescription(description),
                 child: AnimatedOpacity(
                   duration: const Duration(milliseconds: 300),
                   opacity: model.activeWidgetId != description.id &&

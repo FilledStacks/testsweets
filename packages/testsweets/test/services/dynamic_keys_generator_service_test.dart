@@ -2,7 +2,7 @@ import 'package:test/test.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/services/dynamic_keys_generator.dart';
 
-import 'helpers/test_helpers.dart';
+import '../helpers/test_helpers.dart';
 
 void main() {
   group("DynamicKeysGeneratorService -", () {
