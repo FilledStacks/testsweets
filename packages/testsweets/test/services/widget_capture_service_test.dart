@@ -95,7 +95,7 @@ void main() {
             description: description, projectId: 'proj');
 
         verify(cloudFunctionsService.uploadWidgetDescriptionToProject(
-          projectId: 'projectId',
+          projectId: 'proj',
           description: description,
         ));
       });

@@ -5,6 +5,7 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
+import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
@@ -13,7 +14,6 @@ import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_d
 import 'widget_capture_widgets/capture_view_layout.dart';
 import 'widget_capture_widgets/inspect_layout_widget.dart';
 import 'widget_capture_widgets/main_view_layout.dart';
-import 'widget_capture_widgets/widget_description_capture_layer.dart';
 import 'widget_capture_widgets/widget_name_input.dart';
 
 @FormView(fields: [FormTextField(name: 'widgetName')])
@@ -45,10 +45,16 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                             children: [
                               child,
                               if (model.captureWidgetStatusEnum ==
-                                  CaptureWidgetStatusEnum.inspectMode)
+                                      CaptureWidgetStatusEnum.inspectMode ||
+                                  model.captureWidgetStatusEnum ==
+                                      CaptureWidgetStatusEnum
+                                          .inspectModeDialogShow)
                                 InspectLayoutView(),
                               if (model.captureWidgetStatusEnum ==
-                                  CaptureWidgetStatusEnum.captureMode)
+                                      CaptureWidgetStatusEnum.captureMode ||
+                                  model.captureWidgetStatusEnum ==
+                                      CaptureWidgetStatusEnum
+                                          .captureModeWidgetNameInputShow)
                                 _CaptureLayout(
                                     widgetNameController: widgetNameController,
                                     widgetNameFocusNode: widgetNameFocusNode),
@@ -62,23 +68,41 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        if (model.captureWidgetStatusEnum !=
-                                            CaptureWidgetStatusEnum.captureMode)
+                                        if (model.captureWidgetStatusEnum ==
+                                            CaptureWidgetStatusEnum.idle)
                                           MainViewLayout(),
                                         if (model.captureWidgetStatusEnum ==
+                                            CaptureWidgetStatusEnum.inspectMode)
+                                          CtaButton(
+                                            title: 'Stop inspection',
+                                            fillColor: kcPrimaryFuchsia,
+                                            onTap: model.toggleInspectLayout,
+                                          ),
+                                        if (model.captureWidgetStatusEnum ==
                                                 CaptureWidgetStatusEnum
-                                                    .captureMode &&
-                                            !model.hasWidgetDescription)
+                                                    .captureMode ||
+                                            model.captureWidgetStatusEnum ==
+                                                CaptureWidgetStatusEnum
+                                                    .captureModeWidgetsContainerShow ||
+                                            model.captureWidgetStatusEnum ==
+                                                CaptureWidgetStatusEnum
+                                                    .captureModeAddWidget)
                                           CaptureViewLayout(),
                                       ],
                                     ),
                                   )),
                               AnimatedPositioned(
                                 duration: Duration(milliseconds: 500),
-                                bottom: model.showDescription ? 20 : -200,
+                                bottom: model.captureWidgetStatusEnum ==
+                                        CaptureWidgetStatusEnum
+                                            .inspectModeDialogShow
+                                    ? 20
+                                    : -200,
                                 child: AnimatedSwitcher(
                                   duration: Duration(milliseconds: 500),
-                                  child: model.showDescription
+                                  child: model.captureWidgetStatusEnum ==
+                                          CaptureWidgetStatusEnum
+                                              .inspectModeDialogShow
                                       ? WidgetDescriptionDialog(
                                           description:
                                               model.activeWidgetDescription,
@@ -125,13 +149,10 @@ class _CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
     return Stack(
       children: [
-        if (!model.hasWidgetDescription &&
-            model.captureWidgetStatusEnum ==
-                CaptureWidgetStatusEnum.captureMode)
-          WidgetDescriptionCaptureLayer(),
-        if (model.hasWidgetDescription &&
-            model.captureWidgetStatusEnum ==
-                CaptureWidgetStatusEnum.captureMode) ...[
+        if (
+        // model.hasWidgetDescription &&
+        model.captureWidgetStatusEnum ==
+            CaptureWidgetStatusEnum.captureModeWidgetNameInputShow) ...[
           Positioned(
               top: model.descriptionTop,
               left: model.descriptionLeft,
@@ -172,9 +193,9 @@ class _CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
               ),
             ),
             isVisible: !model.isBusy &&
-                model.hasWidgetDescription &&
+                // model.hasWidgetDescription &&
                 model.captureWidgetStatusEnum ==
-                    CaptureWidgetStatusEnum.captureMode),
+                    CaptureWidgetStatusEnum.captureModeWidgetNameInputShow),
       ],
     );
   }

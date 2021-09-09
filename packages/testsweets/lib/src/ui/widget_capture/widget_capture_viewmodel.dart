@@ -17,11 +17,6 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
 
-  List<WidgetDescription> get descriptionsForView =>
-      _widgetCaptureService.getDescriptionsForView(
-        currentRoute: _testSweetsRouteTracker.currentRoute,
-      );
-
   Future<void> initialise({required String projectId}) async {
     setBusy(true);
     try {
@@ -47,8 +42,6 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   WidgetDescription? _widgetDescription;
   bool _hasWidgetNameFocus = false;
-  bool _widgetContainerEnabled = false;
-  bool _showDescription = false;
   String _activeWidgetId = '';
   bool _ignorePointer = false;
   bool widgetNameInputPositionIsDown = true;
@@ -61,9 +54,11 @@ class WidgetCaptureViewModel extends FormViewModel {
     widgetType: WidgetType.touchable,
   );
 
+  List<WidgetDescription> get descriptionsForView =>
+      _widgetCaptureService.getDescriptionsForView(
+        currentRoute: _testSweetsRouteTracker.currentRoute,
+      );
   WidgetDescription get activeWidgetDescription => _activeWidgetDescription;
-
-  bool get showDescription => _showDescription;
 
   String get activeWidgetId => _activeWidgetId;
 
@@ -73,11 +68,9 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   bool get hasWidgetNameFocus => _hasWidgetNameFocus;
 
-  bool get widgetContainerEnabled => _widgetContainerEnabled;
-
   WidgetDescription get widgetDescription => _widgetDescription!;
 
-  bool get hasWidgetDescription => _widgetDescription != null;
+  // bool get hasWidgetDescription => _widgetDescription != null;
 
   double get descriptionTop =>
       _widgetDescription!.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
@@ -89,11 +82,10 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   WidgetCaptureViewModel({required this.projectId}) {
     initialise(projectId: projectId);
-    notifyListeners();
   }
 
   void toggleCaptureView() {
-    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.captureMode)
+    if (captureWidgetStatusEnum.isAtCaptureMode())
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     else
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.captureMode;
@@ -156,10 +148,9 @@ class WidgetCaptureViewModel extends FormViewModel {
         description: _widgetDescription!,
         projectId: projectId,
       );
-
+      captureWidgetStatusEnum =
+          CaptureWidgetStatusEnum.captureModeWidgetsContainerShow;
       _widgetDescription = null;
-
-      notifyListeners();
     } catch (e) {
       log.e('Couldn\'t save the widget. $e');
     }
@@ -170,14 +161,13 @@ class WidgetCaptureViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  void closeWidgetsContainer() {
-    _widgetContainerEnabled = false;
-    notifyListeners();
-  }
-
-  void openWidgetsContainer() {
-    _widgetContainerEnabled = true;
-    notifyListeners();
+  void toggleWidgetsContainer() {
+    if (captureWidgetStatusEnum ==
+        CaptureWidgetStatusEnum.captureModeWidgetsContainerShow)
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.captureModeAddWidget;
+    else
+      captureWidgetStatusEnum =
+          CaptureWidgetStatusEnum.captureModeWidgetsContainerShow;
   }
 
   void addNewWidget(WidgetType widgetType, {WidgetPosition? widgetPosition}) {
@@ -188,9 +178,11 @@ class WidgetCaptureViewModel extends FormViewModel {
     } else {
       _widgetDescription = WidgetDescription.addAtPosition(
           widgetType: widgetType, widgetPosition: widgetPosition);
-      closeWidgetsContainer();
+
+      toggleWidgetsContainer();
+      captureWidgetStatusEnum =
+          CaptureWidgetStatusEnum.captureModeWidgetNameInputShow;
     }
-    openWidgetsContainer();
   }
 
   void switchWidgetNameInputPosition() {
@@ -199,23 +191,20 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void closeWidgetNameInput() {
-    _widgetContainerEnabled = true;
     _widgetDescription = null;
-    notifyListeners();
+    toggleWidgetsContainer();
   }
 
   void showWidgetDescription(WidgetDescription description) {
     _activeWidgetDescription = description;
     _activeWidgetId = description.id ?? '';
-    _showDescription = !_showDescription;
     _ignorePointer = !_ignorePointer;
-    notifyListeners();
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectModeDialogShow;
   }
 
   void closeWidgetDescription() {
     _activeWidgetId = '';
-    _showDescription = false;
     _ignorePointer = false;
-    notifyListeners();
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
   }
 }

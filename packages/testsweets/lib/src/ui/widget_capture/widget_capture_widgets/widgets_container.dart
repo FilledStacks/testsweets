@@ -63,7 +63,7 @@ class WidgetsContainer extends ViewModelWidget<WidgetCaptureViewModel> {
           ),
           MaterialButton(
             minWidth: 136.w,
-            onPressed: model.closeWidgetsContainer,
+            onPressed: model.toggleWidgetsContainer,
             child: SizedBox(height: 100.w, child: CloseCircularButton()),
           )
         ],
