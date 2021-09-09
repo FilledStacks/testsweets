@@ -2,9 +2,9 @@ import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
+import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
-import 'package:testsweets/src/models/enums/widget_type.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 
@@ -20,17 +20,6 @@ class WidgetCaptureViewModel extends FormViewModel {
   WidgetCaptureViewModel({required this.projectId}) {
     initialise(projectId: projectId);
   }
-  Future<void> initialise({required String projectId}) async {
-    setBusy(true);
-    try {
-      await _widgetCaptureService.loadWidgetDescriptionsForProject(
-        projectId: projectId,
-      );
-    } catch (e) {
-      log.e('Could not get widgetDescriptions: $e');
-    }
-    setBusy(false);
-  }
 
   CaptureWidgetStatusEnum _captureWidgetStatusEnum =
       CaptureWidgetStatusEnum.idle;
@@ -39,9 +28,6 @@ class WidgetCaptureViewModel extends FormViewModel {
     _captureWidgetStatusEnum = captureWidgetStatusEnum;
     notifyListeners();
   }
-
-  CaptureWidgetStatusEnum get captureWidgetStatusEnum =>
-      _captureWidgetStatusEnum;
 
   WidgetDescription? _widgetDescription;
   bool _hasWidgetNameFocus = false;
@@ -55,29 +41,36 @@ class WidgetCaptureViewModel extends FormViewModel {
     viewName: '',
     widgetType: WidgetType.touchable,
   );
-  WidgetDescription get activeWidgetDescription => _activeWidgetDescription;
 
+  CaptureWidgetStatusEnum get captureWidgetStatusEnum =>
+      _captureWidgetStatusEnum;
+  WidgetDescription get activeWidgetDescription => _activeWidgetDescription;
   List<WidgetDescription> get descriptionsForView =>
       _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracker.currentRoute,
       );
-
   String get activeWidgetId => _activeWidgetId;
-
   bool get viewAlreadyCaptured => _widgetCaptureService
       .checkCurrentViewIfAlreadyCaptured(_testSweetsRouteTracker.currentRoute);
-
   bool get hasWidgetNameFocus => _hasWidgetNameFocus;
-
   WidgetDescription get widgetDescription => _widgetDescription!;
-
   double get descriptionTop =>
       _widgetDescription!.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
-
   double get descriptionLeft =>
       _widgetDescription!.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
-
   String get nameInputErrorMessage => _nameInputErrorMessage;
+
+  Future<void> initialise({required String projectId}) async {
+    setBusy(true);
+    try {
+      await _widgetCaptureService.loadWidgetDescriptionsForProject(
+        projectId: projectId,
+      );
+    } catch (e) {
+      log.e('Could not get widgetDescriptions: $e');
+    }
+    setBusy(false);
+  }
 
   void toggleCaptureView() {
     if (captureWidgetStatusEnum.isAtCaptureMode())

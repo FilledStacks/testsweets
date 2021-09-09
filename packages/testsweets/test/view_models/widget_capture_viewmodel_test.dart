@@ -1,9 +1,9 @@
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
+import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
-import 'package:testsweets/src/models/enums/widget_type.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
 import '../helpers/test_helpers.dart';
@@ -75,7 +75,6 @@ void main() {
             model.captureWidgetStatusEnum ==
                 CaptureWidgetStatusEnum.inspectModeDialogShow,
             isTrue);
-        expect(model.ignorePointer, isTrue);
       });
     });
 
@@ -101,7 +100,6 @@ void main() {
             model.captureWidgetStatusEnum ==
                 CaptureWidgetStatusEnum.inspectModeDialogShow,
             isFalse);
-        expect(model.ignorePointer, isFalse);
       });
     });
   });

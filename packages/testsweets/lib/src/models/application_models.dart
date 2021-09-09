@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:testsweets/src/models/enums/widget_type.dart';
+import 'package:testsweets/src/enums/widget_type.dart';
 
 part 'application_models.freezed.dart';
 part 'application_models.g.dart';

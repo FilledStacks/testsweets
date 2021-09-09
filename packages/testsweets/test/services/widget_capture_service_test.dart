@@ -1,8 +1,8 @@
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
-import 'package:testsweets/src/models/enums/widget_type.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 
 import '../helpers/test_helpers.dart';
