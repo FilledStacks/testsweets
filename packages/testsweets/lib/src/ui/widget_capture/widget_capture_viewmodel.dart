@@ -1,6 +1,7 @@
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
+import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/models/enums/widget_type.dart';
@@ -33,17 +34,25 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusy(false);
   }
 
+  CaptureWidgetStatusEnum _captureWidgetStatusEnum =
+      CaptureWidgetStatusEnum.idle;
+
+  CaptureWidgetStatusEnum get captureWidgetStatusEnum =>
+      _captureWidgetStatusEnum;
+
+  set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
+    _captureWidgetStatusEnum = captureWidgetStatusEnum;
+    notifyListeners();
+  }
+
   WidgetDescription? _widgetDescription;
   bool _hasWidgetNameFocus = false;
-  bool _captureViewEnabled = false;
   bool _widgetContainerEnabled = false;
   bool _showDescription = false;
   String _activeWidgetId = '';
   bool _ignorePointer = false;
   bool widgetNameInputPositionIsDown = true;
   String _nameInputErrorMessage = '';
-
-  bool _inspectLayoutEnable = false;
 
   WidgetDescription _activeWidgetDescription = WidgetDescription(
     name: '',
@@ -54,8 +63,6 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   WidgetDescription get activeWidgetDescription => _activeWidgetDescription;
 
-  bool get inspectLayoutEnable => _inspectLayoutEnable;
-
   bool get showDescription => _showDescription;
 
   String get activeWidgetId => _activeWidgetId;
@@ -63,8 +70,6 @@ class WidgetCaptureViewModel extends FormViewModel {
   bool get ignorePointer => _ignorePointer;
   bool get viewAlreadyCaptured => _widgetCaptureService
       .checkCurrentViewIfAlreadyCaptured(_testSweetsRouteTracker.currentRoute);
-
-  bool get captureViewEnabled => _captureViewEnabled;
 
   bool get hasWidgetNameFocus => _hasWidgetNameFocus;
 
@@ -88,14 +93,17 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void toggleCaptureView() {
-    _captureViewEnabled = !_captureViewEnabled;
-    _inspectLayoutEnable = false;
-    notifyListeners();
+    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.captureMode)
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+    else
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.captureMode;
   }
 
   void toggleInspectLayout() {
-    _inspectLayoutEnable = !_inspectLayoutEnable;
-    notifyListeners();
+    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.inspectMode)
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+    else
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
   }
 
   void updateDescriptionPosition(double x, double y) {

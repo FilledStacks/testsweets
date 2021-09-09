@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
+import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
@@ -43,12 +44,14 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                       builder: (context) => Stack(
                             children: [
                               child,
-                              model.inspectLayoutEnable
-                                  ? InspectLayoutView()
-                                  : _CaptureLayout(
-                                      widgetNameController:
-                                          widgetNameController,
-                                      widgetNameFocusNode: widgetNameFocusNode),
+                              if (model.captureWidgetStatusEnum ==
+                                  CaptureWidgetStatusEnum.inspectMode)
+                                InspectLayoutView(),
+                              if (model.captureWidgetStatusEnum ==
+                                  CaptureWidgetStatusEnum.captureMode)
+                                _CaptureLayout(
+                                    widgetNameController: widgetNameController,
+                                    widgetNameFocusNode: widgetNameFocusNode),
                               Positioned(
                                   bottom: 20,
                                   child: Container(
@@ -59,9 +62,12 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        if (!model.captureViewEnabled)
+                                        if (model.captureWidgetStatusEnum !=
+                                            CaptureWidgetStatusEnum.captureMode)
                                           MainViewLayout(),
-                                        if (model.captureViewEnabled &&
+                                        if (model.captureWidgetStatusEnum ==
+                                                CaptureWidgetStatusEnum
+                                                    .captureMode &&
                                             !model.hasWidgetDescription)
                                           CaptureViewLayout(),
                                       ],
@@ -119,9 +125,13 @@ class _CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
     return Stack(
       children: [
-        if (!model.hasWidgetDescription && model.captureViewEnabled)
+        if (!model.hasWidgetDescription &&
+            model.captureWidgetStatusEnum ==
+                CaptureWidgetStatusEnum.captureMode)
           WidgetDescriptionCaptureLayer(),
-        if (model.hasWidgetDescription && model.captureViewEnabled) ...[
+        if (model.hasWidgetDescription &&
+            model.captureWidgetStatusEnum ==
+                CaptureWidgetStatusEnum.captureMode) ...[
           Positioned(
               top: model.descriptionTop,
               left: model.descriptionLeft,
@@ -163,7 +173,8 @@ class _CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
             ),
             isVisible: !model.isBusy &&
                 model.hasWidgetDescription &&
-                model.captureViewEnabled),
+                model.captureWidgetStatusEnum ==
+                    CaptureWidgetStatusEnum.captureMode),
       ],
     );
   }
