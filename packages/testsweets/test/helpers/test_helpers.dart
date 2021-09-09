@@ -66,9 +66,13 @@ MockFileSystemService getAndRegisterFileSystemService({
   return service;
 }
 
-MockWidgetCaptureService getAndRegisterWidgetCaptureService() {
+MockWidgetCaptureService getAndRegisterWidgetCaptureService(
+    {List<WidgetDescription> listOfWidgetDescription = const []}) {
   _removeRegistrationIfExists<WidgetCaptureService>();
   final service = MockWidgetCaptureService();
+
+  when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
+      .thenReturn(listOfWidgetDescription);
   locator.registerSingleton<WidgetCaptureService>(service);
   return service;
 }
@@ -210,9 +214,11 @@ AutomationKeysService getAndRegisterAutomationKeysService() {
   return service;
 }
 
-MockTestSweetsRouteTracker getAndRegisterTestSweetsRouteTracker() {
+MockTestSweetsRouteTracker getAndRegisterTestSweetsRouteTracker(
+    {String currentRoute = ''}) {
   _removeRegistrationIfExists<TestSweetsRouteTracker>();
   final service = MockTestSweetsRouteTracker();
+  when(service.currentRoute).thenReturn(currentRoute);
   locator.registerSingleton<TestSweetsRouteTracker>(service);
   return service;
 }

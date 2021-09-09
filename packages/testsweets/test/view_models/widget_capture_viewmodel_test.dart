@@ -19,6 +19,12 @@ void main() {
 
         expect(model.isBusy, true);
       });
+      test('When call the constructer, Should call the initilise function', () {
+        final service = getAndRegisterWidgetCaptureService();
+
+        WidgetCaptureViewModel(projectId: _projectId);
+        verify(service.loadWidgetDescriptionsForProject(projectId: _projectId));
+      });
     });
     group('initialize -', () {
       test('When called, should get all widget description for project',
@@ -94,14 +100,7 @@ void main() {
             isFalse);
       });
     });
-    group('WidgetCaptureViewModelTest constructer -', () {
-      test('When call the constructer, Should call the initilise function', () {
-        final service = getAndRegisterWidgetCaptureService();
 
-        WidgetCaptureViewModel(projectId: _projectId);
-        verify(service.loadWidgetDescriptionsForProject(projectId: _projectId));
-      });
-    });
     group('captureWidgetStatusEnum -', () {
       test('When call getter, Should default to idle', () {
         final model = WidgetCaptureViewModel(projectId: _projectId);
@@ -134,10 +133,83 @@ void main() {
         expect(model.activeWidgetId, '');
       });
     });
+
     group('widgetNameInputPositionIsDown -', () {
       test('When call getter, Should default to true', () {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         expect(model.widgetNameInputPositionIsDown, true);
+      });
+    });
+    group('activeWidgetDescription -', () {
+      test('When call getter, Should default to null', () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        expect(model.activeWidgetDescription, null);
+      });
+    });
+    group('descriptionsForView -', () {
+      test(
+          'When call this getter, Should fetch list of WidgetDescription for the current route',
+          () {
+        final description = WidgetDescription(
+          id: 'widgetId',
+          viewName: 'login',
+          name: 'email',
+          position: WidgetPosition(x: 100, y: 199),
+          widgetType: WidgetType.general,
+        );
+        getAndRegisterWidgetCaptureService(
+            listOfWidgetDescription: [description]);
+        getAndRegisterTestSweetsRouteTracker();
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+
+        expect(model.descriptionsForView, [description]);
+      });
+    });
+    group('initialise -', () {
+      test(
+          'When calling initialise, Should call loadWidgetDescriptionsForProject from WidgetCaptureService',
+          () {
+        final service = getAndRegisterWidgetCaptureService();
+        WidgetCaptureViewModel(projectId: _projectId);
+        verify(service.loadWidgetDescriptionsForProject(projectId: _projectId));
+      });
+    });
+    group('toggleCaptureView -', () {
+      test(
+          'When called while the status is isAtCaptureMode, Should set captureWidgetStatusEnum to idle',
+          () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.captureWidgetStatusEnum = CaptureWidgetStatusEnum.captureMode;
+        model.toggleCaptureView();
+        expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
+      });
+      test(
+          'When called while the status is anything but isAtCaptureMode, Should set captureWidgetStatusEnum to captureMode',
+          () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+        model.toggleCaptureView();
+        expect(
+            model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.captureMode);
+      });
+    });
+    group('toggleInspectLayout -', () {
+      test(
+          'When called while the status is inspectMode, Should set captureWidgetStatusEnum to idle',
+          () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
+        model.toggleInspectLayout();
+        expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
+      });
+      test(
+          'When called while the status is anything but inspectMode, Should set captureWidgetStatusEnum to captureMode',
+          () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+        model.toggleInspectLayout();
+        expect(
+            model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.inspectMode);
       });
     });
   });

@@ -49,10 +49,10 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   bool get widgetNameInputPositionIsDown => _widgetNameInputPositionIsDown;
 
-  String _InputErrorMessage = '';
-  String get nameInputErrorMessage => _InputErrorMessage;
+  String _inputErrorMessage = '';
+  String get nameInputErrorMessage => _inputErrorMessage;
 
-  WidgetDescription? _activeWidgetDescription = null;
+  WidgetDescription? _activeWidgetDescription;
 
   WidgetDescription? get activeWidgetDescription => _activeWidgetDescription;
 
@@ -107,7 +107,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   Future<void> saveWidgetDescription() async {
     if (widgetNameValue?.isNotEmpty ?? false) {
-      _InputErrorMessage = '';
+      _inputErrorMessage = '';
       setBusy(true);
       _widgetDescription = _widgetDescription?.copyWith(
         viewName: _testSweetsRouteTracker.currentRoute,
@@ -127,7 +127,7 @@ class WidgetCaptureViewModel extends FormViewModel {
       await sendWidgetDescriptionToFirestore();
       setBusy(false);
     } else {
-      _InputErrorMessage = 'Widget name must not be empty';
+      _inputErrorMessage = 'Widget name must not be empty';
       notifyListeners();
     }
   }
