@@ -109,15 +109,6 @@ class WidgetCaptureViewModel extends FormViewModel {
     if (widgetNameValue?.isEmpty ?? false) {
       _inputErrorMessage = 'Widget name must not be empty';
       notifyListeners();
-    } else if (_widgetDescription?.widgetType == WidgetType.view) {
-      _inputErrorMessage = '';
-      setBusy(true);
-
-      _widgetDescription = _widgetDescription?.copyWith(
-        viewName: _testSweetsRouteTracker.currentRoute,
-      );
-      await sendWidgetDescriptionToFirestore();
-      setBusy(false);
     } else {
       _inputErrorMessage = '';
       setBusy(true);
@@ -161,7 +152,7 @@ class WidgetCaptureViewModel extends FormViewModel {
           CaptureWidgetStatusEnum.captureModeWidgetsContainerShow;
   }
 
-  void addNewWidget(WidgetType widgetType,
+  Future<void> addNewWidget(WidgetType widgetType,
       {WidgetPosition? widgetPosition}) async {
     if (widgetType == WidgetType.view) {
       _widgetDescription =

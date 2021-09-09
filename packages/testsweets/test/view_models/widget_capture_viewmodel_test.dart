@@ -236,13 +236,100 @@ void main() {
         expect(model.nameInputErrorMessage, "Widget name must not be empty");
       });
       test(
-          'When called with WidgetType.view and widget name textfield is not empty, Should empty nameInputErrorMessage and add the current route as the view name of widgetDescription',
+          'When called with widget name textfield is not empty, Should empty nameInputErrorMessage and add the current route as the view name of widgetDescription',
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'my widget name';
         model.addNewWidget(WidgetType.view);
         expect(model.nameInputErrorMessage, isEmpty);
         expect(model.widgetDescription!.viewName, 'current route');
+      });
+    });
+    group('sendWidgetDescriptionToFirestore -', () {
+      test(
+          'When called, Should set captureWidgetStatusEnum to captureModeWidgetsContainerShow and widgetDescription to null',
+          () async {
+        final description = WidgetDescription(
+          viewName: 'login',
+          id: 'id',
+          name: 'email',
+          position: WidgetPosition(x: 100, y: 199),
+          widgetType: WidgetType.general,
+        );
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        await model.addNewWidget(description.widgetType,
+            widgetPosition: description.position);
+        await model.sendWidgetDescriptionToFirestore();
+        expect(model.captureWidgetStatusEnum,
+            CaptureWidgetStatusEnum.captureModeWidgetsContainerShow);
+        expect(model.widgetDescription, null);
+      });
+    });
+    group('setWidgetNameFocused -', () {
+      test('When called with true, Should make hasWidgetNameFocus  true', () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.setWidgetNameFocused(true);
+        expect(model.hasWidgetNameFocus, true);
+      });
+    });
+
+    group('toggleWidgetsContainer -', () {
+      test(
+          'When called while the status is captureModeWidgetsContainerShow, Should set captureWidgetStatusEnum to captureModeAddWidget',
+          () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.captureWidgetStatusEnum =
+            CaptureWidgetStatusEnum.captureModeWidgetsContainerShow;
+        model.toggleWidgetsContainer();
+        expect(model.captureWidgetStatusEnum,
+            CaptureWidgetStatusEnum.captureModeAddWidget);
+      });
+      test(
+          'When called while the status is anything but captureModeWidgetsContainerShow, Should set captureWidgetStatusEnum to captureModeWidgetsContainerShow',
+          () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+        model.toggleWidgetsContainer();
+        expect(model.captureWidgetStatusEnum,
+            CaptureWidgetStatusEnum.captureModeWidgetsContainerShow);
+      });
+    });
+    group('addNewWidget -', () {
+      test(
+          'When called with widgetType is view, Should update the widgetDescription with a viewWidget',
+          () async {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'my widget name';
+        model.addNewWidget(WidgetType.view);
+        expect(model.widgetDescription!.widgetType, WidgetType.view);
+      });
+      test(
+          'When called with widgetType is other than view, Should update the captureWidgetStatusEnum to captureModeWidgetNameInputShow',
+          () async {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'my widget name';
+        model.addNewWidget(WidgetType.input);
+        expect(model.captureWidgetStatusEnum,
+            CaptureWidgetStatusEnum.captureModeWidgetNameInputShow);
+      });
+    });
+    group('switchWidgetNameInputPosition -', () {
+      test('When called once, Should make widgetNameInputPositionIsDown false',
+          () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.switchWidgetNameInputPosition();
+        expect(model.widgetNameInputPositionIsDown, false);
+      });
+    });
+    group('closeWidgetNameInput -', () {
+      test(
+          'When called, SHould make widgetDescription null and call toggleWidgetsContainer()',
+          () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
+        model.closeWidgetNameInput();
+        expect(model.captureWidgetStatusEnum,
+            CaptureWidgetStatusEnum.captureModeWidgetsContainerShow);
       });
     });
   });

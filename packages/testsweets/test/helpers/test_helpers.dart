@@ -67,18 +67,18 @@ MockFileSystemService getAndRegisterFileSystemService({
 }
 
 MockWidgetCaptureService getAndRegisterWidgetCaptureService(
-    {List<WidgetDescription> listOfWidgetDescription = const []}) {
+    {List<WidgetDescription> listOfWidgetDescription = const [],
+    WidgetDescription? description,
+    String? projectId}) {
   _removeRegistrationIfExists<WidgetCaptureService>();
   final service = MockWidgetCaptureService();
 
+  when(service.captureWidgetDescription(
+          description: description, projectId: projectId))
+      .thenAnswer((realInvocation) => Future.value());
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
       .thenReturn(listOfWidgetDescription);
-  // when(service.captureWidgetDescription(
-  //     description: anyNamed('description'), projectId: anyNamed('projectId')));
-  when(service.captureWidgetDescription(
-          description: anyNamed('description'),
-          projectId: anyNamed('projectId')))
-      .thenAnswer((realInvocation) => Future.value(listOfWidgetDescription));
+
   locator.registerSingleton<WidgetCaptureService>(service);
   return service;
 }
