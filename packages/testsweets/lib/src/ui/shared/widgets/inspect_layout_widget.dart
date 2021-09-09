@@ -1,0 +1,66 @@
+import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
+import 'package:testsweets/src/constants/app_constants.dart';
+import 'package:testsweets/src/models/enums/widget_type.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
+
+import '../app_colors.dart';
+import '../shared_styles.dart';
+
+class InspectLayoutView extends ViewModelWidget<WidgetCaptureViewModel> {
+  const InspectLayoutView({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context, WidgetCaptureViewModel model) {
+    return Stack(
+      children: [
+        ...model.descriptionsForView.map(
+          (description) => Positioned(
+            top: description.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
+            left: description.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
+            child: IgnorePointer(
+              ignoring: model.ignorePointer,
+              child: GestureDetector(
+                onTap: () {
+                  model.showWidgetDescription(description);
+                },
+                child: AnimatedOpacity(
+                  duration: const Duration(milliseconds: 300),
+                  opacity: model.activeWidgetId != description.id &&
+                          model.showDescription
+                      ? 0.25
+                      : 1,
+                  child: Container(
+                    alignment: Alignment.center,
+                    key: Key(description.automationKey),
+                    width: WIDGET_DESCRIPTION_VISUAL_SIZE,
+                    height: WIDGET_DESCRIPTION_VISUAL_SIZE,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: description.widgetType == WidgetType.touchable
+                          ? kcError
+                          : description.widgetType == WidgetType.input
+                              ? kcPrimaryPurple
+                              : Colors.red,
+                    ),
+                    child: description.widgetType == WidgetType.input
+                        ? Text('I',
+                            textAlign: TextAlign.center,
+                            style: positionWidgetStyle)
+                        : description.widgetType == WidgetType.touchable
+                            ? Text('T',
+                                textAlign: TextAlign.center,
+                                style: positionWidgetStyle)
+                            : null,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}
