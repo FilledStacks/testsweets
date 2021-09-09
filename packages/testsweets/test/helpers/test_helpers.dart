@@ -76,7 +76,9 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
   // when(service.captureWidgetDescription(
   //     description: anyNamed('description'), projectId: anyNamed('projectId')));
   when(service.captureWidgetDescription(
-      description: anyNamed('description'), projectId: anyNamed('projectId')));
+          description: anyNamed('description'),
+          projectId: anyNamed('projectId')))
+      .thenAnswer((realInvocation) => Future.value(listOfWidgetDescription));
   locator.registerSingleton<WidgetCaptureService>(service);
   return service;
 }

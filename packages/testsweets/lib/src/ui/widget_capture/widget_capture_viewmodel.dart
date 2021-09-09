@@ -161,11 +161,12 @@ class WidgetCaptureViewModel extends FormViewModel {
           CaptureWidgetStatusEnum.captureModeWidgetsContainerShow;
   }
 
-  void addNewWidget(WidgetType widgetType, {WidgetPosition? widgetPosition}) {
+  void addNewWidget(WidgetType widgetType,
+      {WidgetPosition? widgetPosition}) async {
     if (widgetType == WidgetType.view) {
       _widgetDescription =
           WidgetDescription.addView(_testSweetsRouteTracker.currentRoute);
-      saveWidgetDescription();
+      await saveWidgetDescription();
     } else {
       _widgetDescription = WidgetDescription.addAtPosition(
           widgetType: widgetType, widgetPosition: widgetPosition);
