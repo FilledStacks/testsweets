@@ -2,22 +2,20 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
 import '../helpers/test_helpers.dart';
 
+final _projectId = 'testSweets Id';
 void main() {
   group('WidgetCaptureViewModelTest -', () {
-    setUp(() => registerServices());
-    tearDown(() => locator.reset());
+    setUp(registerServices);
+    tearDown(unregisterServices);
     group('constructer -', () {
       test('When called, should call initialize and set viewmodel busy',
           () async {
-        final projectId = 'testSweets Id';
-
-        final model = WidgetCaptureViewModel(projectId: projectId);
+        final model = WidgetCaptureViewModel(projectId: _projectId);
 
         expect(model.isBusy, true);
       });
@@ -26,11 +24,10 @@ void main() {
       test('When called, should get all widget description for project',
           () async {
         final service = getAndRegisterWidgetCaptureService();
-        final projectId = 'testSweets Id';
 
-        WidgetCaptureViewModel(projectId: projectId);
+        WidgetCaptureViewModel(projectId: _projectId);
 
-        verify(service.loadWidgetDescriptionsForProject(projectId: projectId));
+        verify(service.loadWidgetDescriptionsForProject(projectId: _projectId));
       });
     });
 
@@ -46,9 +43,7 @@ void main() {
           widgetType: WidgetType.general,
         );
 
-        final projectId = 'testSweets Id';
-
-        final model = WidgetCaptureViewModel(projectId: projectId);
+        final model = WidgetCaptureViewModel(projectId: _projectId);
 
         model.showWidgetDescription(description);
 
@@ -66,8 +61,7 @@ void main() {
           widgetType: WidgetType.general,
         );
 
-        final projectId = 'testSweets Id';
-        final model = WidgetCaptureViewModel(projectId: projectId);
+        final model = WidgetCaptureViewModel(projectId: _projectId);
 
         model.showWidgetDescription(description);
 
@@ -80,8 +74,7 @@ void main() {
 
     group('closeWidgetDescription -', () {
       test('When called, should set the active widgetId to empty', () async {
-        final projectId = 'testSweets Id';
-        final model = WidgetCaptureViewModel(projectId: projectId);
+        final model = WidgetCaptureViewModel(projectId: _projectId);
 
         model.closeWidgetDescription();
 
@@ -91,8 +84,7 @@ void main() {
       test(
           'When called, should set widget description and ignore pointer boolean value be false',
           () async {
-        final projectId = 'testSweets Id';
-        final model = WidgetCaptureViewModel(projectId: projectId);
+        final model = WidgetCaptureViewModel(projectId: _projectId);
 
         model.closeWidgetDescription();
 
@@ -100,6 +92,52 @@ void main() {
             model.captureWidgetStatusEnum ==
                 CaptureWidgetStatusEnum.inspectModeDialogShow,
             isFalse);
+      });
+    });
+    group('WidgetCaptureViewModelTest constructer -', () {
+      test('When call the constructer, Should call the initilise function', () {
+        final service = getAndRegisterWidgetCaptureService();
+
+        WidgetCaptureViewModel(projectId: _projectId);
+        verify(service.loadWidgetDescriptionsForProject(projectId: _projectId));
+      });
+    });
+    group('captureWidgetStatusEnum -', () {
+      test('When call getter, Should default to idle', () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
+      });
+      test(
+          'When assign the enum to captureMode, Should change the value to the new assigned status',
+          () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.captureWidgetStatusEnum = CaptureWidgetStatusEnum.captureMode;
+        expect(
+            model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.captureMode);
+      });
+    });
+    group('widgetDescription -', () {
+      test('When call getter, Should default to null', () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        expect(model.widgetDescription, null);
+      });
+    });
+    group('hasWidgetNameFocus -', () {
+      test('When call getter, Should default to false', () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        expect(model.hasWidgetNameFocus, false);
+      });
+    });
+    group('activeWidgetId -', () {
+      test('When call getter, Should default to empty string', () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        expect(model.activeWidgetId, '');
+      });
+    });
+    group('widgetNameInputPositionIsDown -', () {
+      test('When call getter, Should default to true', () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        expect(model.widgetNameInputPositionIsDown, true);
       });
     });
   });
