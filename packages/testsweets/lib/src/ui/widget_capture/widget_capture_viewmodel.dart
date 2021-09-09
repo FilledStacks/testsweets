@@ -17,6 +17,9 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
 
+  WidgetCaptureViewModel({required this.projectId}) {
+    initialise(projectId: projectId);
+  }
   Future<void> initialise({required String projectId}) async {
     setBusy(true);
     try {
@@ -32,18 +35,17 @@ class WidgetCaptureViewModel extends FormViewModel {
   CaptureWidgetStatusEnum _captureWidgetStatusEnum =
       CaptureWidgetStatusEnum.idle;
 
-  CaptureWidgetStatusEnum get captureWidgetStatusEnum =>
-      _captureWidgetStatusEnum;
-
   set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
     _captureWidgetStatusEnum = captureWidgetStatusEnum;
     notifyListeners();
   }
 
+  CaptureWidgetStatusEnum get captureWidgetStatusEnum =>
+      _captureWidgetStatusEnum;
+
   WidgetDescription? _widgetDescription;
   bool _hasWidgetNameFocus = false;
   String _activeWidgetId = '';
-  bool _ignorePointer = false;
   bool widgetNameInputPositionIsDown = true;
   String _nameInputErrorMessage = '';
 
@@ -53,16 +55,15 @@ class WidgetCaptureViewModel extends FormViewModel {
     viewName: '',
     widgetType: WidgetType.touchable,
   );
+  WidgetDescription get activeWidgetDescription => _activeWidgetDescription;
 
   List<WidgetDescription> get descriptionsForView =>
       _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracker.currentRoute,
       );
-  WidgetDescription get activeWidgetDescription => _activeWidgetDescription;
 
   String get activeWidgetId => _activeWidgetId;
 
-  bool get ignorePointer => _ignorePointer;
   bool get viewAlreadyCaptured => _widgetCaptureService
       .checkCurrentViewIfAlreadyCaptured(_testSweetsRouteTracker.currentRoute);
 
@@ -77,10 +78,6 @@ class WidgetCaptureViewModel extends FormViewModel {
       _widgetDescription!.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
 
   String get nameInputErrorMessage => _nameInputErrorMessage;
-
-  WidgetCaptureViewModel({required this.projectId}) {
-    initialise(projectId: projectId);
-  }
 
   void toggleCaptureView() {
     if (captureWidgetStatusEnum.isAtCaptureMode())
@@ -196,13 +193,11 @@ class WidgetCaptureViewModel extends FormViewModel {
   void showWidgetDescription(WidgetDescription description) {
     _activeWidgetDescription = description;
     _activeWidgetId = description.id ?? '';
-    _ignorePointer = !_ignorePointer;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectModeDialogShow;
   }
 
   void closeWidgetDescription() {
     _activeWidgetId = '';
-    _ignorePointer = false;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
   }
 }

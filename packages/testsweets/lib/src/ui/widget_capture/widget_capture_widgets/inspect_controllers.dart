@@ -21,7 +21,8 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
             top: description.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
             left: description.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
             child: IgnorePointer(
-              ignoring: model.ignorePointer,
+              ignoring: model.captureWidgetStatusEnum ==
+                  CaptureWidgetStatusEnum.inspectModeDialogShow,
               child: GestureDetector(
                 onTap: () {
                   model.showWidgetDescription(description);
