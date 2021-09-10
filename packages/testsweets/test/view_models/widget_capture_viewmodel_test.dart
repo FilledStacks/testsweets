@@ -228,12 +228,22 @@ void main() {
     });
     group('saveWidgetDescription -', () {
       test(
-          'When called and widget name textfield is empty, Should update nameInputErrorMessage with the following message "Widget name must not be empty"',
+          'When called and widget name textfield is empty and WidgetType is not view, Should update nameInputErrorMessage with the following message "Widget name must not be empty"',
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = '';
-        await model.saveWidgetDescription();
+        model.addNewWidget(WidgetType.input);
+        model.saveWidgetDescription();
         expect(model.nameInputErrorMessage, "Widget name must not be empty");
+      });
+      test(
+          'When called and widget name textfield is not empty and WidgetType is view, Should update nameInputErrorMessage with the following message "Widget name must not be empty"',
+          () async {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = '';
+        model.addNewWidget(WidgetType.view);
+        expect(model.nameInputErrorMessage, isEmpty);
+        expect(model.widgetDescription!.viewName, 'current route');
       });
       test(
           'When called with widget name textfield is not empty, Should empty nameInputErrorMessage and add the current route as the view name of widgetDescription',

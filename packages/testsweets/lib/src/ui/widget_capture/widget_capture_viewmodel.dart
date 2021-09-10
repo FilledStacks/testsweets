@@ -106,7 +106,8 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<void> saveWidgetDescription() async {
-    if (widgetNameValue?.isEmpty ?? false) {
+    if ((widgetNameValue?.isEmpty ?? false) &&
+        _widgetDescription!.widgetType != WidgetType.view) {
       _inputErrorMessage = 'Widget name must not be empty';
       notifyListeners();
     } else {
