@@ -1,5 +1,6 @@
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
+import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
@@ -11,7 +12,14 @@ void main() {
   group('WidgetCaptureServiceTest -', () {
     setUp(() => registerServices());
     tearDown(() => locator.reset());
-
+    group('initilised -', () {
+      test(
+          'When initilised, widgetDescriptionMap Should has a [CAPTURED_VIEWS_KEY] that will contains all the captured views',
+          () {
+        final service = WidgetCaptureService();
+        service.widgetDescriptionMap.containsKey(CAPTURED_VIEWS_KEY);
+      });
+    });
     group('loadWidgetDescriptions -', () {
       test(
           'When called, should get all the widget descriptions from the CloudFunctionsService',
@@ -142,7 +150,7 @@ void main() {
                   position: WidgetPosition(x: 0, y: 0),
                 ),
                 WidgetDescription(
-                  viewName: '/',
+                  viewName: '',
                   name: '/',
                   widgetType: WidgetType.view,
                   position: WidgetPosition(x: 0, y: 0),
@@ -156,6 +164,58 @@ void main() {
               service.checkCurrentViewIfAlreadyCaptured('/');
           expect(isViewAlreadyExist, true);
         });
+      });
+    });
+    group('addWidgetDescriptionToMap -', () {
+      test(
+          'When WidgetDescription has an empty viewName that mean it\'s a captured view, Should add it to map where key is CAPTURED_VIEWS_KEY',
+          () {
+        final service = WidgetCaptureService();
+        service.addWidgetDescriptionToMap(
+          WidgetDescription(
+            viewName: '',
+            name: '/',
+            widgetType: WidgetType.view,
+            position: WidgetPosition(x: 0, y: 0),
+          ),
+        );
+        expect(service.widgetDescriptionMap[CAPTURED_VIEWS_KEY]!.length, 1);
+      });
+      test(
+          'When WidgetDescription has viewName that not empty(meaning that anything but view), Should create a new key from its viewName',
+          () {
+        final service = WidgetCaptureService();
+        service.addWidgetDescriptionToMap(
+          WidgetDescription(
+            viewName: '/new_view',
+            name: 'button',
+            widgetType: WidgetType.touchable,
+            position: WidgetPosition(x: 0, y: 0),
+          ),
+        );
+        expect(service.widgetDescriptionMap['/new_view']!.length, 1);
+      });
+      test(
+          'When two WidgetDescription has the same viewName , Should add the second widget to the already added key from the first one ',
+          () {
+        final service = WidgetCaptureService();
+        service.addWidgetDescriptionToMap(
+          WidgetDescription(
+            viewName: '/new_view',
+            name: 'button',
+            widgetType: WidgetType.touchable,
+            position: WidgetPosition(x: 0, y: 0),
+          ),
+        );
+        service.addWidgetDescriptionToMap(
+          WidgetDescription(
+            viewName: '/new_view',
+            name: 'inputField',
+            widgetType: WidgetType.input,
+            position: WidgetPosition(x: 0, y: 0),
+          ),
+        );
+        expect(service.widgetDescriptionMap['/new_view']!.length, 2);
       });
     });
   });
