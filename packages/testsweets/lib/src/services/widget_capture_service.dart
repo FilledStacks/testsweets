@@ -9,8 +9,10 @@ class WidgetCaptureService {
 
   final _cloudFunctionsService = locator<CloudFunctionsService>();
 
+  /// Adding views key that we will add all the captured views to it cause
+  /// they doesn't have a viewName(views viewName is empry string)
   final Map<String, List<WidgetDescription>> widgetDescriptionMap =
-      Map<String, List<WidgetDescription>>();
+      Map<String, List<WidgetDescription>>()..addAll({'views': []});
   final bool verbose;
 
   WidgetCaptureService({this.verbose = false});
@@ -45,7 +47,9 @@ class WidgetCaptureService {
   }
 
   void addWidgetDescriptionToMap(WidgetDescription description) {
-    if (widgetDescriptionMap.containsKey(description.viewName)) {
+    if (description.viewName == '') {
+      widgetDescriptionMap['views']?.add(description);
+    } else if (widgetDescriptionMap.containsKey(description.viewName)) {
       widgetDescriptionMap[description.viewName]?.add(description);
     } else {
       widgetDescriptionMap[description.viewName] = [description];
@@ -60,12 +64,6 @@ class WidgetCaptureService {
     return viewDescriptions ?? [];
   }
 
-  bool checkCurrentViewIfAlreadyCaptured(String viewName) {
-    if (widgetDescriptionMap.containsKey(viewName)) {
-      return widgetDescriptionMap[viewName]
-              ?.any((element) => element.name == viewName) ??
-          false;
-    } else
-      return false;
-  }
+  bool checkCurrentViewIfAlreadyCaptured(String viewName) =>
+      widgetDescriptionMap['views']!.any((element) => element.name == viewName);
 }

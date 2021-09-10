@@ -161,7 +161,7 @@ class WidgetCaptureViewModel extends FormViewModel {
         _testSweetsRouteTracker.currentRoute))
       await _captureViewWhenItsNotAlreadyCaptured();
 
-    _whenViewIsAlreadyCaptured();
+    _showInputTextField();
   }
 
   Future<void> _captureViewWhenItsNotAlreadyCaptured() async =>
@@ -170,7 +170,7 @@ class WidgetCaptureViewModel extends FormViewModel {
               WidgetDescription.addView(_testSweetsRouteTracker.currentRoute),
           projectId: projectId);
 
-  void _whenViewIsAlreadyCaptured() {
+  void _showInputTextField() {
     toggleWidgetsContainer();
     captureWidgetStatusEnum =
         CaptureWidgetStatusEnum.captureModeWidgetNameInputShow;
