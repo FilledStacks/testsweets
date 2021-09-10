@@ -1,8 +1,16 @@
+## 1.4.0
+
+**New Feature**: On screen widget key capture
+
+- Allows the user to capture widget keys on screen, removing the need to add keys directly into the code.
+- Keys captured is synced with testsweets auto complete
+
 ## 1.3.4
 
-- Add new `uploadKeys` command  
+- Add new `uploadKeys` command
 - Replace the old `upload` command with `uploadApp`
 - More unit tests
+
 ## 1.3.3
 
 - Fixes dart-define arguments going missing when building the app

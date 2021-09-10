@@ -6,7 +6,10 @@ import 'package:testsweets/testsweets.dart';
 import 'app/app.locator.dart';
 import 'app/app.router.dart';
 
-const bool FLUTTER_DRIVER = bool.fromEnvironment('FLUTTER_DRIVER');
+const bool FLUTTER_DRIVER = bool.fromEnvironment(
+  'FLUTTER_DRIVER',
+  defaultValue: true,
+);
 
 Future<void> main() async {
   if (FLUTTER_DRIVER) {
@@ -27,7 +30,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       builder: (context, child) => TestSweetsOverlayView(
-        projectId: '3sTkrgNYFWtSqDka2AqK',
+        projectId: '5EEL6eC4M7DK80Tu49bd',
         child: child!,
         captureWidgets: true,
       ),
