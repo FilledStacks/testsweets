@@ -20,6 +20,12 @@
 # is commented out by default.
 #.vscode/
 
+*.info
+pubspec.lock
+*.cc
+*.h
+*.cmake
+
 # Flutter/Dart/Pub related
 **/doc/api/
 .dart_tool/
