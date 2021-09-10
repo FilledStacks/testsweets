@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
-import 'package:testsweets/src/constants/app_constants.dart';
+import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
+import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
-import 'package:testsweets/src/ui/shared/widgets/inspect_layout_widget.dart';
-import 'package:testsweets/src/ui/shared/widgets/widget_description_dialog_widget.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_description_dialog.dart';
 
-import 'widget_capture_widgets/capture_view_layout.dart';
-import 'widget_capture_widgets/main_view_layout.dart';
-import 'widget_capture_widgets/widget_description_capture_layer.dart';
-import 'widget_capture_widgets/widget_name_input.dart';
+import 'widget_capture_widgets/capture_controllers.dart';
+import 'widget_capture_widgets/capture_layout.dart';
+import 'widget_capture_widgets/inspect_controllers.dart';
+import 'widget_capture_widgets/intro_controllers.dart';
 
 @FormView(fields: [FormTextField(name: 'widgetName')])
 class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
@@ -36,9 +35,6 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
         widgetNameFocusNode.addListener(() {
           model.setWidgetNameFocused(widgetNameFocusNode.hasFocus);
         });
-        SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
-          model.initialise(projectId: projectId);
-        });
       },
       builder: (context, model, _) => ScreenUtilInit(
           builder: () => Overlay(
@@ -47,12 +43,14 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                       builder: (context) => Stack(
                             children: [
                               child,
-                              model.inspectLayoutEnable
-                                  ? InspectLayoutView()
-                                  : _CaptureLayout(
-                                      widgetNameController:
-                                          widgetNameController,
-                                      widgetNameFocusNode: widgetNameFocusNode),
+                              if (model.captureWidgetStatusEnum
+                                  .isAtInspectModeMode())
+                                InspectControllers(),
+                              if (model.captureWidgetStatusEnum
+                                  .isAtCaptureMode())
+                                CaptureLayout(
+                                    widgetNameController: widgetNameController,
+                                    widgetNameFocusNode: widgetNameFocusNode),
                               Positioned(
                                   bottom: 20,
                                   child: Container(
@@ -63,26 +61,42 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        if (!model.captureViewEnabled)
-                                          MainViewLayout(),
-                                        if (model.captureViewEnabled &&
-                                            !model.hasWidgetDescription)
-                                          CaptureViewLayout(),
+                                        if (model.captureWidgetStatusEnum ==
+                                            CaptureWidgetStatusEnum.idle)
+                                          IntroControllers(),
+                                        if (model.captureWidgetStatusEnum ==
+                                            CaptureWidgetStatusEnum.inspectMode)
+                                          CtaButton(
+                                            title: 'Stop inspection',
+                                            fillColor: kcPrimaryFuchsia,
+                                            onTap: model.toggleInspectLayout,
+                                          ),
+                                        if (model.captureWidgetStatusEnum ==
+                                                CaptureWidgetStatusEnum
+                                                    .captureMode ||
+                                            model.captureWidgetStatusEnum ==
+                                                CaptureWidgetStatusEnum
+                                                    .captureModeWidgetsContainerShow ||
+                                            model.captureWidgetStatusEnum ==
+                                                CaptureWidgetStatusEnum
+                                                    .captureModeAddWidget)
+                                          CaptureControllers(),
                                       ],
                                     ),
                                   )),
                               AnimatedPositioned(
                                 duration: Duration(milliseconds: 500),
-                                bottom: model.showDescription ? 20 : -200,
+                                bottom: model.captureWidgetStatusEnum ==
+                                        CaptureWidgetStatusEnum
+                                            .inspectModeDialogShow
+                                    ? 20
+                                    : -200,
                                 child: AnimatedSwitcher(
                                   duration: Duration(milliseconds: 500),
-                                  child: model.showDescription
-                                      ? WidgetDescriptionDialog(
-                                          description:
-                                              model.activeWidgetDescription,
-                                          onPressed:
-                                              model.closeWidgetDescription,
-                                        )
+                                  child: model.captureWidgetStatusEnum ==
+                                          CaptureWidgetStatusEnum
+                                              .inspectModeDialogShow
+                                      ? WidgetDescriptionDialog()
                                       : SizedBox.shrink(),
                                 ),
                               ),
@@ -105,70 +119,6 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                 ],
               )),
       viewModelBuilder: () => WidgetCaptureViewModel(projectId: projectId),
-    );
-  }
-}
-
-class _CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
-  const _CaptureLayout({
-    Key? key,
-    required this.widgetNameController,
-    required this.widgetNameFocusNode,
-  }) : super(key: key);
-
-  final TextEditingController widgetNameController;
-  final FocusNode widgetNameFocusNode;
-
-  @override
-  Widget build(BuildContext context, WidgetCaptureViewModel model) {
-    return Stack(
-      children: [
-        if (!model.hasWidgetDescription && model.captureViewEnabled)
-          WidgetDescriptionCaptureLayer(),
-        if (model.hasWidgetDescription && model.captureViewEnabled) ...[
-          Positioned(
-              top: model.descriptionTop,
-              left: model.descriptionLeft,
-              child: GestureDetector(
-                onPanUpdate: (panEvent) {
-                  final x = panEvent.delta.dx;
-                  final y = panEvent.delta.dy;
-                  model.updateDescriptionPosition(x, y);
-                },
-                child: Container(
-                  width: WIDGET_DESCRIPTION_VISUAL_SIZE,
-                  height: WIDGET_DESCRIPTION_VISUAL_SIZE,
-                  decoration: BoxDecoration(
-                    color: Colors.pink,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-              )),
-        ],
-        FadeInWidget(
-            child: AnimatedAlign(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeOutCubic,
-              alignment: model.widgetNameInputPositionIsDown
-                  ? Alignment.bottomCenter
-                  : Alignment.topCenter,
-              widthFactor: 1,
-              child: WidgetNameInput(
-                errorMessage: model.nameInputErrorMessage,
-                closeWidget: () {
-                  widgetNameController.clear();
-                  model.closeWidgetNameInput();
-                },
-                saveWidget: model.saveWidgetDescription,
-                switchPositionTap: model.switchWidgetNameInputPosition,
-                focusNode: widgetNameFocusNode,
-                textEditingController: widgetNameController,
-              ),
-            ),
-            isVisible: !model.isBusy &&
-                model.hasWidgetDescription &&
-                model.captureViewEnabled),
-      ],
     );
   }
 }
