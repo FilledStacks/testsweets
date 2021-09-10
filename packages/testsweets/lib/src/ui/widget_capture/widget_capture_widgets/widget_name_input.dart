@@ -26,84 +26,77 @@ class WidgetNameInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 12.w,
-      ).copyWith(
-          top: 32.h, bottom: MediaQuery.of(context).viewInsets.bottom + 24.h),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          BlackWrapperContainer(
-            bottomCornersAreFlat: errorMessage.isNotEmpty,
-            switchPositionTap: switchPositionTap,
-            closeWidget: closeWidget,
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    focusNode: focusNode,
-                    controller: textEditingController,
-                    style: tsNormal().copyWith(color: kcPrimaryWhite),
-                    decoration: InputDecoration(
-                        hintStyle: tsNormal().copyWith(
-                          color: kcSecondaryWhite,
-                        ),
-                        fillColor: kcBackground,
-                        filled: true,
-                        hintText: 'Widget Name',
-                        contentPadding: EdgeInsets.only(
-                          left: 16.w,
-                          right: 16.w,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 1.w,
-                            color: kcSecondaryGreen,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            crTextFieldCornerRadius(),
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 1.w,
-                            color: kcBackground,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            crTextFieldCornerRadius(),
-                          ),
-                        )),
-                  ),
-                ),
-                SizedBox(
-                  width: 12.w,
-                ),
-                CtaButton(
-                  title: 'Save Widget',
-                  fillColor: kcSecondaryGreen,
-                  onTap: () {
-                    saveWidget();
-                    focusNode?.unfocus();
-                    textEditingController?.clear();
-                  },
-                  maxWidth: 100.w,
-                ),
-              ],
-            ),
-          ),
-          FadeInWidget(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        BlackWrapperContainer(
+          bottomCornersAreFlat: errorMessage.isNotEmpty,
+          switchPositionTap: switchPositionTap,
+          closeWidget: closeWidget,
+          footerChild: FadeInWidget(
               child: Container(
                 width: ScreenUtil().screenWidth,
-                padding:
-                    const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16.w),
                 decoration: redBoxDecoration,
                 child: AutoSizeText(errorMessage,
                     style: tsSmall().copyWith(color: kcPrimaryWhite)),
               ),
-              isVisible: errorMessage.isNotEmpty)
-        ],
-      ),
+              isVisible: errorMessage.isNotEmpty),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  focusNode: focusNode,
+                  controller: textEditingController,
+                  style: tsNormal().copyWith(color: kcPrimaryWhite),
+                  decoration: InputDecoration(
+                      hintStyle: tsNormal().copyWith(
+                        color: kcSecondaryWhite,
+                      ),
+                      fillColor: kcSweetsAppBarColor,
+                      filled: true,
+                      hintText: 'Widget Name',
+                      contentPadding: EdgeInsets.only(
+                        left: 16.w,
+                        right: 16.w,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1.w,
+                          color: kcSecondaryGreen,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          crTextFieldCornerRadius(),
+                        ),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 1.w,
+                          color: kcBackground,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          crTextFieldCornerRadius(),
+                        ),
+                      )),
+                ),
+              ),
+              SizedBox(
+                width: 12.w,
+              ),
+              CtaButton(
+                title: 'Save Widget',
+                fillColor: kcSecondaryGreen,
+                onTap: () {
+                  saveWidget();
+                  focusNode?.unfocus();
+                  textEditingController?.clear();
+                },
+                maxWidth: 100.w,
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

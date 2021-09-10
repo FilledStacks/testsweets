@@ -51,6 +51,9 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                 CaptureLayout(
                                     widgetNameController: widgetNameController,
                                     widgetNameFocusNode: widgetNameFocusNode),
+                              if (model.captureWidgetStatusEnum ==
+                                  CaptureWidgetStatusEnum.idle)
+                                Expanded(child: IntroControllers()),
                               Positioned(
                                   bottom: 20,
                                   child: Container(
@@ -61,9 +64,6 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        if (model.captureWidgetStatusEnum ==
-                                            CaptureWidgetStatusEnum.idle)
-                                          IntroControllers(),
                                         if (model.captureWidgetStatusEnum ==
                                             CaptureWidgetStatusEnum.inspectMode)
                                           CtaButton(

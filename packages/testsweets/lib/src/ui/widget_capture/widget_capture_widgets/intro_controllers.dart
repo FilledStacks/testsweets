@@ -4,6 +4,7 @@ import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
 
 import '../widget_capture_viewmodel.dart';
+import 'black_wrapper_container.dart';
 
 class IntroControllers extends ViewModelWidget<WidgetCaptureViewModel> {
   const IntroControllers({
@@ -12,23 +13,27 @@ class IntroControllers extends ViewModelWidget<WidgetCaptureViewModel> {
 
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        CtaButton(
-          title: 'Inspect View',
-          fillColor: kcPrimaryFuchsia,
-          onTap: model.toggleInspectLayout,
-        ),
-        const SizedBox(
-          height: 16,
-        ),
-        CtaButton(
-          title: 'Start Capture',
-          fillColor: kcPrimaryPurple,
-          onTap: model.toggleCaptureView,
-        ),
-      ],
+    return BlackWrapperContainer(
+      switchPositionTap: model.switchWidgetNameInputPosition,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          CtaButton(
+            title: 'Inspect View',
+            fillColor: kcPrimaryFuchsia,
+            onTap: model.toggleInspectLayout,
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          CtaButton(
+            title: 'Start Capture',
+            fillColor: kcPrimaryPurple,
+            onTap: model.toggleCaptureView,
+          ),
+        ],
+      ),
     );
   }
 }
