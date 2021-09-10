@@ -5,8 +5,8 @@ import 'package:testsweets/src/ui/shared/cta_button.dart';
 
 import '../widget_capture_viewmodel.dart';
 
-class MainViewLayout extends ViewModelWidget<WidgetCaptureViewModel> {
-  const MainViewLayout({
+class IntroControllers extends ViewModelWidget<WidgetCaptureViewModel> {
+  const IntroControllers({
     Key? key,
   }) : super(key: key);
 

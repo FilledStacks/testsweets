@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widgets_container.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_types_container.dart';
 
 import '../widget_capture_viewmodel.dart';
 
-class CaptureViewLayout extends ViewModelWidget<WidgetCaptureViewModel> {
-  const CaptureViewLayout({
+class CaptureControllers extends ViewModelWidget<WidgetCaptureViewModel> {
+  const CaptureControllers({
     Key? key,
   }) : super(key: key);
 
@@ -26,12 +27,13 @@ class CaptureViewLayout extends ViewModelWidget<WidgetCaptureViewModel> {
               child: child,
             ),
             duration: const Duration(milliseconds: 350),
-            child: model.widgetContainerEnabled
-                ? WidgetsContainer()
+            child: model.captureWidgetStatusEnum ==
+                    CaptureWidgetStatusEnum.captureModeWidgetsContainerShow
+                ? WidgetsTypesContainer()
                 : CtaButton(
                     title: 'Add Widget',
                     fillColor: kcPassedTestGreenColor,
-                    onTap: model.openWidgetsContainer,
+                    onTap: model.toggleWidgetsContainer,
                   ),
           ),
           CtaButton(

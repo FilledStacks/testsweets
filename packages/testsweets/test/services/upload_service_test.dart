@@ -6,8 +6,8 @@ import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/build_info.dart';
 import 'package:testsweets/src/services/upload_service.dart';
 
-import 'helpers/test_consts.dart';
-import 'helpers/test_helpers.dart';
+import '../helpers/test_consts.dart';
+import '../helpers/test_helpers.dart';
 
 void main() {
   group("UploadService Tests -", () {

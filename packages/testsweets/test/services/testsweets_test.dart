@@ -3,9 +3,9 @@ import 'package:test/test.dart';
 import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
-import '../bin/testsweets.dart' as ts;
-import 'helpers/test_consts.dart';
-import 'helpers/test_helpers.dart';
+import '../../bin/testsweets.dart' as ts;
+import '../helpers/test_consts.dart';
+import '../helpers/test_helpers.dart';
 
 void main() {
   group('Testsweets test -', () {
