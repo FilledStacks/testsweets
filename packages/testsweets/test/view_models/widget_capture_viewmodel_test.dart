@@ -311,22 +311,23 @@ void main() {
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'my widget name';
-        model.addNewWidget(WidgetType.input);
+        await model.addNewWidget(WidgetType.input);
         expect(model.captureWidgetStatusEnum,
             CaptureWidgetStatusEnum.captureModeWidgetNameInputShow);
       });
-//       test(
-//           'When called, should check if the current view(route) is captured or not',
-//           () {
-// //                     final service = getAndRegisterWidgetCaptureService();
-// // service.checkCurrentViewIfAlreadyCaptured(viewName)
-//         final model = WidgetCaptureViewModel(projectId: _projectId);
-//         model.formValueMap[WidgetNameValueKey] = 'my widget name';
-//         model.addNewWidget(WidgetType.input);
+      test(
+          'When called, should check if the current view(route) is captured or not',
+          () async {
+        final widgetCaptureService = getAndRegisterWidgetCaptureService(
+            currentViewIsAlreadyCaptured: true);
 
-//         expect(model.captureWidgetStatusEnum,
-//             CaptureWidgetStatusEnum.captureModeWidgetNameInputShow);
-//       });
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'my widget name';
+        await model.addNewWidget(WidgetType.input);
+
+        verify(widgetCaptureService
+            .checkCurrentViewIfAlreadyCaptured('current route'));
+      });
     });
     group('switchWidgetNameInputPosition -', () {
       test('When called once, Should make widgetNameInputPositionIsDown false',

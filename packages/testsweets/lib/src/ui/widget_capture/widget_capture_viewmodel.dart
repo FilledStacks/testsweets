@@ -157,6 +157,20 @@ class WidgetCaptureViewModel extends FormViewModel {
     _widgetDescription = WidgetDescription.addAtPosition(
         widgetType: widgetType, widgetPosition: widgetPosition);
 
+    if (!_widgetCaptureService.checkCurrentViewIfAlreadyCaptured(
+        _testSweetsRouteTracker.currentRoute))
+      await _captureViewWhenItsNotAlreadyCaptured();
+
+    _whenViewIsAlreadyCaptured();
+  }
+
+  Future<void> _captureViewWhenItsNotAlreadyCaptured() async =>
+      await _widgetCaptureService.captureWidgetDescription(
+          description:
+              WidgetDescription.addView(_testSweetsRouteTracker.currentRoute),
+          projectId: projectId);
+
+  void _whenViewIsAlreadyCaptured() {
     toggleWidgetsContainer();
     captureWidgetStatusEnum =
         CaptureWidgetStatusEnum.captureModeWidgetNameInputShow;
