@@ -96,12 +96,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                   child: model.captureWidgetStatusEnum ==
                                           CaptureWidgetStatusEnum
                                               .inspectModeDialogShow
-                                      ? WidgetDescriptionDialog(
-                                          description:
-                                              model.activeWidgetDescription,
-                                          onPressed:
-                                              model.closeWidgetDescription,
-                                        )
+                                      ? WidgetDescriptionDialog()
                                       : SizedBox.shrink(),
                                 ),
                               ),

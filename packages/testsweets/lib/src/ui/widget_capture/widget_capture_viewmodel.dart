@@ -21,44 +21,47 @@ class WidgetCaptureViewModel extends FormViewModel {
     initialise(projectId: projectId);
   }
 
+  /// the status enum that express the current state of the view
   CaptureWidgetStatusEnum _captureWidgetStatusEnum =
       CaptureWidgetStatusEnum.idle;
-
   set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
     _captureWidgetStatusEnum = captureWidgetStatusEnum;
     notifyListeners();
   }
 
-  WidgetDescription? _widgetDescription;
-  bool _hasWidgetNameFocus = false;
-  String _activeWidgetId = '';
-  bool widgetNameInputPositionIsDown = true;
-  String _nameInputErrorMessage = '';
-
-  WidgetDescription _activeWidgetDescription = WidgetDescription(
-    name: '',
-    position: WidgetPosition(x: 0, y: 0),
-    viewName: '',
-    widgetType: WidgetType.touchable,
-  );
-
   CaptureWidgetStatusEnum get captureWidgetStatusEnum =>
       _captureWidgetStatusEnum;
-  WidgetDescription get activeWidgetDescription => _activeWidgetDescription;
-  List<WidgetDescription> get descriptionsForView =>
-      _widgetCaptureService.getDescriptionsForView(
-        currentRoute: _testSweetsRouteTracker.currentRoute,
-      );
-  String get activeWidgetId => _activeWidgetId;
-  bool get viewAlreadyCaptured => _widgetCaptureService
-      .checkCurrentViewIfAlreadyCaptured(_testSweetsRouteTracker.currentRoute);
-  bool get hasWidgetNameFocus => _hasWidgetNameFocus;
-  WidgetDescription get widgetDescription => _widgetDescription!;
+
+  WidgetDescription? _widgetDescription;
+  WidgetDescription? get widgetDescription => _widgetDescription;
   double get descriptionTop =>
       _widgetDescription!.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
   double get descriptionLeft =>
       _widgetDescription!.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
-  String get nameInputErrorMessage => _nameInputErrorMessage;
+
+  bool _hasWidgetNameFocus = false;
+  bool get hasWidgetNameFocus => _hasWidgetNameFocus;
+
+  String _activeWidgetId = '';
+  String get activeWidgetId => _activeWidgetId;
+
+  bool _widgetNameInputPositionIsDown = true;
+
+  bool get widgetNameInputPositionIsDown => _widgetNameInputPositionIsDown;
+
+  String _inputErrorMessage = '';
+  String get nameInputErrorMessage => _inputErrorMessage;
+
+  WidgetDescription? _activeWidgetDescription;
+
+  WidgetDescription? get activeWidgetDescription => _activeWidgetDescription;
+
+  List<WidgetDescription> get descriptionsForView =>
+      _widgetCaptureService.getDescriptionsForView(
+        currentRoute: _testSweetsRouteTracker.currentRoute,
+      );
+  bool get viewAlreadyCaptured => _widgetCaptureService
+      .checkCurrentViewIfAlreadyCaptured(_testSweetsRouteTracker.currentRoute);
 
   Future<void> initialise({required String projectId}) async {
     setBusy(true);
@@ -93,7 +96,6 @@ class WidgetCaptureViewModel extends FormViewModel {
         y: _widgetDescription!.position.y + y,
       ),
     );
-
     notifyListeners();
   }
 
@@ -104,8 +106,12 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<void> saveWidgetDescription() async {
-    if (widgetNameValue?.isNotEmpty ?? false) {
-      _nameInputErrorMessage = '';
+    if ((widgetNameValue?.isEmpty ?? false) &&
+        _widgetDescription!.widgetType != WidgetType.view) {
+      _inputErrorMessage = 'Widget name must not be empty';
+      notifyListeners();
+    } else {
+      _inputErrorMessage = '';
       setBusy(true);
       _widgetDescription = _widgetDescription?.copyWith(
         viewName: _testSweetsRouteTracker.currentRoute,
@@ -116,17 +122,6 @@ class WidgetCaptureViewModel extends FormViewModel {
       await sendWidgetDescriptionToFirestore();
 
       setBusy(false);
-    } else if (_widgetDescription?.widgetType == WidgetType.view) {
-      setBusy(true);
-      _widgetDescription = _widgetDescription?.copyWith(
-        viewName: _testSweetsRouteTracker.currentRoute,
-      );
-
-      await sendWidgetDescriptionToFirestore();
-      setBusy(false);
-    } else {
-      _nameInputErrorMessage = 'Widget name must not be empty';
-      notifyListeners();
     }
   }
 
@@ -158,11 +153,12 @@ class WidgetCaptureViewModel extends FormViewModel {
           CaptureWidgetStatusEnum.captureModeWidgetsContainerShow;
   }
 
-  void addNewWidget(WidgetType widgetType, {WidgetPosition? widgetPosition}) {
+  Future<void> addNewWidget(WidgetType widgetType,
+      {WidgetPosition? widgetPosition}) async {
     if (widgetType == WidgetType.view) {
       _widgetDescription =
           WidgetDescription.addView(_testSweetsRouteTracker.currentRoute);
-      saveWidgetDescription();
+      await saveWidgetDescription();
     } else {
       _widgetDescription = WidgetDescription.addAtPosition(
           widgetType: widgetType, widgetPosition: widgetPosition);
@@ -174,7 +170,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void switchWidgetNameInputPosition() {
-    widgetNameInputPositionIsDown = !widgetNameInputPositionIsDown;
+    _widgetNameInputPositionIsDown = !widgetNameInputPositionIsDown;
     notifyListeners();
   }
 

@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:testsweets/src/models/application_models.dart';
+import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
-class WidgetDescriptionDialog extends StatelessWidget {
-  final WidgetDescription description;
-  final VoidCallback onPressed;
-
-  const WidgetDescriptionDialog(
-      {Key? key, required this.description, required this.onPressed})
-      : super(key: key);
+class WidgetDescriptionDialog extends ViewModelWidget<WidgetCaptureViewModel> {
+  const WidgetDescriptionDialog({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    var positionX = description.position.x.toStringAsFixed(1);
-    var positionY = description.position.y.toStringAsFixed(1);
-    var widgetType = description.widgetType.toString().substring(11);
+  Widget build(BuildContext context, WidgetCaptureViewModel model) {
+    final description = model.activeWidgetDescription;
 
     return Container(
       height: 250,
@@ -35,15 +31,20 @@ class WidgetDescriptionDialog extends StatelessWidget {
                   color: Colors.grey,
                   size: 32,
                 ),
-                onPressed: onPressed,
+                onPressed: model.closeWidgetDescription,
               ),
             ],
           ),
-          Text('View Name: ${description.viewName}', style: lightStyle),
-          Text('Name: ${description.name}', style: lightStyle),
-          Text('Widget Type: ${widgetType.capitalizeFirstofEach}',
-              style: lightStyle),
-          Text('Position: (x:$positionX, y:$positionY)', style: lightStyle),
+          if (description != null) ...[
+            Text('View Name: ${description.viewName}', style: lightStyle),
+            Text('Name: ${description.name}', style: lightStyle),
+            Text(
+                'Widget Type: ${description.widgetType.toString().substring(11).capitalizeFirstofEach}',
+                style: lightStyle),
+            Text(
+                'Position: (x:${description.position.x.toStringAsFixed(1)}, y:${description.position.y.toStringAsFixed(1)})',
+                style: lightStyle),
+          ]
         ],
       ),
       decoration: BoxDecoration(
