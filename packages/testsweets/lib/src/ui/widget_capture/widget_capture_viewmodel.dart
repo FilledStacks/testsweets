@@ -19,6 +19,12 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   WidgetCaptureViewModel({required this.projectId}) {
     initialise(projectId: projectId);
+
+    _testSweetsRouteTracker.addListener(() {
+      if (_captureWidgetStatusEnum == CaptureWidgetStatusEnum.inspectMode) {
+        initialise(projectId: projectId);
+      }
+    });
   }
 
   /// the status enum that express the current state of the view
