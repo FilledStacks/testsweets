@@ -13,26 +13,34 @@ class IntroControllers extends ViewModelWidget<WidgetCaptureViewModel> {
 
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
-    return BlackWrapperContainer(
-      switchPositionTap: model.switchWidgetNameInputPosition,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          CtaButton(
-            title: 'Inspect View',
-            fillColor: kcPrimaryFuchsia,
-            onTap: model.toggleInspectLayout,
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          CtaButton(
-            title: 'Start Capture',
-            fillColor: kcPrimaryPurple,
-            onTap: model.toggleCaptureView,
-          ),
-        ],
+    return AnimatedAlign(
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeOutCubic,
+      alignment: model.widgetNameInputPositionIsDown
+          ? Alignment.bottomCenter
+          : Alignment.topCenter,
+      widthFactor: 1,
+      child: BlackWrapperContainer(
+        switchPositionTap: model.switchWidgetNameInputPosition,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            CtaButton(
+              title: 'Inspect View',
+              fillColor: kcPrimaryFuchsia,
+              onTap: model.toggleInspectLayout,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            CtaButton(
+              title: 'Start Capture',
+              fillColor: kcPrimaryPurple,
+              onTap: model.toggleCaptureView,
+            ),
+          ],
+        ),
       ),
     );
   }

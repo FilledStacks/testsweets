@@ -6,76 +6,86 @@ import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/close_circular_button.dart';
 
 class BlackWrapperContainer extends StatelessWidget {
-  final bool bottomCornersAreFlat;
-  final VoidCallback switchPositionTap;
+  final VoidCallback? switchPositionTap;
   final VoidCallback? closeWidget;
   final Widget child;
   final Widget? footerChild;
+  final double? spaceBetweenTopControllersAndChild;
   const BlackWrapperContainer(
       {Key? key,
-      this.bottomCornersAreFlat = false,
-      required this.switchPositionTap,
+      this.switchPositionTap,
       this.closeWidget,
       required this.child,
-      this.footerChild})
+      this.footerChild,
+      this.spaceBetweenTopControllersAndChild})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: 12.w,
-      ).copyWith(
-          top: 32.h, bottom: MediaQuery.of(context).viewInsets.bottom + 24.h),
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(
-                left: 16.w, right: 16.w, top: 12.h, bottom: 20.h),
-            decoration: blackBoxDecoration.copyWith(
-                borderRadius: bottomCornersAreFlat
-                    ? BorderRadius.vertical(top: crButtonCornerRadius())
-                    : null),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton.icon(
-                      onPressed: switchPositionTap,
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all<OutlinedBorder>(
-                            RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                    crTextFieldCornerRadius()))),
-                        backgroundColor:
-                            MaterialStateProperty.all(kcSweetsAppBarColor),
-                      ),
-                      icon: Icon(
-                        Icons.swap_vert,
-                        size: 16.w,
-                        color: kcPrimaryWhite,
-                      ),
-                      label: AutoSizeText('Switch Position',
-                          maxLines: 1,
-                          style: tsNormal()
-                              .copyWith(color: Colors.white, fontSize: 14.w)),
-                    ),
-                    closeWidget != null
-                        ? CloseCircularButton(onTap: closeWidget!)
-                        : const SizedBox()
-                  ],
-                ),
-                SizedBox(
-                  height: 24.w,
-                ),
-                child,
-              ],
+    return SizedBox(
+      width: ScreenUtil().screenWidth,
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: 12.w,
+        ).copyWith(
+            top: 32.h, bottom: MediaQuery.of(context).viewInsets.bottom + 24.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.only(
+                  left: 16.w, right: 16.w, top: 12.h, bottom: 20.h),
+              decoration: blackBoxDecoration.copyWith(
+                  borderRadius: footerChild != null
+                      ? BorderRadius.vertical(top: crButtonCornerRadius())
+                      : null),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      switchPositionTap != null
+                          ? TextButton.icon(
+                              onPressed: switchPositionTap,
+                              style: ButtonStyle(
+                                shape:
+                                    MaterialStateProperty.all<OutlinedBorder>(
+                                        RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.all(
+                                                crTextFieldCornerRadius()))),
+                                backgroundColor: MaterialStateProperty.all(
+                                    kcSweetsAppBarColor),
+                              ),
+                              icon: Icon(
+                                Icons.swap_vert,
+                                size: 16.w,
+                                color: kcPrimaryWhite,
+                              ),
+                              label: AutoSizeText('Switch Position',
+                                  maxLines: 1,
+                                  style: tsNormal().copyWith(
+                                      color: Colors.white, fontSize: 14.w)),
+                            )
+                          : const SizedBox(),
+                      closeWidget != null
+                          ? CloseCircularButton(onTap: closeWidget!)
+                          : const SizedBox()
+                    ],
+                  ),
+                  SizedBox(
+                    height: spaceBetweenTopControllersAndChild ?? 24.w,
+                  ),
+                  child,
+                ],
+              ),
             ),
-          ),
-          footerChild ?? const SizedBox()
-        ],
+            footerChild ?? const SizedBox()
+          ],
+        ),
       ),
     );
   }

@@ -53,7 +53,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                     widgetNameFocusNode: widgetNameFocusNode),
                               if (model.captureWidgetStatusEnum ==
                                   CaptureWidgetStatusEnum.idle)
-                                Expanded(child: IntroControllers()),
+                                IntroControllers(),
                               Positioned(
                                   bottom: 20,
                                   child: Container(

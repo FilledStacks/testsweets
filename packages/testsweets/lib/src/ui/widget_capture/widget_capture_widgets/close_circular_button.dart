@@ -11,7 +11,7 @@ class CloseCircularButton extends StatelessWidget {
       icon: Icon(
         Icons.cancel,
         color: kcSweetsAppBarColor,
-        size: 32,
+        size: 34,
       ),
       onPressed: onTap,
     );
