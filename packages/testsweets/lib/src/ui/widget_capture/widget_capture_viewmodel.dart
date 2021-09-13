@@ -106,8 +106,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<void> saveWidgetDescription() async {
-    if ((widgetNameValue?.isEmpty ?? false) &&
-        _widgetDescription!.widgetType != WidgetType.view) {
+    if ((widgetNameValue?.isEmpty ?? false)) {
       _inputErrorMessage = 'Widget name must not be empty';
       notifyListeners();
     } else {
@@ -155,18 +154,26 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   Future<void> addNewWidget(WidgetType widgetType,
       {WidgetPosition? widgetPosition}) async {
-    if (widgetType == WidgetType.view) {
-      _widgetDescription =
-          WidgetDescription.addView(_testSweetsRouteTracker.currentRoute);
-      await saveWidgetDescription();
-    } else {
-      _widgetDescription = WidgetDescription.addAtPosition(
-          widgetType: widgetType, widgetPosition: widgetPosition);
+    _widgetDescription = WidgetDescription.addAtPosition(
+        widgetType: widgetType, widgetPosition: widgetPosition);
 
-      toggleWidgetsContainer();
-      captureWidgetStatusEnum =
-          CaptureWidgetStatusEnum.captureModeWidgetNameInputShow;
-    }
+    if (!_widgetCaptureService.checkCurrentViewIfAlreadyCaptured(
+        _testSweetsRouteTracker.currentRoute))
+      await _captureViewWhenItsNotAlreadyCaptured();
+
+    _showInputTextField();
+  }
+
+  Future<void> _captureViewWhenItsNotAlreadyCaptured() async =>
+      await _widgetCaptureService.captureWidgetDescription(
+          description:
+              WidgetDescription.addView(_testSweetsRouteTracker.currentRoute),
+          projectId: projectId);
+
+  void _showInputTextField() {
+    toggleWidgetsContainer();
+    captureWidgetStatusEnum =
+        CaptureWidgetStatusEnum.captureModeWidgetNameInputShow;
   }
 
   void switchWidgetNameInputPosition() {

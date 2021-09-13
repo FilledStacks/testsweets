@@ -5,7 +5,6 @@ import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
-import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
@@ -40,18 +39,6 @@ class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                     x: ScreenUtil().screenWidth / 2,
                     y: ScreenUtil().screenHeight / 2)),
             title: 'Input',
-          ),
-          SizedBox(
-            height: 24.w,
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w),
-            child: CtaButton(
-              isDisabled: model.viewAlreadyCaptured,
-              title: 'Capture View',
-              fillColor: kcSecondaryGreen,
-              onTap: () => model.addNewWidget(WidgetType.view),
-            ),
           ),
           SizedBox(
             height: 24.w,

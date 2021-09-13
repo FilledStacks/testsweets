@@ -69,7 +69,8 @@ MockFileSystemService getAndRegisterFileSystemService({
 MockWidgetCaptureService getAndRegisterWidgetCaptureService(
     {List<WidgetDescription> listOfWidgetDescription = const [],
     WidgetDescription? description,
-    String? projectId}) {
+    String? projectId,
+    bool currentViewIsAlreadyCaptured = false}) {
   _removeRegistrationIfExists<WidgetCaptureService>();
   final service = MockWidgetCaptureService();
 
@@ -78,6 +79,8 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
       .thenAnswer((realInvocation) => Future.value());
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
       .thenReturn(listOfWidgetDescription);
+  when(service.checkCurrentViewIfAlreadyCaptured(any))
+      .thenReturn(currentViewIsAlreadyCaptured);
 
   locator.registerSingleton<WidgetCaptureService>(service);
   return service;

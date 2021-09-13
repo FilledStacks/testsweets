@@ -228,7 +228,7 @@ void main() {
     });
     group('saveWidgetDescription -', () {
       test(
-          'When called and widget name textfield is empty and WidgetType is not view, Should update nameInputErrorMessage with the following message "Widget name must not be empty"',
+          'When called and textfield controller is empty and WidgetType is not view, Should update nameInputErrorMessage with the following message "Widget name must not be empty"',
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = '';
@@ -236,21 +236,14 @@ void main() {
         model.saveWidgetDescription();
         expect(model.nameInputErrorMessage, "Widget name must not be empty");
       });
+
       test(
-          'When called and widget name textfield is not empty and WidgetType is view, Should update nameInputErrorMessage with the following message "Widget name must not be empty"',
-          () async {
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.formValueMap[WidgetNameValueKey] = '';
-        model.addNewWidget(WidgetType.view);
-        expect(model.nameInputErrorMessage, isEmpty);
-        expect(model.widgetDescription!.viewName, 'current route');
-      });
-      test(
-          'When called with widget name textfield is not empty, Should empty nameInputErrorMessage and add the current route as the view name of widgetDescription',
+          'When called with textfield controller is not empty, Should empty nameInputErrorMessage and add the current route as the view name of widgetDescription',
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'my widget name';
-        model.addNewWidget(WidgetType.view);
+        await model.addNewWidget(WidgetType.input);
+        model.saveWidgetDescription();
         expect(model.nameInputErrorMessage, isEmpty);
         expect(model.widgetDescription!.viewName, 'current route');
       });
@@ -318,9 +311,22 @@ void main() {
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'my widget name';
-        model.addNewWidget(WidgetType.input);
+        await model.addNewWidget(WidgetType.input);
         expect(model.captureWidgetStatusEnum,
             CaptureWidgetStatusEnum.captureModeWidgetNameInputShow);
+      });
+      test(
+          'When called, should check if the current view(route) is captured or not',
+          () async {
+        final widgetCaptureService = getAndRegisterWidgetCaptureService(
+            currentViewIsAlreadyCaptured: true);
+
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'my widget name';
+        await model.addNewWidget(WidgetType.input);
+
+        verify(widgetCaptureService
+            .checkCurrentViewIfAlreadyCaptured('current route'));
       });
     });
     group('switchWidgetNameInputPosition -', () {

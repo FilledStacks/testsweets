@@ -60,12 +60,6 @@ class WidgetCaptureService {
     return viewDescriptions ?? [];
   }
 
-  bool checkCurrentViewIfAlreadyCaptured(String viewName) {
-    if (widgetDescriptionMap.containsKey(viewName)) {
-      return widgetDescriptionMap[viewName]
-              ?.any((element) => element.name == viewName) ??
-          false;
-    } else
-      return false;
-  }
+  bool checkCurrentViewIfAlreadyCaptured(String viewName) =>
+      widgetDescriptionMap[viewName]!.any((element) => element.name == '');
 }
