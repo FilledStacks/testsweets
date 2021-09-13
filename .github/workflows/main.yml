@@ -16,7 +16,7 @@ jobs:
           channel: "stable"
       - name: Running Flutter Test
         id: unit_test
-        run: flutter test --no-sound-null-safety
+        run: flutter test
         working-directory: testsweets/packages/testsweets  
         continue-on-error: true
   comment:
