@@ -1,5 +1,4 @@
 import 'package:testsweets/src/app/logger.dart';
-import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
@@ -10,10 +9,8 @@ class WidgetCaptureService {
 
   final _cloudFunctionsService = locator<CloudFunctionsService>();
 
-  /// Adding views key that we will add all the captured views to it cause
-  /// they doesn't have a viewName(views viewName is empry string)
   final Map<String, List<WidgetDescription>> widgetDescriptionMap =
-      Map<String, List<WidgetDescription>>()..addAll({CAPTURED_VIEWS_KEY: []});
+      Map<String, List<WidgetDescription>>();
   final bool verbose;
 
   WidgetCaptureService({this.verbose = false});
@@ -48,9 +45,7 @@ class WidgetCaptureService {
   }
 
   void addWidgetDescriptionToMap(WidgetDescription description) {
-    if (description.viewName == '') {
-      widgetDescriptionMap[CAPTURED_VIEWS_KEY]?.add(description);
-    } else if (widgetDescriptionMap.containsKey(description.viewName)) {
+    if (widgetDescriptionMap.containsKey(description.viewName)) {
       widgetDescriptionMap[description.viewName]?.add(description);
     } else {
       widgetDescriptionMap[description.viewName] = [description];
@@ -66,6 +61,5 @@ class WidgetCaptureService {
   }
 
   bool checkCurrentViewIfAlreadyCaptured(String viewName) =>
-      widgetDescriptionMap[CAPTURED_VIEWS_KEY]!
-          .any((element) => element.name == viewName);
+      widgetDescriptionMap[viewName]!.any((element) => element.name == '');
 }
