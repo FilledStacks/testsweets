@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
+import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
@@ -43,11 +44,10 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                       builder: (context) => Stack(
                             children: [
                               child,
-                              if (model.captureWidgetStatusEnum
-                                  .isAtInspectModeMode())
+                              if (model
+                                  .captureWidgetStatusEnum.isAtInspectModeMode)
                                 InspectControllers(),
-                              if (model.captureWidgetStatusEnum
-                                  .isAtCaptureMode())
+                              if (model.captureWidgetStatusEnum.isAtCaptureMode)
                                 CaptureLayout(
                                     widgetNameController: widgetNameController,
                                     widgetNameFocusNode: widgetNameFocusNode),
