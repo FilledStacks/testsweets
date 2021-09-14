@@ -22,7 +22,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     _testSweetsRouteTracker.addListener(() {
       if (_captureWidgetStatusEnum == CaptureWidgetStatusEnum.inspectMode) {
-        initialise(projectId: projectId);
+        notifyListeners();
       }
     });
   }
