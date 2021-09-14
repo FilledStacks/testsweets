@@ -17,7 +17,7 @@ jobs:
       - name: Running Flutter Test
         id: unit_test
         run: flutter test
-        working-directory: testsweets/packages/testsweets  
+        working-directory: packages/testsweets  
         continue-on-error: true
   comment:
     name: Comment Result
