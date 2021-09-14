@@ -1,3 +1,11 @@
+## 1.4.1
+
+**Improvements**
+- Hide view widget description when Inspect Mode is active
+- Allows start capture and inspect buttons to be moved to the top or bottom of screen
+- Removes "Capture View" button and replaced with automatic view capture
+- Adds ability to capture scrollable widgets
+
 ## 1.4.0
 
 **New Feature**: On screen widget key capture

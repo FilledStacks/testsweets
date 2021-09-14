@@ -43,6 +43,16 @@ class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
           SizedBox(
             height: 24.w,
           ),
+          _WidgetTypeButton(
+            onTap: () => model.addNewWidget(WidgetType.scrollable,
+                widgetPosition: WidgetPosition(
+                    x: ScreenUtil().screenWidth / 2,
+                    y: ScreenUtil().screenHeight / 2)),
+            title: 'Scrollable',
+          ),
+          SizedBox(
+            height: 24.w,
+          ),
           Divider(
             color: kcBackground,
             thickness: 5.w,

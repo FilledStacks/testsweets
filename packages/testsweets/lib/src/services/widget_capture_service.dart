@@ -61,5 +61,7 @@ class WidgetCaptureService {
   }
 
   bool checkCurrentViewIfAlreadyCaptured(String viewName) =>
-      widgetDescriptionMap[viewName]!.any((element) => element.name == '');
+      widgetDescriptionMap.containsKey(viewName)
+          ? widgetDescriptionMap[viewName]!.any((element) => element.name == '')
+          : false;
 }

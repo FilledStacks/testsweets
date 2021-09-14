@@ -43,7 +43,9 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
                           ? kcError
                           : description.widgetType == WidgetType.input
                               ? kcPrimaryPurple
-                              : Colors.red,
+                              : description.widgetType == WidgetType.scrollable
+                                  ? kcSecondaryGreen
+                                  : Colors.red,
                     ),
                     child: description.widgetType == WidgetType.input
                         ? Text('I',
@@ -53,7 +55,11 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
                             ? Text('T',
                                 textAlign: TextAlign.center,
                                 style: positionWidgetStyle)
-                            : null,
+                            : description.widgetType == WidgetType.scrollable
+                                ? Text('S',
+                                    textAlign: TextAlign.center,
+                                    style: positionWidgetStyle)
+                                : null,
                   ),
                 ),
               ),

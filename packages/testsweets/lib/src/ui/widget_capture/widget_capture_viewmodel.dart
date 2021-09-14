@@ -164,17 +164,22 @@ class WidgetCaptureViewModel extends FormViewModel {
         widgetType: widgetType, widgetPosition: widgetPosition);
 
     if (!_widgetCaptureService.checkCurrentViewIfAlreadyCaptured(
-        _testSweetsRouteTracker.currentRoute))
+        _testSweetsRouteTracker.currentRoute)) {
+      setBusy(true);
       await _captureViewWhenItsNotAlreadyCaptured();
+      setBusy(false);
+    }
 
     _showInputTextField();
   }
 
-  Future<void> _captureViewWhenItsNotAlreadyCaptured() async =>
-      await _widgetCaptureService.captureWidgetDescription(
-          description:
-              WidgetDescription.addView(_testSweetsRouteTracker.currentRoute),
-          projectId: projectId);
+  Future<void> _captureViewWhenItsNotAlreadyCaptured() async {
+    await _widgetCaptureService.captureWidgetDescription(
+        description:
+            WidgetDescription.addView(_testSweetsRouteTracker.currentRoute),
+        projectId: projectId);
+    await initialise(projectId: projectId);
+  }
 
   void _showInputTextField() {
     toggleWidgetsContainer();
