@@ -1,6 +1,5 @@
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
-import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
@@ -13,11 +12,9 @@ void main() {
     setUp(() => registerServices());
     tearDown(() => locator.reset());
     group('initilised -', () {
-      test(
-          'When initilised, widgetDescriptionMap Should has a [CAPTURED_VIEWS_KEY] that will contains all the captured views',
-          () {
+      test('When initilised, widgetDescriptionMap Should be empty', () {
         final service = WidgetCaptureService();
-        service.widgetDescriptionMap.containsKey(CAPTURED_VIEWS_KEY);
+        expect(service.widgetDescriptionMap, isEmpty);
       });
     });
     group('loadWidgetDescriptions -', () {
@@ -150,8 +147,8 @@ void main() {
                   position: WidgetPosition(x: 0, y: 0),
                 ),
                 WidgetDescription(
-                  viewName: '',
-                  name: '/',
+                  viewName: '/',
+                  name: '',
                   widgetType: WidgetType.view,
                   position: WidgetPosition(x: 0, y: 0),
                 ),
@@ -167,20 +164,6 @@ void main() {
       });
     });
     group('addWidgetDescriptionToMap -', () {
-      test(
-          'When WidgetDescription has an empty viewName that mean it\'s a captured view, Should add it to map where key is CAPTURED_VIEWS_KEY',
-          () {
-        final service = WidgetCaptureService();
-        service.addWidgetDescriptionToMap(
-          WidgetDescription(
-            viewName: '',
-            name: '/',
-            widgetType: WidgetType.view,
-            position: WidgetPosition(x: 0, y: 0),
-          ),
-        );
-        expect(service.widgetDescriptionMap[CAPTURED_VIEWS_KEY]!.length, 1);
-      });
       test(
           'When WidgetDescription has viewName that not empty(meaning that anything but view), Should create a new key from its viewName',
           () {
