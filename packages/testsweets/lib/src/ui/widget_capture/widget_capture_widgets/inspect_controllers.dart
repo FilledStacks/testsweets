@@ -16,50 +16,55 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
     return Stack(
       children: [
-        ...model.descriptionsForView.map(
-          (description) => Positioned(
-            top: description.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
-            left: description.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
-            child: IgnorePointer(
-              ignoring: model.captureWidgetStatusEnum ==
-                  CaptureWidgetStatusEnum.inspectModeDialogShow,
-              child: GestureDetector(
-                onTap: () => model.showWidgetDescription(description),
-                child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 300),
-                  opacity: model.activeWidgetId != description.id &&
-                          model.captureWidgetStatusEnum ==
-                              CaptureWidgetStatusEnum.inspectModeDialogShow
-                      ? 0.25
-                      : 1,
-                  child: Container(
-                    alignment: Alignment.center,
-                    key: Key(description.automationKey),
-                    width: WIDGET_DESCRIPTION_VISUAL_SIZE,
-                    height: WIDGET_DESCRIPTION_VISUAL_SIZE,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: description.widgetType == WidgetType.touchable
-                          ? kcError
-                          : description.widgetType == WidgetType.input
-                              ? kcPrimaryPurple
-                              : Colors.red,
-                    ),
-                    child: description.widgetType == WidgetType.input
-                        ? Text('I',
-                            textAlign: TextAlign.center,
-                            style: positionWidgetStyle)
-                        : description.widgetType == WidgetType.touchable
-                            ? Text('T',
+        ...model.descriptionsForView
+            .where(
+                (element) => element.position.x != 0 && element.position.y != 0)
+            .map(
+              (description) => Positioned(
+                top: description.position.y -
+                    (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
+                left: description.position.x -
+                    (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
+                child: IgnorePointer(
+                  ignoring: model.captureWidgetStatusEnum ==
+                      CaptureWidgetStatusEnum.inspectModeDialogShow,
+                  child: GestureDetector(
+                    onTap: () => model.showWidgetDescription(description),
+                    child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 300),
+                      opacity: model.activeWidgetId != description.id &&
+                              model.captureWidgetStatusEnum ==
+                                  CaptureWidgetStatusEnum.inspectModeDialogShow
+                          ? 0.25
+                          : 1,
+                      child: Container(
+                        alignment: Alignment.center,
+                        key: Key(description.automationKey),
+                        width: WIDGET_DESCRIPTION_VISUAL_SIZE,
+                        height: WIDGET_DESCRIPTION_VISUAL_SIZE,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: description.widgetType == WidgetType.touchable
+                              ? kcError
+                              : description.widgetType == WidgetType.input
+                                  ? kcPrimaryPurple
+                                  : Colors.red,
+                        ),
+                        child: description.widgetType == WidgetType.input
+                            ? Text('I',
                                 textAlign: TextAlign.center,
                                 style: positionWidgetStyle)
-                            : null,
+                            : description.widgetType == WidgetType.touchable
+                                ? Text('T',
+                                    textAlign: TextAlign.center,
+                                    style: positionWidgetStyle)
+                                : null,
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-        )
+            )
       ],
     );
   }
