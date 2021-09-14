@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/ui/driver_layout/driver_layout_view.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.dart';
@@ -21,9 +22,11 @@ class TestSweetsOverlayView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: captureWidgets
-          ? WidgetCaptureView(child: child, projectId: projectId)
-          : DriverLayoutView(child: child, projectId: projectId),
+      child: kDebugMode
+          ? captureWidgets
+              ? WidgetCaptureView(child: child, projectId: projectId)
+              : DriverLayoutView(child: child, projectId: projectId)
+          : child,
     );
   }
 }
