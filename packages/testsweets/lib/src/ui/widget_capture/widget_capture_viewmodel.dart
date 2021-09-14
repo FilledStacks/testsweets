@@ -188,6 +188,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void closeWidgetNameInput() {
     _widgetDescription = null;
+    _inputErrorMessage = '';
     toggleWidgetsContainer();
   }
 

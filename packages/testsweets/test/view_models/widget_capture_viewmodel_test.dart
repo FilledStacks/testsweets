@@ -347,6 +347,11 @@ void main() {
         expect(model.captureWidgetStatusEnum,
             CaptureWidgetStatusEnum.captureModeWidgetsContainerShow);
       });
+      test('When called, Should empty the nameInputErrorMessage', () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.closeWidgetNameInput();
+        expect(model.nameInputErrorMessage, isEmpty);
+      });
     });
   });
 }
