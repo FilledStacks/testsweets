@@ -8,17 +8,59 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Color> colorItems = [
+      Colors.blue,
+      Colors.red,
+      Colors.green,
+      Colors.purple,
+      Colors.orange,
+      Colors.black,
+    ];
+
     return ViewModelBuilder<LoginViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
-        body: Center(
-          child: MaterialButton(
-            color: Colors.blue,
-            child: Text(
-              'Go to Home',
-              style: TextStyle(color: Colors.red),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Container(
+              height: 150,
+              child: Scrollbar(
+                isAlwaysShown: true,
+                child: ListView.builder(
+                  itemCount: colorItems.length,
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.all(10),
+                  itemBuilder: (context, index) => Container(
+                    width: 150,
+                    color: colorItems[index],
+                  ),
+                ),
+              ),
             ),
-            onPressed: model.navigateToOtherView,
-          ),
+            Center(
+              child: MaterialButton(
+                color: Colors.blue,
+                child: Text(
+                  'Go to Home',
+                  style: TextStyle(color: Colors.red),
+                ),
+                onPressed: model.navigateToOtherView,
+              ),
+            ),
+            Container(
+              height: 200,
+              child: Scrollbar(
+                child: ListView.builder(
+                  itemCount: colorItems.length,
+                  padding: EdgeInsets.all(10),
+                  itemBuilder: (context, index) => Container(
+                    height: 50,
+                    color: colorItems[index],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       viewModelBuilder: () => LoginViewModel(),
