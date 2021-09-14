@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
+import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_name_input.dart';
 
@@ -36,9 +37,7 @@ class CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
                   width: WIDGET_DESCRIPTION_VISUAL_SIZE,
                   height: WIDGET_DESCRIPTION_VISUAL_SIZE,
                   decoration: BoxDecoration(
-                    color: Colors.pink,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+                      color: kcPrimaryFuchsia, shape: BoxShape.circle),
                 ),
               )),
         ],
