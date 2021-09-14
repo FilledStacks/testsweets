@@ -23,7 +23,9 @@ class AutomationKeysServiceImplementation implements AutomationKeysService {
     List<String> appAutomationKeysJson = [];
 
     if (!_fileSystemService.doesFileExist(pathToAppAutomationKeys)) {
-      throw BuildError(ErrorMessages.notFoundAutomationKeys);
+      print(
+          '`app_automation_keys.json` file not detected, No manual keys added');
+      return [];
     }
 
     final dynamicKeys = _dynamicKeysGeneratorService
