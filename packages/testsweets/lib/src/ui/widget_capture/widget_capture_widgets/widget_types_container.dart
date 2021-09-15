@@ -41,7 +41,7 @@ class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
             title: 'Input',
           ),
           SizedBox(
-            height: 24.w,
+            height: 16.w,
           ),
           _WidgetTypeButton(
             onTap: () => model.addNewWidget(WidgetType.scrollable,
