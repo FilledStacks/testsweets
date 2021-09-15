@@ -30,6 +30,6 @@ class TestSweetsNavigatorObserver extends NavigatorObserver {
   }
 
   String _getRouteName(Route? route) {
-    return route?.settings.name ?? 'NO_ROUTE_NAME_PLEASE_ADD';
+    return route?.settings.name ?? 'NoView';
   }
 }
