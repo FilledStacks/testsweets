@@ -23,6 +23,11 @@ const String appAutomationKeysFile = """
   "home_touchable_google"
 ]
 """;
+const String emptyAppAutomationKeysFile = """
+[
+
+]
+""";
 
 const String testDirectoryPath = 'myApp';
 

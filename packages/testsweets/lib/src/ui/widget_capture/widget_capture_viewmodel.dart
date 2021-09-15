@@ -3,6 +3,7 @@ import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
+import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
@@ -19,6 +20,12 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   WidgetCaptureViewModel({required this.projectId}) {
     initialise(projectId: projectId);
+
+    _testSweetsRouteTracker.addListener(() {
+      if (_captureWidgetStatusEnum == CaptureWidgetStatusEnum.inspectMode) {
+        notifyListeners();
+      }
+    });
   }
 
   /// the status enum that express the current state of the view
@@ -76,7 +83,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void toggleCaptureView() {
-    if (captureWidgetStatusEnum.isAtCaptureMode())
+    if (captureWidgetStatusEnum.isAtCaptureMode)
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     else
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.captureMode;
@@ -188,6 +195,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void closeWidgetNameInput() {
     _widgetDescription = null;
+    _inputErrorMessage = '';
     toggleWidgetsContainer();
   }
 

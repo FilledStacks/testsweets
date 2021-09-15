@@ -1,10 +1,10 @@
 # Testsweets [![Pub Version](https://img.shields.io/pub/v/testsweets)](https://pub.dev/packages/testsweets)
 
-This package is a utility and helper package to the TestSweets product. It is the package responsible for syncing your widget keys to the database which allows us to provide the auto complete functionality when you script your test cases. It also has some UI helpers like the TestSweets builder widget that will overlay on the screen any of the widgets matching our naming syntax. This package also serves as the only way of uploading builds to Test Sweets.
+This package is a utility and helper package to the TestSweets product. It is the package responsible for capturing your widget keys to the database which allows us to provide the auto complete functionality when you script your test cases.
 
 ## Installation
 
-To start using the package you have to add this package as well as the generator which will generate the `AutomationKey` JSON for us to upload to our application. To do that we add the following into the `pubspec.yaml` file.
+To start using the package you have to add this package to your `pubspec.yaml` file.
 
 ```yaml
 dependencies:
@@ -14,6 +14,12 @@ dependencies:
     sdk: flutter
   testsweets: [latest_version]
 
+```
+
+and optionally if you want to add general keys to check for when a certain widget is visible like a dialog or a button
+you have to add the testsweets_generator package too
+
+```
 dev_dependencies:
   testsweets_generator: [latest_version]
   build_runner: [latest_version]
@@ -40,13 +46,60 @@ void main() {
   if (FLUTTER_DRIVER) {
     enableFlutterDriverExtension();
   }
-  
+  // 4. Load the testsweets dependency
+  await setupTestSweets();
   ...
   runApp(MyApp());
 }
 ```
 
+in your MaterialApp
 
+```dart
+...
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+   // 5. Inside MaterialApp add TestSweetsOverlayView to the builder
+   //    with the projectId you get when you created a new project in Testsweets app
+      builder: (context, child) => TestSweetsOverlayView(
+        projectId: '3OezzTovG9xxxxxxxxx',
+        child: child!,
+        captureWidgets: true,
+      ),
+    // 6. Finally add TestSweetsNavigatorObserver() to determine what view you are on right now
+      navigatorObservers: [
+        TestSweetsNavigatorObserver(),
+      ],
+    );
+  }
+}
+```
+
+#### Using the capture functionality 
+
+
+<table>
+  <tr align="center">
+    <td>Intro screen</td>
+     <td>Entered capture mode</td>
+     <td>Types of widgets you can capture</td>
+  </tr>
+  <tr>
+    <td> <img src="https://user-images.githubusercontent.com/89080323/133254053-bbcffc0b-b274-494e-a2a7-9271e05870ea.png"/></td>
+    <td><img src="https://user-images.githubusercontent.com/89080323/133254068-01564574-3676-4834-915d-aba58c4d5f74.png" /></td>
+    <td><img src="https://user-images.githubusercontent.com/89080323/133254040-8efcbc86-2050-438d-851b-c49a3b85f002.png"/></td>
+  </tr> 
+    <tr>
+    <td>Choose a name for the widget</td>
+     <td>Exit capture mode and go to inspect mode to see your keys</td>
+  </tr>
+  <tr>
+    <td><img src="https://user-images.githubusercontent.com/89080323/133254072-9a3e5567-3151-4411-b578-ac6744af7ec5.png" /></td>
+    <td><img src="https://user-images.githubusercontent.com/89080323/133254062-9cde8983-4a92-41d3-ab9c-a656753beef7.png"/></td>
+  </tr>
+ </table>
 
 ## Connecting your Project to TestSweets
 
