@@ -1,3 +1,11 @@
+## 1.4.2
+
+- Updates NO_ROUTE_PARAMETER to NoRoute
+- Disable overlay capture when not in Debug mode
+- Readme updates
+- `buildAndUpload` command now continues even when no `automationKeys` are written
+- Inspec view UI updates in realtime
+
 ## 1.4.1+1
 
 - Removes warnings from packages
