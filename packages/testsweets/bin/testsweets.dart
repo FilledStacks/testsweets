@@ -7,6 +7,7 @@ import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/upload_service.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
+TestSweetsConfigFileService? _testSweetsConfigFileService;
 Future<void> quit(
   String errorMsg,
 ) =>
@@ -39,56 +40,63 @@ Future<void> main(
     pathToBuild = args[positionBeforePath + 1];
   }
   if (!isMocking) await setupLocator();
-  final testSweetsConfigFileService = locator<TestSweetsConfigFileService>();
+  _testSweetsConfigFileService = locator<TestSweetsConfigFileService>();
 
   print("Uploading automation keys ...");
-  await extractAndUploadAutomationKeys(testSweetsConfigFileService);
+  await extractAndUploadAutomationKeys();
   print('Successfully uploaded automation keys!');
 
   if (!onlyUploadAutomationKeys(command)) {
     final appType = args[1];
 
     print('Start building $appType ...');
-    BuildInfo buildInfo =
-        await buildApp(appType, pathToBuild, testSweetsConfigFileService);
+    BuildInfo buildInfo = await buildApp(
+      appType,
+      pathToBuild,
+    );
     print('Successfully Built the $appType...');
 
     print('Uploading build ...');
-    await uploadBuild(buildInfo, testSweetsConfigFileService);
+    await uploadBuild(
+      buildInfo,
+    );
     print('Successfully Uploaded the build ...');
   }
   print("Done!");
 }
 
-Future<void> extractAndUploadAutomationKeys(
-    TestSweetsConfigFileService testSweetsConfigFileService) async {
-  await locator<CloudFunctionsService>().uploadAutomationKeys(
-    testSweetsConfigFileService
-        .getValueFromConfigFileByKey(ConfigFileKeyType.ProjectId),
-    testSweetsConfigFileService
-        .getValueFromConfigFileByKey(ConfigFileKeyType.ApiKey),
-    locator<AutomationKeysService>().extractKeysListFromJson(),
-  );
+Future<void> extractAndUploadAutomationKeys() async {
+  final automationKeys =
+      locator<AutomationKeysService>().extractKeysListFromJson();
+  final projectId = _testSweetsConfigFileService!
+      .getValueFromConfigFileByKey(ConfigFileKeyType.ProjectId);
+  final apiKey = _testSweetsConfigFileService!
+      .getValueFromConfigFileByKey(ConfigFileKeyType.ApiKey);
+
+  await locator<CloudFunctionsService>()
+      .uploadAutomationKeys(projectId, apiKey, automationKeys);
 }
 
-Future<void> uploadBuild(BuildInfo buildInfo,
-    TestSweetsConfigFileService testSweetsConfigFileService) async {
-  await locator<UploadService>().uploadBuild(
-      buildInfo,
-      testSweetsConfigFileService
-          .getValueFromConfigFileByKey(ConfigFileKeyType.ProjectId),
-      testSweetsConfigFileService
-          .getValueFromConfigFileByKey(ConfigFileKeyType.ApiKey));
+Future<void> uploadBuild(BuildInfo buildInfo) async {
+  final projectId = _testSweetsConfigFileService!
+      .getValueFromConfigFileByKey(ConfigFileKeyType.ProjectId);
+  final apiKey = _testSweetsConfigFileService!
+      .getValueFromConfigFileByKey(ConfigFileKeyType.ApiKey);
+
+  await locator<UploadService>().uploadBuild(buildInfo, projectId, apiKey);
 }
 
-Future<BuildInfo> buildApp(String appType, String pathToBuild,
-    TestSweetsConfigFileService testSweetsConfigFileService) async {
+Future<BuildInfo> buildApp(
+  String appType,
+  String pathToBuild,
+) async {
+  final extraFlutterProcessArgs = _testSweetsConfigFileService!
+      .getValueFromConfigFileByKey(ConfigFileKeyType.FlutterBuildCommand)
+      .split(' ');
   final buildInfo = await locator<BuildService>().build(
       appType: appType,
       pathToBuild: pathToBuild,
-      extraFlutterProcessArgs: testSweetsConfigFileService
-          .getValueFromConfigFileByKey(ConfigFileKeyType.FlutterBuildCommand)
-          .split(' '));
+      extraFlutterProcessArgs: extraFlutterProcessArgs);
   return buildInfo;
 }
 
