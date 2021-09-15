@@ -169,7 +169,7 @@ void main() {
           () {
         final service = WidgetCaptureService();
         service.addWidgetDescriptionToMap(
-          WidgetDescription(
+          description: WidgetDescription(
             viewName: '/new_view',
             name: 'button',
             widgetType: WidgetType.touchable,
@@ -183,7 +183,7 @@ void main() {
           () {
         final service = WidgetCaptureService();
         service.addWidgetDescriptionToMap(
-          WidgetDescription(
+          description: WidgetDescription(
             viewName: '/new_view',
             name: 'button',
             widgetType: WidgetType.touchable,
@@ -191,7 +191,7 @@ void main() {
           ),
         );
         service.addWidgetDescriptionToMap(
-          WidgetDescription(
+          description: WidgetDescription(
             viewName: '/new_view',
             name: 'inputField',
             widgetType: WidgetType.input,
