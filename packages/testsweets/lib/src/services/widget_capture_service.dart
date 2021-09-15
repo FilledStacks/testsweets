@@ -45,18 +45,11 @@ class WidgetCaptureService {
     }
   }
 
-  void addWidgetDescriptionToMap({
-    required WidgetDescription description,
-    bool isUpdate = false,
-  }) {
-    if (isUpdate) {
-      widgetDescriptionMap[description.viewName] = [description];
+  void addWidgetDescriptionToMap({required WidgetDescription description}) {
+    if (widgetDescriptionMap.containsKey(description.viewName)) {
+      widgetDescriptionMap[description.viewName]?.add(description);
     } else {
-      if (widgetDescriptionMap.containsKey(description.viewName)) {
-        widgetDescriptionMap[description.viewName]?.add(description);
-      } else {
-        widgetDescriptionMap[description.viewName] = [description];
-      }
+      widgetDescriptionMap[description.viewName] = [description];
     }
   }
 
@@ -87,7 +80,11 @@ class WidgetCaptureService {
 
     log.i('descriptionId from Cloud: $descriptionId');
 
-    addWidgetDescriptionToMap(description: description, isUpdate: true);
+    // Remove the old description
+    widgetDescriptionMap[description.viewName]
+        ?.removeWhere((description) => description.id == description.id);
+
+    addWidgetDescriptionToMap(description: description);
   }
 
   /// Delete a widget descriptions from the project as well as locally
