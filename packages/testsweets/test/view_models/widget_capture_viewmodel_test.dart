@@ -5,6 +5,7 @@ import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
+import 'package:testsweets/utils/error_messages.dart';
 
 import '../helpers/test_helpers.dart';
 
@@ -234,14 +235,24 @@ void main() {
         model.formValueMap[WidgetNameValueKey] = '';
         model.addNewWidget(WidgetType.input);
         model.saveWidgetDescription();
-        expect(model.nameInputErrorMessage, "Widget name must not be empty");
+        expect(
+            model.nameInputErrorMessage, ErrorMessages.widgetInputNameIsEmpty);
       });
-
       test(
-          'When called with textfield controller is not empty, Should empty nameInputErrorMessage and add the current route as the view name of widgetDescription',
+          "When called with textfield controller is having a space in the string, Should show a validation that say's names shouldn't have spaces",
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'my widget name';
+        model.addNewWidget(WidgetType.input);
+        model.saveWidgetDescription();
+        expect(model.nameInputErrorMessage,
+            ErrorMessages.widgetInputNameHaveSpaces);
+      });
+      test(
+          'When called with textfield controller is not empty and not have spaces, Should empty nameInputErrorMessage and add the current route as the view name of widgetDescription',
+          () async {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'my_widget_name';
         await model.addNewWidget(WidgetType.input);
         model.saveWidgetDescription();
         expect(model.nameInputErrorMessage, isEmpty);

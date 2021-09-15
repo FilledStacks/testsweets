@@ -46,4 +46,7 @@ argument after the apiKey.
 For example:
   \$ flutter pub run testsweets buildAndUpload apk'
 ''';
+
+  static const String widgetInputNameIsEmpty = "Widget name must not be empty";
+  static const String widgetInputNameHaveSpaces = "Names shouldn't have spaces";
 }
