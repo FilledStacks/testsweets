@@ -7,6 +7,6 @@ extension CapExtension on String {
 
   String get allInCaps => this.isEmpty ? '' : this.toUpperCase();
 
-  String get capitalizeFirstofEach =>
+  String get capitalizeFirstOfEach =>
       this.isEmpty ? '' : this.split(" ").map((str) => str.inCaps).join(" ");
 }
