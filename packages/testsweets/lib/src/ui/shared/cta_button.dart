@@ -10,14 +10,16 @@ class CtaButton extends StatelessWidget {
   final String title;
   final double? maxWidth;
   final bool isDisabled;
-  const CtaButton(
-      {Key? key,
-      required this.onTap,
-      required this.fillColor,
-      required this.title,
-      this.maxWidth,
-      this.isDisabled = false})
-      : super(key: key);
+  final bool isSmallSize;
+  const CtaButton({
+    Key? key,
+    required this.onTap,
+    required this.fillColor,
+    required this.title,
+    this.maxWidth,
+    this.isDisabled = false,
+    this.isSmallSize = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +34,9 @@ class CtaButton extends StatelessWidget {
         padding: buttonPadding,
         child: AutoSizeText(title,
             maxLines: 1,
-            style: tsMedium().copyWith(
-              color: Colors.white,
-            )),
+            style: isSmallSize
+                ? tsSmall().copyWith(color: Colors.white)
+                : tsMedium().copyWith(color: Colors.white)),
       ),
     );
   }
