@@ -131,6 +131,10 @@ class WidgetCaptureViewModel extends FormViewModel {
       _inputErrorMessage = ErrorMessages.widgetInputNameHaveSpaces;
       notifyListeners();
       return true;
+    } else if (widgetNameValue!.trim().contains('_')) {
+      _inputErrorMessage = ErrorMessages.widgetInputNameHaveUnderScores;
+      notifyListeners();
+      return true;
     }
 
     _inputErrorMessage = '';

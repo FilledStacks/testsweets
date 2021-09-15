@@ -49,4 +49,6 @@ For example:
 
   static const String widgetInputNameIsEmpty = "Widget name must not be empty";
   static const String widgetInputNameHaveSpaces = "Names shouldn't have spaces";
+  static const String widgetInputNameHaveUnderScores =
+      "Names shouldn't have undescores";
 }
