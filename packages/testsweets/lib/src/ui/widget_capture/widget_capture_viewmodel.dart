@@ -230,7 +230,9 @@ class WidgetCaptureViewModel extends FormViewModel {
       await _widgetCaptureService.loadWidgetDescriptionsForProject(
         projectId: projectId,
       );
-    } catch (e) {}
+    } catch (e) {
+      log.e('Couldn\'t load the widget descriptions. $e');
+    }
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
     notifyListeners();
   }
@@ -248,6 +250,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
         await _widgetCaptureService.deleteWidgetDescription(
             projectId: projectId, description: _widgetDescription!);
+
         setBusy(false);
 
         toggleIsEditMode();
