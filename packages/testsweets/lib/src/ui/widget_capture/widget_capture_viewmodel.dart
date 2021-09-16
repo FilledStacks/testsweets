@@ -226,6 +226,8 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void toggleIsEditMode() async {
     _isEditMode = false;
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
+
     try {
       await _widgetCaptureService.loadWidgetDescriptionsForProject(
         projectId: projectId,
@@ -233,7 +235,6 @@ class WidgetCaptureViewModel extends FormViewModel {
     } catch (e) {
       log.e('Couldn\'t load the widget descriptions. $e');
     }
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
     notifyListeners();
   }
 
@@ -278,7 +279,6 @@ class WidgetCaptureViewModel extends FormViewModel {
             projectId: projectId, description: _widgetDescription!);
         setBusy(false);
         toggleIsEditMode();
-        captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
       } catch (e) {
         setBusy(false);
         log.e('Couldn\'t update the widget. $e');

@@ -85,16 +85,6 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
   when(service.checkCurrentViewIfAlreadyCaptured(any))
       .thenReturn(currentViewIsAlreadyCaptured);
 
-  when(service.deleteWidgetDescription(
-          description: anyNamed('description'),
-          projectId: anyNamed('projectId')))
-      .thenAnswer((realInvocation) => Future.value());
-
-  when(service.updateWidgetDescription(
-          description: anyNamed('description'),
-          projectId: anyNamed('projectId')))
-      .thenAnswer((realInvocation) => Future.value());
-
   locator.registerSingleton<WidgetCaptureService>(service);
   return service;
 }
