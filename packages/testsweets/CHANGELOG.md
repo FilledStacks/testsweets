@@ -1,6 +1,25 @@
+## 1.4.3
+
+- Makes sure that view widgets format keys as `viewName_widgetType` and normal keys format, `viewName_widgetType_widgetName`
+- Validation for widget names to follow camel case pattern
+- General UI updates to match designs
+
+## 1.4.2
+
+- Updates NO_ROUTE_PARAMETER to NoRoute
+- Disable overlay capture when not in Debug mode
+- Readme updates
+- `buildAndUpload` command now continues even when no `automationKeys` are written
+- Inspec view UI updates in realtime
+
+## 1.4.1+1
+
+- Removes warnings from packages
+
 ## 1.4.1
 
 **Improvements**
+
 - Hide view widget description when Inspect Mode is active
 - Allows start capture and inspect buttons to be moved to the top or bottom of screen
 - Removes "Capture View" button and replaced with automatic view capture

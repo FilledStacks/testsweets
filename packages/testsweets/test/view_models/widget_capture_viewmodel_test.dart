@@ -5,6 +5,7 @@ import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
+import 'package:testsweets/utils/error_messages.dart';
 
 import '../helpers/test_helpers.dart';
 
@@ -229,20 +230,42 @@ void main() {
     });
     group('saveWidgetDescription -', () {
       test(
-          'When called and textfield controller is empty and WidgetType is not view, Should update nameInputErrorMessage with the following message "Widget name must not be empty"',
+          "When called and textfield controller text is empty and WidgetType is not view, Should show a validation that say's 'Widget name must not be empty'",
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = '';
         model.addNewWidget(WidgetType.input);
         model.saveWidgetDescription();
-        expect(model.nameInputErrorMessage, "Widget name must not be empty");
+        expect(
+            model.nameInputErrorMessage, ErrorMessages.widgetInputNameIsEmpty);
       });
-
       test(
-          'When called with textfield controller is not empty, Should empty nameInputErrorMessage and add the current route as the view name of widgetDescription',
+          "When called with textfield controller text is having a space in the string, Should show a validation that say's 'names shouldn't have spaces'",
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'my widget name';
+        model.addNewWidget(WidgetType.input);
+        model.saveWidgetDescription();
+        expect(model.nameInputErrorMessage,
+            ErrorMessages.widgetInputNameHaveSpaces);
+      });
+
+      test(
+          'When called with textfield controller text have underscores, Should show error message "Names shouldn\'t have undescores"',
+          () async {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'my_widget_name';
+        await model.addNewWidget(WidgetType.input);
+        model.saveWidgetDescription();
+
+        expect(model.nameInputErrorMessage,
+            ErrorMessages.widgetInputNameHaveUnderScores);
+      });
+      test(
+          'When called with textfield controller is not empty and not have spaces or underscores, Should empty nameInputErrorMessage and add the current route as the view name of widgetDescription',
+          () async {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
         await model.addNewWidget(WidgetType.input);
         model.saveWidgetDescription();
         expect(model.nameInputErrorMessage, isEmpty);

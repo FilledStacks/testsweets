@@ -42,7 +42,9 @@ class WidgetDescription with _$WidgetDescription {
   factory WidgetDescription.fromJson(Map<String, dynamic> json) =>
       _$WidgetDescriptionFromJson(json);
 
-  String get automationKey => '$viewName\_$widgetType\_$name';
+  String get automationKey => widgetType == WidgetType.view
+      ? '$viewName\_$widgetType'
+      : '$viewName\_$widgetType\_$name';
 }
 
 /// The position of the widget as we captured it on device

@@ -8,6 +8,7 @@ import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
+import 'package:testsweets/utils/error_messages.dart';
 
 import 'widget_capture_view.form.dart';
 
@@ -113,22 +114,37 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<void> saveWidgetDescription() async {
-    if ((widgetNameValue?.isEmpty ?? false)) {
-      _inputErrorMessage = 'Widget name must not be empty';
+    if (_validateWidgetName()) return;
+
+    setBusy(true);
+    _widgetDescription = _widgetDescription?.copyWith(
+      viewName: _testSweetsRouteTracker.currentRoute,
+    );
+
+    log.i('descriptionToSave:$_widgetDescription');
+
+    await sendWidgetDescriptionToFirestore();
+
+    setBusy(false);
+  }
+
+  bool _validateWidgetName() {
+    if (widgetNameValue!.isEmpty) {
+      _inputErrorMessage = ErrorMessages.widgetInputNameIsEmpty;
       notifyListeners();
-    } else {
-      _inputErrorMessage = '';
-      setBusy(true);
-      _widgetDescription = _widgetDescription?.copyWith(
-        viewName: _testSweetsRouteTracker.currentRoute,
-      );
-
-      log.i('descriptionToSave:$_widgetDescription');
-
-      await sendWidgetDescriptionToFirestore();
-
-      setBusy(false);
+      return true;
+    } else if (widgetNameValue!.trim().contains(' ')) {
+      _inputErrorMessage = ErrorMessages.widgetInputNameHaveSpaces;
+      notifyListeners();
+      return true;
+    } else if (widgetNameValue!.trim().contains('_')) {
+      _inputErrorMessage = ErrorMessages.widgetInputNameHaveUnderScores;
+      notifyListeners();
+      return true;
     }
+
+    _inputErrorMessage = '';
+    return false;
   }
 
   Future<void> sendWidgetDescriptionToFirestore() async {
