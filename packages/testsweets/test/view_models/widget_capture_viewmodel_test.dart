@@ -402,7 +402,7 @@ void main() {
           () async {
         final description = WidgetDescription(
           viewName: '',
-          name: 'loginButton',
+          name: '',
           position: WidgetPosition(x: 100, y: 199),
           widgetType: WidgetType.general,
         );
@@ -416,7 +416,7 @@ void main() {
 
         await model.deleteWidgetDescription();
 
-        verify(service.updateWidgetDescription(
+        verify(service.deleteWidgetDescription(
             projectId: _projectId, description: description));
       });
 
