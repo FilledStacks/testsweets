@@ -1,3 +1,7 @@
+## 1.4.4
+
+- Use correct string version of widget type in the `automationKey` value
+
 ## 1.4.3
 
 - Makes sure that view widgets format keys as `viewName_widgetType` and normal keys format, `viewName_widgetType_widgetName`
