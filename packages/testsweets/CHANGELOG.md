@@ -1,3 +1,9 @@
+## 1.4.3
+
+- Makes sure that view widgets format keys as `viewName_widgetType` and normal keys format, `viewName_widgetType_widgetName`
+- Validation for widget names to follow camel case pattern
+- General UI updates to match designs
+
 ## 1.4.2
 
 - Updates NO_ROUTE_PARAMETER to NoRoute
