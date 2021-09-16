@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
+import 'package:testsweets/src/extensions/widget_type_extension.dart';
 
 part 'application_models.freezed.dart';
 part 'application_models.g.dart';
@@ -42,7 +43,9 @@ class WidgetDescription with _$WidgetDescription {
   factory WidgetDescription.fromJson(Map<String, dynamic> json) =>
       _$WidgetDescriptionFromJson(json);
 
-  String get automationKey => '$viewName\_$widgetType\_$name';
+  String get automationKey => widgetType == WidgetType.view
+    ? '$viewName\_${widgetType.shortName}'
+      : '$viewName\_${widgetType.shortName}\_$name';
 }
 
 /// The position of the widget as we captured it on device

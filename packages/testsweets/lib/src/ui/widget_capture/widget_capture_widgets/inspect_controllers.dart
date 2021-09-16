@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
-import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/ui/shared/app_colors.dart';
-import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
+
+import 'widget_circle.dart';
 
 class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
   const InspectControllers({
@@ -26,42 +25,16 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
               child: GestureDetector(
                 onTap: () => model.showWidgetDescription(description),
                 child: AnimatedOpacity(
-                  duration: const Duration(milliseconds: 300),
-                  opacity: model.activeWidgetId != description.id &&
-                          model.captureWidgetStatusEnum ==
-                              CaptureWidgetStatusEnum.inspectModeDialogShow
-                      ? 0.25
-                      : 1,
-                  child: Container(
-                    alignment: Alignment.center,
-                    key: Key(description.automationKey),
-                    width: WIDGET_DESCRIPTION_VISUAL_SIZE,
-                    height: WIDGET_DESCRIPTION_VISUAL_SIZE,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: description.widgetType == WidgetType.touchable
-                          ? kcError
-                          : description.widgetType == WidgetType.input
-                              ? kcPrimaryPurple
-                              : description.widgetType == WidgetType.scrollable
-                                  ? kcSecondaryGreen
-                                  : Colors.red,
-                    ),
-                    child: description.widgetType == WidgetType.input
-                        ? Text('I',
-                            textAlign: TextAlign.center,
-                            style: positionWidgetStyle)
-                        : description.widgetType == WidgetType.touchable
-                            ? Text('T',
-                                textAlign: TextAlign.center,
-                                style: positionWidgetStyle)
-                            : description.widgetType == WidgetType.scrollable
-                                ? Text('S',
-                                    textAlign: TextAlign.center,
-                                    style: positionWidgetStyle)
-                                : null,
-                  ),
-                ),
+                    duration: const Duration(milliseconds: 300),
+                    opacity: model.activeWidgetId != description.id &&
+                            model.captureWidgetStatusEnum ==
+                                CaptureWidgetStatusEnum.inspectModeDialogShow
+                        ? 0.25
+                        : 1,
+                    child: WidgetCircle(
+                      key: Key(description.automationKey),
+                      widgetType: description.widgetType,
+                    )),
               ),
             ),
           ),
