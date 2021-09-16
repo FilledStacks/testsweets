@@ -378,9 +378,8 @@ void main() {
       test('When called should call deleteWidgetDescription() in service"',
           () async {
         final description = WidgetDescription(
-          viewName: 'login',
-          id: 'id',
-          name: 'email',
+          viewName: '',
+          name: 'loginButton',
           position: WidgetPosition(x: 100, y: 199),
           widgetType: WidgetType.general,
         );
@@ -394,9 +393,8 @@ void main() {
 
         await model.deleteWidgetDescription();
 
-        verify(service.deleteWidgetDescription(
-            projectId: anyNamed('projectId'),
-            description: anyNamed('description')));
+        verify(service.updateWidgetDescription(
+            projectId: _projectId, description: description));
       });
 
       test(
@@ -435,14 +433,14 @@ void main() {
       test('When called, should call updateWidgetDescription() in service"',
           () async {
         final description = WidgetDescription(
-          viewName: 'login',
-          id: 'id',
-          name: 'email',
+          viewName: '',
+          name: 'loginButton',
           position: WidgetPosition(x: 100, y: 199),
           widgetType: WidgetType.general,
         );
 
         final service = getAndRegisterWidgetCaptureService();
+
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.onChangedValue = 'loginButton';
         await model.addNewWidget(description.widgetType,
@@ -451,8 +449,7 @@ void main() {
         await model.updateWidgetDescription();
 
         verify(service.updateWidgetDescription(
-            projectId: anyNamed('projectId'),
-            description: anyNamed('description')));
+            projectId: _projectId, description: description));
       });
 
       test(
