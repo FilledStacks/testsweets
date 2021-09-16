@@ -63,7 +63,6 @@ class DriverLayoutView extends StatelessWidget {
                 height: WIDGET_DESCRIPTION_VISUAL_SIZE,
                 decoration: BoxDecoration(
                   color: Color(0x01000000),
-                  border: Border.all(color: Colors.red),
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
