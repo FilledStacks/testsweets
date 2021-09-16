@@ -78,10 +78,22 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
           description: anyNamed('description'),
           projectId: anyNamed('projectId')))
       .thenAnswer((realInvocation) => Future.value());
+
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
       .thenReturn(listOfWidgetDescription);
+
   when(service.checkCurrentViewIfAlreadyCaptured(any))
       .thenReturn(currentViewIsAlreadyCaptured);
+
+  when(service.deleteWidgetDescription(
+          description: anyNamed('description'),
+          projectId: anyNamed('projectId')))
+      .thenAnswer((realInvocation) => Future.value());
+
+  when(service.updateWidgetDescription(
+          description: anyNamed('description'),
+          projectId: anyNamed('projectId')))
+      .thenAnswer((realInvocation) => Future.value());
 
   locator.registerSingleton<WidgetCaptureService>(service);
   return service;
@@ -168,7 +180,9 @@ BuildService getAndRegisterBuildServiceService() {
 MockCloudFunctionsService getAndRegisterCloudFunctionsService({
   String getV4BuildUploadSignedUrlResult = '',
   bool doesBuildExistInProjectResult = true,
-  String addWidgetDescritpionToProjectResult = 'default_id',
+  String addWidgetDescriptionToProjectResult = 'default_id',
+  String updateWidgetDescription = 'default_id',
+  String deleteWidgetDescription = 'default_id',
   List<WidgetDescription> getWidgetDescriptionForProjectResult = const [],
 }) {
   _removeRegistrationIfExists<CloudFunctionsService>();
@@ -197,11 +211,21 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
           projectId: anyNamed('projectId'),
           description: anyNamed('description')))
       .thenAnswer((realInvocation) =>
-          Future.value(addWidgetDescritpionToProjectResult));
+          Future.value(addWidgetDescriptionToProjectResult));
 
   when(service.getWidgetDescriptionForProject(projectId: anyNamed('projectId')))
       .thenAnswer((realInvocation) =>
           Future.value(getWidgetDescriptionForProjectResult));
+
+  when(service.deleteWidgetDescription(
+          projectId: anyNamed('projectId'),
+          description: anyNamed('description')))
+      .thenAnswer((realInvocation) => Future.value(deleteWidgetDescription));
+
+  when(service.updateWidgetDescription(
+          projectId: anyNamed('projectId'),
+          description: anyNamed('description')))
+      .thenAnswer((realInvocation) => Future.value(updateWidgetDescription));
 
   locator.registerSingleton<CloudFunctionsService>(service);
   return service;
