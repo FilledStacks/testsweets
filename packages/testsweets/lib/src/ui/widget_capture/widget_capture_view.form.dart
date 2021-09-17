@@ -34,6 +34,7 @@ mixin $WidgetCaptureView on StatelessWidget {
     // The dispose function for a TextEditingController sets all listeners to null
 
     widgetNameController.dispose();
+    widgetNameFocusNode.dispose();
   }
 }
 

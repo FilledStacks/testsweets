@@ -129,38 +129,55 @@ void main() {
           idToReturn,
         );
       });
-      group('checkCurrentViewIfAlreadyCaptured -', () {
-        test('When call and the view is captured, Should return true',
-            () async {
-          getAndRegisterCloudFunctionsService(
-              getWidgetDescriptionForProjectResult: [
-                WidgetDescription(
-                  viewName: 'login',
-                  name: 'loginButton',
-                  widgetType: WidgetType.touchable,
-                  position: WidgetPosition(x: 0, y: 0),
-                ),
-                WidgetDescription(
-                  viewName: 'signUp',
-                  name: 'loginButton',
-                  widgetType: WidgetType.touchable,
-                  position: WidgetPosition(x: 0, y: 0),
-                ),
-                WidgetDescription(
-                  viewName: '/',
-                  name: '',
-                  widgetType: WidgetType.view,
-                  position: WidgetPosition(x: 0, y: 0),
-                ),
-              ]);
+      test('When called, Should check if widget description name is valid',
+          () async {
+        final description = WidgetDescription(
+          viewName: 'login',
+          name: 'email',
+          position: WidgetPosition(x: 100, y: 199),
+          widgetType: WidgetType.general,
+        );
 
-          final service = WidgetCaptureService();
-          await service.loadWidgetDescriptionsForProject(projectId: 'proj');
+        final validateDescriptionService =
+            getAndRegisterValidateDescriptionService();
 
-          bool isViewAlreadyExist =
-              service.checkCurrentViewIfAlreadyCaptured('/');
-          expect(isViewAlreadyExist, true);
-        });
+        final service = WidgetCaptureService();
+        await service.captureWidgetDescription(
+            description: description, projectId: 'proj');
+
+        verify(validateDescriptionService.isValid(description));
+      });
+    });
+    group('checkCurrentViewIfAlreadyCaptured -', () {
+      test('When call and the view is captured, Should return true', () async {
+        getAndRegisterCloudFunctionsService(
+            getWidgetDescriptionForProjectResult: [
+              WidgetDescription(
+                viewName: 'login',
+                name: 'loginButton',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+              WidgetDescription(
+                viewName: 'signUp',
+                name: 'loginButton',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+              WidgetDescription(
+                viewName: '/',
+                name: '',
+                widgetType: WidgetType.view,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+            ]);
+
+        final service = WidgetCaptureService();
+        await service.loadWidgetDescriptionsForProject(projectId: 'proj');
+
+        bool isViewAlreadyExist =
+            service.checkCurrentViewIfAlreadyCaptured('/');
+        expect(isViewAlreadyExist, true);
       });
     });
     group('addWidgetDescriptionToMap -', () {

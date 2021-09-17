@@ -13,6 +13,7 @@ import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/time_service.dart';
 import 'package:testsweets/src/services/upload_service.dart';
+import 'package:testsweets/src/services/validate_description_service.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 
 import 'stubed_proccess.dart';
@@ -32,6 +33,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<AutomationKeysService>(returnNullOnMissingStub: true),
   MockSpec<WidgetCaptureService>(returnNullOnMissingStub: true),
   MockSpec<TestSweetsRouteTracker>(returnNullOnMissingStub: true),
+  MockSpec<ValidateDescriptionService>(returnNullOnMissingStub: true),
 ])
 MockFileSystemService getAndRegisterFileSystemService({
   bool doesFileExist = false,
@@ -233,6 +235,22 @@ MockTestSweetsRouteTracker getAndRegisterTestSweetsRouteTracker(
   return service;
 }
 
+ValidateDescriptionService getAndRegisterValidateDescriptionService({
+  bool isWidgetDescriptionNameValid = true,
+  WidgetDescription? encodedValidation,
+  WidgetDescription? decodedValidation,
+}) {
+  _removeRegistrationIfExists<ValidateDescriptionService>();
+  final service = MockValidateDescriptionService();
+  when(service.isValid(any)).thenReturn(isWidgetDescriptionNameValid);
+  when(service.encodeValidation(any))
+      .thenReturn(encodedValidation ?? WidgetDescription.empty());
+  when(service.decodeValidation(any))
+      .thenReturn(decodedValidation ?? WidgetDescription.empty());
+  locator.registerSingleton<ValidateDescriptionService>(service);
+  return service;
+}
+
 void registerServices() {
   getAndRegisterFileSystemService();
   getAndRegisterFlutterProcess();
@@ -246,6 +264,7 @@ void registerServices() {
   getAndRegisterAutomationKeysService();
   getAndRegisterTestSweetsRouteTracker();
   getAndRegisterWidgetCaptureService();
+  getAndRegisterValidateDescriptionService();
 }
 
 void unregisterServices() {
@@ -261,6 +280,7 @@ void unregisterServices() {
   locator.unregister<AutomationKeysService>();
   locator.unregister<TestSweetsRouteTracker>();
   locator.unregister<WidgetCaptureService>();
+  locator.unregister<ValidateDescriptionService>();
 }
 
 // Call this before any service registration helper. This is to ensure that if there

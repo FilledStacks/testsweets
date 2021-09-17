@@ -31,6 +31,11 @@ class WidgetDescription with _$WidgetDescription {
       name: '',
       widgetType: WidgetType.view,
       position: WidgetPosition(x: 0, y: 0));
+  factory WidgetDescription.empty() => WidgetDescription(
+      viewName: '',
+      name: '',
+      widgetType: WidgetType.general,
+      position: WidgetPosition(x: 0, y: 0));
 
   factory WidgetDescription.addAtPosition(
           {required WidgetType widgetType, WidgetPosition? widgetPosition}) =>

@@ -2,12 +2,14 @@ import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
+import 'package:testsweets/src/services/validate_description_service.dart';
 
 /// A service that facilitates the capturing of widgets on device
 class WidgetCaptureService {
   final log = getLogger('WidgetCaptureService');
 
   final _cloudFunctionsService = locator<CloudFunctionsService>();
+  final _validateDescriptionService = locator<ValidateDescriptionService>();
 
   final Map<String, List<WidgetDescription>> widgetDescriptionMap =
       Map<String, List<WidgetDescription>>();
@@ -21,7 +23,10 @@ class WidgetCaptureService {
     required String projectId,
   }) async {
     log.i('description:$description projectId:$projectId');
-
+    WidgetDescription? validateDescription;
+    if (_validateDescriptionService.isValid(description)) {
+      validateDescription = description;
+    } else {}
     final descriptionId =
         await _cloudFunctionsService.uploadWidgetDescriptionToProject(
       projectId: projectId,
