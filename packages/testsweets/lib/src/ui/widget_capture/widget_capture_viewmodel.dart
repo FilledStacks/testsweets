@@ -7,6 +7,7 @@ import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.d
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
+import 'package:testsweets/src/services/validate_widget_description.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
@@ -18,6 +19,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   final String projectId;
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
+  final _validateDescriptionService = locator<ValidateWidgetDescription>();
 
   WidgetCaptureViewModel({required this.projectId}) {
     initialise(projectId: projectId);
@@ -114,12 +116,13 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<void> saveWidgetDescription() async {
-    if (_validateWidgetName()) return;
+    if (_isEmpty()) return;
 
     setBusy(true);
     _widgetDescription = _widgetDescription?.copyWith(
-      viewName: _testSweetsRouteTracker.currentRoute,
-    );
+        viewName: _testSweetsRouteTracker.currentRoute,
+        name: _validateDescriptionService
+            .ifTextNotValidConvertToValidText(_widgetDescription!.name));
 
     log.i('descriptionToSave:$_widgetDescription');
 
@@ -128,23 +131,15 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusy(false);
   }
 
-  bool _validateWidgetName() {
+  bool _isEmpty() {
     if (widgetNameValue!.isEmpty) {
       _inputErrorMessage = ErrorMessages.widgetInputNameIsEmpty;
       notifyListeners();
       return true;
-    } else if (widgetNameValue!.trim().contains(' ')) {
-      _inputErrorMessage = ErrorMessages.widgetInputNameHaveSpaces;
-      notifyListeners();
-      return true;
-    } else if (widgetNameValue!.trim().contains('_')) {
-      _inputErrorMessage = ErrorMessages.widgetInputNameHaveUnderScores;
-      notifyListeners();
-      return true;
+    } else {
+      _inputErrorMessage = '';
+      return false;
     }
-
-    _inputErrorMessage = '';
-    return false;
   }
 
   Future<void> sendWidgetDescriptionToFirestore() async {

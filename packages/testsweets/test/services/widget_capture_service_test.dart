@@ -129,24 +129,6 @@ void main() {
           idToReturn,
         );
       });
-      test('When called, Should check if widget description name is valid',
-          () async {
-        final description = WidgetDescription(
-          viewName: 'login',
-          name: 'email',
-          position: WidgetPosition(x: 100, y: 199),
-          widgetType: WidgetType.general,
-        );
-
-        final validateDescriptionService =
-            getAndRegisterValidateDescriptionService();
-
-        final service = WidgetCaptureService();
-        await service.captureWidgetDescription(
-            description: description, projectId: 'proj');
-
-        verify(validateDescriptionService.isValid(description));
-      });
     });
     group('checkCurrentViewIfAlreadyCaptured -', () {
       test('When call and the view is captured, Should return true', () async {

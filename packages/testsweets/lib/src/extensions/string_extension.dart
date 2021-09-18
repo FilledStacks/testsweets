@@ -4,6 +4,8 @@ extension CapExtension on String {
 
   String get inCaps =>
       this.isEmpty ? '' : '${this[0].toUpperCase()}${this.substring(1)}';
+  String get firstLetterInSmallLetter =>
+      this.isEmpty ? '' : '${this[0].toLowerCase()}${this.substring(1)}';
 
   String get allInCaps => this.isEmpty ? '' : this.toUpperCase();
 

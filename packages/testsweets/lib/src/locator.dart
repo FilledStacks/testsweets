@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:get_it/get_it.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
+import 'package:testsweets/src/services/validate_widget_description.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 
 import 'services/automation_keys_service.dart';
@@ -41,6 +42,8 @@ Future<void> setupLocator() async {
 
   locator.registerLazySingleton(() => TestSweetsRouteTracker());
   locator.registerLazySingleton(() => WidgetCaptureService(verbose: true));
+  locator.registerLazySingleton<ValidateWidgetDescription>(
+      () => ValidateWidgetDescriptionName());
 
   locatorSetup = true;
 }
