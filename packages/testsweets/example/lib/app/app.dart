@@ -18,4 +18,4 @@ import 'package:stacked_services/stacked_services.dart';
   ],
   logger: StackedLogger(),
 )
-class ExampleApp {}
+class App {}
