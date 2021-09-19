@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:testsweets/src/app/logger.dart';
+import 'package:testsweets/src/app/app.logger.dart';
 import 'package:testsweets/src/models/application_models.dart';
 
 import '../locator.dart';
@@ -93,7 +93,7 @@ class CloudFunctionsService {
     log.i('projectId:$projectId');
 
     final endpoint =
-        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/getWidgetDescriptionsForProject?projectId=$projectId';
+        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/getWidgetDescription?projectId=$projectId';
 
     final response = await httpService.get(to: endpoint);
 
