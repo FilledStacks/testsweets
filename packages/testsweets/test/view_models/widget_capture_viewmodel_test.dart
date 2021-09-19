@@ -317,19 +317,6 @@ void main() {
         expect(model.captureWidgetStatusEnum,
             CaptureWidgetStatusEnum.captureModeWidgetNameInputShow);
       });
-      test(
-          'When called, should check if the current view(route) is captured or not',
-          () async {
-        final widgetCaptureService = getAndRegisterWidgetCaptureService(
-            currentViewIsAlreadyCaptured: true);
-
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.formValueMap[WidgetNameValueKey] = 'my widget name';
-        await model.addNewWidget(WidgetType.input);
-
-        verify(widgetCaptureService
-            .checkCurrentViewIfAlreadyCaptured('current route'));
-      });
     });
     group('switchWidgetNameInputPosition -', () {
       test('When called once, Should make widgetNameInputPositionIsDown false',

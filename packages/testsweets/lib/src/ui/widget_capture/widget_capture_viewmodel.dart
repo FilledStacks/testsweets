@@ -70,8 +70,6 @@ class WidgetCaptureViewModel extends FormViewModel {
       _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracker.currentRoute,
       );
-  bool get viewAlreadyCaptured => _widgetCaptureService
-      .checkCurrentViewIfAlreadyCaptured(_testSweetsRouteTracker.currentRoute);
 
   Future<void> initialise({required String projectId}) async {
     setBusy(true);
@@ -175,22 +173,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     _widgetDescription = WidgetDescription.addAtPosition(
         widgetType: widgetType, widgetPosition: widgetPosition);
 
-    if (!_widgetCaptureService.checkCurrentViewIfAlreadyCaptured(
-        _testSweetsRouteTracker.currentRoute)) {
-      setBusy(true);
-      await _captureViewWhenItsNotAlreadyCaptured();
-      setBusy(false);
-    }
-
     _showInputTextField();
-  }
-
-  Future<void> _captureViewWhenItsNotAlreadyCaptured() async {
-    await _widgetCaptureService.captureWidgetDescription(
-        description:
-            WidgetDescription.addView(_testSweetsRouteTracker.currentRoute),
-        projectId: projectId);
-    await initialise(projectId: projectId);
   }
 
   void _showInputTextField() {
