@@ -58,4 +58,9 @@ class WidgetCaptureService {
     log.v('currentRoute:$currentRoute viewDescriptions:$viewDescriptions');
     return viewDescriptions ?? [];
   }
+
+  bool checkCurrentViewIfAlreadyCaptured(String viewName) =>
+      widgetDescriptionMap.containsKey(viewName)
+          ? widgetDescriptionMap[viewName]!.any((element) => element.name == '')
+          : false;
 }

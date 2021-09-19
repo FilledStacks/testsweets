@@ -7,7 +7,8 @@ import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.d
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
-import 'package:testsweets/src/services/validate_widget_description.dart';
+import 'package:testsweets/src/services/validate_widget_description_name.dart';
+import 'package:testsweets/src/services/validate_widget_description_view_name.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
@@ -19,7 +20,9 @@ class WidgetCaptureViewModel extends FormViewModel {
   final String projectId;
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
-  final _validateDescriptionService = locator<ValidateWidgetDescription>();
+  final _validateDescriptionName = locator<ValidateWidgetDescriptionName>();
+  final _validateDescriptionViewName =
+      locator<ValidateWidgetDescriptionViewName>();
 
   WidgetCaptureViewModel({required this.projectId}) {
     initialise(projectId: projectId);
@@ -70,6 +73,8 @@ class WidgetCaptureViewModel extends FormViewModel {
       _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracker.currentRoute,
       );
+  bool get viewAlreadyCaptured => _widgetCaptureService
+      .checkCurrentViewIfAlreadyCaptured(_testSweetsRouteTracker.currentRoute);
 
   Future<void> initialise({required String projectId}) async {
     setBusy(true);
@@ -118,8 +123,9 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     setBusy(true);
     _widgetDescription = _widgetDescription?.copyWith(
-        viewName: _testSweetsRouteTracker.currentRoute,
-        name: _validateDescriptionService
+        viewName: _validateDescriptionViewName.ifTextNotValidConvertToValidText(
+            _testSweetsRouteTracker.currentRoute),
+        name: _validateDescriptionName
             .ifTextNotValidConvertToValidText(_widgetDescription!.name));
 
     log.i('descriptionToSave:$_widgetDescription');
@@ -173,7 +179,22 @@ class WidgetCaptureViewModel extends FormViewModel {
     _widgetDescription = WidgetDescription.addAtPosition(
         widgetType: widgetType, widgetPosition: widgetPosition);
 
+    if (!_widgetCaptureService.checkCurrentViewIfAlreadyCaptured(
+        _testSweetsRouteTracker.currentRoute)) {
+      setBusy(true);
+      await _captureViewWhenItsNotAlreadyCaptured();
+      setBusy(false);
+    }
+
     _showInputTextField();
+  }
+
+  Future<void> _captureViewWhenItsNotAlreadyCaptured() async {
+    await _widgetCaptureService.captureWidgetDescription(
+        description:
+            WidgetDescription.addView(_testSweetsRouteTracker.currentRoute),
+        projectId: projectId);
+    await initialise(projectId: projectId);
   }
 
   void _showInputTextField() {

@@ -242,12 +242,34 @@ void main() {
       test(
           'When called with textfield controller is not empty and not have spaces or underscores, Should empty nameInputErrorMessage and add the current route as the view name of widgetDescription',
           () async {
+        getAndRegisterValidateWidgetDescriptionViewName(
+            validatedText: 'current route');
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
         await model.addNewWidget(WidgetType.input);
         model.saveWidgetDescription();
         expect(model.nameInputErrorMessage, isEmpty);
         expect(model.widgetDescription!.viewName, 'current route');
+      });
+      test(
+          'When called, Should call ifTextNotValidConvertToValidText on ValidateWidgetDescriptionName,ValidateWidgetDescriptionViewName',
+          () async {
+        final validateWidgetDescriptionViewName =
+            getAndRegisterValidateWidgetDescriptionViewName(
+                validatedText: 'current route');
+        final validateWidgetDescriptionName =
+            getAndRegisterValidateWidgetDescriptionName(
+                validatedText: 'current route');
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
+        await model.addNewWidget(WidgetType.input);
+        model.saveWidgetDescription();
+        verify(validateWidgetDescriptionViewName
+            .ifTextNotValidConvertToValidText('current route'));
+        model.saveWidgetDescription();
+        verify(
+          validateWidgetDescriptionName.ifTextNotValidConvertToValidText(''),
+        );
       });
     });
     group('sendWidgetDescriptionToFirestore -', () {
@@ -316,6 +338,19 @@ void main() {
         await model.addNewWidget(WidgetType.input);
         expect(model.captureWidgetStatusEnum,
             CaptureWidgetStatusEnum.captureModeWidgetNameInputShow);
+      });
+      test(
+          'When called, should check if the current view(route) is captured or not',
+          () async {
+        final widgetCaptureService = getAndRegisterWidgetCaptureService(
+            currentViewIsAlreadyCaptured: true);
+
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'my widget name';
+        await model.addNewWidget(WidgetType.input);
+
+        verify(widgetCaptureService
+            .checkCurrentViewIfAlreadyCaptured('current route'));
       });
     });
     group('switchWidgetNameInputPosition -', () {

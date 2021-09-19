@@ -1,5 +1,6 @@
 import 'package:test/test.dart';
-import 'package:testsweets/src/services/validate_widget_description.dart';
+import 'package:testsweets/src/services/validate_widget_description_name.dart';
+import 'package:testsweets/src/services/validate_widget_description_view_name.dart';
 
 import '../helpers/test_helpers.dart';
 
