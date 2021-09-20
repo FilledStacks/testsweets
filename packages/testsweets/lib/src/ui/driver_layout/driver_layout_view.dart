@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/ui/driver_layout/hittable_stack.dart';
+import 'package:testsweets/src/ui/shared/busy_indecator.dart';
 
 import 'driver_layout_viewmodel.dart';
 
@@ -26,31 +27,9 @@ class DriverLayoutView extends StatelessWidget {
       builder: (context, model, _) => HittableStack(
         children: [
           child,
-          if (model.isBusy)
-            Positioned.fill(
-              child: Center(
-                child: Container(
-                  child: Column(
-                    children: [
-                      Text('Busy fetching driver keys'),
-                      SizedBox(height: 4),
-                      SizedBox(
-                        width: 10,
-                        height: 10,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
-                      )
-                    ],
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  decoration: BoxDecoration(
-                      color: Color(0xff181818),
-                      borderRadius: BorderRadius.circular(5)),
-                ),
-              ),
-            ),
+          BusyIndecator(
+            enable: model.isBusy,
+          ),
           ...model.descriptionsForView.map(
             (description) => Positioned(
               top:

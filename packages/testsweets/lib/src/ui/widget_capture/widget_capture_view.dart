@@ -5,8 +5,8 @@ import 'package:stacked/stacked_annotations.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
+import 'package:testsweets/src/ui/shared/busy_indecator.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
-import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_description_dialog.dart';
@@ -100,20 +100,9 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                       : SizedBox.shrink(),
                                 ),
                               ),
-                              if (model.isBusy)
-                                Container(
-                                  color: kcBackground.withOpacity(0.3),
-                                  child: Center(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(16),
-                                      decoration: blackBoxDecoration,
-                                      child: CircularProgressIndicator(
-                                        valueColor: AlwaysStoppedAnimation(
-                                            kcPrimaryPurple),
-                                      ),
-                                    ),
-                                  ),
-                                )
+                              BusyIndecator(
+                                enable: model.isBusy,
+                              )
                             ],
                           ))
                 ],
