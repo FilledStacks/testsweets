@@ -24,12 +24,14 @@ class _$WidgetDescriptionTearOff {
   _WidgetDescription call(
       {String? id,
       required String viewName,
+      required String originalViewName,
       required String name,
       required WidgetType widgetType,
       required WidgetPosition position}) {
     return _WidgetDescription(
       id: id,
       viewName: viewName,
+      originalViewName: originalViewName,
       name: name,
       widgetType: widgetType,
       position: position,
@@ -51,6 +53,9 @@ mixin _$WidgetDescription {
 
   /// The name of the view this widget was captured on
   String get viewName => throw _privateConstructorUsedError;
+
+  /// The orignal name of the view this widget was captured on before the prettify
+  String get originalViewName => throw _privateConstructorUsedError;
 
   /// The name we want to use when referring to the widget in the scripts
   String get name => throw _privateConstructorUsedError;
@@ -75,6 +80,7 @@ abstract class $WidgetDescriptionCopyWith<$Res> {
   $Res call(
       {String? id,
       String viewName,
+      String originalViewName,
       String name,
       WidgetType widgetType,
       WidgetPosition position});
@@ -95,6 +101,7 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? viewName = freezed,
+    Object? originalViewName = freezed,
     Object? name = freezed,
     Object? widgetType = freezed,
     Object? position = freezed,
@@ -107,6 +114,10 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
       viewName: viewName == freezed
           ? _value.viewName
           : viewName // ignore: cast_nullable_to_non_nullable
+              as String,
+      originalViewName: originalViewName == freezed
+          ? _value.originalViewName
+          : originalViewName // ignore: cast_nullable_to_non_nullable
               as String,
       name: name == freezed
           ? _value.name
@@ -141,6 +152,7 @@ abstract class _$WidgetDescriptionCopyWith<$Res>
   $Res call(
       {String? id,
       String viewName,
+      String originalViewName,
       String name,
       WidgetType widgetType,
       WidgetPosition position});
@@ -164,6 +176,7 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? viewName = freezed,
+    Object? originalViewName = freezed,
     Object? name = freezed,
     Object? widgetType = freezed,
     Object? position = freezed,
@@ -176,6 +189,10 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
       viewName: viewName == freezed
           ? _value.viewName
           : viewName // ignore: cast_nullable_to_non_nullable
+              as String,
+      originalViewName: originalViewName == freezed
+          ? _value.originalViewName
+          : originalViewName // ignore: cast_nullable_to_non_nullable
               as String,
       name: name == freezed
           ? _value.name
@@ -199,6 +216,7 @@ class _$_WidgetDescription extends _WidgetDescription {
   _$_WidgetDescription(
       {this.id,
       required this.viewName,
+      required this.originalViewName,
       required this.name,
       required this.widgetType,
       required this.position})
@@ -217,6 +235,10 @@ class _$_WidgetDescription extends _WidgetDescription {
   final String viewName;
   @override
 
+  /// The orignal name of the view this widget was captured on before the prettify
+  final String originalViewName;
+  @override
+
   /// The name we want to use when referring to the widget in the scripts
   final String name;
   @override
@@ -230,7 +252,7 @@ class _$_WidgetDescription extends _WidgetDescription {
 
   @override
   String toString() {
-    return 'WidgetDescription(id: $id, viewName: $viewName, name: $name, widgetType: $widgetType, position: $position)';
+    return 'WidgetDescription(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position)';
   }
 
   @override
@@ -242,6 +264,9 @@ class _$_WidgetDescription extends _WidgetDescription {
             (identical(other.viewName, viewName) ||
                 const DeepCollectionEquality()
                     .equals(other.viewName, viewName)) &&
+            (identical(other.originalViewName, originalViewName) ||
+                const DeepCollectionEquality()
+                    .equals(other.originalViewName, originalViewName)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
             (identical(other.widgetType, widgetType) ||
@@ -257,6 +282,7 @@ class _$_WidgetDescription extends _WidgetDescription {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(viewName) ^
+      const DeepCollectionEquality().hash(originalViewName) ^
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(widgetType) ^
       const DeepCollectionEquality().hash(position);
@@ -276,6 +302,7 @@ abstract class _WidgetDescription extends WidgetDescription {
   factory _WidgetDescription(
       {String? id,
       required String viewName,
+      required String originalViewName,
       required String name,
       required WidgetType widgetType,
       required WidgetPosition position}) = _$_WidgetDescription;
@@ -292,6 +319,10 @@ abstract class _WidgetDescription extends WidgetDescription {
 
   /// The name of the view this widget was captured on
   String get viewName => throw _privateConstructorUsedError;
+  @override
+
+  /// The orignal name of the view this widget was captured on before the prettify
+  String get originalViewName => throw _privateConstructorUsedError;
   @override
 
   /// The name we want to use when referring to the widget in the scripts

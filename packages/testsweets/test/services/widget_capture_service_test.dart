@@ -35,12 +35,14 @@ void main() {
         getAndRegisterCloudFunctionsService(
             getWidgetDescriptionForProjectResult: [
               WidgetDescription(
+                originalViewName: '',
                 viewName: 'login',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
                 position: WidgetPosition(x: 0, y: 0),
               ),
               WidgetDescription(
+                originalViewName: '',
                 viewName: 'signUp',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
@@ -60,12 +62,14 @@ void main() {
         getAndRegisterCloudFunctionsService(
             getWidgetDescriptionForProjectResult: [
               WidgetDescription(
+                originalViewName: '',
                 viewName: 'login',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
                 position: WidgetPosition(x: 0, y: 0),
               ),
               WidgetDescription(
+                originalViewName: '',
                 viewName: 'login',
                 name: 'loginButton2',
                 widgetType: WidgetType.touchable,
@@ -84,6 +88,7 @@ void main() {
           'When called, should capture the widget description passed in to the backed',
           () async {
         final description = WidgetDescription(
+          originalViewName: '',
           viewName: 'login',
           name: 'email',
           position: WidgetPosition(x: 100, y: 199),
@@ -109,6 +114,7 @@ void main() {
           'When widget has been added to backend, add description to descriptionMap with id from the backend',
           () async {
         final description = WidgetDescription(
+          originalViewName: '',
           viewName: 'login',
           name: 'email',
           position: WidgetPosition(x: 100, y: 199),
@@ -135,18 +141,21 @@ void main() {
         getAndRegisterCloudFunctionsService(
             getWidgetDescriptionForProjectResult: [
               WidgetDescription(
+                originalViewName: '',
                 viewName: 'login',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
                 position: WidgetPosition(x: 0, y: 0),
               ),
               WidgetDescription(
+                originalViewName: '',
                 viewName: 'signUp',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
                 position: WidgetPosition(x: 0, y: 0),
               ),
               WidgetDescription(
+                originalViewName: '',
                 viewName: '/',
                 name: '',
                 widgetType: WidgetType.view,
@@ -169,6 +178,7 @@ void main() {
         final service = WidgetCaptureService();
         service.addWidgetDescriptionToMap(
           WidgetDescription(
+            originalViewName: '',
             viewName: '/new_view',
             name: 'button',
             widgetType: WidgetType.touchable,
@@ -183,6 +193,7 @@ void main() {
         final service = WidgetCaptureService();
         service.addWidgetDescriptionToMap(
           WidgetDescription(
+            originalViewName: '',
             viewName: '/new_view',
             name: 'button',
             widgetType: WidgetType.touchable,
@@ -191,6 +202,7 @@ void main() {
         );
         service.addWidgetDescriptionToMap(
           WidgetDescription(
+            originalViewName: '',
             viewName: '/new_view',
             name: 'inputField',
             widgetType: WidgetType.input,

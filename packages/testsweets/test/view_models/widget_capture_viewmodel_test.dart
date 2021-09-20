@@ -44,6 +44,7 @@ void main() {
           'When called, should set the active widget description to the current widget description',
           () async {
         final description = WidgetDescription(
+          originalViewName: ' ',
           id: 'widgetId',
           viewName: 'login',
           name: 'email',
@@ -63,6 +64,7 @@ void main() {
           'When called, should set widget description and ignore pointer boolean value be true',
           () async {
         final description = WidgetDescription(
+          originalViewName: ' ',
           viewName: 'login',
           name: 'email',
           position: WidgetPosition(x: 100, y: 199),
@@ -153,6 +155,7 @@ void main() {
           'When call this getter, Should fetch list of WidgetDescription for the current route',
           () {
         final description = WidgetDescription(
+          originalViewName: ' ',
           id: 'widgetId',
           viewName: 'login',
           name: 'email',
@@ -277,6 +280,7 @@ void main() {
           'When called, Should set captureWidgetStatusEnum to captureModeWidgetsContainerShow and widgetDescription to null',
           () async {
         final description = WidgetDescription(
+          originalViewName: ' ',
           viewName: 'login',
           id: 'id',
           name: 'email',

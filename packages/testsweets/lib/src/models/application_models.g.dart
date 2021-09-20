@@ -10,6 +10,7 @@ _$_WidgetDescription _$$_WidgetDescriptionFromJson(Map<String, dynamic> json) =>
     _$_WidgetDescription(
       id: json['id'] as String?,
       viewName: json['viewName'] as String,
+      originalViewName: json['originalViewName'] as String,
       name: json['name'] as String,
       widgetType: _$enumDecode(_$WidgetTypeEnumMap, json['widgetType']),
       position:
@@ -21,6 +22,7 @@ Map<String, dynamic> _$$_WidgetDescriptionToJson(
     <String, dynamic>{
       'id': instance.id,
       'viewName': instance.viewName,
+      'originalViewName': instance.originalViewName,
       'name': instance.name,
       'widgetType': _$WidgetTypeEnumMap[instance.widgetType],
       'position': instance.position,
