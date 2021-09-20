@@ -13,8 +13,6 @@ import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/time_service.dart';
 import 'package:testsweets/src/services/upload_service.dart';
-import 'package:testsweets/src/services/validate_widget_description_name.dart';
-import 'package:testsweets/src/services/validate_widget_description_view_name.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 
 import 'stubed_proccess.dart';
@@ -34,8 +32,6 @@ import 'test_helpers.mocks.dart';
   MockSpec<AutomationKeysService>(returnNullOnMissingStub: true),
   MockSpec<WidgetCaptureService>(returnNullOnMissingStub: true),
   MockSpec<TestSweetsRouteTracker>(returnNullOnMissingStub: true),
-  MockSpec<ValidateWidgetDescriptionName>(returnNullOnMissingStub: true),
-  MockSpec<ValidateWidgetDescriptionViewName>(returnNullOnMissingStub: true),
 ])
 MockFileSystemService getAndRegisterFileSystemService({
   bool doesFileExist = false,
@@ -237,31 +233,6 @@ MockTestSweetsRouteTracker getAndRegisterTestSweetsRouteTracker(
   return service;
 }
 
-ValidateWidgetDescriptionName getAndRegisterValidateWidgetDescriptionName({
-  String validatedText = '',
-  String devalidatedText = '',
-}) {
-  _removeRegistrationIfExists<ValidateWidgetDescriptionName>();
-  final service = MockValidateWidgetDescriptionName();
-  when(service.ifTextNotValidConvertToValidText(any)).thenReturn(validatedText);
-  when(service.deValidate(any)).thenReturn(devalidatedText);
-  locator.registerSingleton<ValidateWidgetDescriptionName>(service);
-  return service;
-}
-
-ValidateWidgetDescriptionViewName
-    getAndRegisterValidateWidgetDescriptionViewName({
-  String validatedText = '',
-  String devalidatedText = '',
-}) {
-  _removeRegistrationIfExists<ValidateWidgetDescriptionViewName>();
-  final service = MockValidateWidgetDescriptionViewName();
-  when(service.ifTextNotValidConvertToValidText(any)).thenReturn(validatedText);
-  when(service.deValidate(any)).thenReturn(devalidatedText);
-  locator.registerSingleton<ValidateWidgetDescriptionViewName>(service);
-  return service;
-}
-
 void registerServices() {
   getAndRegisterFileSystemService();
   getAndRegisterFlutterProcess();
@@ -275,8 +246,6 @@ void registerServices() {
   getAndRegisterAutomationKeysService();
   getAndRegisterTestSweetsRouteTracker();
   getAndRegisterWidgetCaptureService();
-  getAndRegisterValidateWidgetDescriptionName();
-  getAndRegisterValidateWidgetDescriptionViewName();
 }
 
 void unregisterServices() {
@@ -292,8 +261,6 @@ void unregisterServices() {
   _removeRegistrationIfExists<AutomationKeysService>();
   _removeRegistrationIfExists<TestSweetsRouteTracker>();
   _removeRegistrationIfExists<WidgetCaptureService>();
-  _removeRegistrationIfExists<ValidateWidgetDescriptionName>();
-  _removeRegistrationIfExists<ValidateWidgetDescriptionViewName>();
 }
 
 // Call this before any service registration helper. This is to ensure that if there

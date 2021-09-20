@@ -1,11 +1,8 @@
 import 'package:test/test.dart';
-import 'package:testsweets/src/services/validate_widget_description_name.dart';
-import 'package:testsweets/src/services/validate_widget_description_view_name.dart';
+import 'package:testsweets/src/extensions/string_extension.dart';
 
 import '../helpers/test_helpers.dart';
 
-final _widgetDescriptionName = ValidateWidgetDescriptionName();
-final _widgetDescriptionView = ValidateWidgetDescriptionViewName();
 void main() {
   group('ValidateWidgetDescriptionTest -', () {
     setUp(registerServices);
@@ -16,43 +13,38 @@ void main() {
         test(
             'When called and widget name is `   login email input`, Should convert to loginEmailInput',
             () {
-          final result = _widgetDescriptionName
-              .ifTextNotValidConvertToValidText('   login email input');
+          final result = '   login email input'.convertWidgetNameToValidFormat;
           expect(result, 'loginEmailInput');
         });
         test(
             'When called and widget name is `login email input`, Should convert to loginEmailInput',
             () {
-          final result = _widgetDescriptionName
-              .ifTextNotValidConvertToValidText('login email input');
+          final result = 'login email input'.convertWidgetNameToValidFormat;
           expect(result, 'loginEmailInput');
         });
         test(
             'When called and widget name is `login Email input`, Should convert to loginEmailInput',
             () {
-          final result = _widgetDescriptionName
-              .ifTextNotValidConvertToValidText('login Email input');
+          final result = 'login Email input'.convertWidgetNameToValidFormat;
           expect(result, 'loginEmailInput');
         });
         test(
             'When called and widget name is `login         Email input`, Should convert to loginEmailInput',
             () {
-          final result = _widgetDescriptionName
-              .ifTextNotValidConvertToValidText('login           Email input');
+          final result =
+              'login           Email input'.convertWidgetNameToValidFormat;
           expect(result, 'loginEmailInput');
         });
         test(
             'When called and widget name is `login Email1 input`, Should convert to loginEmail1Input',
             () {
-          final result = _widgetDescriptionName
-              .ifTextNotValidConvertToValidText('login Email1 input');
+          final result = 'login Email1 input'.convertWidgetNameToValidFormat;
           expect(result, 'loginEmail1Input');
         });
         test(
             'When called and widget name is `login 1Email1 input`, Should convert to login1Email1Input',
             () {
-          final result = _widgetDescriptionName
-              .ifTextNotValidConvertToValidText('login 1Email1 input');
+          final result = 'login 1Email1 input'.convertWidgetNameToValidFormat;
           expect(result, 'login1Email1Input');
         });
       });
@@ -60,7 +52,7 @@ void main() {
         test(
             'When called and widget name is `loginEmailInput`, Should convert to `login email input`',
             () {
-          final result = _widgetDescriptionName.deValidate('loginEmailInput');
+          final result = 'loginEmailInput'.restoreWidgetNameToOriginal;
           expect(result, 'login email input');
         });
       });
@@ -68,15 +60,13 @@ void main() {
     group('ValidateWidgetDescriptionViewName -', () {
       test('When called and view name is `/`, Should convert to `initialView',
           () {
-        final result =
-            _widgetDescriptionView.ifTextNotValidConvertToValidText('/');
+        final result = '/'.convertViewNameToValidFormat;
         expect(result, 'initialView');
       });
       test(
           'When called and view name is `/login-view`, Should convert to `loginView',
           () {
-        final result = _widgetDescriptionView
-            .ifTextNotValidConvertToValidText('/login-view');
+        final result = '/login-view'.convertViewNameToValidFormat;
         expect(result, 'loginView');
       });
     });

@@ -4,11 +4,10 @@ import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
+import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
-import 'package:testsweets/src/services/validate_widget_description_name.dart';
-import 'package:testsweets/src/services/validate_widget_description_view_name.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
@@ -20,12 +19,9 @@ class WidgetCaptureViewModel extends FormViewModel {
   final String projectId;
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
-  final _validateDescriptionName = locator<ValidateWidgetDescriptionName>();
-  final _validateDescriptionViewName =
-      locator<ValidateWidgetDescriptionViewName>();
 
   WidgetCaptureViewModel({required this.projectId}) {
-    initialise(projectId: projectId);
+    syncWithFirestoreWidgetKeys(projectId: projectId);
 
     _testSweetsRouteTracker.addListener(() {
       if (_captureWidgetStatusEnum == CaptureWidgetStatusEnum.inspectMode) {
@@ -74,8 +70,9 @@ class WidgetCaptureViewModel extends FormViewModel {
         currentRoute: _testSweetsRouteTracker.currentRoute,
       );
 
-  Future<void> initialise({required String projectId}) async {
-    setBusy(true);
+  Future<void> syncWithFirestoreWidgetKeys(
+      {required String projectId, bool enableBusy = true}) async {
+    if (enableBusy) setBusy(true);
     try {
       await _widgetCaptureService.loadWidgetDescriptionsForProject(
         projectId: projectId,
@@ -121,11 +118,10 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     setBusy(true);
     _widgetDescription = _widgetDescription?.copyWith(
-        viewName: _validateDescriptionViewName.ifTextNotValidConvertToValidText(
-            _testSweetsRouteTracker.currentRoute),
+        viewName:
+            _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
         originalViewName: _testSweetsRouteTracker.currentRoute,
-        name: _validateDescriptionName
-            .ifTextNotValidConvertToValidText(_widgetDescription!.name));
+        name: widgetNameValue!.convertWidgetNameToValidFormat);
 
     log.i('descriptionToSave:$_widgetDescription');
 
@@ -135,7 +131,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   bool _isEmpty() {
-    if (widgetNameValue!.isEmpty) {
+    if (widgetNameValue!.trim().isEmpty) {
       _inputErrorMessage = ErrorMessages.widgetInputNameIsEmpty;
       notifyListeners();
       return true;
@@ -180,21 +176,20 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     if (!_widgetCaptureService.checkCurrentViewIfAlreadyCaptured(
         _testSweetsRouteTracker.currentRoute))
-      await _captureViewWhenItsNotAlreadyCaptured();
+      _captureViewWhenItsNotAlreadyCaptured();
 
     _showInputTextField();
   }
 
   Future<void> _captureViewWhenItsNotAlreadyCaptured() async {
     try {
-      await _widgetCaptureService.captureWidgetDescription(
+      _widgetCaptureService.captureWidgetDescription(
           description: WidgetDescription.addView(
-              viewName:
-                  _validateDescriptionViewName.ifTextNotValidConvertToValidText(
-                      _testSweetsRouteTracker.currentRoute),
+              viewName: _testSweetsRouteTracker
+                  .currentRoute.convertViewNameToValidFormat,
               originalViewName: _testSweetsRouteTracker.currentRoute),
           projectId: projectId);
-      await initialise(projectId: projectId);
+      syncWithFirestoreWidgetKeys(projectId: projectId, enableBusy: false);
     } catch (e) {
       log.e("couldn't capture the view : $e");
       //should add a way to notify the user that something wrong happened

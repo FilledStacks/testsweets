@@ -245,34 +245,34 @@ void main() {
       test(
           'When called with textfield controller is not empty and not have spaces or underscores, Should empty nameInputErrorMessage and add the current route as the view name of widgetDescription',
           () async {
-        getAndRegisterValidateWidgetDescriptionViewName(
-            validatedText: 'current route');
+        getAndRegisterTestSweetsRouteTracker(currentRoute: 'current route');
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
         await model.addNewWidget(WidgetType.input);
         model.saveWidgetDescription();
         expect(model.nameInputErrorMessage, isEmpty);
-        expect(model.widgetDescription!.viewName, 'current route');
+        expect(model.widgetDescription!.originalViewName, 'current route');
       });
       test(
-          'When called, Should call ifTextNotValidConvertToValidText on ValidateWidgetDescriptionName,ValidateWidgetDescriptionViewName',
+          'When called and the current route is `/current route`, Should convert it to `currentRoute` in viewName proberty before send it to backend',
           () async {
-        final validateWidgetDescriptionViewName =
-            getAndRegisterValidateWidgetDescriptionViewName(
-                validatedText: 'current route');
-        final validateWidgetDescriptionName =
-            getAndRegisterValidateWidgetDescriptionName(
-                validatedText: 'current route');
+        getAndRegisterTestSweetsRouteTracker(currentRoute: '/current route');
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
         await model.addNewWidget(WidgetType.input);
         model.saveWidgetDescription();
-        verify(validateWidgetDescriptionViewName
-            .ifTextNotValidConvertToValidText('current route'));
+        expect(model.widgetDescription!.viewName, 'currentRoute');
+        expect(model.widgetDescription!.originalViewName, '/current route');
+      });
+      test(
+          'When called and the current widget name is `login-button`, Should convert it to `loginButton` in name proberty before send it to backend',
+          () async {
+        getAndRegisterTestSweetsRouteTracker(currentRoute: '/current route');
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'login-button';
+        await model.addNewWidget(WidgetType.input);
         model.saveWidgetDescription();
-        verify(
-          validateWidgetDescriptionName.ifTextNotValidConvertToValidText(''),
-        );
+        expect(model.widgetDescription!.name, 'loginButton');
       });
     });
     group('sendWidgetDescriptionToFirestore -', () {

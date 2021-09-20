@@ -22,10 +22,6 @@ import 'package:testsweets/src/services/test_sweets_config_file_service.dart'
 import 'package:testsweets/src/services/testsweets_route_tracker.dart' as _i18;
 import 'package:testsweets/src/services/time_service.dart' as _i11;
 import 'package:testsweets/src/services/upload_service.dart' as _i15;
-import 'package:testsweets/src/services/validate_widget_description_name.dart'
-    as _i20;
-import 'package:testsweets/src/services/validate_widget_description_view_name.dart'
-    as _i21;
 import 'package:testsweets/src/services/widget_capture_service.dart' as _i17;
 
 // ignore_for_file: avoid_redundant_argument_values
@@ -348,9 +344,10 @@ class MockWidgetCaptureService extends _i1.Mock
               returnValue: <_i13.WidgetDescription>[])
           as List<_i13.WidgetDescription>);
   @override
-  bool checkCurrentViewIfAlreadyCaptured(String? viewName) =>
+  bool checkCurrentViewIfAlreadyCaptured(String? originalViewName) =>
       (super.noSuchMethod(
-          Invocation.method(#checkCurrentViewIfAlreadyCaptured, [viewName]),
+          Invocation.method(
+              #checkCurrentViewIfAlreadyCaptured, [originalViewName]),
           returnValue: false) as bool);
   @override
   String toString() => super.toString();
@@ -388,40 +385,6 @@ class MockTestSweetsRouteTracker extends _i1.Mock
   void notifyListeners() =>
       super.noSuchMethod(Invocation.method(#notifyListeners, []),
           returnValueForMissingStub: null);
-  @override
-  String toString() => super.toString();
-}
-
-/// A class which mocks [ValidateWidgetDescriptionName].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockValidateWidgetDescriptionName extends _i1.Mock
-    implements _i20.ValidateWidgetDescriptionName {
-  @override
-  String ifTextNotValidConvertToValidText(String? text) => (super.noSuchMethod(
-      Invocation.method(#ifTextNotValidConvertToValidText, [text]),
-      returnValue: '') as String);
-  @override
-  String deValidate(String? text) => (super
-          .noSuchMethod(Invocation.method(#deValidate, [text]), returnValue: '')
-      as String);
-  @override
-  String toString() => super.toString();
-}
-
-/// A class which mocks [ValidateWidgetDescriptionViewName].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockValidateWidgetDescriptionViewName extends _i1.Mock
-    implements _i21.ValidateWidgetDescriptionViewName {
-  @override
-  String ifTextNotValidConvertToValidText(String? text) => (super.noSuchMethod(
-      Invocation.method(#ifTextNotValidConvertToValidText, [text]),
-      returnValue: '') as String);
-  @override
-  String deValidate(String? text) => (super
-          .noSuchMethod(Invocation.method(#deValidate, [text]), returnValue: '')
-      as String);
   @override
   String toString() => super.toString();
 }
