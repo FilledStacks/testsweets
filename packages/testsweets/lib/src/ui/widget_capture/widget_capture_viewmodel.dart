@@ -181,20 +181,24 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     if (!_widgetCaptureService.checkCurrentViewIfAlreadyCaptured(
         _testSweetsRouteTracker.currentRoute)) {
-      setBusy(true);
       await _captureViewWhenItsNotAlreadyCaptured();
-      setBusy(false);
     }
 
     _showInputTextField();
   }
 
   Future<void> _captureViewWhenItsNotAlreadyCaptured() async {
-    await _widgetCaptureService.captureWidgetDescription(
-        description:
-            WidgetDescription.addView(_testSweetsRouteTracker.currentRoute),
-        projectId: projectId);
-    await initialise(projectId: projectId);
+    try {
+      await _widgetCaptureService.captureWidgetDescription(
+          description:
+              WidgetDescription.addView(_testSweetsRouteTracker.currentRoute),
+          projectId: projectId);
+      await initialise(projectId: projectId);
+    } catch (e) {
+      log.e("couldn't capture the view : $e");
+      //should add a way to notify the user that something wrong happened
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.captureMode;
+    }
   }
 
   void _showInputTextField() {
