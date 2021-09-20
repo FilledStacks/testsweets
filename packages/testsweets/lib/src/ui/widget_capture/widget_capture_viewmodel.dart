@@ -179,9 +179,8 @@ class WidgetCaptureViewModel extends FormViewModel {
         widgetType: widgetType, widgetPosition: widgetPosition);
 
     if (!_widgetCaptureService.checkCurrentViewIfAlreadyCaptured(
-        _testSweetsRouteTracker.currentRoute)) {
+        _testSweetsRouteTracker.currentRoute))
       await _captureViewWhenItsNotAlreadyCaptured();
-    }
 
     _showInputTextField();
   }
