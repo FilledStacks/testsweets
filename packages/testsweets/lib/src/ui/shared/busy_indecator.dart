@@ -3,9 +3,9 @@ import 'package:testsweets/src/ui/shared/shared_styles.dart';
 
 import 'app_colors.dart';
 
-class BusyIndecator extends StatelessWidget {
+class BusyIndicator extends StatelessWidget {
   final bool enable;
-  const BusyIndecator({Key? key, required this.enable}) : super(key: key);
+  const BusyIndicator({Key? key, required this.enable}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

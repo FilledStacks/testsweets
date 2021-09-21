@@ -100,7 +100,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                       : SizedBox.shrink(),
                                 ),
                               ),
-                              BusyIndecator(
+                              BusyIndicator(
                                 enable: model.isBusy,
                               )
                             ],

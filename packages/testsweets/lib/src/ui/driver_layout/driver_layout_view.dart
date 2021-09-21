@@ -27,7 +27,7 @@ class DriverLayoutView extends StatelessWidget {
       builder: (context, model, _) => HittableStack(
         children: [
           child,
-          BusyIndecator(
+          BusyIndicator(
             enable: model.isBusy,
           ),
           ...model.descriptionsForView.map(
