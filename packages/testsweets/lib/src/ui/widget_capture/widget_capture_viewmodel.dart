@@ -1,5 +1,5 @@
 import 'package:stacked/stacked.dart';
-import 'package:testsweets/src/app/logger.dart';
+import 'package:testsweets/src/app/app.logger.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
@@ -209,9 +209,12 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void closeWidgetNameInput() {
-    _widgetDescription = null;
-    _inputErrorMessage = '';
-    toggleWidgetsContainer();
+    if (_isEditMode) {
+      toggleIsEditMode();
+    } else {
+      _widgetDescription = null;
+      toggleWidgetsContainer();
+    }
   }
 
   void showWidgetDescription(WidgetDescription description) {
@@ -223,5 +226,90 @@ class WidgetCaptureViewModel extends FormViewModel {
   void closeWidgetDescription() {
     _activeWidgetId = '';
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
+  }
+
+  bool _isEditMode = false;
+  bool get isEditMode => _isEditMode;
+
+  void editWidgetDescription() {
+    _isEditMode = true;
+    _widgetDescription = _activeWidgetDescription;
+    captureWidgetStatusEnum =
+        CaptureWidgetStatusEnum.captureModeWidgetNameInputShow;
+    notifyListeners();
+  }
+
+  void toggleIsEditMode() async {
+    _isEditMode = false;
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
+
+    try {
+      await _widgetCaptureService.loadWidgetDescriptionsForProject(
+        projectId: projectId,
+      );
+    } catch (e) {
+      log.e('Couldn\'t load the widget descriptions. $e');
+    }
+    notifyListeners();
+  }
+
+  Future<void> deleteWidgetDescription() async {
+    if (_onChangedValue.isEmpty) {
+      _inputErrorMessage = 'Widget name must not be empty';
+      notifyListeners();
+    } else {
+      _inputErrorMessage = '';
+      try {
+        setBusy(true);
+
+        log.i('descriptionToDelete:$_widgetDescription');
+
+        await _widgetCaptureService.deleteWidgetDescription(
+            projectId: projectId, description: _widgetDescription!);
+
+        setBusy(false);
+
+        toggleIsEditMode();
+      } catch (e) {
+        setBusy(false);
+        log.e('Couldn\'t delete the widget. $e');
+      }
+    }
+  }
+
+  Future<void> updateWidgetDescription() async {
+    if (_onChangedValue.isEmpty) {
+      _inputErrorMessage = 'Widget name must not be empty';
+      notifyListeners();
+    } else {
+      _inputErrorMessage = '';
+      _widgetDescription = _widgetDescription?.copyWith(name: _onChangedValue);
+
+      try {
+        setBusy(true);
+
+        log.i('descriptionToUpdate:$_widgetDescription');
+
+        await _widgetCaptureService.updateWidgetDescription(
+            projectId: projectId, description: _widgetDescription!);
+        setBusy(false);
+        toggleIsEditMode();
+      } catch (e) {
+        setBusy(false);
+        log.e('Couldn\'t update the widget. $e');
+      }
+    }
+  }
+
+  String _onChangedValue = '';
+  String get onChangedValue => _onChangedValue;
+
+  set onChangedValue(String value) {
+    _onChangedValue = value;
+    notifyListeners();
+  }
+
+  void onChangeWidgetName(String value) {
+    onChangedValue = value;
   }
 }

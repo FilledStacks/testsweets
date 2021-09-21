@@ -11,9 +11,14 @@ class WidgetNameInput extends StatelessWidget {
   final FocusNode? focusNode;
   final TextEditingController? textEditingController;
   final VoidCallback switchPositionTap;
+  final VoidCallback deleteWidget;
   final VoidCallback saveWidget;
   final VoidCallback closeWidget;
   final String errorMessage;
+  final bool isEditMode;
+  final String? initialValue;
+  final ValueChanged<String>? onChanged;
+
   const WidgetNameInput({
     Key? key,
     this.focusNode,
@@ -22,6 +27,10 @@ class WidgetNameInput extends StatelessWidget {
     required this.saveWidget,
     required this.closeWidget,
     required this.errorMessage,
+    required this.deleteWidget,
+    this.isEditMode = false,
+    this.initialValue,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -44,10 +53,12 @@ class WidgetNameInput extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: TextField(
+                child: TextFormField(
                   focusNode: focusNode,
                   controller: textEditingController,
+                  initialValue: initialValue,
                   style: tsNormal().copyWith(color: kcPrimaryWhite),
+                  onChanged: onChanged,
                   decoration: InputDecoration(
                       hintStyle: tsNormal().copyWith(
                         color: kcSecondaryWhite,
@@ -82,15 +93,32 @@ class WidgetNameInput extends StatelessWidget {
               SizedBox(
                 width: 12.w,
               ),
-              CtaButton(
-                title: 'Save Widget',
-                fillColor: kcSecondaryGreen,
-                onTap: () {
-                  saveWidget();
-                  focusNode?.unfocus();
-                  textEditingController?.clear();
-                },
-                maxWidth: 100.w,
+              Column(
+                children: [
+                  CtaButton(
+                    title: isEditMode ? 'Update Widget' : 'Save Widget',
+                    fillColor: kcSecondaryGreen,
+                    onTap: () {
+                      saveWidget();
+                      focusNode?.unfocus();
+                      textEditingController?.clear();
+                    },
+                    maxWidth: 100.w,
+                  ),
+                  isEditMode ? SizedBox(height: 8.h) : SizedBox.shrink(),
+                  isEditMode
+                      ? CtaButton(
+                          title: 'Delete Widget',
+                          fillColor: kcError,
+                          onTap: () {
+                            deleteWidget();
+                            focusNode?.unfocus();
+                            textEditingController?.clear();
+                          },
+                          maxWidth: 100.w,
+                        )
+                      : SizedBox.shrink()
+                ],
               ),
             ],
           ),

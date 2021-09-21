@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:testsweets/src/app/logger.dart';
+import 'package:testsweets/src/app/app.logger.dart';
 import 'package:testsweets/src/models/application_models.dart';
 
 import '../locator.dart';
@@ -89,11 +89,11 @@ class CloudFunctionsService {
 
   Future<List<WidgetDescription>> getWidgetDescriptionForProject({
     required String projectId,
-  }) async { 
+  }) async {
     log.i('projectId:$projectId');
 
     final endpoint =
-        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/getWidgetDescriptionsForProject?projectId=$projectId';
+        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/getWidgetDescription?projectId=$projectId';
 
     final response = await httpService.get(to: endpoint);
 
@@ -104,6 +104,58 @@ class CloudFunctionsService {
       return descriptionsJson
           .map((e) => WidgetDescription.fromJson(e))
           .toList();
+    }
+
+    throw Exception(response.body);
+  }
+
+  Future<String> updateWidgetDescription({
+    required String projectId,
+    required WidgetDescription description,
+  }) async {
+    log.i('projectId:$projectId');
+    log.i('WidgetDescription:$description');
+
+    final endpoint =
+        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/updateWidgetDescription?projectId=$projectId';
+
+    final response = await httpService.postJson(
+      to: endpoint,
+      body: {
+        'projectId': projectId,
+        'widgetDescription': description.toJson(),
+      },
+    );
+
+    if (response.statusCode == 200) {
+      log.i('updateWidgetDescription | Success!');
+      return response.parseBodyAsJsonMap()['id'];
+    }
+
+    throw Exception(response.body);
+  }
+
+  Future<String> deleteWidgetDescription({
+    required String projectId,
+    required WidgetDescription description,
+  }) async {
+    log.i('projectId:$projectId');
+    log.i('WidgetDescription:$description');
+
+    final endpoint =
+        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/deleteWidgetDescription?projectId=$projectId';
+
+    final response = await httpService.postJson(
+      to: endpoint,
+      body: {
+        'projectId': projectId,
+        'widgetDescription': description.toJson(),
+      },
+    );
+
+    if (response.statusCode == 200) {
+      log.i('deleteWidgetDescription | Success!');
+      return response.parseBodyAsJsonMap()['id'];
     }
 
     throw Exception(response.body);
