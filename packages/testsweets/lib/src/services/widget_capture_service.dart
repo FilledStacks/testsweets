@@ -44,7 +44,7 @@ class WidgetCaptureService {
     }
   }
 
-  void addWidgetDescriptionToMap(WidgetDescription description) {
+  void addWidgetDescriptionToMap({required WidgetDescription description}) {
     if (widgetDescriptionMap.containsKey(description.originalViewName)) {
       widgetDescriptionMap[description.originalViewName]?.add(description);
     } else {
