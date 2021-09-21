@@ -15,30 +15,36 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
     return Stack(
       children: [
-        ...model.descriptionsForView.map(
-          (description) => Positioned(
-            top: description.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
-            left: description.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
-            child: IgnorePointer(
-              ignoring: model.captureWidgetStatusEnum ==
-                  CaptureWidgetStatusEnum.inspectModeDialogShow,
-              child: GestureDetector(
-                onTap: () => model.showWidgetDescription(description),
-                child: AnimatedOpacity(
-                    duration: const Duration(milliseconds: 300),
-                    opacity: model.activeWidgetId != description.id &&
-                            model.captureWidgetStatusEnum ==
-                                CaptureWidgetStatusEnum.inspectModeDialogShow
-                        ? 0.25
-                        : 1,
-                    child: WidgetCircle(
-                      key: Key(description.automationKey),
-                      widgetType: description.widgetType,
-                    )),
+        ...model.descriptionsForView
+            .where(
+                (element) => element.position.x != 0 && element.position.y != 0)
+            .map(
+              (description) => Positioned(
+                top: description.position.y -
+                    (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
+                left: description.position.x -
+                    (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
+                child: IgnorePointer(
+                  ignoring: model.captureWidgetStatusEnum ==
+                      CaptureWidgetStatusEnum.inspectModeDialogShow,
+                  child: GestureDetector(
+                    onTap: () => model.showWidgetDescription(description),
+                    child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 300),
+                        opacity: model.activeWidgetId != description.id &&
+                                model.captureWidgetStatusEnum ==
+                                    CaptureWidgetStatusEnum
+                                        .inspectModeDialogShow
+                            ? 0.25
+                            : 1,
+                        child: WidgetCircle(
+                          key: Key(description.automationKey),
+                          widgetType: description.widgetType,
+                        )),
+                  ),
+                ),
               ),
-            ),
-          ),
-        )
+            )
       ],
     );
   }

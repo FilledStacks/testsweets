@@ -45,6 +45,7 @@ void main() {
           'When called, should set the active widget description to the current widget description',
           () async {
         final description = WidgetDescription(
+          originalViewName: ' ',
           id: 'widgetId',
           viewName: 'login',
           name: 'email',
@@ -64,6 +65,7 @@ void main() {
           'When called, should set widget description and ignore pointer boolean value be true',
           () async {
         final description = WidgetDescription(
+          originalViewName: ' ',
           viewName: 'login',
           name: 'email',
           position: WidgetPosition(x: 100, y: 199),
@@ -154,6 +156,7 @@ void main() {
           'When call this getter, Should fetch list of WidgetDescription for the current route',
           () {
         final description = WidgetDescription(
+          originalViewName: ' ',
           id: 'widgetId',
           viewName: 'login',
           name: 'email',
@@ -239,37 +242,38 @@ void main() {
         expect(
             model.nameInputErrorMessage, ErrorMessages.widgetInputNameIsEmpty);
       });
-      test(
-          "When called with textfield controller text is having a space in the string, Should show a validation that say's 'names shouldn't have spaces'",
-          () async {
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.formValueMap[WidgetNameValueKey] = 'my widget name';
-        model.addNewWidget(WidgetType.input);
-        model.saveWidgetDescription();
-        expect(model.nameInputErrorMessage,
-            ErrorMessages.widgetInputNameHaveSpaces);
-      });
 
-      test(
-          'When called with textfield controller text have underscores, Should show error message "Names shouldn\'t have undescores"',
-          () async {
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.formValueMap[WidgetNameValueKey] = 'my_widget_name';
-        await model.addNewWidget(WidgetType.input);
-        model.saveWidgetDescription();
-
-        expect(model.nameInputErrorMessage,
-            ErrorMessages.widgetInputNameHaveUnderScores);
-      });
       test(
           'When called with textfield controller is not empty and not have spaces or underscores, Should empty nameInputErrorMessage and add the current route as the view name of widgetDescription',
           () async {
+        getAndRegisterTestSweetsRouteTracker(currentRoute: 'current route');
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
         await model.addNewWidget(WidgetType.input);
         model.saveWidgetDescription();
         expect(model.nameInputErrorMessage, isEmpty);
-        expect(model.widgetDescription!.viewName, 'current route');
+        expect(model.widgetDescription!.originalViewName, 'current route');
+      });
+      test(
+          'When called and the current route is `/current route`, Should convert it to `currentRoute` in viewName proberty before send it to backend',
+          () async {
+        getAndRegisterTestSweetsRouteTracker(currentRoute: '/current route');
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
+        await model.addNewWidget(WidgetType.input);
+        model.saveWidgetDescription();
+        expect(model.widgetDescription!.viewName, 'currentRoute');
+        expect(model.widgetDescription!.originalViewName, '/current route');
+      });
+      test(
+          'When called and the current widget name is `login-button`, Should convert it to `loginButton` in name proberty before send it to backend',
+          () async {
+        getAndRegisterTestSweetsRouteTracker(currentRoute: '/current route');
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'login-button';
+        await model.addNewWidget(WidgetType.input);
+        model.saveWidgetDescription();
+        expect(model.widgetDescription!.name, 'loginButton');
       });
     });
     group('sendWidgetDescriptionToFirestore -', () {
@@ -277,6 +281,7 @@ void main() {
           'When called, Should set captureWidgetStatusEnum to captureModeWidgetsContainerShow and widgetDescription to null',
           () async {
         final description = WidgetDescription(
+          originalViewName: ' ',
           viewName: 'login',
           id: 'id',
           name: 'email',

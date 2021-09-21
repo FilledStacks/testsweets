@@ -17,6 +17,9 @@ class WidgetDescription with _$WidgetDescription {
     /// The name of the view this widget was captured on
     required String viewName,
 
+    /// The orignal name of the view this widget was captured on before the prettify
+    required String originalViewName,
+
     /// The name we want to use when referring to the widget in the scripts
     required String name,
 
@@ -26,15 +29,19 @@ class WidgetDescription with _$WidgetDescription {
     /// The position we defined for he widget
     required WidgetPosition position,
   }) = _WidgetDescription;
-  factory WidgetDescription.addView(String viewName) => WidgetDescription(
-      viewName: viewName,
-      name: '',
-      widgetType: WidgetType.view,
-      position: WidgetPosition(x: 0, y: 0));
+  factory WidgetDescription.addView(
+          {required String viewName, required String originalViewName}) =>
+      WidgetDescription(
+          viewName: viewName,
+          originalViewName: originalViewName,
+          name: '',
+          widgetType: WidgetType.view,
+          position: WidgetPosition(x: 0, y: 0));
 
   factory WidgetDescription.addAtPosition(
           {required WidgetType widgetType, WidgetPosition? widgetPosition}) =>
       WidgetDescription(
+          originalViewName: '',
           viewName: '',
           name: '',
           widgetType: widgetType,

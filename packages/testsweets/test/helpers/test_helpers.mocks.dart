@@ -348,9 +348,10 @@ class MockWidgetCaptureService extends _i1.Mock
               returnValue: <_i12.WidgetDescription>[])
           as List<_i12.WidgetDescription>);
   @override
-  bool checkCurrentViewIfAlreadyCaptured(String? viewName) =>
+  bool checkCurrentViewIfAlreadyCaptured(String? originalViewName) =>
       (super.noSuchMethod(
-          Invocation.method(#checkCurrentViewIfAlreadyCaptured, [viewName]),
+          Invocation.method(
+              #checkCurrentViewIfAlreadyCaptured, [originalViewName]),
           returnValue: false) as bool);
   @override
   _i8.Future<void> updateWidgetDescription(

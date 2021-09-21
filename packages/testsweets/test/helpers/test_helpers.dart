@@ -263,18 +263,18 @@ void registerServices() {
 }
 
 void unregisterServices() {
-  locator.unregister<FileSystemService>();
-  locator.unregister<FlutterProcess>();
-  locator.unregister<HttpService>();
-  locator.unregister<TimeService>();
-  locator.unregister<CloudFunctionsService>();
-  locator.unregister<DynamicKeysGenerator>();
-  locator.unregister<BuildService>();
-  locator.unregister<TestSweetsConfigFileService>();
-  locator.unregister<UploadService>();
-  locator.unregister<AutomationKeysService>();
-  locator.unregister<TestSweetsRouteTracker>();
-  locator.unregister<WidgetCaptureService>();
+  _removeRegistrationIfExists<FileSystemService>();
+  _removeRegistrationIfExists<FlutterProcess>();
+  _removeRegistrationIfExists<HttpService>();
+  _removeRegistrationIfExists<TimeService>();
+  _removeRegistrationIfExists<CloudFunctionsService>();
+  _removeRegistrationIfExists<DynamicKeysGenerator>();
+  _removeRegistrationIfExists<BuildService>();
+  _removeRegistrationIfExists<TestSweetsConfigFileService>();
+  _removeRegistrationIfExists<UploadService>();
+  _removeRegistrationIfExists<AutomationKeysService>();
+  _removeRegistrationIfExists<TestSweetsRouteTracker>();
+  _removeRegistrationIfExists<WidgetCaptureService>();
 }
 
 // Call this before any service registration helper. This is to ensure that if there

@@ -4,6 +4,7 @@ import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
+import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
@@ -20,7 +21,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _widgetCaptureService = locator<WidgetCaptureService>();
 
   WidgetCaptureViewModel({required this.projectId}) {
-    initialise(projectId: projectId);
+    syncWithFirestoreWidgetKeys(projectId: projectId);
 
     _testSweetsRouteTracker.addListener(() {
       if (_captureWidgetStatusEnum == CaptureWidgetStatusEnum.inspectMode) {
@@ -68,11 +69,10 @@ class WidgetCaptureViewModel extends FormViewModel {
       _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracker.currentRoute,
       );
-  bool get viewAlreadyCaptured => _widgetCaptureService
-      .checkCurrentViewIfAlreadyCaptured(_testSweetsRouteTracker.currentRoute);
 
-  Future<void> initialise({required String projectId}) async {
-    setBusy(true);
+  Future<void> syncWithFirestoreWidgetKeys(
+      {required String projectId, bool enableBusy = true}) async {
+    if (enableBusy) setBusy(true);
     try {
       await _widgetCaptureService.loadWidgetDescriptionsForProject(
         projectId: projectId,
@@ -114,12 +114,14 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<void> saveWidgetDescription() async {
-    if (_validateWidgetName()) return;
+    if (_isEmpty()) return;
 
     setBusy(true);
     _widgetDescription = _widgetDescription?.copyWith(
-      viewName: _testSweetsRouteTracker.currentRoute,
-    );
+        viewName:
+            _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
+        originalViewName: _testSweetsRouteTracker.currentRoute,
+        name: widgetNameValue!.convertWidgetNameToValidFormat);
 
     log.i('descriptionToSave:$_widgetDescription');
 
@@ -128,23 +130,15 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusy(false);
   }
 
-  bool _validateWidgetName() {
-    if (widgetNameValue!.isEmpty) {
+  bool _isEmpty() {
+    if (widgetNameValue!.trim().isEmpty) {
       _inputErrorMessage = ErrorMessages.widgetInputNameIsEmpty;
       notifyListeners();
       return true;
-    } else if (widgetNameValue!.trim().contains(' ')) {
-      _inputErrorMessage = ErrorMessages.widgetInputNameHaveSpaces;
-      notifyListeners();
-      return true;
-    } else if (widgetNameValue!.trim().contains('_')) {
-      _inputErrorMessage = ErrorMessages.widgetInputNameHaveUnderScores;
-      notifyListeners();
-      return true;
+    } else {
+      _inputErrorMessage = '';
+      return false;
     }
-
-    _inputErrorMessage = '';
-    return false;
   }
 
   Future<void> sendWidgetDescriptionToFirestore() async {
@@ -181,21 +175,26 @@ class WidgetCaptureViewModel extends FormViewModel {
         widgetType: widgetType, widgetPosition: widgetPosition);
 
     if (!_widgetCaptureService.checkCurrentViewIfAlreadyCaptured(
-        _testSweetsRouteTracker.currentRoute)) {
-      setBusy(true);
-      await _captureViewWhenItsNotAlreadyCaptured();
-      setBusy(false);
-    }
+        _testSweetsRouteTracker.currentRoute))
+      _captureViewWhenItsNotAlreadyCaptured();
 
     _showInputTextField();
   }
 
   Future<void> _captureViewWhenItsNotAlreadyCaptured() async {
-    await _widgetCaptureService.captureWidgetDescription(
-        description:
-            WidgetDescription.addView(_testSweetsRouteTracker.currentRoute),
-        projectId: projectId);
-    await initialise(projectId: projectId);
+    try {
+      _widgetCaptureService.captureWidgetDescription(
+          description: WidgetDescription.addView(
+              viewName: _testSweetsRouteTracker
+                  .currentRoute.convertViewNameToValidFormat,
+              originalViewName: _testSweetsRouteTracker.currentRoute),
+          projectId: projectId);
+      syncWithFirestoreWidgetKeys(projectId: projectId, enableBusy: false);
+    } catch (e) {
+      log.e("couldn't capture the view : $e");
+      //should add a way to notify the user that something wrong happened
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.captureMode;
+    }
   }
 
   void _showInputTextField() {
