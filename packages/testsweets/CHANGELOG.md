@@ -1,3 +1,9 @@
+## 1.4.5
+
+- Improves UX for capturing widgets
+- Adds new alias properties for better viewnames
+- Adds new enabled functionality to turn overlay on or off
+
 ## 1.4.4
 
 - Use correct string version of widget type in the `automationKey` value
