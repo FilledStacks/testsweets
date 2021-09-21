@@ -176,8 +176,8 @@ void main() {
           'When WidgetDescription has viewName that not empty(meaning that anything but view), Should create a new key from its viewName',
           () {
         final service = WidgetCaptureService();
-        service.addWidgetDescriptionToMap(description:
-          WidgetDescription(
+        service.addWidgetDescriptionToMap(
+          description: WidgetDescription(
             originalViewName: '/new_view',
             viewName: 'newView',
             name: 'button',
@@ -191,8 +191,8 @@ void main() {
           'When two WidgetDescription has the same viewName , Should add the second widget to the already added key from the first one ',
           () {
         final service = WidgetCaptureService();
-        service.addWidgetDescriptionToMap(description:
-          WidgetDescription(
+        service.addWidgetDescriptionToMap(
+          description: WidgetDescription(
             originalViewName: '/new_view',
             viewName: 'newView',
             name: 'button',
@@ -200,8 +200,8 @@ void main() {
             position: WidgetPosition(x: 0, y: 0),
           ),
         );
-        service.addWidgetDescriptionToMap(description:
-          WidgetDescription(
+        service.addWidgetDescriptionToMap(
+          description: WidgetDescription(
             originalViewName: '/new_view',
             viewName: 'newView',
             name: 'inputField',
