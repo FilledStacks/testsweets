@@ -30,7 +30,7 @@ void main() {
       });
 
       test(
-          'When called and descriptions are returned with 1 description for login and 1 for sign up, should populat map with key login and signup',
+          'When called and descriptions are returned with 1 description for login and 1 for sign up, should populate map with key login and signup',
           () async {
         getAndRegisterCloudFunctionsService(
             getWidgetDescriptionForProjectResult: [
@@ -174,6 +174,21 @@ void main() {
     group('addWidgetDescriptionToMap -', () {
       test(
           'When WidgetDescription has viewName that not empty(meaning that anything but view), Should create a new key from its viewName',
+          () {
+        final service = WidgetCaptureService();
+        service.addWidgetDescriptionToMap(
+          description: WidgetDescription(
+            originalViewName: '/new_view',
+            viewName: 'newView',
+            name: 'button',
+            widgetType: WidgetType.touchable,
+            position: WidgetPosition(x: 0, y: 0),
+          ),
+        );
+        expect(service.widgetDescriptionMap['/new_view']!.length, 1);
+      });
+
+      test('When isUpdate is true, Should create a new key from its viewName',
           () {
         final service = WidgetCaptureService();
         service.addWidgetDescriptionToMap(
