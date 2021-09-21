@@ -21,7 +21,6 @@ class WidgetCaptureService {
     required String projectId,
   }) async {
     log.i('description:$description projectId:$projectId');
-
     final descriptionId =
         await _cloudFunctionsService.uploadWidgetDescriptionToProject(
       projectId: projectId,
@@ -45,10 +44,10 @@ class WidgetCaptureService {
   }
 
   void addWidgetDescriptionToMap(WidgetDescription description) {
-    if (widgetDescriptionMap.containsKey(description.viewName)) {
-      widgetDescriptionMap[description.viewName]?.add(description);
+    if (widgetDescriptionMap.containsKey(description.originalViewName)) {
+      widgetDescriptionMap[description.originalViewName]?.add(description);
     } else {
-      widgetDescriptionMap[description.viewName] = [description];
+      widgetDescriptionMap[description.originalViewName] = [description];
     }
   }
 
@@ -60,8 +59,9 @@ class WidgetCaptureService {
     return viewDescriptions ?? [];
   }
 
-  bool checkCurrentViewIfAlreadyCaptured(String viewName) =>
-      widgetDescriptionMap.containsKey(viewName)
-          ? widgetDescriptionMap[viewName]!.any((element) => element.name == '')
+  bool checkCurrentViewIfAlreadyCaptured(String originalViewName) =>
+      widgetDescriptionMap.containsKey(originalViewName)
+          ? widgetDescriptionMap[originalViewName]!
+              .any((element) => element.name == '')
           : false;
 }

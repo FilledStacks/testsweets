@@ -12,17 +12,21 @@ class TestSweetsOverlayView extends StatelessWidget {
   /// Puts the overlay into widget capture mode
   final bool captureWidgets;
 
+  /// When true we add the TestSweets overlay, default is true
+  final bool enabled;
+
   const TestSweetsOverlayView({
     Key? key,
     required this.child,
     required this.projectId,
     this.captureWidgets = false,
+    this.enabled = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: kDebugMode
+      child: enabled
           ? captureWidgets
               ? WidgetCaptureView(child: child, projectId: projectId)
               : DriverLayoutView(child: child, projectId: projectId)
