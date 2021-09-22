@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:testsweets/src/app/app.logger.dart';
 
 class TestSweetsRouteTracker extends ChangeNotifier {
+  final log = getLogger('TestSweetsRouteTracker');
+
   static TestSweetsRouteTracker? _instance;
   static TestSweetsRouteTracker get instance {
     if (_instance == null) {
@@ -13,8 +17,10 @@ class TestSweetsRouteTracker extends ChangeNotifier {
   String get currentRoute => _currentRoute;
 
   void setCurrentRoute(String route) {
-    print('setCurrentRoute | route$route');
+    log.i('setCurrentRoute | route: $route');
     _currentRoute = route;
-    notifyListeners();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      notifyListeners();
+    });
   }
 }
