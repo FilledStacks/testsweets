@@ -29,6 +29,10 @@ class TestSweetsNavigatorObserver extends NavigatorObserver {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
   }
 
+  void setBottomNavIndex({required int index, required String btmNavBarName}) {
+    routeTracker.setCurrentRoute(btmNavBarName + index.toString());
+  }
+
   String _getRouteName(Route? route) {
     return route?.settings.name ?? 'NoView';
   }
