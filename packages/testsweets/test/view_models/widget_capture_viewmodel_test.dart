@@ -517,5 +517,49 @@ void main() {
             model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.inspectMode);
       });
     });
+
+    group('editWidgetDescription -', () {
+      test('When called should set isEditMode true', () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.editWidgetDescription();
+        expect(model.isEditMode, isTrue);
+      });
+
+      test(
+          'When called should set WidgetDescription to the active WidgetDescription',
+          () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.editWidgetDescription();
+
+        expect(model.widgetDescription, model.activeWidgetDescription);
+      });
+
+      test(
+          'When called should set onChangeValue with activeWidgetDescription name',
+          () {
+        final description = WidgetDescription(
+          viewName: '',
+          originalViewName: '',
+          name: 'loginButton',
+          position: WidgetPosition(x: 100, y: 199),
+          widgetType: WidgetType.general,
+        );
+        
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.showWidgetDescription(description);
+        model.editWidgetDescription();
+        
+        expect(model.onChangedValue, model.activeWidgetDescription?.name);
+      });
+
+      test(
+          'When called should set captureWidgetStatusEnum to captureModeWidgetNameInputShow',
+          () {
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.editWidgetDescription();
+        expect(model.captureWidgetStatusEnum,
+            CaptureWidgetStatusEnum.captureModeWidgetNameInputShow);
+      });
+    });
   });
 }
