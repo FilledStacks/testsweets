@@ -233,7 +233,8 @@ void main() {
           'When called, should call delete widget description from the CloudFunctionsService',
           () async {
         final description = WidgetDescription(
-          viewName: 'login',
+          originalViewName: '/new_view',
+          viewName: 'newView',
           name: 'email',
           position: WidgetPosition(x: 100, y: 199),
           widgetType: WidgetType.general,
@@ -257,12 +258,14 @@ void main() {
             getWidgetDescriptionForProjectResult: [
               WidgetDescription(
                 viewName: 'login',
+                originalViewName: '/login_view',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
                 position: WidgetPosition(x: 0, y: 0),
               ),
               WidgetDescription(
                 viewName: 'signUp',
+                originalViewName: '/login_view',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
                 position: WidgetPosition(x: 0, y: 0),
@@ -273,6 +276,7 @@ void main() {
           projectId: 'proj',
           description: WidgetDescription(
             viewName: 'signUp',
+            originalViewName: '/signUp_view',
             name: 'loginButton',
             widgetType: WidgetType.touchable,
             position: WidgetPosition(x: 0, y: 0),
@@ -289,6 +293,7 @@ void main() {
           () async {
         final description = WidgetDescription(
           viewName: 'login',
+          originalViewName: '/login_view',
           name: 'email',
           position: WidgetPosition(x: 100, y: 199),
           widgetType: WidgetType.general,
@@ -312,12 +317,14 @@ void main() {
             getWidgetDescriptionForProjectResult: [
               WidgetDescription(
                 viewName: 'login',
+                originalViewName: '/login_view',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
                 position: WidgetPosition(x: 0, y: 0),
               ),
               WidgetDescription(
                 viewName: 'signUp',
+                originalViewName: '/signUp_view',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
                 position: WidgetPosition(x: 0, y: 0),
@@ -327,6 +334,8 @@ void main() {
         await service.updateWidgetDescription(
           projectId: 'proj',
           description: WidgetDescription(
+            id: '1234',
+            originalViewName: '/signUp_view',
             viewName: 'signUp',
             name: 'loginBBButton',
             widgetType: WidgetType.touchable,
@@ -334,8 +343,8 @@ void main() {
           ),
         );
 
-        expect(
-            service.widgetDescriptionMap['signUp']!.last.name, 'loginBBButton');
+        expect(service.widgetDescriptionMap['/signUp_view']!.last.name,
+            'loginBBButton');
       });
     });
   });

@@ -407,6 +407,7 @@ void main() {
           () async {
         final description = WidgetDescription(
           viewName: '',
+          originalViewName: '',
           name: '',
           position: WidgetPosition(x: 100, y: 199),
           widgetType: WidgetType.general,
@@ -462,6 +463,7 @@ void main() {
           () async {
         final description = WidgetDescription(
           viewName: '',
+          originalViewName: '',
           name: 'loginButton',
           position: WidgetPosition(x: 100, y: 199),
           widgetType: WidgetType.general,
