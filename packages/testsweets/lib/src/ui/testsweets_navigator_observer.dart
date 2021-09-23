@@ -5,6 +5,17 @@ import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 class TestSweetsNavigatorObserver extends NavigatorObserver {
   final routeTracker = locator<TestSweetsRouteTracker>();
 
+  static final TestSweetsNavigatorObserver _instance =
+      TestSweetsNavigatorObserver._internal();
+
+  factory TestSweetsNavigatorObserver() {
+    return _instance;
+  }
+
+  TestSweetsNavigatorObserver._internal();
+
+  static TestSweetsNavigatorObserver get instance => _instance;
+
   @override
   void didPop(Route route, Route? previousRoute) {
     routeTracker.setCurrentRoute(_getRouteName(previousRoute));
