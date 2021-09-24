@@ -11,13 +11,16 @@ class BlackWrapperContainer extends StatelessWidget {
   final Widget child;
   final Widget? footerChild;
   final double? spaceBetweenTopControllersAndChild;
+  final Widget viewName;
+
   const BlackWrapperContainer(
       {Key? key,
       this.switchPositionTap,
       this.closeWidget,
       required this.child,
       this.footerChild,
-      this.spaceBetweenTopControllersAndChild})
+      this.spaceBetweenTopControllersAndChild,
+      this.viewName = const SizedBox.shrink()})
       : super(key: key);
 
   @override
@@ -49,26 +52,32 @@ class BlackWrapperContainer extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       switchPositionTap != null
-                          ? TextButton.icon(
-                              onPressed: switchPositionTap,
-                              style: ButtonStyle(
-                                shape:
-                                    MaterialStateProperty.all<OutlinedBorder>(
+                          ? Row(
+                              children: [
+                                TextButton.icon(
+                                  onPressed: switchPositionTap,
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all<
+                                            OutlinedBorder>(
                                         RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
                                                 crTextFieldCornerRadius()))),
-                                backgroundColor: MaterialStateProperty.all(
-                                    kcSweetsAppBarColor),
-                              ),
-                              icon: Icon(
-                                Icons.swap_vert,
-                                size: 16.w,
-                                color: kcPrimaryWhite,
-                              ),
-                              label: AutoSizeText('Switch Position',
-                                  maxLines: 1,
-                                  style: tsNormal().copyWith(
-                                      color: Colors.white, fontSize: 14.w)),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        kcSweetsAppBarColor),
+                                  ),
+                                  icon: Icon(
+                                    Icons.swap_vert,
+                                    size: 16.w,
+                                    color: kcPrimaryWhite,
+                                  ),
+                                  label: AutoSizeText('Switch Position',
+                                      maxLines: 1,
+                                      style: tsNormal().copyWith(
+                                          color: Colors.white, fontSize: 14.w)),
+                                ),
+                                SizedBox(width: 12.w),
+                                viewName
+                              ],
                             )
                           : const SizedBox(),
                       closeWidget != null

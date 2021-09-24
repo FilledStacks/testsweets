@@ -50,6 +50,7 @@ class CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
                 onChanged: model.isEditMode ? model.onChangeWidgetName : null,
                 isEditMode: model.isEditMode,
                 errorMessage: model.nameInputErrorMessage,
+                viewName: model.currentView,
                 closeWidget: () {
                   widgetNameController.clear();
                   model.closeWidgetNameInput();

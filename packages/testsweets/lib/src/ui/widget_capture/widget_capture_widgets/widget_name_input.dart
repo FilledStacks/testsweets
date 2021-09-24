@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/view_name.dart';
 
 import 'black_wrapper_container.dart';
 
@@ -18,6 +19,7 @@ class WidgetNameInput extends StatelessWidget {
   final bool isEditMode;
   final String? initialValue;
   final ValueChanged<String>? onChanged;
+  final String viewName;
 
   const WidgetNameInput({
     Key? key,
@@ -28,6 +30,7 @@ class WidgetNameInput extends StatelessWidget {
     required this.closeWidget,
     required this.errorMessage,
     required this.deleteWidget,
+    required this.viewName,
     this.isEditMode = false,
     this.initialValue,
     this.onChanged,
@@ -41,6 +44,7 @@ class WidgetNameInput extends StatelessWidget {
         BlackWrapperContainer(
           switchPositionTap: switchPositionTap,
           closeWidget: closeWidget,
+          viewName: ViewName(viewName: viewName),
           footerChild: FadeInWidget(
               child: Container(
                 width: ScreenUtil().screenWidth,
