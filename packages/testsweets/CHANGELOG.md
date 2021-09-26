@@ -1,3 +1,10 @@
+## 1.4.6
+
+### Features
+- Show view names during widgetDescription capture
+- Show view names during inspect mode
+- Add functionality to track bottom nav bar switches as new pages
+
 ## 1.4.5
 
 - Improves UX for capturing widgets
