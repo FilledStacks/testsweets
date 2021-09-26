@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/view_name.dart';
 
 import 'black_wrapper_container.dart';
 
@@ -11,9 +12,15 @@ class WidgetNameInput extends StatelessWidget {
   final FocusNode? focusNode;
   final TextEditingController? textEditingController;
   final VoidCallback switchPositionTap;
+  final VoidCallback deleteWidget;
   final VoidCallback saveWidget;
   final VoidCallback closeWidget;
   final String errorMessage;
+  final bool isEditMode;
+  final String? initialValue;
+  final ValueChanged<String>? onChanged;
+  final String viewName;
+
   const WidgetNameInput({
     Key? key,
     this.focusNode,
@@ -22,6 +29,11 @@ class WidgetNameInput extends StatelessWidget {
     required this.saveWidget,
     required this.closeWidget,
     required this.errorMessage,
+    required this.deleteWidget,
+    required this.viewName,
+    this.isEditMode = false,
+    this.initialValue,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -32,6 +44,7 @@ class WidgetNameInput extends StatelessWidget {
         BlackWrapperContainer(
           switchPositionTap: switchPositionTap,
           closeWidget: closeWidget,
+          viewName: ViewName(viewName: viewName),
           footerChild: FadeInWidget(
               child: Container(
                 width: ScreenUtil().screenWidth,
@@ -44,10 +57,12 @@ class WidgetNameInput extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: TextField(
+                child: TextFormField(
                   focusNode: focusNode,
                   controller: textEditingController,
+                  initialValue: initialValue,
                   style: tsNormal().copyWith(color: kcPrimaryWhite),
+                  onChanged: onChanged,
                   decoration: InputDecoration(
                       hintStyle: tsNormal().copyWith(
                         color: kcSecondaryWhite,
@@ -82,15 +97,32 @@ class WidgetNameInput extends StatelessWidget {
               SizedBox(
                 width: 12.w,
               ),
-              CtaButton(
-                title: 'Save Widget',
-                fillColor: kcSecondaryGreen,
-                onTap: () {
-                  saveWidget();
-                  focusNode?.unfocus();
-                  textEditingController?.clear();
-                },
-                maxWidth: 100.w,
+              Column(
+                children: [
+                  CtaButton(
+                    title: isEditMode ? 'Update Widget' : 'Save Widget',
+                    fillColor: kcSecondaryGreen,
+                    onTap: () {
+                      saveWidget();
+                      focusNode?.unfocus();
+                      textEditingController?.clear();
+                    },
+                    maxWidth: 100.w,
+                  ),
+                  isEditMode ? SizedBox(height: 8.h) : SizedBox.shrink(),
+                  isEditMode
+                      ? CtaButton(
+                          title: 'Delete Widget',
+                          fillColor: kcError,
+                          onTap: () {
+                            deleteWidget();
+                            focusNode?.unfocus();
+                            textEditingController?.clear();
+                          },
+                          maxWidth: 100.w,
+                        )
+                      : SizedBox.shrink()
+                ],
               ),
             ],
           ),

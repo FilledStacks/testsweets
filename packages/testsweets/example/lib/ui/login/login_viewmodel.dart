@@ -5,8 +5,9 @@ import 'package:stacked_services/stacked_services.dart';
 
 class LoginViewModel extends BaseViewModel {
   final _navigationService = locator<NavigationService>();
+  
   void navigateToOtherView() {
-    _navigationService.navigateTo(Routes.homeView);
+    _navigationService.navigateTo(Routes.mainView);
 
   }
 }

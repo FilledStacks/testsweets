@@ -7,8 +7,8 @@ import 'string_extension.dart';
 
 extension WidgetTypeUtilty on WidgetType {
   String get returnFirstLetterOfWidgetTypeCapitalized =>
-      this.toString().split('.').last[0].capitalizeFirstofEach;
-
+      this.toString().split('.').last[0].capitalizeFirstOfEach;
+      
   String get shortName => this.toString().split('.').last;
 
   Color get getColorOfWidgetType {

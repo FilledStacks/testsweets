@@ -1,6 +1,7 @@
 import 'package:example/ui/home/home_view.dart';
 import 'package:example/ui/home/signup_view.dart';
 import 'package:example/ui/login/login_view.dart';
+import 'package:example/ui/main/main_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -12,10 +13,11 @@ import 'package:stacked_services/stacked_services.dart';
     ),
     MaterialRoute(page: LoginView),
     MaterialRoute(page: HomeView),
+    MaterialRoute(page: MainView),
   ],
   dependencies: [
     LazySingleton(classType: NavigationService),
   ],
   logger: StackedLogger(),
 )
-class ExampleApp {}
+class App {}

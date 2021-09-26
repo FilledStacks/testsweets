@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
+import 'package:testsweets/src/ui/shared/app_colors.dart';
+import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
@@ -42,7 +44,7 @@ class WidgetDescriptionDialog extends ViewModelWidget<WidgetCaptureViewModel> {
                 body: description.widgetType
                     .toString()
                     .substring(11)
-                    .capitalizeFirstofEach,
+                    .capitalizeFirstOfEach,
               ),
               MultiStyleText(
                 title: 'Position: ',
@@ -54,7 +56,16 @@ class WidgetDescriptionDialog extends ViewModelWidget<WidgetCaptureViewModel> {
                   SizedBox(
                     height: 3.h,
                   )
-                ])
+                ]),
+          SizedBox(
+            height: 5.h,
+          ),
+          CtaButton(
+            onTap: model.editWidgetDescription,
+            fillColor: kcSecondaryWhite,
+            title: 'Edit',
+            isSmallSize: true,
+          )
         ],
       ),
     );
