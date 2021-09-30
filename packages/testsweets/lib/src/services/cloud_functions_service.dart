@@ -68,6 +68,8 @@ class CloudFunctionsService {
     required String projectId,
     required WidgetDescription description,
   }) async {
+    log.i('WidgetDescription:$description , projectId:$projectId');
+
     final endpoint =
         'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/uploadWidgetDescription';
 
@@ -79,7 +81,7 @@ class CloudFunctionsService {
       },
     );
 
-    print(
+    log.i(
         'uploadWidgetDescriptionToProject response. ${response.statusCode} - ${response.body}');
 
     if (response.statusCode == 200) return response.parseBodyAsJsonMap()['id'];
@@ -98,7 +100,7 @@ class CloudFunctionsService {
     final response = await httpService.get(to: endpoint);
 
     if (response.statusCode == 200) {
-      print('getWidgetDescriptionForProject | fetch success! Lets serialise');
+      log.i('getWidgetDescriptionForProject | fetch success! Lets serialise');
       final jsonContent = response.body;
       final descriptionsJson = json.decode(jsonContent) as Iterable;
       return descriptionsJson
@@ -113,11 +115,10 @@ class CloudFunctionsService {
     required String projectId,
     required WidgetDescription description,
   }) async {
-    log.i('projectId:$projectId');
-    log.i('WidgetDescription:$description');
+    log.i('WidgetDescription:$description , projectId:$projectId');
 
     final endpoint =
-        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/updateWidgetDescription?projectId=$projectId';
+        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/updateWidgetDescription';
 
     final response = await httpService.postJson(
       to: endpoint,
@@ -139,11 +140,10 @@ class CloudFunctionsService {
     required String projectId,
     required WidgetDescription description,
   }) async {
-    log.i('projectId:$projectId');
-    log.i('WidgetDescription:$description');
+    log.i('WidgetDescription:$description , projectId:$projectId');
 
     final endpoint =
-        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/deleteWidgetDescription?projectId=$projectId';
+        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/deleteWidgetDescription';
 
     final response = await httpService.postJson(
       to: endpoint,

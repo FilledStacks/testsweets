@@ -243,7 +243,6 @@ class WidgetCaptureViewModel extends FormViewModel {
     _onChangedValue = _activeWidgetDescription?.name ?? '';
     captureWidgetStatusEnum =
         CaptureWidgetStatusEnum.captureModeWidgetNameInputShow;
-    notifyListeners();
   }
 
   void toggleIsEditMode() async {
