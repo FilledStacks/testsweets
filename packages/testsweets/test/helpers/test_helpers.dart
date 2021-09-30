@@ -214,7 +214,7 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
 
   when(service.updateWidgetDescription(
           projectId: anyNamed('projectId'),
-          description: anyNamed('description')))
+          newwidgetDescription: anyNamed('description')))
       .thenAnswer((realInvocation) => Future.value(updateWidgetDescription));
 
   locator.registerSingleton<CloudFunctionsService>(service);

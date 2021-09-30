@@ -232,10 +232,15 @@ class MockCloudFunctionsService extends _i1.Mock
           as _i8.Future<List<_i12.WidgetDescription>>);
   @override
   _i8.Future<String> updateWidgetDescription(
-          {String? projectId, _i12.WidgetDescription? description}) =>
+          {String? projectId,
+          _i12.WidgetDescription? oldwidgetDescription,
+          _i12.WidgetDescription? newwidgetDescription}) =>
       (super.noSuchMethod(
-          Invocation.method(#updateWidgetDescription, [],
-              {#projectId: projectId, #description: description}),
+          Invocation.method(#updateWidgetDescription, [], {
+            #projectId: projectId,
+            #oldwidgetDescription: oldwidgetDescription,
+            #newwidgetDescription: newwidgetDescription
+          }),
           returnValue: Future<String>.value('')) as _i8.Future<String>);
   @override
   _i8.Future<String> deleteWidgetDescription(

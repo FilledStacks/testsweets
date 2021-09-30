@@ -73,16 +73,15 @@ class WidgetCaptureService {
   }) async {
     log.i('description:$description projectId:$projectId');
 
+    final widgetToUpdate = widgetDescriptionMap[description.originalViewName]
+        ?.firstWhere((description) => description.id == description.id);
+
     final descriptionId = await _cloudFunctionsService.updateWidgetDescription(
-      projectId: projectId,
-      description: description,
-    );
+        projectId: projectId,
+        newwidgetDescription: description,
+        oldwidgetDescription: widgetToUpdate!);
 
     log.i('descriptionId from Cloud: $descriptionId');
-
-    // Remove the old description
-    widgetDescriptionMap[description.viewName]
-        ?.removeWhere((description) => description.id == description.id);
 
     addWidgetDescriptionToMap(description: description);
   }
@@ -91,11 +90,12 @@ class WidgetCaptureService {
   Future<void> deleteWidgetDescription(
       {required String projectId,
       required WidgetDescription description}) async {
+    widgetDescriptionMap[description.originalViewName]
+        ?.removeWhere((element) => element.id == description.id);
+
     final descriptionId = await _cloudFunctionsService.deleteWidgetDescription(
         projectId: projectId, description: description);
 
     log.i('descriptionId from Cloud: $descriptionId');
-
-    widgetDescriptionMap[description.viewName]?.remove(description);
   }
 }

@@ -113,9 +113,11 @@ class CloudFunctionsService {
 
   Future<String> updateWidgetDescription({
     required String projectId,
-    required WidgetDescription description,
+    required WidgetDescription oldwidgetDescription,
+    required WidgetDescription newwidgetDescription,
   }) async {
-    log.i('WidgetDescription:$description , projectId:$projectId');
+    log.i(
+        'oldwidgetDescription:$oldwidgetDescription, newwidgetDescription:$newwidgetDescription, projectId:$projectId');
 
     final endpoint =
         'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/updateWidgetDescription';
@@ -124,7 +126,8 @@ class CloudFunctionsService {
       to: endpoint,
       body: {
         'projectId': projectId,
-        'widgetDescription': description.toJson(),
+        'newwidgetDescription': newwidgetDescription.toJson(),
+        'oldwidgetDescription': oldwidgetDescription.toJson(),
       },
     );
 

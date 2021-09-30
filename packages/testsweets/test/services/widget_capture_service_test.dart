@@ -307,7 +307,7 @@ void main() {
         );
 
         verify(cloudFunctionsService.updateWidgetDescription(
-            projectId: 'proJ', description: description));
+            projectId: 'proJ', newwidgetDescription: description));
       });
 
       test(
