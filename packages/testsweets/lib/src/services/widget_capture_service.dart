@@ -38,7 +38,7 @@ class WidgetCaptureService {
       {required String projectId}) async {
     final widgetDescriptions = await _cloudFunctionsService
         .getWidgetDescriptionForProject(projectId: projectId);
-
+    widgetDescriptionMap.clear();
     for (final description in widgetDescriptions) {
       addWidgetDescriptionToMap(description: description);
     }
@@ -73,18 +73,15 @@ class WidgetCaptureService {
   }) async {
     log.i('description:$description projectId:$projectId');
 
+    final widgetToUpdate = widgetDescriptionMap[description.originalViewName]
+        ?.firstWhere((element) => element.id == description.id);
+
     final descriptionId = await _cloudFunctionsService.updateWidgetDescription(
-      projectId: projectId,
-      description: description,
-    );
+        projectId: projectId,
+        newwidgetDescription: description,
+        oldwidgetDescription: widgetToUpdate!);
 
     log.i('descriptionId from Cloud: $descriptionId');
-
-    // Remove the old description
-    widgetDescriptionMap[description.viewName]
-        ?.removeWhere((description) => description.id == description.id);
-
-    addWidgetDescriptionToMap(description: description);
   }
 
   /// Delete a widget descriptions from the project as well as locally
@@ -95,7 +92,5 @@ class WidgetCaptureService {
         projectId: projectId, description: description);
 
     log.i('descriptionId from Cloud: $descriptionId');
-
-    widgetDescriptionMap[description.viewName]?.remove(description);
   }
 }

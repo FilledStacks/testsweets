@@ -243,7 +243,6 @@ class WidgetCaptureViewModel extends FormViewModel {
     _onChangedValue = _activeWidgetDescription?.name ?? '';
     captureWidgetStatusEnum =
         CaptureWidgetStatusEnum.captureModeWidgetNameInputShow;
-    notifyListeners();
   }
 
   void toggleIsEditMode() async {
@@ -277,6 +276,9 @@ class WidgetCaptureViewModel extends FormViewModel {
         setBusy(false);
 
         toggleIsEditMode();
+        await syncWithFirestoreWidgetKeys(
+            projectId: projectId, enableBusy: false);
+        setBusy(false);
       } catch (e) {
         setBusy(false);
         log.e('Couldn\'t delete the widget. $e');
@@ -299,8 +301,11 @@ class WidgetCaptureViewModel extends FormViewModel {
 
         await _widgetCaptureService.updateWidgetDescription(
             projectId: projectId, description: _widgetDescription!);
-        setBusy(false);
+
         toggleIsEditMode();
+        await syncWithFirestoreWidgetKeys(
+            projectId: projectId, enableBusy: false);
+        setBusy(false);
       } catch (e) {
         setBusy(false);
         log.e('Couldn\'t update the widget. $e');
