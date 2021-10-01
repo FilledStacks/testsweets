@@ -21,7 +21,7 @@ class MainView extends StatelessWidget {
           onTap: (index) {
             model.setIndex(index);
             TestSweetsNavigatorObserver.instance.setBottomNavIndex(
-              btmNavBarName: Routes.mainView,
+              viewName: Routes.mainView,
               index: index,
             );
           },

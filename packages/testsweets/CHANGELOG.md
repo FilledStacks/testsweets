@@ -1,6 +1,11 @@
+## 1.4.7
+
+- Updates the naming of the Bottom nav tracking in `TestSweetsNavigatorObserver`
+
 ## 1.4.6
 
 ### Features
+
 - Show view names during widgetDescription capture
 - Show view names during inspect mode
 - Add functionality to track bottom nav bar switches as new pages
@@ -36,6 +41,7 @@
 ## 1.4.1
 
 ### Improvements
+
 - Hide view widget description when Inspect Mode is active
 - Allows start capture and inspect buttons to be moved to the top or bottom of screen
 - Removes "Capture View" button and replaced with automatic view capture
@@ -43,7 +49,8 @@
 
 ## 1.4.0
 
-### New Feature 
+### New Feature
+
 - On screen widget key capture
 - Allows the user to capture widget keys on screen, removing the need to add keys directly into the code.
 - Keys captured is synced with testsweets auto complete
@@ -97,6 +104,7 @@
 ## 1.0.0
 
 ### Breaking Change
+
 - Removes the `syncAutomationKeys` function. Automation keys are now uploaded with the build. See README.
 
 ## 0.3.1

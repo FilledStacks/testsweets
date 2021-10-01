@@ -40,8 +40,13 @@ class TestSweetsNavigatorObserver extends NavigatorObserver {
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
   }
 
-  void setBottomNavIndex({required int index, required String btmNavBarName}) {
-    routeTracker.setCurrentRoute(btmNavBarName + index.toString());
+  /// Creates a unique name for each bottom nav tab to ensure widgets are captured
+  /// as if each tab is a new view
+  void setBottomNavIndex({
+    required int index,
+    required String viewName,
+  }) {
+    routeTracker.setCurrentRoute(viewName + index.toString());
   }
 
   String _getRouteName(Route? route) {
