@@ -21,11 +21,17 @@ dependencies:
   logger: ^1.1.0
   recase: ^4.0.0
   flutter_screenutil: ^5.0.0+2
-
+  
+dependency_overrides:
+  dart_style: 2.0.3
+  analyzer: ^2.0.0
 dev_dependencies:
-  mockito:
-  test: any
-  build_runner:
-  freezed:
-  json_serializable:
-  stacked_generator:
+  flutter_test:
+    sdk: flutter
+
+  stacked_generator: ^0.5.0
+
+  build_runner: ^2.0.5
+  freezed: ^0.14.5
+  json_serializable: ^5.0.2
+  mockito: ^5.0.16
