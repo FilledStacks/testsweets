@@ -213,8 +213,9 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
       .thenAnswer((realInvocation) => Future.value(deleteWidgetDescription));
 
   when(service.updateWidgetDescription(
+          oldwidgetDescription: anyNamed('oldwidgetDescription'),
           projectId: anyNamed('projectId'),
-          newwidgetDescription: anyNamed('description')))
+          newwidgetDescription: anyNamed('newwidgetDescription')))
       .thenAnswer((realInvocation) => Future.value(updateWidgetDescription));
 
   locator.registerSingleton<CloudFunctionsService>(service);

@@ -1,5 +1,5 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
@@ -301,13 +301,16 @@ void main() {
 
         final cloudFunctionsService = getAndRegisterCloudFunctionsService();
         final service = WidgetCaptureService();
+        service.addWidgetDescriptionToMap(description: description);
         await service.updateWidgetDescription(
           projectId: 'proJ',
           description: description,
         );
 
         verify(cloudFunctionsService.updateWidgetDescription(
-            projectId: 'proJ', newwidgetDescription: description));
+            oldwidgetDescription: description,
+            projectId: 'proJ',
+            newwidgetDescription: description));
       });
 
       test(
@@ -331,6 +334,17 @@ void main() {
               ),
             ]);
         final service = WidgetCaptureService();
+        service.addWidgetDescriptionToMap(
+          description: WidgetDescription(
+            id: '1234',
+            originalViewName: '/signUp_view',
+            viewName: 'signUp',
+            name: 'loginBBButton',
+            widgetType: WidgetType.touchable,
+            position: WidgetPosition(x: 0, y: 0),
+          ),
+        );
+
         await service.updateWidgetDescription(
           projectId: 'proj',
           description: WidgetDescription(

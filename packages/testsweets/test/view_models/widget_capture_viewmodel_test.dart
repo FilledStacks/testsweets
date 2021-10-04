@@ -1,5 +1,5 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:test/test.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
@@ -544,11 +544,11 @@ void main() {
           position: WidgetPosition(x: 100, y: 199),
           widgetType: WidgetType.general,
         );
-        
+
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.showWidgetDescription(description);
         model.editWidgetDescription();
-        
+
         expect(model.onChangedValue, model.activeWidgetDescription?.name);
       });
 

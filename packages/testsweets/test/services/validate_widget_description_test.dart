@@ -1,4 +1,4 @@
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
 
 import '../helpers/test_helpers.dart';

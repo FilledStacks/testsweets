@@ -1,4 +1,4 @@
-import 'package:test/test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:testsweets/src/services/automation_keys_service.dart';
 
 import '../helpers/test_consts.dart';
