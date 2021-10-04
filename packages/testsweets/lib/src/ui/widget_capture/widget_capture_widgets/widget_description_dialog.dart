@@ -4,7 +4,6 @@ import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
-import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
 import 'black_wrapper_container.dart';
@@ -20,15 +19,12 @@ class WidgetDescriptionDialog extends ViewModelWidget<WidgetCaptureViewModel> {
     final description = model.activeWidgetDescription;
 
     return BlackWrapperContainer(
-      closeWidget: model.closeWidgetDescription,
-      spaceBetweenTopControllersAndChild: 0,
+      spaceBetweenTopControllersAndChild: 4.h,
+      closeWidgetOnTap: model.closeWidgetDescription,
+      title: 'Widget Description',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Widget Description', style: boldStyle),
-          SizedBox(
-            height: 8.h,
-          ),
           if (description != null)
             ...[
               MultiStyleText(
@@ -58,13 +54,28 @@ class WidgetDescriptionDialog extends ViewModelWidget<WidgetCaptureViewModel> {
                   )
                 ]),
           SizedBox(
-            height: 5.h,
+            height: 12.h,
           ),
-          CtaButton(
-            onTap: model.editWidgetDescription,
-            fillColor: kcSecondaryWhite,
-            title: 'Edit',
-            isSmallSize: true,
+          Row(
+            children: [
+              Expanded(
+                child: CtaButton(
+                  onTap: model.editWidgetDescription,
+                  fillColor: kcPrimaryPurple,
+                  title: 'Edit',
+                  isSmallSize: true,
+                ),
+              ),
+              Spacer(),
+              Expanded(
+                child: CtaButton(
+                  onTap: model.deleteWidgetDescription,
+                  fillColor: kcError,
+                  title: 'Delete',
+                  isSmallSize: true,
+                ),
+              ),
+            ],
           )
         ],
       ),

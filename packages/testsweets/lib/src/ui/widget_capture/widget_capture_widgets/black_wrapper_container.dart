@@ -1,30 +1,35 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/close_circular_button.dart';
 
-class BlackWrapperContainer extends StatelessWidget {
+import '../widget_capture_viewmodel.dart';
+
+class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
   final VoidCallback? switchPositionTap;
-  final VoidCallback? closeWidget;
+  final VoidCallback? closeWidgetOnTap;
   final Widget child;
   final Widget? footerChild;
   final double? spaceBetweenTopControllersAndChild;
-  final Widget viewName;
+  final String? title;
+  final bool bottomCornerRaduisIsZero;
 
   const BlackWrapperContainer(
       {Key? key,
       this.switchPositionTap,
-      this.closeWidget,
+      this.closeWidgetOnTap,
+      this.bottomCornerRaduisIsZero = false,
       required this.child,
       this.footerChild,
       this.spaceBetweenTopControllersAndChild,
-      this.viewName = const SizedBox.shrink()})
+      this.title})
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetCaptureViewModel model) {
     return SizedBox(
       width: ScreenUtil().screenWidth,
       child: Padding(
@@ -36,52 +41,59 @@ class BlackWrapperContainer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
+            FadeInWidget(
+                child: Container(
+                  alignment: Alignment.center,
+                  width: ScreenUtil().screenWidth,
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16.w),
+                  decoration: viewNameBoxDecoration,
+                  child: AutoSizeText(model.currentView,
+                      textAlign: TextAlign.center,
+                      style: tsNormalBold().copyWith(color: kcPrimaryWhite)),
+                ),
+                isVisible: model.currentView.isNotEmpty),
             Container(
               padding: EdgeInsets.only(
                   left: 16.w, right: 16.w, top: 12.h, bottom: 20.h),
               decoration: blackBoxDecoration.copyWith(
-                  borderRadius: footerChild != null
+                  borderRadius: bottomCornerRaduisIsZero
                       ? BorderRadius.vertical(top: crButtonCornerRadius())
-                      : null),
+                      : BorderRadius.vertical(bottom: crButtonCornerRadius())),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       switchPositionTap != null
-                          ? Row(
-                              children: [
-                                TextButton.icon(
-                                  onPressed: switchPositionTap,
-                                  style: ButtonStyle(
-                                    shape: MaterialStateProperty.all<
-                                            OutlinedBorder>(
+                          ? TextButton.icon(
+                              onPressed: switchPositionTap,
+                              style: ButtonStyle(
+                                shape:
+                                    MaterialStateProperty.all<OutlinedBorder>(
                                         RoundedRectangleBorder(
                                             borderRadius: BorderRadius.all(
                                                 crTextFieldCornerRadius()))),
-                                    backgroundColor: MaterialStateProperty.all(
-                                        kcSweetsAppBarColor),
-                                  ),
-                                  icon: Icon(
-                                    Icons.swap_vert,
-                                    size: 16.w,
-                                    color: kcPrimaryWhite,
-                                  ),
-                                  label: AutoSizeText('Switch Position',
-                                      maxLines: 1,
-                                      style: tsNormal().copyWith(
-                                          color: Colors.white, fontSize: 14.w)),
-                                ),
-                                SizedBox(width: 12.w),
-                                viewName
-                              ],
+                                backgroundColor: MaterialStateProperty.all(
+                                    kcSweetsAppBarColor),
+                              ),
+                              icon: Icon(
+                                Icons.swap_vert,
+                                size: 16.w,
+                                color: kcPrimaryWhite,
+                              ),
+                              label: AutoSizeText('Switch Position',
+                                  maxLines: 1,
+                                  style: tsNormal().copyWith(
+                                      color: Colors.white, fontSize: 14.w)),
                             )
-                          : const SizedBox(),
-                      closeWidget != null
-                          ? CloseCircularButton(onTap: closeWidget!)
+                          : title != null
+                              ? Expanded(child: Text(title!, style: boldStyle))
+                              : const SizedBox(),
+                      closeWidgetOnTap != null
+                          ? CloseCircularButton(onTap: closeWidgetOnTap!)
                           : const SizedBox()
                     ],
                   ),
