@@ -8,6 +8,11 @@ TextStyle tsSmall() => TextStyle(
       fontWeight: FontWeight.w400,
       fontSize: 12.sp,
     );
+TextStyle tsNormalBold() => TextStyle(
+      fontFamily: "Roboto",
+      fontWeight: FontWeight.w600,
+      fontSize: 14.sp,
+    );
 TextStyle tsNormal() => TextStyle(
       fontFamily: "Roboto",
       fontWeight: FontWeight.w400,
@@ -51,6 +56,14 @@ final redBoxDecoration = BoxDecoration(
         blurRadius: 8, offset: Offset(3, 4), color: kcError.withOpacity(0.25))
   ],
   borderRadius: BorderRadius.vertical(bottom: crButtonCornerRadius()),
+);
+final viewNameBoxDecoration = BoxDecoration(
+  gradient: LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [kcCard.withOpacity(0.7), kcCard],
+  ),
+  borderRadius: BorderRadius.vertical(top: crButtonCornerRadius()),
 );
 
 class FadeInWidget extends StatelessWidget {

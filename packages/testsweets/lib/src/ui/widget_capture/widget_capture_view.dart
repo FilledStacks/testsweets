@@ -9,7 +9,6 @@ import 'package:testsweets/src/ui/shared/busy_indecator.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/view_name.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_description_dialog.dart';
 
 import 'widget_capture_widgets/capture_controllers.dart';
@@ -45,15 +44,6 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                       builder: (context) => Stack(
                             children: [
                               child,
-                              if (model.captureWidgetStatusEnum ==
-                                  CaptureWidgetStatusEnum.inspectMode)
-                                Positioned(
-                                  top: 15,
-                                  right: 10,
-                                  child: ViewName(
-                                    viewName: model.currentView,
-                                  ),
-                                ),
                               if (model
                                   .captureWidgetStatusEnum.isAtInspectModeMode)
                                 InspectControllers(),
