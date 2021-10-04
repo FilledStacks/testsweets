@@ -21,7 +21,7 @@ TextStyle tsMedium() => TextStyle(
 const boldStyle =
     TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white);
 
-const lightStyle = TextStyle(fontSize: 18, color: Colors.white);
+const lightStyle = TextStyle(fontSize: 19, color: Colors.white);
 
 const positionWidgetStyle = TextStyle(
     fontSize: 40,

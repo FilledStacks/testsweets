@@ -42,8 +42,9 @@ class WidgetNameInput extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         BlackWrapperContainer(
+          bottomCornerRaduisIsZero: errorMessage.isNotEmpty,
           switchPositionTap: switchPositionTap,
-          closeWidget: closeWidget,
+          closeWidgetOnTap: closeWidget,
           viewName: ViewName(viewName: viewName),
           footerChild: FadeInWidget(
               child: Container(
@@ -101,7 +102,7 @@ class WidgetNameInput extends StatelessWidget {
                 children: [
                   CtaButton(
                     title: isEditMode ? 'Update Widget' : 'Save Widget',
-                    fillColor: kcSecondaryGreen,
+                    fillColor: isEditMode ? kcPrimaryPurple : kcSecondaryGreen,
                     onTap: () {
                       saveWidget();
                       focusNode?.unfocus();
@@ -109,19 +110,6 @@ class WidgetNameInput extends StatelessWidget {
                     },
                     maxWidth: 100.w,
                   ),
-                  isEditMode ? SizedBox(height: 8.h) : SizedBox.shrink(),
-                  isEditMode
-                      ? CtaButton(
-                          title: 'Delete Widget',
-                          fillColor: kcError,
-                          onTap: () {
-                            deleteWidget();
-                            focusNode?.unfocus();
-                            textEditingController?.clear();
-                          },
-                          maxWidth: 100.w,
-                        )
-                      : SizedBox.shrink()
                 ],
               ),
             ],

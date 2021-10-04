@@ -7,20 +7,24 @@ import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/close_ci
 
 class BlackWrapperContainer extends StatelessWidget {
   final VoidCallback? switchPositionTap;
-  final VoidCallback? closeWidget;
+  final VoidCallback? closeWidgetOnTap;
   final Widget child;
   final Widget? footerChild;
   final double? spaceBetweenTopControllersAndChild;
   final Widget viewName;
+  final String? title;
+  final bool bottomCornerRaduisIsZero;
 
   const BlackWrapperContainer(
       {Key? key,
       this.switchPositionTap,
-      this.closeWidget,
+      this.closeWidgetOnTap,
+      this.bottomCornerRaduisIsZero = false,
       required this.child,
       this.footerChild,
       this.spaceBetweenTopControllersAndChild,
-      this.viewName = const SizedBox.shrink()})
+      this.viewName = const SizedBox.shrink(),
+      this.title})
       : super(key: key);
 
   @override
@@ -40,16 +44,16 @@ class BlackWrapperContainer extends StatelessWidget {
               padding: EdgeInsets.only(
                   left: 16.w, right: 16.w, top: 12.h, bottom: 20.h),
               decoration: blackBoxDecoration.copyWith(
-                  borderRadius: footerChild != null
+                  borderRadius: bottomCornerRaduisIsZero
                       ? BorderRadius.vertical(top: crButtonCornerRadius())
-                      : null),
+                      : BorderRadius.all(crButtonCornerRadius())),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       switchPositionTap != null
                           ? Row(
@@ -79,9 +83,11 @@ class BlackWrapperContainer extends StatelessWidget {
                                 viewName
                               ],
                             )
-                          : const SizedBox(),
-                      closeWidget != null
-                          ? CloseCircularButton(onTap: closeWidget!)
+                          : title != null
+                              ? Expanded(child: Text(title!, style: boldStyle))
+                              : const SizedBox(),
+                      closeWidgetOnTap != null
+                          ? CloseCircularButton(onTap: closeWidgetOnTap!)
                           : const SizedBox()
                     ],
                   ),

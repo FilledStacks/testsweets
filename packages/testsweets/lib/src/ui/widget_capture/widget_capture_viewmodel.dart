@@ -215,6 +215,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void closeWidgetNameInput() {
+    _inputErrorMessage = '';
     if (_isEditMode) {
       toggleIsEditMode();
     } else {
