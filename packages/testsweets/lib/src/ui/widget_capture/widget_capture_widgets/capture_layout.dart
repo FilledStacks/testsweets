@@ -53,7 +53,7 @@ class CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
                   model.closeWidgetNameInput();
                 },
                 deleteWidget: model.deleteWidgetDescription,
-                saveWidget: (text) => model.saveWidgetDescription(),
+                saveWidget: model.saveWidgetDescription,
                 switchPositionTap: model.switchWidgetNameInputPosition,
                 focusNode: widgetNameFocusNode,
                 textEditingController: widgetNameController,

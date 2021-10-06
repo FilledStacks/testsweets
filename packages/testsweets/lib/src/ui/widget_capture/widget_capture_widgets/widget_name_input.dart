@@ -12,7 +12,7 @@ class WidgetNameInput extends StatelessWidget {
   final TextEditingController? textEditingController;
   final VoidCallback switchPositionTap;
   final VoidCallback deleteWidget;
-  final Function(String) saveWidget;
+  final VoidCallback saveWidget;
   final VoidCallback closeWidget;
   final String errorMessage;
   final bool isEditMode;
@@ -95,7 +95,7 @@ class WidgetNameInput extends StatelessWidget {
                 title: isEditMode ? 'Update Widget' : 'Save Widget',
                 fillColor: isEditMode ? kcPrimaryPurple : kcSecondaryGreen,
                 onTap: () {
-                  saveWidget(textEditingController!.text);
+                  saveWidget();
                   focusNode?.unfocus();
                   textEditingController?.clear();
                 },

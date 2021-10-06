@@ -119,7 +119,7 @@ class WidgetCaptureViewModel extends FormViewModel {
         _widgetDescription?.copyWith(name: widgetNameValue ?? '');
   }
 
-  Future<void> saveWidgetDescription({String? text}) async {
+  Future<void> saveWidgetDescription() async {
     if (_isEmpty()) return;
 
     setBusy(true);
@@ -136,7 +136,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusy(false);
   }
 
-  bool _isEmpty() {
+  bool _isEmpty({String? text}) {
     if (widgetNameValue!.trim().isEmpty) {
       _inputErrorMessage = ErrorMessages.widgetInputNameIsEmpty;
       notifyListeners();
@@ -235,7 +235,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
   }
 
-  void toggleUpdateMode() async {
+  void toggleUpdateMode() {
     if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.inspectModeUpdate)
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
     else
@@ -264,9 +264,12 @@ class WidgetCaptureViewModel extends FormViewModel {
     }
   }
 
-  Future<void> updateWidgetDescription(String text) async {
+  Future<void> updateWidgetDescription() async {
+    if (_isEmpty()) return;
+
     _inputErrorMessage = '';
-    _activeWidgetDescription = _activeWidgetDescription?.copyWith(name: text);
+    _activeWidgetDescription =
+        _activeWidgetDescription?.copyWith(name: widgetNameValue!);
 
     try {
       setBusy(true);
