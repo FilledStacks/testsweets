@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
+import 'package:testsweets/src/extensions/widget_type_extension.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
@@ -29,6 +30,7 @@ class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                     x: ScreenUtil().screenWidth / 2,
                     y: ScreenUtil().screenHeight / 2)),
             title: 'Touchable',
+            color: WidgetType.touchable.getColorOfWidgetType,
           ),
           SizedBox(
             height: 16.w,
@@ -39,6 +41,7 @@ class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                     x: ScreenUtil().screenWidth / 2,
                     y: ScreenUtil().screenHeight / 2)),
             title: 'Input',
+            color: WidgetType.input.getColorOfWidgetType,
           ),
           SizedBox(
             height: 16.w,
@@ -49,6 +52,7 @@ class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                     x: ScreenUtil().screenWidth / 2,
                     y: ScreenUtil().screenHeight / 2)),
             title: 'Scrollable',
+            color: WidgetType.scrollable.getColorOfWidgetType,
           ),
           SizedBox(
             height: 24.w,
@@ -72,10 +76,12 @@ class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
 class _WidgetTypeButton extends StatelessWidget {
   final VoidCallback onTap;
   final String title;
+  final Color color;
   const _WidgetTypeButton({
     Key? key,
     required this.onTap,
     required this.title,
+    required this.color,
   }) : super(key: key);
 
   @override
@@ -84,7 +90,7 @@ class _WidgetTypeButton extends StatelessWidget {
       onPressed: onTap,
       minWidth: 97.w,
       height: 97.w,
-      color: kcPrimaryPurple,
+      color: color,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(crButtonCornerRadius())),
       child: AutoSizeText(title,

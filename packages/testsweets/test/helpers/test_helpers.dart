@@ -81,6 +81,10 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
 
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
       .thenReturn(listOfWidgetDescription);
+  when(service.updateWidgetDescription(
+          projectId: anyNamed('projectId'),
+          description: anyNamed('description')))
+      .thenAnswer((_) => Future.value());
 
   when(service.checkCurrentViewIfAlreadyCaptured(any))
       .thenReturn(currentViewIsAlreadyCaptured);
