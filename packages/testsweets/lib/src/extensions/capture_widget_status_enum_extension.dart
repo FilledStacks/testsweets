@@ -8,5 +8,6 @@ extension CaptureWidgetEnumUnion on CaptureWidgetStatusEnum {
       this == CaptureWidgetStatusEnum.captureModeAddWidget;
   bool get isAtInspectModeMode =>
       this == CaptureWidgetStatusEnum.inspectMode ||
-      this == CaptureWidgetStatusEnum.inspectModeDialogShow;
+      this == CaptureWidgetStatusEnum.inspectModeDialogShow ||
+      this == CaptureWidgetStatusEnum.inspectModeUpdate;
 }

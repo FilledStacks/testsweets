@@ -12,12 +12,11 @@ class WidgetNameInput extends StatelessWidget {
   final TextEditingController? textEditingController;
   final VoidCallback switchPositionTap;
   final VoidCallback deleteWidget;
-  final VoidCallback saveWidget;
+  final Function(String) saveWidget;
   final VoidCallback closeWidget;
   final String errorMessage;
   final bool isEditMode;
   final String? initialValue;
-  final ValueChanged<String>? onChanged;
 
   const WidgetNameInput({
     Key? key,
@@ -30,7 +29,6 @@ class WidgetNameInput extends StatelessWidget {
     required this.deleteWidget,
     this.isEditMode = false,
     this.initialValue,
-    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -59,7 +57,6 @@ class WidgetNameInput extends StatelessWidget {
                   controller: textEditingController,
                   initialValue: initialValue,
                   style: tsNormal().copyWith(color: kcPrimaryWhite),
-                  onChanged: onChanged,
                   decoration: InputDecoration(
                       hintStyle: tsNormal().copyWith(
                         color: kcSecondaryWhite,
@@ -94,19 +91,15 @@ class WidgetNameInput extends StatelessWidget {
               SizedBox(
                 width: 12.w,
               ),
-              Column(
-                children: [
-                  CtaButton(
-                    title: isEditMode ? 'Update Widget' : 'Save Widget',
-                    fillColor: isEditMode ? kcPrimaryPurple : kcSecondaryGreen,
-                    onTap: () {
-                      saveWidget();
-                      focusNode?.unfocus();
-                      textEditingController?.clear();
-                    },
-                    maxWidth: 100.w,
-                  ),
-                ],
+              CtaButton(
+                title: isEditMode ? 'Update Widget' : 'Save Widget',
+                fillColor: isEditMode ? kcPrimaryPurple : kcSecondaryGreen,
+                onTap: () {
+                  saveWidget(textEditingController!.text);
+                  focusNode?.unfocus();
+                  textEditingController?.clear();
+                },
+                maxWidth: 100.w,
               ),
             ],
           ),

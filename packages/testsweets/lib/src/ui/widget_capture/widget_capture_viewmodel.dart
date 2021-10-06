@@ -119,7 +119,7 @@ class WidgetCaptureViewModel extends FormViewModel {
         _widgetDescription?.copyWith(name: widgetNameValue ?? '');
   }
 
-  Future<void> saveWidgetDescription() async {
+  Future<void> saveWidgetDescription({String? text}) async {
     if (_isEmpty()) return;
 
     setBusy(true);
@@ -216,8 +216,8 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void closeWidgetNameInput() {
     _inputErrorMessage = '';
-    if (_isEditMode) {
-      toggleIsEditMode();
+    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.inspectModeUpdate) {
+      toggleUpdateMode();
     } else {
       _widgetDescription = null;
       toggleWidgetsContainer();
@@ -235,94 +235,54 @@ class WidgetCaptureViewModel extends FormViewModel {
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
   }
 
-  bool _isEditMode = false;
-  bool get isEditMode => _isEditMode;
-
-  void editWidgetDescription() {
-    _isEditMode = true;
-    _widgetDescription = _activeWidgetDescription;
-    _onChangedValue = _activeWidgetDescription?.name ?? '';
-    captureWidgetStatusEnum =
-        CaptureWidgetStatusEnum.captureModeWidgetNameInputShow;
-  }
-
-  void toggleIsEditMode() async {
-    _isEditMode = false;
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
-
-    try {
-      await _widgetCaptureService.loadWidgetDescriptionsForProject(
-        projectId: projectId,
-      );
-    } catch (e) {
-      log.e('Couldn\'t load the widget descriptions. $e');
-    }
-    notifyListeners();
+  void toggleUpdateMode() async {
+    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.inspectModeUpdate)
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
+    else
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectModeUpdate;
   }
 
   Future<void> deleteWidgetDescription() async {
-    if (_onChangedValue.isEmpty) {
-      _inputErrorMessage = 'Widget name must not be empty';
-      notifyListeners();
-    } else {
-      _inputErrorMessage = '';
-      try {
-        setBusy(true);
+    try {
+      setBusy(true);
 
-        log.i('descriptionToDelete:$_widgetDescription');
+      log.i('descriptionToDelete:$_widgetDescription');
 
-        await _widgetCaptureService.deleteWidgetDescription(
-            projectId: projectId, description: _widgetDescription!);
+      await _widgetCaptureService.deleteWidgetDescription(
+          projectId: projectId, description: _activeWidgetDescription!);
 
-        setBusy(false);
+      setBusy(false);
 
-        toggleIsEditMode();
-        await syncWithFirestoreWidgetKeys(
-            projectId: projectId, enableBusy: false);
-        setBusy(false);
-      } catch (e) {
-        setBusy(false);
-        log.e('Couldn\'t delete the widget. $e');
-      }
+      await syncWithFirestoreWidgetKeys(
+          projectId: projectId, enableBusy: false);
+
+      closeWidgetDescription();
+      setBusy(false);
+    } catch (e) {
+      setBusy(false);
+      log.e('Couldn\'t delete the widget. $e');
     }
   }
 
-  Future<void> updateWidgetDescription() async {
-    if (_onChangedValue.isEmpty) {
-      _inputErrorMessage = 'Widget name must not be empty';
-      notifyListeners();
-    } else {
-      _inputErrorMessage = '';
-      _widgetDescription = _widgetDescription?.copyWith(name: _onChangedValue);
+  Future<void> updateWidgetDescription(String text) async {
+    _inputErrorMessage = '';
+    _activeWidgetDescription = _activeWidgetDescription?.copyWith(name: text);
 
-      try {
-        setBusy(true);
+    try {
+      setBusy(true);
 
-        log.i('descriptionToUpdate:$_widgetDescription');
+      log.i('descriptionToUpdate:$_widgetDescription');
 
-        await _widgetCaptureService.updateWidgetDescription(
-            projectId: projectId, description: _widgetDescription!);
+      await _widgetCaptureService.updateWidgetDescription(
+          projectId: projectId, description: _activeWidgetDescription!);
 
-        toggleIsEditMode();
-        await syncWithFirestoreWidgetKeys(
-            projectId: projectId, enableBusy: false);
-        setBusy(false);
-      } catch (e) {
-        setBusy(false);
-        log.e('Couldn\'t update the widget. $e');
-      }
+      toggleUpdateMode();
+      await syncWithFirestoreWidgetKeys(
+          projectId: projectId, enableBusy: false);
+      setBusy(false);
+    } catch (e) {
+      setBusy(false);
+      log.e('Couldn\'t update the widget. $e');
     }
-  }
-
-  String _onChangedValue = '';
-  String get onChangedValue => _onChangedValue;
-
-  set onChangedValue(String value) {
-    _onChangedValue = value;
-    notifyListeners();
-  }
-
-  void onChangeWidgetName(String value) {
-    onChangedValue = value;
   }
 }

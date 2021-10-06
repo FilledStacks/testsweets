@@ -46,7 +46,9 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                               child,
                               if (model
                                   .captureWidgetStatusEnum.isAtInspectModeMode)
-                                InspectControllers(),
+                                InspectControllers(
+                                    widgetNameController: widgetNameController,
+                                    widgetNameFocusNode: widgetNameFocusNode),
                               if (model.captureWidgetStatusEnum.isAtCaptureMode)
                                 CaptureLayout(
                                     widgetNameController: widgetNameController,
@@ -96,7 +98,12 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                   child: model.captureWidgetStatusEnum ==
                                           CaptureWidgetStatusEnum
                                               .inspectModeDialogShow
-                                      ? WidgetDescriptionDialog()
+                                      ? WidgetDescriptionDialog(
+                                          updateTextControllerText: () {
+                                            widgetNameController.text = model
+                                                .activeWidgetDescription!.name;
+                                          },
+                                        )
                                       : SizedBox.shrink(),
                                 ),
                               ),

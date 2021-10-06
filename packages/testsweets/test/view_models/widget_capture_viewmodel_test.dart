@@ -383,183 +383,183 @@ void main() {
       });
     });
 
-    group('deleteWidgetDescription -', () {
-      test(
-          'When called and onChangedValue is empty, Should update nameInputErrorMessage with the following message "Widget name must not be empty"',
-          () async {
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.onChangedValue = '';
-        model.deleteWidgetDescription();
-        expect(model.nameInputErrorMessage, "Widget name must not be empty");
-      });
+    // group('deleteWidgetDescription -', () {
+    //   test(
+    //       'When called and onChangedValue is empty, Should update nameInputErrorMessage with the following message "Widget name must not be empty"',
+    //       () async {
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     model.onChangedValue = '';
+    //     model.deleteWidgetDescription();
+    //     expect(model.nameInputErrorMessage, "Widget name must not be empty");
+    //   });
 
-      test(
-          'When called and onChangedValue is NOT empty, Should setBusy() true"',
-          () async {
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.onChangedValue = 'loginButton';
-        await model.addNewWidget(WidgetType.input);
-        model.deleteWidgetDescription();
-        expect(model.isBusy, isTrue);
-      });
+    //   test(
+    //       'When called and onChangedValue is NOT empty, Should setBusy() true"',
+    //       () async {
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     model.onChangedValue = 'loginButton';
+    //     await model.addNewWidget(WidgetType.input);
+    //     model.deleteWidgetDescription();
+    //     expect(model.isBusy, isTrue);
+    //   });
 
-      test('When called should call deleteWidgetDescription() in service"',
-          () async {
-        final description = WidgetDescription(
-          viewName: '',
-          originalViewName: '',
-          name: '',
-          position: WidgetPosition(x: 100, y: 199),
-          widgetType: WidgetType.general,
-        );
+    //   test('When called should call deleteWidgetDescription() in service"',
+    //       () async {
+    //     final description = WidgetDescription(
+    //       viewName: '',
+    //       originalViewName: '',
+    //       name: '',
+    //       position: WidgetPosition(x: 100, y: 199),
+    //       widgetType: WidgetType.general,
+    //     );
 
-        final service = getAndRegisterWidgetCaptureService();
-        final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     final service = getAndRegisterWidgetCaptureService();
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
 
-        model.onChangedValue = 'loginButton';
-        await model.addNewWidget(description.widgetType,
-            widgetPosition: description.position);
+    //     model.onChangedValue = 'loginButton';
+    //     await model.addNewWidget(description.widgetType,
+    //         widgetPosition: description.position);
 
-        await model.deleteWidgetDescription();
+    //     await model.deleteWidgetDescription();
 
-        verify(service.deleteWidgetDescription(
-            projectId: _projectId, description: description));
-      });
+    //     verify(service.deleteWidgetDescription(
+    //         projectId: _projectId, description: description));
+    //   });
 
-      test(
-          'When called and delete was successful, should call set isEditMode to be false"',
-          () async {
-        getAndRegisterWidgetCaptureService();
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.onChangedValue = 'loginButton';
-        await model.addNewWidget(WidgetType.scrollable);
-        await model.deleteWidgetDescription();
+    //   test(
+    //       'When called and delete was successful, should call set isEditMode to be false"',
+    //       () async {
+    //     getAndRegisterWidgetCaptureService();
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     model.onChangedValue = 'loginButton';
+    //     await model.addNewWidget(WidgetType.scrollable);
+    //     await model.deleteWidgetDescription();
 
-        expect(model.isEditMode, isFalse);
-      });
-    });
+    //     expect(model.isEditMode, isFalse);
+    //   });
+    // });
 
-    group('updateWidgetDescription -', () {
-      test(
-          'When called and onChangedValue is empty, Should update nameInputErrorMessage with the following message "Widget name must not be empty"',
-          () async {
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.onChangedValue = '';
-        model.updateWidgetDescription();
-        expect(model.nameInputErrorMessage, "Widget name must not be empty");
-      });
+    // group('updateWidgetDescription -', () {
+    //   test(
+    //       'When called and onChangedValue is empty, Should update nameInputErrorMessage with the following message "Widget name must not be empty"',
+    //       () async {
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     model.onChangedValue = '';
+    //     model.updateWidgetDescription();
+    //     expect(model.nameInputErrorMessage, "Widget name must not be empty");
+    //   });
 
-      test(
-          'When called and onChangedValue is NOT empty, Should setBusy() true"',
-          () async {
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.onChangedValue = 'loginButton';
-        await model.addNewWidget(WidgetType.input);
-        model.updateWidgetDescription();
-        expect(model.isBusy, isTrue);
-      });
+    //   test(
+    //       'When called and onChangedValue is NOT empty, Should setBusy() true"',
+    //       () async {
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     model.onChangedValue = 'loginButton';
+    //     await model.addNewWidget(WidgetType.input);
+    //     model.updateWidgetDescription();
+    //     expect(model.isBusy, isTrue);
+    //   });
 
-      test('When called, should call updateWidgetDescription() in service"',
-          () async {
-        final description = WidgetDescription(
-          viewName: '',
-          originalViewName: '',
-          name: 'loginButton',
-          position: WidgetPosition(x: 100, y: 199),
-          widgetType: WidgetType.general,
-        );
+    //   test('When called, should call updateWidgetDescription() in service"',
+    //       () async {
+    //     final description = WidgetDescription(
+    //       viewName: '',
+    //       originalViewName: '',
+    //       name: 'loginButton',
+    //       position: WidgetPosition(x: 100, y: 199),
+    //       widgetType: WidgetType.general,
+    //     );
 
-        final service = getAndRegisterWidgetCaptureService();
+    //     final service = getAndRegisterWidgetCaptureService();
 
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.onChangedValue = 'loginButton';
-        await model.addNewWidget(description.widgetType,
-            widgetPosition: description.position);
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     model.onChangedValue = 'loginButton';
+    //     await model.addNewWidget(description.widgetType,
+    //         widgetPosition: description.position);
 
-        await model.updateWidgetDescription();
+    //     await model.updateWidgetDescription();
 
-        verify(service.updateWidgetDescription(
-            projectId: _projectId, description: description));
-      });
+    //     verify(service.updateWidgetDescription(
+    //         projectId: _projectId, description: description));
+    //   });
 
-      test(
-          'When called and update was successful, should call set isEditMode to be false"',
-          () async {
-        getAndRegisterWidgetCaptureService();
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.onChangedValue = 'loginButton';
-        await model.addNewWidget(WidgetType.scrollable);
-        await model.updateWidgetDescription();
+    //   test(
+    //       'When called and update was successful, should call set isEditMode to be false"',
+    //       () async {
+    //     getAndRegisterWidgetCaptureService();
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     model.onChangedValue = 'loginButton';
+    //     await model.addNewWidget(WidgetType.scrollable);
+    //     await model.updateWidgetDescription();
 
-        expect(model.isEditMode, isFalse);
-      });
-    });
+    //     expect(model.isEditMode, isFalse);
+    //   });
+    // });
 
-    group('toggleIsEditMode -', () {
-      test('When called should set isEditMode false', () {
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.toggleIsEditMode();
-        expect(model.isEditMode, isFalse);
-      });
+    // group('toggleIsEditMode -', () {
+    //   test('When called should set isEditMode false', () {
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     model.toggleIsEditMode();
+    //     expect(model.isEditMode, isFalse);
+    //   });
 
-      test('When called should load widget description', () {
-        final service = getAndRegisterWidgetCaptureService();
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.toggleIsEditMode();
+    //   test('When called should load widget description', () {
+    //     final service = getAndRegisterWidgetCaptureService();
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     model.toggleIsEditMode();
 
-        verify(service.loadWidgetDescriptionsForProject(projectId: _projectId));
-      });
+    //     verify(service.loadWidgetDescriptionsForProject(projectId: _projectId));
+    //   });
 
-      test('When called should set captureWidgetStatusEnum to inspectMode', () {
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.toggleIsEditMode();
-        expect(
-            model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.inspectMode);
-      });
-    });
+    //   test('When called should set captureWidgetStatusEnum to inspectMode', () {
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     model.toggleIsEditMode();
+    //     expect(
+    //         model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.inspectMode);
+    //   });
+    // });
 
-    group('editWidgetDescription -', () {
-      test('When called should set isEditMode true', () {
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.editWidgetDescription();
-        expect(model.isEditMode, isTrue);
-      });
+    // group('editWidgetDescription -', () {
+    //   test('When called should set isEditMode true', () {
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     model.editWidgetDescription();
+    //     expect(model.isEditMode, isTrue);
+    //   });
 
-      test(
-          'When called should set WidgetDescription to the active WidgetDescription',
-          () {
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.editWidgetDescription();
+    //   test(
+    //       'When called should set WidgetDescription to the active WidgetDescription',
+    //       () {
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     model.editWidgetDescription();
 
-        expect(model.widgetDescription, model.activeWidgetDescription);
-      });
+    //     expect(model.widgetDescription, model.activeWidgetDescription);
+    //   });
 
-      test(
-          'When called should set onChangeValue with activeWidgetDescription name',
-          () {
-        final description = WidgetDescription(
-          viewName: '',
-          originalViewName: '',
-          name: 'loginButton',
-          position: WidgetPosition(x: 100, y: 199),
-          widgetType: WidgetType.general,
-        );
+    //   test(
+    //       'When called should set onChangeValue with activeWidgetDescription name',
+    //       () {
+    //     final description = WidgetDescription(
+    //       viewName: '',
+    //       originalViewName: '',
+    //       name: 'loginButton',
+    //       position: WidgetPosition(x: 100, y: 199),
+    //       widgetType: WidgetType.general,
+    //     );
 
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.showWidgetDescription(description);
-        model.editWidgetDescription();
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     model.showWidgetDescription(description);
+    //     model.editWidgetDescription();
 
-        expect(model.onChangedValue, model.activeWidgetDescription?.name);
-      });
+    //     expect(model.onChangedValue, model.activeWidgetDescription?.name);
+    //   });
 
-      test(
-          'When called should set captureWidgetStatusEnum to captureModeWidgetNameInputShow',
-          () {
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.editWidgetDescription();
-        expect(model.captureWidgetStatusEnum,
-            CaptureWidgetStatusEnum.captureModeWidgetNameInputShow);
-      });
-    });
+    //   test(
+    //       'When called should set captureWidgetStatusEnum to captureModeWidgetNameInputShow',
+    //       () {
+    //     final model = WidgetCaptureViewModel(projectId: _projectId);
+    //     model.editWidgetDescription();
+    //     expect(model.captureWidgetStatusEnum,
+    //         CaptureWidgetStatusEnum.captureModeWidgetNameInputShow);
+    //   });
+    // });
   });
 }

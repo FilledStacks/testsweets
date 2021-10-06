@@ -10,8 +10,10 @@ import 'black_wrapper_container.dart';
 import 'multi_style_text.dart';
 
 class WidgetDescriptionDialog extends ViewModelWidget<WidgetCaptureViewModel> {
+  final VoidCallback updateTextControllerText;
   const WidgetDescriptionDialog({
     Key? key,
+    required this.updateTextControllerText,
   }) : super(key: key);
 
   @override
@@ -60,7 +62,10 @@ class WidgetDescriptionDialog extends ViewModelWidget<WidgetCaptureViewModel> {
             children: [
               Expanded(
                 child: CtaButton(
-                  onTap: model.editWidgetDescription,
+                  onTap: () {
+                    updateTextControllerText.call();
+                    model.toggleUpdateMode();
+                  },
                   fillColor: kcPrimaryPurple,
                   title: 'Edit',
                   isSmallSize: true,

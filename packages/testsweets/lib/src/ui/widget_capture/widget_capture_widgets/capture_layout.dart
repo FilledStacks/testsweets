@@ -45,23 +45,18 @@ class CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
                   : Alignment.topCenter,
               widthFactor: 1,
               child: WidgetNameInput(
-                initialValue:
-                    model.isEditMode ? model.widgetDescription?.name : null,
-                onChanged: model.isEditMode ? model.onChangeWidgetName : null,
-                isEditMode: model.isEditMode,
+                initialValue: null,
+                isEditMode: false,
                 errorMessage: model.nameInputErrorMessage,
                 closeWidget: () {
                   widgetNameController.clear();
                   model.closeWidgetNameInput();
                 },
                 deleteWidget: model.deleteWidgetDescription,
-                saveWidget: model.isEditMode
-                    ? model.updateWidgetDescription
-                    : model.saveWidgetDescription,
+                saveWidget: (text) => model.saveWidgetDescription(),
                 switchPositionTap: model.switchWidgetNameInputPosition,
                 focusNode: widgetNameFocusNode,
-                textEditingController:
-                    model.isEditMode ? null : widgetNameController,
+                textEditingController: widgetNameController,
               ),
             ),
             isVisible: !model.isBusy &&
