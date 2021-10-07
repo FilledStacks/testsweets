@@ -1,3 +1,7 @@
+## 1.4.9
+
+- Adds a debug icon to see which keys are on screen when automating
+
 ## 1.4.8
 
 - Adds functionality to show parent widgets when the child is the current route. Used for bottom nav functionality
