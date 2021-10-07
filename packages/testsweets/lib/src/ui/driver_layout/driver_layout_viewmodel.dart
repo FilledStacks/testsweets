@@ -34,9 +34,6 @@ class DriverLayoutViewModel extends BaseViewModel {
     notifyListeners();
 
     _testSweetsRouteTracer.addListener(() {
-      for (var widgetDescription in descriptionsForView) {
-        print('Automation key: ${widgetDescription.automationKey}');
-      }
       notifyListeners();
     });
   }
