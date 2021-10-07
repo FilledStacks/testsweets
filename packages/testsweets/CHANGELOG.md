@@ -1,3 +1,7 @@
+## 1.4.8
+
+- Adds functionality to show parent widgets when the child is the current route. Used for bottom nav functionality
+
 ## 1.4.7
 
 - Updates the naming of the Bottom nav tracking in `TestSweetsNavigatorObserver`

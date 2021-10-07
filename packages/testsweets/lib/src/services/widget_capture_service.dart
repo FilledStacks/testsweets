@@ -55,8 +55,20 @@ class WidgetCaptureService {
   List<WidgetDescription> getDescriptionsForView({
     required String currentRoute,
   }) {
-    final viewDescriptions = widgetDescriptionMap[currentRoute];
+    var viewDescriptions = widgetDescriptionMap[currentRoute];
     log.v('currentRoute:$currentRoute viewDescriptions:$viewDescriptions');
+
+    final potentialParentRoute = currentRoute.replaceAll(RegExp('[0-9]'), '');
+
+    if (currentRoute != potentialParentRoute) {
+      final additionalDescriptions = widgetDescriptionMap[potentialParentRoute];
+      if (additionalDescriptions != null) {
+        log.v('Parent route has descriptions: $potentialParentRoute');
+
+        viewDescriptions = [...?viewDescriptions, ...additionalDescriptions];
+      }
+    }
+
     return viewDescriptions ?? [];
   }
 
