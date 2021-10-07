@@ -1,6 +1,6 @@
 name: testsweets
 description: A package to help sync flutter automation keys with TestSweets backend
-version: 1.4.7
+version: 1.4.8
 homepage: https://github.com/FilledStacks/testsweets
 
 environment:
@@ -21,7 +21,7 @@ dependencies:
   logger: ^1.1.0
   recase: ^4.0.0
   flutter_screenutil: ^5.0.0+2
-  
+
 dependency_overrides:
   dart_style: 2.0.3
   analyzer: ^2.0.0

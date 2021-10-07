@@ -287,6 +287,127 @@ void main() {
       });
     });
 
+    group('getDescriptionsForView -', () {
+      test(
+          'When called with route homeView, should return the widgets for homeView only',
+          () async {
+        getAndRegisterCloudFunctionsService(
+            getWidgetDescriptionForProjectResult: [
+              WidgetDescription(
+                viewName: 'homeView',
+                originalViewName: '/home_view',
+                name: 'bottomTab1',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+              WidgetDescription(
+                viewName: 'homeView',
+                originalViewName: '/home_view',
+                name: 'bottomTab2',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+            ]);
+        final service = WidgetCaptureService();
+        await service.loadWidgetDescriptionsForProject(projectId: 'projectId');
+
+        final result =
+            service.getDescriptionsForView(currentRoute: '/home_view');
+        expect(result.length, 2);
+      });
+
+      test(
+          'When called with route homeView0, should return the widgets for homeView + homeView0',
+          () async {
+        getAndRegisterCloudFunctionsService(
+            getWidgetDescriptionForProjectResult: [
+              WidgetDescription(
+                viewName: 'homeView',
+                originalViewName: '/home_view',
+                name: 'bottomTab1',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+              WidgetDescription(
+                viewName: 'homeView',
+                originalViewName: '/home_view',
+                name: 'bottomTab2',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+              WidgetDescription(
+                viewName: 'homeView0',
+                originalViewName: '/home_view0',
+                name: 'bottomTab2',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+              WidgetDescription(
+                viewName: 'homeView1',
+                originalViewName: '/home_view1',
+                name: 'bottomTab2',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+            ]);
+        final service = WidgetCaptureService();
+        await service.loadWidgetDescriptionsForProject(projectId: 'projectId');
+
+        final result =
+            service.getDescriptionsForView(currentRoute: '/home_view0');
+        expect(result.length, 3);
+      });
+
+      test(
+          'When called with route homeView1, should return the widgets for homeView + homeView0',
+          () async {
+        getAndRegisterCloudFunctionsService(
+            getWidgetDescriptionForProjectResult: [
+              WidgetDescription(
+                viewName: 'homeView',
+                originalViewName: '/home_view',
+                name: 'bottomTab1',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+              WidgetDescription(
+                viewName: 'homeView',
+                originalViewName: '/home_view',
+                name: 'bottomTab2',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+              WidgetDescription(
+                viewName: 'homeView0',
+                originalViewName: '/home_view0',
+                name: 'bottomTab2',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+              WidgetDescription(
+                viewName: 'homeView1',
+                originalViewName: '/home_view1',
+                name: 'bottomTab2',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+              WidgetDescription(
+                viewName: 'homeView1',
+                originalViewName: '/home_view1',
+                name: 'bottomTab3',
+                widgetType: WidgetType.touchable,
+                position: WidgetPosition(x: 0, y: 0),
+              ),
+            ]);
+        final service = WidgetCaptureService();
+        await service.loadWidgetDescriptionsForProject(projectId: 'projectId');
+
+        final result =
+            service.getDescriptionsForView(currentRoute: '/home_view1');
+        expect(result.length, 4);
+      });
+    });
+
     group('updateWidgetDescription -', () {
       test(
           'When called, should call update widget description from the CloudFunctionsService',
