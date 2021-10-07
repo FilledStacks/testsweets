@@ -3,11 +3,12 @@ import 'package:flutter/scheduler.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/ui/driver_layout/hittable_stack.dart';
+import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/busy_indecator.dart';
 
 import 'driver_layout_viewmodel.dart';
 
-class DriverLayoutView extends StatelessWidget {
+class DriverLayoutView extends StatefulWidget {
   final Widget child;
   final String projectId;
 
@@ -18,6 +19,13 @@ class DriverLayoutView extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<DriverLayoutView> createState() => _DriverLayoutViewState();
+}
+
+class _DriverLayoutViewState extends State<DriverLayoutView> {
+  bool _showDebugInformation = false;
+
+  @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<DriverLayoutViewModel>.reactive(
       onModelReady: (model) =>
@@ -26,7 +34,18 @@ class DriverLayoutView extends StatelessWidget {
       }),
       builder: (context, model, _) => HittableStack(
         children: [
-          child,
+          widget.child,
+          Positioned(
+              right: 15,
+              top: 15,
+              child: IconButton(
+                icon: Icon(Icons.remove_red_eye),
+                onPressed: () {
+                  setState(() {
+                    _showDebugInformation = !_showDebugInformation;
+                  });
+                },
+              )),
           BusyIndicator(
             enable: model.isBusy,
           ),
@@ -43,13 +62,36 @@ class DriverLayoutView extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Color(0x01000000),
                   borderRadius: BorderRadius.circular(5),
+                  border: _showDebugInformation
+                      ? Border.all(color: Colors.red, width: 1)
+                      : null,
                 ),
               ),
             ),
-          )
+          ),
+          if (_showDebugInformation)
+            ...model.descriptionsForView.map(
+              (description) => Positioned(
+                top: description.position.y -
+                    (WIDGET_DESCRIPTION_VISUAL_SIZE / 3),
+                left: description.position.x -
+                    (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
+                child: Container(
+                  color: kcFailTestRedColor,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 15,
+                    vertical: 5,
+                  ),
+                  child: Text(
+                    description.automationKey,
+                  ),
+                ),
+              ),
+            )
         ],
       ),
-      viewModelBuilder: () => DriverLayoutViewModel(projectId: projectId),
+      viewModelBuilder: () =>
+          DriverLayoutViewModel(projectId: widget.projectId),
     );
   }
 }
