@@ -33,11 +33,14 @@ class WidgetDescription with _$WidgetDescription {
     required WidgetPosition position,
   }) = _WidgetDescription;
   factory WidgetDescription.addView(
-          {required String viewName, required String originalViewName}) =>
+          {required String viewName,
+          required String originalViewName,
+          String? originalParentViewName}) =>
       WidgetDescription(
           viewName: viewName,
           originalViewName: originalViewName,
           name: '',
+          originalParentViewName: originalParentViewName,
           widgetType: WidgetType.view,
           position: WidgetPosition(x: 0, y: 0));
 

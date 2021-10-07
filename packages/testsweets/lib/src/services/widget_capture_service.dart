@@ -57,10 +57,10 @@ class WidgetCaptureService {
     // if any of the widgets view have a parentView we should add its widgets too
     if (matchedList.any((element) => element.originalParentViewName != null)) {
       log.v('Fetching parent view');
-      getDescriptionsForView(
-          currentRoute: matchedList
-              .firstWhere((element) => element.originalParentViewName != null)
-              .originalParentViewName!);
+      final parentRoute = matchedList
+          .firstWhere((element) => element.originalParentViewName != null)
+          .originalParentViewName!;
+      return matchedList + getDescriptionsForView(currentRoute: parentRoute);
     }
 
     log.v('currentRoute:$currentRoute matchedList:$matchedList');

@@ -189,12 +189,25 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   Future<void> _captureViewWhenItsNotAlreadyCaptured() async {
     try {
-      _widgetCaptureService.captureWidgetDescription(
-          description: WidgetDescription.addView(
-              viewName: _testSweetsRouteTracker
-                  .currentRoute.convertViewNameToValidFormat,
-              originalViewName: _testSweetsRouteTracker.currentRoute),
-          projectId: projectId);
+      if (_testSweetsRouteTracker.currentRoute.contains('###')) {
+        final currentRoute = _testSweetsRouteTracker.currentRoute;
+        _widgetCaptureService.captureWidgetDescription(
+            description: WidgetDescription.addView(
+                originalParentViewName: currentRoute.split('###').first,
+                viewName: (currentRoute.split('###')[0] +
+                        currentRoute.split('###')[1])
+                    .convertViewNameToValidFormat,
+                originalViewName: _testSweetsRouteTracker.currentRoute),
+            projectId: projectId);
+      } else {
+        _widgetCaptureService.captureWidgetDescription(
+            description: WidgetDescription.addView(
+                viewName: _testSweetsRouteTracker
+                    .currentRoute.convertViewNameToValidFormat,
+                originalViewName: _testSweetsRouteTracker.currentRoute),
+            projectId: projectId);
+      }
+
       await syncWithFirestoreWidgetKeys(
           projectId: projectId, enableBusy: false);
     } catch (e) {
