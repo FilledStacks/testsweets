@@ -20,6 +20,9 @@ class WidgetDescription with _$WidgetDescription {
     /// The orignal name of the view this widget was captured on before the prettify
     required String originalViewName,
 
+    /// The orignal name of the parent view that contains this widget view example: bottom nav bar
+    String? originalParentViewName,
+
     /// The name we want to use when referring to the widget in the scripts
     required String name,
 
@@ -51,7 +54,7 @@ class WidgetDescription with _$WidgetDescription {
       _$WidgetDescriptionFromJson(json);
 
   String get automationKey => widgetType == WidgetType.view
-    ? '$viewName\_${widgetType.shortName}'
+      ? '$viewName\_${widgetType.shortName}'
       : '$viewName\_${widgetType.shortName}\_$name';
 }
 

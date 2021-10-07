@@ -195,7 +195,8 @@ class WidgetCaptureViewModel extends FormViewModel {
                   .currentRoute.convertViewNameToValidFormat,
               originalViewName: _testSweetsRouteTracker.currentRoute),
           projectId: projectId);
-      syncWithFirestoreWidgetKeys(projectId: projectId, enableBusy: false);
+      await syncWithFirestoreWidgetKeys(
+          projectId: projectId, enableBusy: false);
     } catch (e) {
       log.e("couldn't capture the view : $e");
       //should add a way to notify the user that something wrong happened

@@ -9,8 +9,7 @@ class WidgetCaptureService {
 
   final _cloudFunctionsService = locator<CloudFunctionsService>();
 
-  final Map<String, List<WidgetDescription>> widgetDescriptionMap =
-      Map<String, List<WidgetDescription>>();
+  final List<WidgetDescription> widgetDescriptionsStore = [];
   final bool verbose;
 
   WidgetCaptureService({this.verbose = false});
@@ -38,33 +37,39 @@ class WidgetCaptureService {
       {required String projectId}) async {
     final widgetDescriptions = await _cloudFunctionsService
         .getWidgetDescriptionForProject(projectId: projectId);
-    widgetDescriptionMap.clear();
+    widgetDescriptionsStore.clear();
     for (final description in widgetDescriptions) {
       addWidgetDescriptionToMap(description: description);
     }
   }
 
   void addWidgetDescriptionToMap({required WidgetDescription description}) {
-    if (widgetDescriptionMap.containsKey(description.originalViewName)) {
-      widgetDescriptionMap[description.originalViewName]?.add(description);
-    } else {
-      widgetDescriptionMap[description.originalViewName] = [description];
-    }
+    widgetDescriptionsStore.add(description);
   }
 
   List<WidgetDescription> getDescriptionsForView({
     required String currentRoute,
   }) {
-    final viewDescriptions = widgetDescriptionMap[currentRoute];
-    log.v('currentRoute:$currentRoute viewDescriptions:$viewDescriptions');
-    return viewDescriptions ?? [];
+    final matchedList = widgetDescriptionsStore
+        .where((element) => element.originalViewName == currentRoute)
+        .toList();
+
+    // if any of the widgets view have a parentView we should add its widgets too
+    if (matchedList.any((element) => element.originalParentViewName != null)) {
+      log.v('Fetching parent view');
+      getDescriptionsForView(
+          currentRoute: matchedList
+              .firstWhere((element) => element.originalParentViewName != null)
+              .originalParentViewName!);
+    }
+
+    log.v('currentRoute:$currentRoute matchedList:$matchedList');
+    return matchedList;
   }
 
   bool checkCurrentViewIfAlreadyCaptured(String originalViewName) =>
-      widgetDescriptionMap.containsKey(originalViewName)
-          ? widgetDescriptionMap[originalViewName]!
-              .any((element) => element.name == '')
-          : false;
+      widgetDescriptionsStore
+          .any((element) => element.originalViewName == originalViewName);
 
   /// Updates a widget description to the backend as well as locally in the [widgetDescriptionMap]
   Future<void> updateWidgetDescription({
@@ -73,13 +78,13 @@ class WidgetCaptureService {
   }) async {
     log.i('description:$description projectId:$projectId');
 
-    final widgetToUpdate = widgetDescriptionMap[description.originalViewName]
-        ?.firstWhere((element) => element.id == description.id);
+    final widgetToUpdate = widgetDescriptionsStore
+        .firstWhere((element) => element.id == description.id);
 
     final descriptionId = await _cloudFunctionsService.updateWidgetDescription(
         projectId: projectId,
         newwidgetDescription: description,
-        oldwidgetDescription: widgetToUpdate!);
+        oldwidgetDescription: widgetToUpdate);
 
     log.i('descriptionId from Cloud: $descriptionId');
   }

@@ -25,6 +25,7 @@ class _$WidgetDescriptionTearOff {
       {String? id,
       required String viewName,
       required String originalViewName,
+      String? originalParentViewName,
       required String name,
       required WidgetType widgetType,
       required WidgetPosition position}) {
@@ -32,6 +33,7 @@ class _$WidgetDescriptionTearOff {
       id: id,
       viewName: viewName,
       originalViewName: originalViewName,
+      originalParentViewName: originalParentViewName,
       name: name,
       widgetType: widgetType,
       position: position,
@@ -57,6 +59,9 @@ mixin _$WidgetDescription {
   /// The orignal name of the view this widget was captured on before the prettify
   String get originalViewName => throw _privateConstructorUsedError;
 
+  /// The orignal name of the parent view that contains this widget view example: bottom nav bar
+  String? get originalParentViewName => throw _privateConstructorUsedError;
+
   /// The name we want to use when referring to the widget in the scripts
   String get name => throw _privateConstructorUsedError;
 
@@ -81,6 +86,7 @@ abstract class $WidgetDescriptionCopyWith<$Res> {
       {String? id,
       String viewName,
       String originalViewName,
+      String? originalParentViewName,
       String name,
       WidgetType widgetType,
       WidgetPosition position});
@@ -102,6 +108,7 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
     Object? id = freezed,
     Object? viewName = freezed,
     Object? originalViewName = freezed,
+    Object? originalParentViewName = freezed,
     Object? name = freezed,
     Object? widgetType = freezed,
     Object? position = freezed,
@@ -119,6 +126,10 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
           ? _value.originalViewName
           : originalViewName // ignore: cast_nullable_to_non_nullable
               as String,
+      originalParentViewName: originalParentViewName == freezed
+          ? _value.originalParentViewName
+          : originalParentViewName // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -153,6 +164,7 @@ abstract class _$WidgetDescriptionCopyWith<$Res>
       {String? id,
       String viewName,
       String originalViewName,
+      String? originalParentViewName,
       String name,
       WidgetType widgetType,
       WidgetPosition position});
@@ -177,6 +189,7 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
     Object? id = freezed,
     Object? viewName = freezed,
     Object? originalViewName = freezed,
+    Object? originalParentViewName = freezed,
     Object? name = freezed,
     Object? widgetType = freezed,
     Object? position = freezed,
@@ -194,6 +207,10 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
           ? _value.originalViewName
           : originalViewName // ignore: cast_nullable_to_non_nullable
               as String,
+      originalParentViewName: originalParentViewName == freezed
+          ? _value.originalParentViewName
+          : originalParentViewName // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -217,6 +234,7 @@ class _$_WidgetDescription extends _WidgetDescription {
       {this.id,
       required this.viewName,
       required this.originalViewName,
+      this.originalParentViewName,
       required this.name,
       required this.widgetType,
       required this.position})
@@ -239,6 +257,10 @@ class _$_WidgetDescription extends _WidgetDescription {
   final String originalViewName;
   @override
 
+  /// The orignal name of the parent view that contains this widget view example: bottom nav bar
+  final String? originalParentViewName;
+  @override
+
   /// The name we want to use when referring to the widget in the scripts
   final String name;
   @override
@@ -252,7 +274,7 @@ class _$_WidgetDescription extends _WidgetDescription {
 
   @override
   String toString() {
-    return 'WidgetDescription(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position)';
+    return 'WidgetDescription(id: $id, viewName: $viewName, originalViewName: $originalViewName, originalParentViewName: $originalParentViewName, name: $name, widgetType: $widgetType, position: $position)';
   }
 
   @override
@@ -267,6 +289,9 @@ class _$_WidgetDescription extends _WidgetDescription {
             (identical(other.originalViewName, originalViewName) ||
                 const DeepCollectionEquality()
                     .equals(other.originalViewName, originalViewName)) &&
+            (identical(other.originalParentViewName, originalParentViewName) ||
+                const DeepCollectionEquality().equals(
+                    other.originalParentViewName, originalParentViewName)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
             (identical(other.widgetType, widgetType) ||
@@ -283,6 +308,7 @@ class _$_WidgetDescription extends _WidgetDescription {
       const DeepCollectionEquality().hash(id) ^
       const DeepCollectionEquality().hash(viewName) ^
       const DeepCollectionEquality().hash(originalViewName) ^
+      const DeepCollectionEquality().hash(originalParentViewName) ^
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(widgetType) ^
       const DeepCollectionEquality().hash(position);
@@ -303,6 +329,7 @@ abstract class _WidgetDescription extends WidgetDescription {
       {String? id,
       required String viewName,
       required String originalViewName,
+      String? originalParentViewName,
       required String name,
       required WidgetType widgetType,
       required WidgetPosition position}) = _$_WidgetDescription;
@@ -323,6 +350,10 @@ abstract class _WidgetDescription extends WidgetDescription {
 
   /// The orignal name of the view this widget was captured on before the prettify
   String get originalViewName => throw _privateConstructorUsedError;
+  @override
+
+  /// The orignal name of the parent view that contains this widget view example: bottom nav bar
+  String? get originalParentViewName => throw _privateConstructorUsedError;
   @override
 
   /// The name we want to use when referring to the widget in the scripts
