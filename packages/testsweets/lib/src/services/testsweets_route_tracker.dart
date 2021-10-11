@@ -20,7 +20,9 @@ class TestSweetsRouteTracker extends ChangeNotifier {
 
   String _currentRoute = '';
   String get currentRoute => _currentRoute;
-  String get formatedCurrentRoute => _currentRoute.convertViewNameToValidFormat;
+  String get formatedCurrentRoute => _currentRoute.isNotEmpty
+      ? _currentRoute.convertViewNameToValidFormat
+      : '';
 
   String _parentRoute = '';
   String get parentRoute => _parentRoute;
@@ -31,14 +33,12 @@ class TestSweetsRouteTracker extends ChangeNotifier {
   String get formatedTempRoute =>
       _tempRoute.isNotEmpty ? _tempRoute.convertViewNameToValidFormat : '';
 
-  String get leftViewName => isNestedView
-      ? isChildRouteActivated
-          ? formatedParentRoute
-          : formatedCurrentRoute
-      : '';
+  String get leftViewName => isNestedView ? formatedParentRoute : '';
+
   String get rightViewName => isChildRouteActivated
       ? formatedCurrentRoute
       : _tempRoute.convertViewNameToValidFormat;
+
   void setCurrentRoute(String route) {
     log.i('setCurrentRoute | route: $route');
     _parentRoute = '';
