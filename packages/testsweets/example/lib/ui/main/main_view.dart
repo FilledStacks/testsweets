@@ -12,6 +12,12 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainViewModel>.reactive(
+      onModelReady: (model) {
+        TestSweetsNavigatorObserver.instance.setBottomNavIndex(
+          viewName: Routes.mainView,
+          index: 0,
+        );
+      },
       builder: (context, model, child) => Scaffold(
         body: getViewForIndex(model.currentIndex),
         bottomNavigationBar: BottomNavigationBar(

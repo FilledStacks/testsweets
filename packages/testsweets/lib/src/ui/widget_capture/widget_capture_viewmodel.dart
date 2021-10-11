@@ -22,19 +22,18 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   WidgetCaptureViewModel({required this.projectId}) {
     syncWithFirestoreWidgetKeys(projectId: projectId);
-
-    _testSweetsRouteTracker.addListener(() {
-      _currentView =
-          _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat;
-      notifyListeners();
-      if (_captureWidgetStatusEnum == CaptureWidgetStatusEnum.inspectMode) {
-        notifyListeners();
-      }
-    });
+    _testSweetsRouteTracker.addListener(notifyListeners);
   }
 
-  String _currentView = '';
-  String get currentView => _currentView;
+  String get rightViewName => _testSweetsRouteTracker.rightViewName;
+
+  String get leftViewName => _testSweetsRouteTracker.leftViewName;
+  bool get isNestedView => _testSweetsRouteTracker.isNestedView;
+  bool get isChildRouteActivated =>
+      _testSweetsRouteTracker.isChildRouteActivated;
+
+  void toggleBetweenParentRouteAndChildRoute() =>
+      _testSweetsRouteTracker.toggleActivatedRouteBetweenParentAndChild();
 
   /// the status enum that express the current state of the view
   CaptureWidgetStatusEnum _captureWidgetStatusEnum =

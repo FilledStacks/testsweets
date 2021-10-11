@@ -23,6 +23,29 @@ TextStyle tsMedium() => TextStyle(
       fontWeight: FontWeight.w500,
       fontSize: 16.sp,
     );
+TextStyle tsLarge() => TextStyle(
+      fontFamily: "Roboto",
+      fontWeight: FontWeight.w600,
+      fontSize: 18.sp,
+    );
+
+TextStyle tsExtraLarge() => TextStyle(
+      fontFamily: "Roboto",
+      fontWeight: FontWeight.w700,
+      fontSize: 40.sp,
+    );
+TextStyle tsActiveRoute() => TextStyle(
+      fontFamily: "Roboto",
+      color: kcPrimaryWhite,
+      fontWeight: FontWeight.w600,
+      fontSize: 18.sp,
+    );
+TextStyle tsDisableRoute() => TextStyle(
+      fontFamily: "Roboto",
+      fontWeight: FontWeight.w600,
+      color: kcSubtext,
+      fontSize: 16.sp,
+    );
 const boldStyle =
     TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white);
 

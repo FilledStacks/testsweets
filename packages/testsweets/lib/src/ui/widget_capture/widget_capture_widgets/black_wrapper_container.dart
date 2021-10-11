@@ -44,7 +44,7 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                 onPressed: switchPositionTap,
                 style: ButtonStyle(
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  fixedSize: MaterialStateProperty.all(Size(142.h, 22)),
+                  fixedSize: MaterialStateProperty.all(Size(140.h, 22)),
                   shape: MaterialStateProperty.all<OutlinedBorder>(
                       RoundedRectangleBorder(
                           borderRadius:
@@ -67,30 +67,48 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
               ),
             ),
           SizedBox(
-            width: 4.w,
+            width: 2,
           ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                FadeInWidget(
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 16.w),
-                      decoration: viewNameBoxDecoration,
-                      child: Row(
-                        children: [
-                          AutoSizeText(model.currentView,
-                              textAlign: TextAlign.center,
-                              style: tsNormalBold()
-                                  .copyWith(color: kcPrimaryWhite)),
-                        ],
-                      ),
+                MaterialButton(
+                  padding: EdgeInsets.zero,
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  onPressed: model.isNestedView
+                      ? model.toggleBetweenParentRouteAndChildRoute
+                      : null,
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding:
+                        EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+                    decoration: viewNameBoxDecoration,
+                    child: AutoSizeText.rich(
+                      TextSpan(children: [
+                        TextSpan(
+                            text: model.leftViewName,
+                            style: model.isChildRouteActivated
+                                ? tsDisableRoute()
+                                : tsActiveRoute()),
+                        if (model.isNestedView)
+                          TextSpan(
+                              text: ' / ',
+                              style:
+                                  tsLarge().copyWith(color: kcPrimaryFuchsia)),
+                        TextSpan(
+                            text: model.rightViewName,
+                            style: model.isChildRouteActivated
+                                ? tsActiveRoute()
+                                : tsDisableRoute()),
+                      ]),
+                      textAlign: TextAlign.center,
                     ),
-                    isVisible: model.currentView.isNotEmpty),
+                  ),
+                ),
                 Container(
+                  margin: EdgeInsets.only(top: 1),
                   padding: EdgeInsets.only(
                       left: 16.w, right: 16.w, top: 4.h, bottom: 20.h),
                   decoration: blackBoxDecoration.copyWith(
