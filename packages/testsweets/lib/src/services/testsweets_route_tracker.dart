@@ -5,7 +5,8 @@ import 'package:testsweets/src/extensions/string_extension.dart';
 
 class TestSweetsRouteTracker extends ChangeNotifier {
   final log = getLogger('TestSweetsRouteTracker');
-
+  @visibleForTesting
+  bool testMode = false;
   static TestSweetsRouteTracker? _instance;
   static TestSweetsRouteTracker get instance {
     if (_instance == null) {
@@ -43,17 +44,13 @@ class TestSweetsRouteTracker extends ChangeNotifier {
     _parentRoute = '';
     _tempRoute = '';
     _currentRoute = route;
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      notifyListeners();
-    });
+    refreshUi();
   }
 
   void setparentRoute(String route) {
     log.i('setparentRoute | parentRoute: $route');
     _parentRoute = route;
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      notifyListeners();
-    });
+    refreshUi();
   }
 
   void toggleActivatedRouteBetweenParentAndChild() {
@@ -66,10 +63,13 @@ class TestSweetsRouteTracker extends ChangeNotifier {
       _currentRoute = _tempRoute;
       _tempRoute = '';
     }
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      notifyListeners();
-    });
+    refreshUi();
     log.v(
         'tempRoute: $_tempRoute | currentRoute: $_currentRoute | parentRoute: $_parentRoute');
+  }
+
+  void refreshUi() {
+    if (!testMode)
+      WidgetsBinding.instance!.addPostFrameCallback((_) => notifyListeners());
   }
 }
