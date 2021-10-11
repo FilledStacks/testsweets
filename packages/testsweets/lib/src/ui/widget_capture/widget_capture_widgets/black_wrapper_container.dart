@@ -12,18 +12,19 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
   final VoidCallback? closeWidgetOnTap;
   final Widget child;
   final Widget? footerChild;
-  final double? spaceBetweenTopControllersAndChild;
   final String? title;
   final bool bottomCornerRaduisIsZero;
-
+  final bool hideViewBar;
+  final bool disableToggleViews;
   const BlackWrapperContainer(
       {Key? key,
       this.switchPositionTap,
       this.closeWidgetOnTap,
       this.bottomCornerRaduisIsZero = false,
+      this.disableToggleViews = false,
+      this.hideViewBar = false,
       required this.child,
       this.footerChild,
-      this.spaceBetweenTopControllersAndChild,
       this.title})
       : super(key: key);
 
@@ -96,45 +97,46 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    MaterialButton(
-                      padding: EdgeInsets.zero,
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      onPressed: model.isNestedView
-                          ? model.toggleBetweenParentRouteAndChildRoute
-                          : null,
-                      child: Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.symmetric(
-                            vertical: 8.h, horizontal: 16.w),
-                        decoration: viewNameBoxDecoration,
-                        child: AutoSizeText.rich(
-                          TextSpan(children: [
-                            TextSpan(
-                                text: model.leftViewName,
-                                style: model.isChildRouteActivated
-                                    ? tsDisableRoute()
-                                    : tsActiveRoute()),
-                            if (model.isNestedView)
+                    if (!hideViewBar)
+                      MaterialButton(
+                        padding: EdgeInsets.zero,
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        onPressed: model.isNestedView && !disableToggleViews
+                            ? model.toggleBetweenParentRouteAndChildRoute
+                            : null,
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8.h, horizontal: 16.w),
+                          decoration: viewNameBoxDecoration,
+                          child: AutoSizeText.rich(
+                            TextSpan(children: [
                               TextSpan(
-                                  text: ' / ',
-                                  style: tsLarge()
-                                      .copyWith(color: kcPrimaryFuchsia)),
-                            TextSpan(
-                                text: model.rightViewName,
-                                style: model.isChildRouteActivated
-                                    ? tsActiveRoute()
-                                    : tsDisableRoute()),
-                          ]),
-                          textAlign: TextAlign.center,
+                                  text: model.leftViewName,
+                                  style: model.isChildRouteActivated
+                                      ? tsDisableRoute()
+                                      : tsActiveRoute()),
+                              if (model.isNestedView)
+                                TextSpan(
+                                    text: ' / ',
+                                    style: tsLarge()
+                                        .copyWith(color: kcPrimaryFuchsia)),
+                              TextSpan(
+                                  text: model.rightViewName,
+                                  style: model.isChildRouteActivated
+                                      ? tsActiveRoute()
+                                      : tsDisableRoute()),
+                            ]),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
-                    ),
                     Container(
                       margin: EdgeInsets.only(top: 1),
                       padding: EdgeInsets.only(
                           left: 16.w, right: 16.w, top: 4.h, bottom: 20.h),
                       decoration: blackBoxDecoration.copyWith(
-                          borderRadius: bottomCornerRaduisIsZero
+                          borderRadius: bottomCornerRaduisIsZero || hideViewBar
                               ? BorderRadius.vertical(
                                   top: crButtonCornerRadius())
                               : BorderRadius.vertical(
@@ -144,10 +146,15 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           title != null
-                              ? Expanded(child: Text(title!, style: boldStyle))
+                              ? Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 12.h,
+                                  ),
+                                  child: Text(title!, style: boldStyle),
+                                )
                               : const SizedBox(),
                           SizedBox(
-                            height: spaceBetweenTopControllersAndChild ?? 24.w,
+                            height: 24.w,
                           ),
                           child,
                         ],
