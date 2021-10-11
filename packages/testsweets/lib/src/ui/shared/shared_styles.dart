@@ -88,6 +88,14 @@ final viewNameBoxDecoration = BoxDecoration(
   ),
   borderRadius: BorderRadius.vertical(top: crButtonCornerRadius()),
 );
+final backButtonBoxDecoration = BoxDecoration(
+  gradient: LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [kcCard.withOpacity(0.7), kcCard],
+  ),
+  borderRadius: BorderRadius.all(crButtonCornerRadius()),
+);
 
 class FadeInWidget extends StatelessWidget {
   final Widget child;
