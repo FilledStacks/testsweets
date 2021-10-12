@@ -244,10 +244,16 @@ AutomationKeysService getAndRegisterAutomationKeysService() {
 }
 
 MockTestSweetsRouteTracker getAndRegisterTestSweetsRouteTracker(
-    {String currentRoute = 'current route'}) {
+    {String currentRoute = 'current route',
+    bool isChildRouteActivated = true,
+    bool isNestedView = true,
+    String parentRoute = 'parentRoute'}) {
   _removeRegistrationIfExists<TestSweetsRouteTracker>();
   final service = MockTestSweetsRouteTracker();
   when(service.currentRoute).thenReturn(currentRoute);
+  when(service.parentRoute).thenReturn(parentRoute);
+  when(service.isChildRouteActivated).thenReturn(isChildRouteActivated);
+  when(service.isNestedView).thenReturn(isNestedView);
   locator.registerSingleton<TestSweetsRouteTracker>(service);
   return service;
 }

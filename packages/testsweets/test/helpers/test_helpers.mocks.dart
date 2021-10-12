@@ -384,8 +384,48 @@ class MockWidgetCaptureService extends _i1.Mock
 class MockTestSweetsRouteTracker extends _i1.Mock
     implements _i17.TestSweetsRouteTracker {
   @override
+  bool get testMode =>
+      (super.noSuchMethod(Invocation.getter(#testMode), returnValue: false)
+          as bool);
+  @override
+  set testMode(bool? _testMode) =>
+      super.noSuchMethod(Invocation.setter(#testMode, _testMode),
+          returnValueForMissingStub: null);
+  @override
+  bool get isChildRouteActivated =>
+      (super.noSuchMethod(Invocation.getter(#isChildRouteActivated),
+          returnValue: false) as bool);
+  @override
+  bool get isNestedView =>
+      (super.noSuchMethod(Invocation.getter(#isNestedView), returnValue: false)
+          as bool);
+  @override
   String get currentRoute =>
       (super.noSuchMethod(Invocation.getter(#currentRoute), returnValue: '')
+          as String);
+  @override
+  String get formatedCurrentRoute =>
+      (super.noSuchMethod(Invocation.getter(#formatedCurrentRoute),
+          returnValue: '') as String);
+  @override
+  String get parentRoute =>
+      (super.noSuchMethod(Invocation.getter(#parentRoute), returnValue: '')
+          as String);
+  @override
+  String get formatedParentRoute =>
+      (super.noSuchMethod(Invocation.getter(#formatedParentRoute),
+          returnValue: '') as String);
+  @override
+  String get formatedTempRoute => (super
+          .noSuchMethod(Invocation.getter(#formatedTempRoute), returnValue: '')
+      as String);
+  @override
+  String get leftViewName =>
+      (super.noSuchMethod(Invocation.getter(#leftViewName), returnValue: '')
+          as String);
+  @override
+  String get rightViewName =>
+      (super.noSuchMethod(Invocation.getter(#rightViewName), returnValue: '')
           as String);
   @override
   bool get hasListeners =>
@@ -395,6 +435,17 @@ class MockTestSweetsRouteTracker extends _i1.Mock
   void setCurrentRoute(String? route) =>
       super.noSuchMethod(Invocation.method(#setCurrentRoute, [route]),
           returnValueForMissingStub: null);
+  @override
+  void setparentRoute(String? route) =>
+      super.noSuchMethod(Invocation.method(#setparentRoute, [route]),
+          returnValueForMissingStub: null);
+  @override
+  void toggleActivatedRouteBetweenParentAndChild() => super.noSuchMethod(
+      Invocation.method(#toggleActivatedRouteBetweenParentAndChild, []),
+      returnValueForMissingStub: null);
+  @override
+  void refreshUi() => super.noSuchMethod(Invocation.method(#refreshUi, []),
+      returnValueForMissingStub: null);
   @override
   void addListener(_i18.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#addListener, [listener]),
