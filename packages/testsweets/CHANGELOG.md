@@ -1,3 +1,13 @@
+## 1.5.0
+
+### Features
+
+- Nested views swapping when navigation bar is detected
+
+### Improvements
+
+- UI updates to the capture tool
+
 ## 1.4.9
 
 - Adds a debug icon to see which keys are on screen when automating
