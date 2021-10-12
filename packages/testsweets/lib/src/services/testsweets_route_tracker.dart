@@ -33,7 +33,11 @@ class TestSweetsRouteTracker extends ChangeNotifier {
   String get formatedTempRoute =>
       _tempRoute.isNotEmpty ? _tempRoute.convertViewNameToValidFormat : '';
 
-  String get leftViewName => isNestedView ? formatedParentRoute : '';
+  String get leftViewName => isNestedView
+      ? isChildRouteActivated
+          ? formatedParentRoute
+          : formatedCurrentRoute
+      : '';
 
   String get rightViewName => isChildRouteActivated
       ? formatedCurrentRoute
