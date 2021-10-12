@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       builder: (context, child) => TestSweetsOverlayView(
-        projectId: '7lyZJXDJQtLodBvJsYsu',
+        projectId: '4BwobHaZRWjMn1hHdgqv',
         child: child!,
         captureWidgets: !FLUTTER_DRIVER,
       ),
