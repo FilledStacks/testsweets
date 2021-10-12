@@ -47,6 +47,7 @@ class TestSweetsNavigatorObserver extends NavigatorObserver {
     required String viewName,
   }) {
     routeTracker.setCurrentRoute(viewName + index.toString());
+    routeTracker.setparentRoute(viewName);
   }
 
   String _getRouteName(Route? route) {

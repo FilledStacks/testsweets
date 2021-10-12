@@ -21,7 +21,7 @@ class WidgetDescriptionDialog extends ViewModelWidget<WidgetCaptureViewModel> {
     final description = model.activeWidgetDescription;
 
     return BlackWrapperContainer(
-      spaceBetweenTopControllersAndChild: 4.h,
+      hideViewBar: true,
       closeWidgetOnTap: model.closeWidgetDescription,
       title: 'Widget Description',
       child: Column(

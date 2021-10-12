@@ -37,6 +37,7 @@ class WidgetNameInput extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         BlackWrapperContainer(
+          disableToggleViews: true,
           bottomCornerRaduisIsZero: errorMessage.isNotEmpty,
           switchPositionTap: switchPositionTap,
           closeWidgetOnTap: closeWidget,

@@ -4,11 +4,10 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
-import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/busy_indecator.dart';
-import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/stop_inspect_controllers.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_description_dialog.dart';
 
 import 'widget_capture_widgets/capture_controllers.dart';
@@ -56,6 +55,9 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                               if (model.captureWidgetStatusEnum ==
                                   CaptureWidgetStatusEnum.idle)
                                 IntroControllers(),
+                              if (model.captureWidgetStatusEnum ==
+                                  CaptureWidgetStatusEnum.inspectMode)
+                                StopInspectControllers(),
                               Positioned(
                                   bottom: 20,
                                   child: Container(
@@ -66,13 +68,6 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        if (model.captureWidgetStatusEnum ==
-                                            CaptureWidgetStatusEnum.inspectMode)
-                                          CtaButton(
-                                            title: 'Stop inspection',
-                                            fillColor: kcPrimaryFuchsia,
-                                            onTap: model.toggleInspectLayout,
-                                          ),
                                         if (model.captureWidgetStatusEnum ==
                                                 CaptureWidgetStatusEnum
                                                     .captureMode ||

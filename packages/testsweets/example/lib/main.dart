@@ -30,9 +30,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       builder: (context, child) => TestSweetsOverlayView(
-        projectId: '3sTkrgNYFWtSqDka2AqK',
+        projectId: '7lyZJXDJQtLodBvJsYsu',
         child: child!,
-        captureWidgets: true,
+        captureWidgets: !FLUTTER_DRIVER,
       ),
       initialRoute: Routes.signUpView,
       navigatorKey: StackedService.navigatorKey,
