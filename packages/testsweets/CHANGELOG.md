@@ -1,3 +1,7 @@
+## 1.5.1
+
+- Fixes bug that causes parent view text to dissapear
+
 ## 1.5.0
 
 ### Features
