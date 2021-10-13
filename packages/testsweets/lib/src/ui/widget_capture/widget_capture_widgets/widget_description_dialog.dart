@@ -18,7 +18,7 @@ class WidgetDescriptionDialog extends ViewModelWidget<WidgetCaptureViewModel> {
 
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
-    final description = model.activeWidgetDescription;
+    final description = model.widgetDescription;
 
     return BlackWrapperContainer(
       hideViewBar: true,

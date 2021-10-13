@@ -57,7 +57,7 @@ void main() {
 
         model.showWidgetDescription(description);
 
-        expect(model.activeWidgetDescription, description);
+        expect(model.widgetDescription, description);
       });
 
       test(
@@ -88,7 +88,7 @@ void main() {
 
         model.closeWidgetDescription();
 
-        expect(model.activeWidgetDescription, isNull);
+        expect(model.widgetDescription, isNull);
       });
 
       test(
@@ -138,10 +138,10 @@ void main() {
         expect(model.widgetNameInputPositionIsDown, true);
       });
     });
-    group('activeWidgetDescription -', () {
+    group('widgetDescription -', () {
       test('When call getter, Should default to null', () {
         final model = WidgetCaptureViewModel(projectId: _projectId);
-        expect(model.activeWidgetDescription, null);
+        expect(model.widgetDescription, null);
       });
     });
     group('descriptionsForView -', () {
@@ -429,9 +429,9 @@ void main() {
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.showWidgetDescription(description);
-        model.formValueMap[WidgetNameValueKey] = 'hh';
+        model.formValueMap[WidgetNameValueKey] = 'email';
         await model.updateWidgetDescription(description);
-        expect(model.activeWidgetDescription!.name, 'hh');
+        expect(model.widgetDescription!.name, 'email');
       });
 
       test(

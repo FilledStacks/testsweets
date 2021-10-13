@@ -95,8 +95,8 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                               .inspectModeDialogShow
                                       ? WidgetDescriptionDialog(
                                           updateTextControllerText: () {
-                                            widgetNameController.text = model
-                                                .activeWidgetDescription!.name;
+                                            widgetNameController.text =
+                                                model.widgetDescription!.name;
                                           },
                                         )
                                       : SizedBox.shrink(),

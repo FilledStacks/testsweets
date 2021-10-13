@@ -28,6 +28,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   String get rightViewName => _testSweetsRouteTracker.rightViewName;
 
   String get leftViewName => _testSweetsRouteTracker.leftViewName;
+
   bool get isNestedView => _testSweetsRouteTracker.isNestedView;
   bool get isChildRouteActivated =>
       _testSweetsRouteTracker.isChildRouteActivated;
@@ -52,26 +53,15 @@ class WidgetCaptureViewModel extends FormViewModel {
       _widgetDescription!.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
   double get descriptionLeft =>
       _widgetDescription!.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
-  double get activedescriptionTop =>
-      _activeWidgetDescription!.position.y -
-      (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
-  double get activedescriptionLeft =>
-      _activeWidgetDescription!.position.x -
-      (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
 
   bool _hasWidgetNameFocus = false;
   bool get hasWidgetNameFocus => _hasWidgetNameFocus;
 
   bool _widgetNameInputPositionIsDown = true;
-
   bool get widgetNameInputPositionIsDown => _widgetNameInputPositionIsDown;
 
   String _inputErrorMessage = '';
   String get nameInputErrorMessage => _inputErrorMessage;
-
-  WidgetDescription? _activeWidgetDescription;
-
-  WidgetDescription? get activeWidgetDescription => _activeWidgetDescription;
 
   List<WidgetDescription> get descriptionsForView =>
       _widgetCaptureService.getDescriptionsForView(
@@ -116,10 +106,10 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void updateActiveDescriptionPosition(double x, double y) {
-    _activeWidgetDescription = _activeWidgetDescription!.copyWith(
+    _widgetDescription = _widgetDescription!.copyWith(
       position: WidgetPosition(
-        x: _activeWidgetDescription!.position.x + x,
-        y: _activeWidgetDescription!.position.y + y,
+        x: _widgetDescription!.position.x + x,
+        y: _widgetDescription!.position.y + y,
       ),
     );
     notifyListeners();
@@ -237,12 +227,12 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void showWidgetDescription(WidgetDescription description) {
-    _activeWidgetDescription = description;
+    _widgetDescription = description;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectModeDialogShow;
   }
 
   void closeWidgetDescription() {
-    _activeWidgetDescription = null;
+    _widgetDescription = null;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
   }
 
@@ -260,7 +250,7 @@ class WidgetCaptureViewModel extends FormViewModel {
       log.i('descriptionToDelete:$_widgetDescription');
 
       await _widgetCaptureService.deleteWidgetDescription(
-          projectId: projectId, description: _activeWidgetDescription!);
+          projectId: projectId, description: _widgetDescription!);
 
       setBusy(false);
 

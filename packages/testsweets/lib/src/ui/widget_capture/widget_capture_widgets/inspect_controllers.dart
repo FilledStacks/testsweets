@@ -28,7 +28,7 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
             WidgetDescription element) =>
         (model.captureWidgetStatusEnum !=
                 CaptureWidgetStatusEnum.inspectModeUpdate ||
-            element.id != model.activeWidgetDescription!.id);
+            element.id != model.widgetDescription!.id);
 
     bool filterUnWantedWidgets(WidgetDescription element) =>
         widgetIsInTopLeftCornerMeaningItsAView(element) &&
@@ -41,8 +41,8 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
         if (model.captureWidgetStatusEnum ==
             CaptureWidgetStatusEnum.inspectModeUpdate)
           Positioned(
-              top: model.activedescriptionTop,
-              left: model.activedescriptionLeft,
+              top: model.descriptionTop,
+              left: model.descriptionLeft,
               child: GestureDetector(
                 onPanUpdate: (panEvent) {
                   final x = panEvent.delta.dx;
@@ -50,7 +50,7 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
                   model.updateActiveDescriptionPosition(x, y);
                 },
                 child: WidgetCircle(
-                    widgetType: model.activeWidgetDescription!.widgetType),
+                    widgetType: model.widgetDescription!.widgetType),
               )),
         ...model.descriptionsForView.where(filterUnWantedWidgets).map(
               (description) => Positioned(
@@ -69,7 +69,7 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
                     },
                     child: AnimatedOpacity(
                         duration: const Duration(milliseconds: 300),
-                        opacity: model.activeWidgetDescription?.id !=
+                        opacity: model.widgetDescription?.id !=
                                     description.id &&
                                 model.captureWidgetStatusEnum.isSelectWidgetMode
                             ? 0.25
@@ -98,8 +98,8 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
                   model.closeWidgetNameInput();
                 },
                 deleteWidget: model.deleteWidgetDescription,
-                saveWidget: () => model
-                    .updateWidgetDescription(model.activeWidgetDescription!),
+                saveWidget: () =>
+                    model.updateWidgetDescription(model.widgetDescription!),
                 switchPositionTap: model.switchWidgetNameInputPosition,
                 focusNode: widgetNameFocusNode,
                 textEditingController: widgetNameController,
