@@ -135,7 +135,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusy(false);
   }
 
-  bool _isEmpty({String? text}) {
+  bool _isEmpty() {
     if (widgetNameValue!.trim().isEmpty) {
       _inputErrorMessage = ErrorMessages.widgetInputNameIsEmpty;
       notifyListeners();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
+import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
@@ -40,9 +41,7 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
                     child: AnimatedOpacity(
                         duration: const Duration(milliseconds: 300),
                         opacity: model.activeWidgetId != description.id &&
-                                model.captureWidgetStatusEnum ==
-                                    CaptureWidgetStatusEnum
-                                        .inspectModeDialogShow
+                                model.captureWidgetStatusEnum.isSelectWidgetMode
                             ? 0.25
                             : 1,
                         child: WidgetCircle(
