@@ -58,7 +58,6 @@ void main() {
         model.showWidgetDescription(description);
 
         expect(model.activeWidgetDescription, description);
-        expect(model.activeWidgetId, description.id);
       });
 
       test(
@@ -89,7 +88,7 @@ void main() {
 
         model.closeWidgetDescription();
 
-        expect(model.activeWidgetId, isEmpty);
+        expect(model.activeWidgetDescription, isNull);
       });
 
       test(
@@ -130,12 +129,6 @@ void main() {
       test('When call getter, Should default to false', () {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         expect(model.hasWidgetNameFocus, false);
-      });
-    });
-    group('activeWidgetId -', () {
-      test('When call getter, Should default to empty string', () {
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        expect(model.activeWidgetId, '');
       });
     });
 
@@ -427,7 +420,7 @@ void main() {
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = '';
-        await model.updateWidgetDescription();
+        await model.updateWidgetDescription(description);
         expect(model.nameInputErrorMessage, "Widget name must not be empty");
       });
 
@@ -437,7 +430,7 @@ void main() {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.showWidgetDescription(description);
         model.formValueMap[WidgetNameValueKey] = 'hh';
-        await model.updateWidgetDescription();
+        await model.updateWidgetDescription(description);
         expect(model.activeWidgetDescription!.name, 'hh');
       });
 
@@ -451,7 +444,7 @@ void main() {
 
         model.formValueMap[WidgetNameValueKey] = 'loginButton';
 
-        await model.updateWidgetDescription();
+        await model.updateWidgetDescription(description);
 
         verify(service.updateWidgetDescription(
             projectId: _projectId,
@@ -468,7 +461,7 @@ void main() {
             CaptureWidgetStatusEnum.inspectModeUpdate;
         model.formValueMap[WidgetNameValueKey] = 'loginButton';
 
-        await model.updateWidgetDescription();
+        await model.updateWidgetDescription(description);
 
         expect(
             model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.inspectMode);

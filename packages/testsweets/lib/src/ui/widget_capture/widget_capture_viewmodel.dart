@@ -52,12 +52,15 @@ class WidgetCaptureViewModel extends FormViewModel {
       _widgetDescription!.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
   double get descriptionLeft =>
       _widgetDescription!.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
+  double get activedescriptionTop =>
+      _activeWidgetDescription!.position.y -
+      (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
+  double get activedescriptionLeft =>
+      _activeWidgetDescription!.position.x -
+      (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
 
   bool _hasWidgetNameFocus = false;
   bool get hasWidgetNameFocus => _hasWidgetNameFocus;
-
-  String _activeWidgetId = '';
-  String get activeWidgetId => _activeWidgetId;
 
   bool _widgetNameInputPositionIsDown = true;
 
@@ -107,6 +110,16 @@ class WidgetCaptureViewModel extends FormViewModel {
       position: WidgetPosition(
         x: _widgetDescription!.position.x + x,
         y: _widgetDescription!.position.y + y,
+      ),
+    );
+    notifyListeners();
+  }
+
+  void updateActiveDescriptionPosition(double x, double y) {
+    _activeWidgetDescription = _activeWidgetDescription!.copyWith(
+      position: WidgetPosition(
+        x: _activeWidgetDescription!.position.x + x,
+        y: _activeWidgetDescription!.position.y + y,
       ),
     );
     notifyListeners();
@@ -225,12 +238,11 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void showWidgetDescription(WidgetDescription description) {
     _activeWidgetDescription = description;
-    _activeWidgetId = description.id ?? '';
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectModeDialogShow;
   }
 
   void closeWidgetDescription() {
-    _activeWidgetId = '';
+    _activeWidgetDescription = null;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
   }
 
@@ -263,12 +275,11 @@ class WidgetCaptureViewModel extends FormViewModel {
     }
   }
 
-  Future<void> updateWidgetDescription() async {
+  Future<void> updateWidgetDescription(
+      WidgetDescription updatedWidgetDescription) async {
     if (_isEmpty()) return;
 
     _inputErrorMessage = '';
-    _activeWidgetDescription =
-        _activeWidgetDescription?.copyWith(name: widgetNameValue!);
 
     try {
       setBusy(true);
@@ -276,7 +287,9 @@ class WidgetCaptureViewModel extends FormViewModel {
       log.i('descriptionToUpdate:$_widgetDescription');
 
       await _widgetCaptureService.updateWidgetDescription(
-          projectId: projectId, description: _activeWidgetDescription!);
+          projectId: projectId,
+          description:
+              updatedWidgetDescription.copyWith(name: widgetNameValue!));
 
       toggleUpdateMode();
       await syncWithFirestoreWidgetKeys(
