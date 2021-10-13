@@ -10,7 +10,6 @@ class CtaButton extends StatelessWidget {
   final String title;
   final double? maxWidth;
   final bool isDisabled;
-  final bool isSmallSize;
   const CtaButton({
     Key? key,
     required this.onTap,
@@ -18,7 +17,6 @@ class CtaButton extends StatelessWidget {
     required this.title,
     this.maxWidth,
     this.isDisabled = false,
-    this.isSmallSize = false,
   }) : super(key: key);
 
   @override
@@ -26,6 +24,7 @@ class CtaButton extends StatelessWidget {
     return SizedBox(
       width: maxWidth,
       child: MaterialButton(
+        visualDensity: VisualDensity.compact,
         disabledColor: kcBackground,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(crButtonCornerRadius())),
@@ -33,10 +32,7 @@ class CtaButton extends StatelessWidget {
         color: fillColor,
         padding: buttonPadding,
         child: AutoSizeText(title,
-            maxLines: 1,
-            style: isSmallSize
-                ? tsSmall().copyWith(color: Colors.white)
-                : tsMedium().copyWith(color: Colors.white)),
+            maxLines: 1, style: tsMedium().copyWith(color: Colors.white)),
       ),
     );
   }
