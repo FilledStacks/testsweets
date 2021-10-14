@@ -9,8 +9,6 @@ import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
-import 'close_circular_button.dart';
-
 class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
   const WidgetsTypesContainer({Key? key}) : super(key: key);
 
@@ -65,7 +63,14 @@ class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
           MaterialButton(
             minWidth: 136.w,
             onPressed: model.toggleWidgetsContainer,
-            child: SizedBox(height: 100.w, child: CloseCircularButton()),
+            child: SizedBox(
+              height: 100.w,
+              child: Icon(
+                Icons.cancel,
+                color: kcSweetsAppBarColor,
+                size: 34,
+              ),
+            ),
           )
         ],
       ),

@@ -10,6 +10,7 @@ import '../widget_capture_viewmodel.dart';
 class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
   final VoidCallback? switchPositionTap;
   final VoidCallback? closeWidgetOnTap;
+  final VoidCallback? changeAppTheme;
   final Widget child;
   final Widget? footerChild;
   final String? title;
@@ -18,6 +19,7 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
   final bool disableToggleViews;
   const BlackWrapperContainer(
       {Key? key,
+      this.changeAppTheme,
       this.switchPositionTap,
       this.closeWidgetOnTap,
       this.bottomCornerRaduisIsZero = false,
@@ -52,6 +54,24 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                       size: 24,
                     ),
                   ),
+                )
+              : const SizedBox(),
+          changeAppTheme != null
+              ? IconButton(
+                  visualDensity: VisualDensity.compact,
+                  padding: EdgeInsets.zero,
+                  icon: Container(
+                    decoration: backButtonBoxDecoration,
+                    alignment: Alignment.center,
+                    child: Icon(
+                      model.isDarkMode
+                          ? Icons.dark_mode_outlined
+                          : Icons.light_mode,
+                      color: kcPrimaryWhite,
+                      size: 34,
+                    ),
+                  ),
+                  onPressed: changeAppTheme,
                 )
               : const SizedBox(),
           const SizedBox(
