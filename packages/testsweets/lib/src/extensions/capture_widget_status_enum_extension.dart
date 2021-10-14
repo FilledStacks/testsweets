@@ -10,4 +10,7 @@ extension CaptureWidgetEnumUnion on CaptureWidgetStatusEnum {
       this == CaptureWidgetStatusEnum.inspectMode ||
       this == CaptureWidgetStatusEnum.inspectModeDialogShow ||
       this == CaptureWidgetStatusEnum.inspectModeUpdate;
+  bool get isSelectWidgetMode =>
+      this == CaptureWidgetStatusEnum.inspectModeUpdate ||
+      this == CaptureWidgetStatusEnum.inspectModeDialogShow;
 }

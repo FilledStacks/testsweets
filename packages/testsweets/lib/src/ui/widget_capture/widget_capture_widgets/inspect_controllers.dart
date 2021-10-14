@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
+import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
+import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
@@ -19,30 +21,57 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
   final FocusNode widgetNameFocusNode;
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
+    bool widgetIsInTopLeftCornerMeaningItsAView(WidgetDescription element) =>
+        element.position.x != 0 && element.position.y != 0;
+
+    bool eitherItsInUpdateModeOrItIsTheActiveWidget(
+            WidgetDescription element) =>
+        (model.captureWidgetStatusEnum !=
+                CaptureWidgetStatusEnum.inspectModeUpdate ||
+            element.id != model.widgetDescription!.id);
+
+    bool filterUnWantedWidgets(WidgetDescription element) =>
+        widgetIsInTopLeftCornerMeaningItsAView(element) &&
+        eitherItsInUpdateModeOrItIsTheActiveWidget(element);
+
     return Stack(
       fit: StackFit.expand,
       alignment: Alignment.center,
       children: [
-        ...model.descriptionsForView
-            .where(
-                (element) => element.position.x != 0 && element.position.y != 0)
-            .map(
+        if (model.captureWidgetStatusEnum ==
+            CaptureWidgetStatusEnum.inspectModeUpdate)
+          Positioned(
+              top: model.descriptionTop,
+              left: model.descriptionLeft,
+              child: GestureDetector(
+                onPanUpdate: (panEvent) {
+                  final x = panEvent.delta.dx;
+                  final y = panEvent.delta.dy;
+                  model.updateActiveDescriptionPosition(x, y);
+                },
+                child: WidgetCircle(
+                    widgetType: model.widgetDescription!.widgetType),
+              )),
+        ...model.descriptionsForView.where(filterUnWantedWidgets).map(
               (description) => Positioned(
                 top: description.position.y -
                     (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
                 left: description.position.x -
                     (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
                 child: IgnorePointer(
-                  ignoring: model.captureWidgetStatusEnum ==
-                      CaptureWidgetStatusEnum.inspectModeDialogShow,
+                  ignoring: model.captureWidgetStatusEnum.isSelectWidgetMode,
                   child: GestureDetector(
                     onTap: () => model.showWidgetDescription(description),
+                    onPanUpdate: (panEvent) {
+                      final x = panEvent.delta.dx;
+                      final y = panEvent.delta.dy;
+                      model.updateActiveDescriptionPosition(x, y);
+                    },
                     child: AnimatedOpacity(
                         duration: const Duration(milliseconds: 300),
-                        opacity: model.activeWidgetId != description.id &&
-                                model.captureWidgetStatusEnum ==
-                                    CaptureWidgetStatusEnum
-                                        .inspectModeDialogShow
+                        opacity: model.widgetDescription?.id !=
+                                    description.id &&
+                                model.captureWidgetStatusEnum.isSelectWidgetMode
                             ? 0.25
                             : 1,
                         child: WidgetCircle(
@@ -69,7 +98,8 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
                   model.closeWidgetNameInput();
                 },
                 deleteWidget: model.deleteWidgetDescription,
-                saveWidget: model.updateWidgetDescription,
+                saveWidget: () =>
+                    model.updateWidgetDescription(model.widgetDescription!),
                 switchPositionTap: model.switchWidgetNameInputPosition,
                 focusNode: widgetNameFocusNode,
                 textEditingController: widgetNameController,

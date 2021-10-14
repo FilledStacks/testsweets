@@ -18,7 +18,7 @@ class WidgetDescriptionDialog extends ViewModelWidget<WidgetCaptureViewModel> {
 
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
-    final description = model.activeWidgetDescription;
+    final description = model.widgetDescription;
 
     return BlackWrapperContainer(
       hideViewBar: true,
@@ -68,7 +68,6 @@ class WidgetDescriptionDialog extends ViewModelWidget<WidgetCaptureViewModel> {
                   },
                   fillColor: kcPrimaryPurple,
                   title: 'Edit',
-                  isSmallSize: true,
                 ),
               ),
               Spacer(),
@@ -77,7 +76,6 @@ class WidgetDescriptionDialog extends ViewModelWidget<WidgetCaptureViewModel> {
                   onTap: model.deleteWidgetDescription,
                   fillColor: kcError,
                   title: 'Delete',
-                  isSmallSize: true,
                 ),
               ),
             ],

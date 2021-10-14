@@ -61,7 +61,7 @@ Radius crButtonCornerRadius() => Radius.circular(8);
 Radius crTextFieldCornerRadius() => Radius.circular(8.w);
 
 const EdgeInsets buttonPadding =
-    const EdgeInsets.symmetric(horizontal: 20, vertical: 12);
+    const EdgeInsets.symmetric(horizontal: 20, vertical: 22);
 final blackBoxDecoration = BoxDecoration(
   color: kcCard,
   boxShadow: [

@@ -22,7 +22,7 @@ class CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
     return Stack(
       children: [
         if (model.captureWidgetStatusEnum ==
-            CaptureWidgetStatusEnum.captureModeWidgetNameInputShow) ...[
+            CaptureWidgetStatusEnum.captureModeWidgetNameInputShow)
           Positioned(
               top: model.descriptionTop,
               left: model.descriptionLeft,
@@ -35,7 +35,6 @@ class CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
                 child: WidgetCircle(
                     widgetType: model.widgetDescription!.widgetType),
               )),
-        ],
         FadeInWidget(
             child: AnimatedAlign(
               duration: const Duration(milliseconds: 500),

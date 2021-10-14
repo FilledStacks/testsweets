@@ -28,6 +28,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   String get rightViewName => _testSweetsRouteTracker.rightViewName;
 
   String get leftViewName => _testSweetsRouteTracker.leftViewName;
+
   bool get isNestedView => _testSweetsRouteTracker.isNestedView;
   bool get isChildRouteActivated =>
       _testSweetsRouteTracker.isChildRouteActivated;
@@ -56,19 +57,11 @@ class WidgetCaptureViewModel extends FormViewModel {
   bool _hasWidgetNameFocus = false;
   bool get hasWidgetNameFocus => _hasWidgetNameFocus;
 
-  String _activeWidgetId = '';
-  String get activeWidgetId => _activeWidgetId;
-
   bool _widgetNameInputPositionIsDown = true;
-
   bool get widgetNameInputPositionIsDown => _widgetNameInputPositionIsDown;
 
   String _inputErrorMessage = '';
   String get nameInputErrorMessage => _inputErrorMessage;
-
-  WidgetDescription? _activeWidgetDescription;
-
-  WidgetDescription? get activeWidgetDescription => _activeWidgetDescription;
 
   List<WidgetDescription> get descriptionsForView =>
       _widgetCaptureService.getDescriptionsForView(
@@ -112,6 +105,16 @@ class WidgetCaptureViewModel extends FormViewModel {
     notifyListeners();
   }
 
+  void updateActiveDescriptionPosition(double x, double y) {
+    _widgetDescription = _widgetDescription!.copyWith(
+      position: WidgetPosition(
+        x: _widgetDescription!.position.x + x,
+        y: _widgetDescription!.position.y + y,
+      ),
+    );
+    notifyListeners();
+  }
+
   @override
   void setFormStatus() {
     _widgetDescription =
@@ -135,7 +138,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusy(false);
   }
 
-  bool _isEmpty({String? text}) {
+  bool _isEmpty() {
     if (widgetNameValue!.trim().isEmpty) {
       _inputErrorMessage = ErrorMessages.widgetInputNameIsEmpty;
       notifyListeners();
@@ -224,13 +227,12 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void showWidgetDescription(WidgetDescription description) {
-    _activeWidgetDescription = description;
-    _activeWidgetId = description.id ?? '';
+    _widgetDescription = description;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectModeDialogShow;
   }
 
   void closeWidgetDescription() {
-    _activeWidgetId = '';
+    _widgetDescription = null;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
   }
 
@@ -248,7 +250,7 @@ class WidgetCaptureViewModel extends FormViewModel {
       log.i('descriptionToDelete:$_widgetDescription');
 
       await _widgetCaptureService.deleteWidgetDescription(
-          projectId: projectId, description: _activeWidgetDescription!);
+          projectId: projectId, description: _widgetDescription!);
 
       setBusy(false);
 
@@ -263,12 +265,11 @@ class WidgetCaptureViewModel extends FormViewModel {
     }
   }
 
-  Future<void> updateWidgetDescription() async {
+  Future<void> updateWidgetDescription(
+      WidgetDescription updatedWidgetDescription) async {
     if (_isEmpty()) return;
 
     _inputErrorMessage = '';
-    _activeWidgetDescription =
-        _activeWidgetDescription?.copyWith(name: widgetNameValue!);
 
     try {
       setBusy(true);
@@ -276,7 +277,9 @@ class WidgetCaptureViewModel extends FormViewModel {
       log.i('descriptionToUpdate:$_widgetDescription');
 
       await _widgetCaptureService.updateWidgetDescription(
-          projectId: projectId, description: _activeWidgetDescription!);
+          projectId: projectId,
+          description:
+              updatedWidgetDescription.copyWith(name: widgetNameValue!));
 
       toggleUpdateMode();
       await syncWithFirestoreWidgetKeys(

@@ -57,8 +57,7 @@ void main() {
 
         model.showWidgetDescription(description);
 
-        expect(model.activeWidgetDescription, description);
-        expect(model.activeWidgetId, description.id);
+        expect(model.widgetDescription, description);
       });
 
       test(
@@ -89,7 +88,7 @@ void main() {
 
         model.closeWidgetDescription();
 
-        expect(model.activeWidgetId, isEmpty);
+        expect(model.widgetDescription, isNull);
       });
 
       test(
@@ -132,12 +131,6 @@ void main() {
         expect(model.hasWidgetNameFocus, false);
       });
     });
-    group('activeWidgetId -', () {
-      test('When call getter, Should default to empty string', () {
-        final model = WidgetCaptureViewModel(projectId: _projectId);
-        expect(model.activeWidgetId, '');
-      });
-    });
 
     group('widgetNameInputPositionIsDown -', () {
       test('When call getter, Should default to true', () {
@@ -145,10 +138,10 @@ void main() {
         expect(model.widgetNameInputPositionIsDown, true);
       });
     });
-    group('activeWidgetDescription -', () {
+    group('widgetDescription -', () {
       test('When call getter, Should default to null', () {
         final model = WidgetCaptureViewModel(projectId: _projectId);
-        expect(model.activeWidgetDescription, null);
+        expect(model.widgetDescription, null);
       });
     });
     group('descriptionsForView -', () {
@@ -427,7 +420,7 @@ void main() {
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = '';
-        await model.updateWidgetDescription();
+        await model.updateWidgetDescription(description);
         expect(model.nameInputErrorMessage, "Widget name must not be empty");
       });
 
@@ -436,9 +429,9 @@ void main() {
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.showWidgetDescription(description);
-        model.formValueMap[WidgetNameValueKey] = 'hh';
-        await model.updateWidgetDescription();
-        expect(model.activeWidgetDescription!.name, 'hh');
+        model.formValueMap[WidgetNameValueKey] = 'email';
+        await model.updateWidgetDescription(description);
+        expect(model.widgetDescription!.name, 'email');
       });
 
       test(
@@ -451,7 +444,7 @@ void main() {
 
         model.formValueMap[WidgetNameValueKey] = 'loginButton';
 
-        await model.updateWidgetDescription();
+        await model.updateWidgetDescription(description);
 
         verify(service.updateWidgetDescription(
             projectId: _projectId,
@@ -468,7 +461,7 @@ void main() {
             CaptureWidgetStatusEnum.inspectModeUpdate;
         model.formValueMap[WidgetNameValueKey] = 'loginButton';
 
-        await model.updateWidgetDescription();
+        await model.updateWidgetDescription(description);
 
         expect(
             model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.inspectMode);
