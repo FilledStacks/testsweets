@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 
-class CloseCircularButton extends StatelessWidget {
-  final VoidCallback? onTap;
-  const CloseCircularButton({
-    Key? key,
-    this.onTap,
-  }) : super(key: key);
+class DarkLightModeButton extends StatelessWidget {
+  final bool isDarkMode;
+  final VoidCallback onTap;
+
+  const DarkLightModeButton(
+      {Key? key, required this.onTap, this.isDarkMode = true})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(
-        Icons.cancel,
+        isDarkMode ? Icons.dark_mode : Icons.light_mode,
         color: kcSweetsAppBarColor,
         size: 34,
       ),

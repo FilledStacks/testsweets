@@ -10,6 +10,7 @@ import '../widget_capture_viewmodel.dart';
 class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
   final VoidCallback? switchPositionTap;
   final VoidCallback? closeWidgetOnTap;
+  final VoidCallback? changeAppTheme;
   final Widget child;
   final Widget? footerChild;
   final String? title;
@@ -18,6 +19,7 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
   final bool disableToggleViews;
   const BlackWrapperContainer(
       {Key? key,
+      this.changeAppTheme,
       this.switchPositionTap,
       this.closeWidgetOnTap,
       this.bottomCornerRaduisIsZero = false,
@@ -30,6 +32,7 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
 
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
+    bool isDarkMode = model.isDarkMode;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w).copyWith(
           top: 32.h, bottom: MediaQuery.of(context).viewInsets.bottom + 24.h),
@@ -44,14 +47,35 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                   padding: EdgeInsets.zero,
                   onPressed: closeWidgetOnTap,
                   icon: Container(
-                    decoration: backButtonBoxDecoration,
+                    decoration:
+                        isDarkMode ? blackBoxDecoration : whiteBoxDecoration,
                     alignment: Alignment.center,
                     child: Icon(
                       Icons.close,
-                      color: kcPrimaryWhite,
+                      color: isDarkMode ? kcPrimaryWhite : kcCard,
                       size: 24,
                     ),
                   ),
+                )
+              : const SizedBox(),
+          changeAppTheme != null
+              ? IconButton(
+                  visualDensity: VisualDensity.compact,
+                  padding: EdgeInsets.zero,
+                  icon: Container(
+                    decoration: isDarkMode
+                        ? buttonDarkBoxDecoration
+                        : buttonLightBoxDecoration,
+                    alignment: Alignment.center,
+                    child: Icon(
+                      model.isDarkMode
+                          ? Icons.dark_mode_outlined
+                          : Icons.light_mode,
+                      color: model.isDarkMode ? kcPrimaryWhite : kcCard,
+                      size: 34,
+                    ),
+                  ),
+                  onPressed: changeAppTheme,
                 )
               : const SizedBox(),
           const SizedBox(
@@ -73,20 +97,26 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                               borderRadius:
                                   BorderRadius.all(crTextFieldCornerRadius()))),
                       backgroundColor: MaterialStateProperty.all(
-                          kcHighlightGrey.withOpacity(0.7)),
+                          (isDarkMode ? kcHighlightGrey : kcPrimaryWhite)
+                              .withOpacity(0.7)),
                     ),
                     icon: RotatedBox(
                       quarterTurns: 1,
                       child: Icon(
                         Icons.swap_vert,
                         size: 16.w,
-                        color: kcPrimaryWhite,
+                        color: isDarkMode
+                            ? kcPrimaryWhite
+                            : kcAutocompleteBackground,
                       ),
                     ),
                     label: AutoSizeText('Switch Position',
                         maxLines: 1,
-                        style: tsNormal()
-                            .copyWith(color: Colors.white, fontSize: 14.w)),
+                        style: tsNormal().copyWith(
+                            color: isDarkMode
+                                ? kcPrimaryWhite
+                                : kcAutocompleteBackground,
+                            fontSize: 14.w)),
                   ),
                 ),
               const SizedBox(
@@ -108,14 +138,16 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                           alignment: Alignment.center,
                           padding: EdgeInsets.symmetric(
                               vertical: 8.h, horizontal: 16.w),
-                          decoration: viewNameBoxDecoration,
+                          decoration: isDarkMode
+                              ? viewNameBlackBoxDecoration
+                              : viewNameWhiteBoxDecoration,
                           child: AutoSizeText.rich(
                             TextSpan(children: [
                               TextSpan(
                                   text: model.leftViewName,
                                   style: model.isChildRouteActivated
                                       ? tsDisableRoute()
-                                      : tsActiveRoute()),
+                                      : tsActiveRoute(isDarkMode)),
                               if (model.isNestedView)
                                 TextSpan(
                                     text: ' / ',
@@ -124,7 +156,7 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                               TextSpan(
                                   text: model.rightViewName,
                                   style: model.isChildRouteActivated
-                                      ? tsActiveRoute()
+                                      ? tsActiveRoute(isDarkMode)
                                       : tsDisableRoute()),
                             ]),
                             textAlign: TextAlign.center,
@@ -135,12 +167,16 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                       margin: EdgeInsets.only(top: 1),
                       padding: EdgeInsets.only(
                           left: 16.w, right: 16.w, top: 4.h, bottom: 20.h),
-                      decoration: blackBoxDecoration.copyWith(
-                          borderRadius: bottomCornerRaduisIsZero || hideViewBar
-                              ? BorderRadius.vertical(
-                                  top: crButtonCornerRadius())
-                              : BorderRadius.vertical(
-                                  bottom: crButtonCornerRadius())),
+                      decoration: (isDarkMode
+                              ? blackBoxDecoration
+                              : whiteBoxDecoration)
+                          .copyWith(
+                              borderRadius:
+                                  bottomCornerRaduisIsZero || hideViewBar
+                                      ? BorderRadius.vertical(
+                                          top: crButtonCornerRadius())
+                                      : BorderRadius.vertical(
+                                          bottom: crButtonCornerRadius())),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
@@ -150,7 +186,11 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                                   padding: EdgeInsets.only(
                                     top: 12.h,
                                   ),
-                                  child: Text(title!, style: boldStyle),
+                                  child: Text(title!,
+                                      style: boldStyle.copyWith(
+                                          color: isDarkMode
+                                              ? kcPrimaryWhite
+                                              : kcPrimaryPurple)),
                                 )
                               : const SizedBox(),
                           SizedBox(

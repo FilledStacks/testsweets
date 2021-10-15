@@ -34,9 +34,9 @@ TextStyle tsExtraLarge() => TextStyle(
       fontWeight: FontWeight.w700,
       fontSize: 40.sp,
     );
-TextStyle tsActiveRoute() => TextStyle(
+TextStyle tsActiveRoute(bool darkMode) => TextStyle(
       fontFamily: "Roboto",
-      color: kcPrimaryWhite,
+      color: darkMode ? kcPrimaryWhite : kcAutocompleteBackground,
       fontWeight: FontWeight.w600,
       fontSize: 18.sp,
     );
@@ -72,6 +72,16 @@ final blackBoxDecoration = BoxDecoration(
   ],
   borderRadius: BorderRadius.all(crButtonCornerRadius()),
 );
+final whiteBoxDecoration = BoxDecoration(
+  color: kcPrimaryWhite,
+  boxShadow: [
+    BoxShadow(
+        blurRadius: 8,
+        offset: Offset(3, 4),
+        color: Colors.white.withOpacity(0.25))
+  ],
+  borderRadius: BorderRadius.all(crButtonCornerRadius()),
+);
 final redBoxDecoration = BoxDecoration(
   color: kcError,
   boxShadow: [
@@ -80,7 +90,7 @@ final redBoxDecoration = BoxDecoration(
   ],
   borderRadius: BorderRadius.vertical(bottom: crButtonCornerRadius()),
 );
-final viewNameBoxDecoration = BoxDecoration(
+final viewNameBlackBoxDecoration = BoxDecoration(
   gradient: LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
@@ -88,11 +98,29 @@ final viewNameBoxDecoration = BoxDecoration(
   ),
   borderRadius: BorderRadius.vertical(top: crButtonCornerRadius()),
 );
-final backButtonBoxDecoration = BoxDecoration(
+
+final viewNameWhiteBoxDecoration = BoxDecoration(
+  gradient: LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [kcGrey.withOpacity(0.7), kcSubtext],
+  ),
+  borderRadius: BorderRadius.vertical(top: crButtonCornerRadius()),
+);
+
+final buttonDarkBoxDecoration = BoxDecoration(
   gradient: LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
     colors: [kcCard.withOpacity(0.7), kcCard],
+  ),
+  borderRadius: BorderRadius.all(crButtonCornerRadius()),
+);
+final buttonLightBoxDecoration = BoxDecoration(
+  gradient: LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [kcSubtext.withOpacity(0.7), kcSubtext],
   ),
   borderRadius: BorderRadius.all(crButtonCornerRadius()),
 );

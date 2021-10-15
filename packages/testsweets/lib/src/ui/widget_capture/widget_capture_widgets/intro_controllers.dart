@@ -21,6 +21,7 @@ class IntroControllers extends ViewModelWidget<WidgetCaptureViewModel> {
           : Alignment.topCenter,
       widthFactor: 1,
       child: BlackWrapperContainer(
+        changeAppTheme: model.toggleTheme,
         switchPositionTap: model.switchWidgetNameInputPosition,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -20,6 +20,14 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
 
+  bool _isDarkMode = true;
+  bool get isDarkMode => _isDarkMode;
+
+  void toggleTheme() {
+    _isDarkMode = !isDarkMode;
+    notifyListeners();
+  }
+
   WidgetCaptureViewModel({required this.projectId}) {
     syncWithFirestoreWidgetKeys(projectId: projectId);
     _testSweetsRouteTracker.addListener(notifyListeners);
