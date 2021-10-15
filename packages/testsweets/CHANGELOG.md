@@ -1,3 +1,7 @@
+## 1.5.2
+
+- Fixes edit mode
+
 ## 1.5.1
 
 - Fixes bug that causes parent view text to dissapear
