@@ -9,7 +9,6 @@ const kcSweetsDarkerNavy = const Color.fromARGB(255, 30, 32, 47);
 const kcPrimaryFuchsia = const Color.fromARGB(255, 253, 113, 215);
 const kcPrimaryPurple = const Color.fromARGB(255, 150, 144, 254);
 const kcPrimaryWhite = const Color.fromARGB(255, 255, 255, 255);
-const kcSecondaryWhite = const Color.fromARGB(102, 255, 255, 255);
 
 const kcBackground = const Color(0xff202129);
 const kcAutocompleteBackground = const Color(0xff121319);

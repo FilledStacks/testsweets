@@ -22,6 +22,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   bool _isDarkMode = true;
   bool get isDarkMode => _isDarkMode;
+
   void toggleTheme() {
     _isDarkMode = !isDarkMode;
     notifyListeners();

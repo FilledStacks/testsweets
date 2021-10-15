@@ -15,7 +15,7 @@ class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
     return Container(
-      decoration: blackBoxDecoration,
+      decoration: model.isDarkMode ? blackBoxDecoration : whiteBoxDecoration,
       width: 136.w,
       child: Column(
         children: [
@@ -56,7 +56,7 @@ class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
             height: 24.w,
           ),
           Divider(
-            color: kcBackground,
+            color: model.isDarkMode ? kcSweetsAppBarColor : kcSubtext,
             thickness: 5.w,
             height: 0,
           ),
@@ -67,7 +67,7 @@ class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
               height: 100.w,
               child: Icon(
                 Icons.cancel,
-                color: kcSweetsAppBarColor,
+                color: model.isDarkMode ? kcSweetsAppBarColor : kcSubtext,
                 size: 34,
               ),
             ),

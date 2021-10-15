@@ -1,13 +1,15 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
 import 'black_wrapper_container.dart';
 
-class WidgetNameInput extends StatelessWidget {
+class WidgetNameInput extends ViewModelWidget<WidgetCaptureViewModel> {
   final FocusNode? focusNode;
   final TextEditingController? textEditingController;
   final VoidCallback switchPositionTap;
@@ -32,7 +34,8 @@ class WidgetNameInput extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetCaptureViewModel model) {
+    final isDarkMode = model.isDarkMode;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -57,12 +60,17 @@ class WidgetNameInput extends StatelessWidget {
                   focusNode: focusNode,
                   controller: textEditingController,
                   initialValue: initialValue,
-                  style: tsNormal().copyWith(color: kcPrimaryWhite),
+                  style: tsNormal().copyWith(
+                      color: model.isDarkMode ? kcPrimaryWhite : kcCard),
                   decoration: InputDecoration(
                       hintStyle: tsNormal().copyWith(
-                        color: kcSecondaryWhite,
+                        color: model.isDarkMode
+                            ? kcSubtext
+                            : kcTextFieldHintTextColor,
                       ),
-                      fillColor: kcSweetsAppBarColor,
+                      fillColor: isDarkMode
+                          ? kcSweetsAppBarColor
+                          : kcSubtext.withAlpha(124),
                       filled: true,
                       hintText: 'Widget Name',
                       contentPadding: EdgeInsets.only(
