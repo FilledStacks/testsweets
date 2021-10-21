@@ -1,21 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_driver/driver_extension.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/testsweets.dart';
 
 import 'app/app.locator.dart';
 import 'app/app.router.dart';
 
-const bool FLUTTER_DRIVER = bool.fromEnvironment(
-  'FLUTTER_DRIVER',
-  defaultValue: false,
-);
-
 Future<void> main() async {
-  if (FLUTTER_DRIVER) {
-    enableFlutterDriverExtension();
-  }
-
   await setupTestSweets();
   setupLocator();
   runApp(MyApp());
