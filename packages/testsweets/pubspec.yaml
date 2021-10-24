@@ -1,6 +1,6 @@
 name: testsweets
 description: A package to help sync flutter automation keys with TestSweets backend
-version: 1.5.2
+version: 1.5.3
 homepage: https://github.com/FilledStacks/testsweets
 
 environment:
@@ -9,7 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  flutter_driver:
+    sdk: flutter
   http: ^0.13.3
   auto_size_text: ^3.0.0-nullsafety.0
   yaml: ^3.0.0

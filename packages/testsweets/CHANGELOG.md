@@ -1,3 +1,9 @@
+### 1.5.3
+
+### Improvements
+
+- Removes the requirement for the user to use flutter driver in their project by including the setup in our package.
+
 ## 1.5.2
 
 - Fixes edit mode
