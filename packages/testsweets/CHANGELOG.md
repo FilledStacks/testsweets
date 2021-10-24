@@ -1,3 +1,9 @@
+## 1.5.2
+
+### Improvements
+
+- Removes the requirement for the user to use flutter driver in their project by including the setup in our package.
+
 ## 1.5.1
 
 - Fixes bug that causes parent view text to dissapear
