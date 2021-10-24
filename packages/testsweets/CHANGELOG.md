@@ -1,3 +1,7 @@
+### 1.5.4
+
+- Removes default factory constructor for the `TestSweetsNavigatorObserver`
+
 ### 1.5.3
 
 ### Improvements
