@@ -28,7 +28,7 @@ class TestSweetsOverlayView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: enabled
-          ? (captureWidgets ?? DRIVE_MODE)
+          ? (captureWidgets ?? !DRIVE_MODE)
               ? WidgetCaptureView(child: child, projectId: projectId)
               : DriverLayoutView(child: child, projectId: projectId)
           : child,
