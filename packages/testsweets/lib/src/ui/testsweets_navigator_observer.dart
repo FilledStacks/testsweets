@@ -8,10 +8,6 @@ class TestSweetsNavigatorObserver extends NavigatorObserver {
   static final TestSweetsNavigatorObserver _instance =
       TestSweetsNavigatorObserver._internal();
 
-  factory TestSweetsNavigatorObserver() {
-    return _instance;
-  }
-
   TestSweetsNavigatorObserver._internal();
 
   static TestSweetsNavigatorObserver get instance => _instance;
