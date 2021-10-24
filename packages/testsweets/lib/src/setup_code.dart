@@ -1,13 +1,15 @@
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:testsweets/src/locator.dart';
 
-const bool FLUTTER_DRIVER = bool.fromEnvironment(
-  'FLUTTER_DRIVER',
+const bool DRIVE_MODE = bool.fromEnvironment(
+  'DRIVE_MODE',
   defaultValue: false,
 );
+
 Future<void> setupTestSweets() async {
-  if (FLUTTER_DRIVER) {
+  if (DRIVE_MODE) {
     enableFlutterDriverExtension();
   }
+
   await setupLocator();
 }

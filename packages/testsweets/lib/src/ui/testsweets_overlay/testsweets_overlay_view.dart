@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:testsweets/src/setup_code.dart';
 import 'package:testsweets/src/ui/driver_layout/driver_layout_view.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.dart';
 
@@ -10,7 +11,7 @@ class TestSweetsOverlayView extends StatelessWidget {
   final String projectId;
 
   /// Puts the overlay into widget capture mode
-  final bool captureWidgets;
+  final bool? captureWidgets;
 
   /// When true we add the TestSweets overlay, default is true
   final bool enabled;
@@ -19,7 +20,7 @@ class TestSweetsOverlayView extends StatelessWidget {
     Key? key,
     required this.child,
     required this.projectId,
-    this.captureWidgets = false,
+    this.captureWidgets,
     this.enabled = true,
   }) : super(key: key);
 
@@ -27,7 +28,7 @@ class TestSweetsOverlayView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: enabled
-          ? captureWidgets
+          ? (captureWidgets ?? DRIVE_MODE)
               ? WidgetCaptureView(child: child, projectId: projectId)
               : DriverLayoutView(child: child, projectId: projectId)
           : child,
