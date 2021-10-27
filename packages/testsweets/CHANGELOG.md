@@ -1,3 +1,7 @@
+### 1.5.5
+
+- Fixes layout in landscape mode for the overlay
+
 ### 1.5.4
 
 - Removes default factory constructor for the `TestSweetsNavigatorObserver`
