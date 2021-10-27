@@ -20,6 +20,7 @@ class CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
     return Stack(
+      fit: StackFit.expand,
       children: [
         if (model.captureWidgetStatusEnum ==
             CaptureWidgetStatusEnum.captureModeWidgetNameInputShow)

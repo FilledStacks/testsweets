@@ -96,8 +96,8 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         shape: MaterialStateProperty.all<OutlinedBorder>(
                             RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
-                                    crTextFieldCornerRadius()))),
+                                borderRadius:
+                                    BorderRadius.all(crButtonCornerRadius()))),
                         backgroundColor: MaterialStateProperty.all(
                             (isDarkMode ? kcHighlightGrey : kcPrimaryWhite)
                                 .withOpacity(0.7)),
@@ -106,7 +106,7 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                         quarterTurns: 1,
                         child: Icon(
                           Icons.swap_vert,
-                          size: 16.w,
+                          size: 16,
                           color: isDarkMode
                               ? kcPrimaryWhite
                               : kcAutocompleteBackground,

@@ -41,6 +41,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                 initialEntries: [
                   OverlayEntry(
                       builder: (context) => Stack(
+                            fit: StackFit.expand,
                             children: [
                               child,
                               if (model
@@ -93,11 +94,13 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                                   child: model.captureWidgetStatusEnum ==
                                           CaptureWidgetStatusEnum
                                               .inspectModeDialogShow
-                                      ? WidgetDescriptionDialog(
-                                          updateTextControllerText: () {
-                                            widgetNameController.text =
-                                                model.widgetDescription!.name;
-                                          },
+                                      ? Center(
+                                          child: WidgetDescriptionDialog(
+                                            updateTextControllerText: () {
+                                              widgetNameController.text =
+                                                  model.widgetDescription!.name;
+                                            },
+                                          ),
                                         )
                                       : SizedBox.shrink(),
                                 ),
