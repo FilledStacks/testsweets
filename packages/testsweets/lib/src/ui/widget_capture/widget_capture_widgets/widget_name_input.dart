@@ -108,7 +108,6 @@ class WidgetNameInput extends ViewModelWidget<WidgetCaptureViewModel> {
                   focusNode?.unfocus();
                   textEditingController?.clear();
                 },
-                maxWidth: 100.w,
               ),
             ],
           ),

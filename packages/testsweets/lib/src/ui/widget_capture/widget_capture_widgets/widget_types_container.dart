@@ -14,6 +14,26 @@ class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
 
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
+    final orientation = MediaQuery.of(context).orientation;
+    return orientation == Orientation.portrait
+        ? _PortraitWidgetTypeContainer(
+            model: model,
+          )
+        : _LandscapeWidgetTypeContainer(
+            model: model,
+          );
+  }
+}
+
+class _PortraitWidgetTypeContainer extends StatelessWidget {
+  final WidgetCaptureViewModel model;
+  const _PortraitWidgetTypeContainer({
+    Key? key,
+    required this.model,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       decoration: model.isDarkMode ? blackBoxDecoration : whiteBoxDecoration,
       width: 136.w,
@@ -78,29 +98,112 @@ class WidgetsTypesContainer extends ViewModelWidget<WidgetCaptureViewModel> {
   }
 }
 
+class _LandscapeWidgetTypeContainer extends StatelessWidget {
+  final WidgetCaptureViewModel model;
+  const _LandscapeWidgetTypeContainer({
+    Key? key,
+    required this.model,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: model.isDarkMode ? blackBoxDecoration : whiteBoxDecoration,
+      width: 42.w,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 24.h,
+          ),
+          _WidgetTypeButton(
+            landscape: true,
+            onTap: () => model.addNewWidget(WidgetType.touchable,
+                widgetPosition: WidgetPosition(
+                    x: ScreenUtil().screenWidth / 2,
+                    y: ScreenUtil().screenHeight / 2)),
+            title: 'Touchable',
+            color: WidgetType.touchable.getColorOfWidgetType,
+          ),
+          SizedBox(
+            height: 16.h,
+          ),
+          _WidgetTypeButton(
+            landscape: true,
+            onTap: () => model.addNewWidget(WidgetType.input,
+                widgetPosition: WidgetPosition(
+                    x: ScreenUtil().screenWidth / 2,
+                    y: ScreenUtil().screenHeight / 2)),
+            title: 'Input',
+            color: WidgetType.input.getColorOfWidgetType,
+          ),
+          SizedBox(
+            height: 16.h,
+          ),
+          _WidgetTypeButton(
+            landscape: true,
+            onTap: () => model.addNewWidget(WidgetType.scrollable,
+                widgetPosition: WidgetPosition(
+                    x: ScreenUtil().screenWidth / 2,
+                    y: ScreenUtil().screenHeight / 2)),
+            title: 'Scrollable',
+            color: WidgetType.scrollable.getColorOfWidgetType,
+          ),
+          SizedBox(
+            height: 24.h,
+          ),
+          Divider(
+            color: model.isDarkMode ? kcSweetsAppBarColor : kcSubtext,
+            thickness: 5.h,
+            height: 0,
+          ),
+          MaterialButton(
+            minWidth: 45.w,
+            onPressed: model.toggleWidgetsContainer,
+            child: SizedBox(
+              height: 45.h,
+              child: Icon(
+                Icons.cancel,
+                color: model.isDarkMode ? kcSweetsAppBarColor : kcSubtext,
+                size: 24,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class _WidgetTypeButton extends StatelessWidget {
   final VoidCallback onTap;
   final String title;
   final Color color;
+  final bool landscape;
   const _WidgetTypeButton({
     Key? key,
     required this.onTap,
     required this.title,
     required this.color,
+    this.landscape = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      onPressed: onTap,
-      minWidth: 97.w,
-      height: 97.w,
-      color: color,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(crButtonCornerRadius())),
-      child: AutoSizeText(title,
-          maxLines: 1,
-          style: tsNormal().copyWith(color: Colors.white, fontSize: 12.w)),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: landscape ? 16.h : 16.w),
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: MaterialButton(
+          onPressed: onTap,
+          color: color,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(crButtonCornerRadius())),
+          child: AutoSizeText(title,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              style: tsNormal().copyWith(color: Colors.white, fontSize: 12.h)),
+        ),
+      ),
     );
   }
 }
