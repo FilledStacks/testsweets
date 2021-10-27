@@ -36,7 +36,7 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w).copyWith(
           top: 32.h, bottom: MediaQuery.of(context).viewInsets.bottom + 24.h),
-      width: ScreenUtil().screenWidth,
+      width: MediaQuery.of(context).size.shortestSide,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -81,130 +81,140 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
           const SizedBox(
             height: 2,
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (switchPositionTap != null)
-                RotatedBox(
-                  quarterTurns: 1,
-                  child: TextButton.icon(
-                    onPressed: switchPositionTap,
-                    style: ButtonStyle(
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      fixedSize: MaterialStateProperty.all(Size(140.h, 22)),
-                      shape: MaterialStateProperty.all<OutlinedBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(crTextFieldCornerRadius()))),
-                      backgroundColor: MaterialStateProperty.all(
-                          (isDarkMode ? kcHighlightGrey : kcPrimaryWhite)
-                              .withOpacity(0.7)),
-                    ),
-                    icon: RotatedBox(
-                      quarterTurns: 1,
-                      child: Icon(
-                        Icons.swap_vert,
-                        size: 16.w,
-                        color: isDarkMode
-                            ? kcPrimaryWhite
-                            : kcAutocompleteBackground,
+          AspectRatio(
+            aspectRatio: title != null ? 1.4 : 2.8,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (switchPositionTap != null)
+                  RotatedBox(
+                    quarterTurns: 1,
+                    child: TextButton.icon(
+                      onPressed: switchPositionTap,
+                      style: ButtonStyle(
+                        visualDensity: VisualDensity.compact,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        shape: MaterialStateProperty.all<OutlinedBorder>(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                    crTextFieldCornerRadius()))),
+                        backgroundColor: MaterialStateProperty.all(
+                            (isDarkMode ? kcHighlightGrey : kcPrimaryWhite)
+                                .withOpacity(0.7)),
+                      ),
+                      icon: RotatedBox(
+                        quarterTurns: 1,
+                        child: Icon(
+                          Icons.swap_vert,
+                          size: 16.w,
+                          color: isDarkMode
+                              ? kcPrimaryWhite
+                              : kcAutocompleteBackground,
+                        ),
+                      ),
+                      label: Center(
+                        child: AutoSizeText('Switch Position',
+                            maxLines: 1,
+                            style: tsNormal().copyWith(
+                                color: isDarkMode
+                                    ? kcPrimaryWhite
+                                    : kcAutocompleteBackground,
+                                fontSize: 14.w)),
                       ),
                     ),
-                    label: AutoSizeText('Switch Position',
-                        maxLines: 1,
-                        style: tsNormal().copyWith(
-                            color: isDarkMode
-                                ? kcPrimaryWhite
-                                : kcAutocompleteBackground,
-                            fontSize: 14.w)),
                   ),
+                const SizedBox(
+                  width: 2,
                 ),
-              const SizedBox(
-                width: 2,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (!hideViewBar)
-                      MaterialButton(
-                        padding: EdgeInsets.zero,
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        onPressed: model.isNestedView && !disableToggleViews
-                            ? model.toggleBetweenParentRouteAndChildRoute
-                            : null,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (!hideViewBar)
+                        AspectRatio(
+                          aspectRatio: 10,
+                          child: MaterialButton(
+                            padding: EdgeInsets.zero,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            onPressed: model.isNestedView && !disableToggleViews
+                                ? model.toggleBetweenParentRouteAndChildRoute
+                                : null,
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: isDarkMode
+                                  ? viewNameBlackBoxDecoration
+                                  : viewNameWhiteBoxDecoration,
+                              child: AutoSizeText.rich(
+                                TextSpan(children: [
+                                  TextSpan(
+                                      text: model.leftViewName,
+                                      style: model.isChildRouteActivated
+                                          ? tsDisableRoute()
+                                          : tsActiveRoute(isDarkMode)),
+                                  if (model.isNestedView)
+                                    TextSpan(
+                                        text: ' / ',
+                                        style: tsLarge()
+                                            .copyWith(color: kcPrimaryFuchsia)),
+                                  TextSpan(
+                                      text: model.rightViewName,
+                                      style: model.isChildRouteActivated
+                                          ? tsActiveRoute(isDarkMode)
+                                          : tsDisableRoute()),
+                                ]),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ),
+                      Expanded(
                         child: Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.symmetric(
-                              vertical: 8.h, horizontal: 16.w),
-                          decoration: isDarkMode
-                              ? viewNameBlackBoxDecoration
-                              : viewNameWhiteBoxDecoration,
-                          child: AutoSizeText.rich(
-                            TextSpan(children: [
-                              TextSpan(
-                                  text: model.leftViewName,
-                                  style: model.isChildRouteActivated
-                                      ? tsDisableRoute()
-                                      : tsActiveRoute(isDarkMode)),
-                              if (model.isNestedView)
-                                TextSpan(
-                                    text: ' / ',
-                                    style: tsLarge()
-                                        .copyWith(color: kcPrimaryFuchsia)),
-                              TextSpan(
-                                  text: model.rightViewName,
-                                  style: model.isChildRouteActivated
-                                      ? tsActiveRoute(isDarkMode)
-                                      : tsDisableRoute()),
-                            ]),
-                            textAlign: TextAlign.center,
+                          margin: EdgeInsets.only(top: 1),
+                          padding: EdgeInsets.only(
+                            left: 16.w,
+                            right: 16.w,
+                          ),
+                          decoration: (isDarkMode
+                                  ? blackBoxDecoration
+                                  : whiteBoxDecoration)
+                              .copyWith(
+                                  borderRadius:
+                                      bottomCornerRaduisIsZero || hideViewBar
+                                          ? BorderRadius.vertical(
+                                              top: crButtonCornerRadius())
+                                          : BorderRadius.vertical(
+                                              bottom: crButtonCornerRadius())),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              title != null
+                                  ? Padding(
+                                      padding: EdgeInsets.only(
+                                        top: 12.h,
+                                      ),
+                                      child: Text(title!,
+                                          style: boldStyle.copyWith(
+                                              color: isDarkMode
+                                                  ? kcPrimaryWhite
+                                                  : kcPrimaryPurple)),
+                                    )
+                                  : const SizedBox(),
+                              const SizedBox(),
+                              child,
+                            ],
                           ),
                         ),
                       ),
-                    Container(
-                      margin: EdgeInsets.only(top: 1),
-                      padding: EdgeInsets.only(
-                          left: 16.w, right: 16.w, top: 4.h, bottom: 20.h),
-                      decoration: (isDarkMode
-                              ? blackBoxDecoration
-                              : whiteBoxDecoration)
-                          .copyWith(
-                              borderRadius:
-                                  bottomCornerRaduisIsZero || hideViewBar
-                                      ? BorderRadius.vertical(
-                                          top: crButtonCornerRadius())
-                                      : BorderRadius.vertical(
-                                          bottom: crButtonCornerRadius())),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          title != null
-                              ? Padding(
-                                  padding: EdgeInsets.only(
-                                    top: 12.h,
-                                  ),
-                                  child: Text(title!,
-                                      style: boldStyle.copyWith(
-                                          color: isDarkMode
-                                              ? kcPrimaryWhite
-                                              : kcPrimaryPurple)),
-                                )
-                              : const SizedBox(),
-                          SizedBox(
-                            height: 24.w,
-                          ),
-                          child,
-                        ],
-                      ),
-                    ),
-                    footerChild ?? const SizedBox()
-                  ],
+                      footerChild ?? const SizedBox()
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
