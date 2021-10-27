@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       navigatorKey: StackedService.navigatorKey,
       onGenerateRoute: StackedRouter().onGenerateRoute,
       navigatorObservers: [
-        TestSweetsNavigatorObserver(),
+        TestSweetsNavigatorObserver.instance,
       ],
     );
   }
