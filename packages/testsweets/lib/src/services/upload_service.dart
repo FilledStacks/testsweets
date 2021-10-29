@@ -1,11 +1,12 @@
 import 'dart:io';
 
+import 'package:testsweets/src/dart_only_locator.dart';
+
 import '../models/build_info.dart';
-import '../locator.dart';
-import 'file_system_service.dart';
-import 'time_service.dart';
 import 'cloud_functions_service.dart';
+import 'file_system_service.dart';
 import 'http_service.dart';
+import 'time_service.dart';
 
 abstract class UploadService {
   Future<void> uploadBuild(
@@ -13,10 +14,10 @@ abstract class UploadService {
 }
 
 class UploadServiceImplementation implements UploadService {
-  final cloudFunctionsService = locator<CloudFunctionsService>();
-  final timeService = locator<TimeService>();
-  final fileSystemService = locator<FileSystemService>();
-  final httpService = locator<HttpService>();
+  final cloudFunctionsService = dartOnlyLocator<CloudFunctionsService>();
+  final timeService = dartOnlyLocator<TimeService>();
+  final fileSystemService = dartOnlyLocator<FileSystemService>();
+  final httpService = dartOnlyLocator<HttpService>();
 
   @override
   Future<void> uploadBuild(

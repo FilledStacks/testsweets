@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:testsweets/src/models/build_error.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
-import '../locator.dart';
-import 'build_service.dart';
+import '../dart_only_locator.dart';
 import 'dynamic_keys_generator.dart';
 import 'file_system_service.dart';
 
@@ -12,8 +12,8 @@ abstract class AutomationKeysService {
 }
 
 class AutomationKeysServiceImplementation implements AutomationKeysService {
-  final _fileSystemService = locator<FileSystemService>();
-  final _dynamicKeysGeneratorService = locator<DynamicKeysGenerator>();
+  final _fileSystemService = dartOnlyLocator<FileSystemService>();
+  final _dynamicKeysGeneratorService = dartOnlyLocator<DynamicKeysGenerator>();
 
   @override
   List<String> extractKeysListFromJson() {

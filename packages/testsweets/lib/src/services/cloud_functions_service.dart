@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 import 'package:testsweets/src/app/app.logger.dart';
+import 'package:testsweets/src/dart_only_locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 
-import '../locator.dart';
 import 'http_service.dart';
 
 class CloudFunctionsService {
   final log = getLogger('CloudFunctionsService');
-  final httpService = locator<HttpService>();
+  final httpService = dartOnlyLocator<HttpService>();
 
   Future<String> getV4BuildUploadSignedUrl(String projectId, String apiKey,
       [Map extensionHeaders = const <String, String>{}]) async {

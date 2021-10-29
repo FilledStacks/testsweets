@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/extensions/widget_type_extension.dart';
+import 'package:testsweets/src/extensions/widget_type_flutter_extension.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';

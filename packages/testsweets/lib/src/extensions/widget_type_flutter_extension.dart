@@ -3,14 +3,7 @@ import 'dart:ui';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 
-import 'string_extension.dart';
-
-extension WidgetTypeUtilty on WidgetType {
-  String get returnFirstLetterOfWidgetTypeCapitalized =>
-      this.toString().split('.').last[0].capitalizeFirstOfEach;
-      
-  String get shortName => this.toString().split('.').last;
-
+extension WidgetTypeFlutterExtension on WidgetType {
   Color get getColorOfWidgetType {
     switch (this) {
       case WidgetType.touchable:

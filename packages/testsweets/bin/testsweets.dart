@@ -1,4 +1,5 @@
-import 'package:testsweets/src/locator.dart';
+import 'package:testsweets/src/dart_only_locator.dart';
+import 'package:testsweets/src/models/build_error.dart';
 import 'package:testsweets/src/models/build_info.dart';
 import 'package:testsweets/src/services/automation_keys_service.dart';
 import 'package:testsweets/src/services/build_service.dart';
@@ -12,10 +13,12 @@ Future<void> quit(
   String errorMsg,
 ) =>
     throw BuildError('Error: $errorMsg');
+
 Future<void> main(
   List<String> args, {
   bool isMocking = false,
 }) async {
+  print('TestSweets running!');
   if (args.length < 1) quit(ErrorMessages.buildArgumentsError);
 
   final command = args[0];
@@ -39,8 +42,9 @@ Future<void> main(
 
     pathToBuild = args[positionBeforePath + 1];
   }
-  if (!isMocking) await setupLocator();
-  _testSweetsConfigFileService = locator<TestSweetsConfigFileService>();
+
+  if (!isMocking) await setupDartOnlyLocator();
+  _testSweetsConfigFileService = dartOnlyLocator<TestSweetsConfigFileService>();
 
   print("Uploading automation keys ...");
   await extractAndUploadAutomationKeys();
@@ -67,13 +71,13 @@ Future<void> main(
 
 Future<void> extractAndUploadAutomationKeys() async {
   final automationKeys =
-      locator<AutomationKeysService>().extractKeysListFromJson();
+      dartOnlyLocator<AutomationKeysService>().extractKeysListFromJson();
   final projectId = _testSweetsConfigFileService!
       .getValueFromConfigFileByKey(ConfigFileKeyType.ProjectId);
   final apiKey = _testSweetsConfigFileService!
       .getValueFromConfigFileByKey(ConfigFileKeyType.ApiKey);
 
-  await locator<CloudFunctionsService>()
+  await dartOnlyLocator<CloudFunctionsService>()
       .uploadAutomationKeys(projectId, apiKey, automationKeys);
 }
 
@@ -83,7 +87,8 @@ Future<void> uploadBuild(BuildInfo buildInfo) async {
   final apiKey = _testSweetsConfigFileService!
       .getValueFromConfigFileByKey(ConfigFileKeyType.ApiKey);
 
-  await locator<UploadService>().uploadBuild(buildInfo, projectId, apiKey);
+  await dartOnlyLocator<UploadService>()
+      .uploadBuild(buildInfo, projectId, apiKey);
 }
 
 Future<BuildInfo> buildApp(
@@ -93,7 +98,7 @@ Future<BuildInfo> buildApp(
   final extraFlutterProcessArgs = _testSweetsConfigFileService!
       .getValueFromConfigFileByKey(ConfigFileKeyType.FlutterBuildCommand)
       .split(' ');
-  final buildInfo = await locator<BuildService>().build(
+  final buildInfo = await dartOnlyLocator<BuildService>().build(
       appType: appType,
       pathToBuild: pathToBuild,
       extraFlutterProcessArgs: extraFlutterProcessArgs);

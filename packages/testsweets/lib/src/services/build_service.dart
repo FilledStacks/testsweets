@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:testsweets/src/dart_only_locator.dart';
+import 'package:testsweets/src/models/build_error.dart';
 import 'package:testsweets/utils/error_messages.dart';
 import 'package:yaml/yaml.dart';
 
-import '../locator.dart';
 import '../models/build_info.dart';
 import 'file_system_service.dart';
 import 'runnable_process.dart';
@@ -28,8 +29,8 @@ abstract class BuildService {
 }
 
 class BuildServiceImplementation implements BuildService {
-  final fileSystemService = locator<FileSystemService>();
-  final flutterProcess = locator<FlutterProcess>();
+  final fileSystemService = dartOnlyLocator<FileSystemService>();
+  final flutterProcess = dartOnlyLocator<FlutterProcess>();
 
   @override
   Future<BuildInfo> build({
@@ -92,18 +93,6 @@ class BuildServiceImplementation implements BuildService {
 
     return ret;
   }
-}
-
-class BuildError extends Error {
-  final String message;
-  BuildError(this.message);
-
-  operator ==(other) => other is BuildError && other.message == this.message;
-
-  int get hashCode => message.hashCode;
-
-  @override
-  String toString() => '$BuildError: $message';
 }
 
 class Utf8CollectingStreamConsumer implements StreamConsumer<List<int>> {

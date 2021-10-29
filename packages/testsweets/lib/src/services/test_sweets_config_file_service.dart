@@ -1,9 +1,8 @@
 import 'dart:convert';
 
+import 'package:testsweets/src/models/build_error.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
-import '../locator.dart';
-import 'build_service.dart';
 import 'file_system_service.dart';
 
 enum ConfigFileKeyType { ProjectId, ApiKey, FlutterBuildCommand }
@@ -19,7 +18,7 @@ extension ToString on ConfigFileKeyType {
 }
 
 class TestSweetsConfigFileService {
-  final fileSystemService = locator<FileSystemService>();
+  final fileSystemService = FileSystemServiceImplementation();
 
   String getValueFromConfigFileByKey(ConfigFileKeyType keyType) {
     final flutterProjectFullPath = fileSystemService.fullPathToWorkingDirectory;

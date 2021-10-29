@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-import '../locator.dart';
+import 'package:testsweets/src/dart_only_locator.dart';
+
 import 'file_system_service.dart';
 
 class DynamicKeysGenerator {
-  final fileSystemService = locator<FileSystemService>();
+  final fileSystemService = dartOnlyLocator<FileSystemService>();
 
   List<String> generateAutomationKeysForDynamicKey(
       {required String key, required int numberOfAutomationKeysToGenerate}) {
