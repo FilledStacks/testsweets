@@ -1,3 +1,7 @@
+### 1.5.6
+
+- Fixes the testsweets run command
+
 ### 1.5.5
 
 - Fixes layout in landscape mode for the overlay
