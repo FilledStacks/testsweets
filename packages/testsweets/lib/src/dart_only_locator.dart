@@ -30,8 +30,10 @@ Future<void> setupDartOnlyLocator() async {
 
   dartOnlyLocator.registerLazySingleton(() => DynamicKeysGenerator());
 
-  dartOnlyLocator.registerLazySingleton<CloudFunctionsService>(
-      () => CloudFunctionsService());
+  dartOnlyLocator
+      .registerLazySingleton<CloudFunctionsService>(() => CloudFunctionsService(
+            httpService: HttpServiceImplementation(),
+          ));
 
   dartOnlyLocator.registerLazySingleton(() => TimeService());
 

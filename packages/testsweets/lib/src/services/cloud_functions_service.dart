@@ -1,14 +1,18 @@
 import 'dart:convert';
 
 import 'package:testsweets/src/app/app.logger.dart';
-import 'package:testsweets/src/dart_only_locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 
 import 'http_service.dart';
 
 class CloudFunctionsService {
   final log = getLogger('CloudFunctionsService');
-  final httpService = dartOnlyLocator<HttpService>();
+
+  // This service is being passed in here because we can't get it from the locator
+  // given that when running the command we need the dartOnlyLocator and when running
+  // and using the package we need the normal flutter locator
+  final HttpService httpService;
+  CloudFunctionsService({required this.httpService});
 
   Future<String> getV4BuildUploadSignedUrl(String projectId, String apiKey,
       [Map extensionHeaders = const <String, String>{}]) async {
