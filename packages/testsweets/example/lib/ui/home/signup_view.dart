@@ -10,13 +10,20 @@ class SignUpView extends StatelessWidget {
     return ViewModelBuilder<SignUpViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
         body: Center(
-          child: MaterialButton(
-            color: Colors.blue,
-            child: Text(
-              'Go to Login',
-              style: TextStyle(color: Colors.white),
-            ),
-            onPressed: model.navigateToOtherView,
+          child: Column(
+            children: [
+              TextField(
+                decoration: InputDecoration(hintText: 'Temp text'),
+              ),
+              MaterialButton(
+                color: Colors.blue,
+                child: Text(
+                  'Go to Login',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: model.navigateToOtherView,
+              ),
+            ],
           ),
         ),
       ),

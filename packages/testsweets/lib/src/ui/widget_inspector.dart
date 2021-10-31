@@ -33,7 +33,7 @@ class _WidgetInspectorViewState extends State<WidgetInspectorView> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Overlay(
+        WidgetInspectorOverlay(
           child: widget.child,
           onTap: (widget) => showKey(widget),
           showOverlay: _showOverlay,
@@ -68,22 +68,22 @@ class _WidgetInspectorViewState extends State<WidgetInspectorView> {
   }
 }
 
-class Overlay extends StatefulWidget {
+class WidgetInspectorOverlay extends StatefulWidget {
   final Widget child;
   final Function(WidgetInfo) onTap;
   final bool showOverlay;
 
-  const Overlay(
+  const WidgetInspectorOverlay(
       {Key? key,
       required this.child,
       required this.onTap,
       this.showOverlay = false})
       : super(key: key);
   @override
-  _OverlayState createState() => _OverlayState();
+  _WidgetInspectorOverlayState createState() => _WidgetInspectorOverlayState();
 }
 
-class _OverlayState extends State<Overlay> {
+class _WidgetInspectorOverlayState extends State<WidgetInspectorOverlay> {
   List<WidgetInfo> elements = [];
 
   void getElements(BuildContext context) {
@@ -94,11 +94,13 @@ class _OverlayState extends State<Overlay> {
         while (element.findRenderObject() is! RenderBox) {}
         RenderBox box = element.findRenderObject() as RenderBox;
 
-        elements.add(WidgetInfo(
-          size: box.size,
-          offset: box.localToGlobal(Offset.zero),
-          key: key,
-        ));
+        // elements.add(WidgetInfo(
+        //   indentation: 0,
+        //   size: box.size,
+
+        //   key: key,
+        //   className: '',
+        // ));
       }
       element.visitChildren(visitor);
     }
@@ -132,8 +134,8 @@ class _OverlayState extends State<Overlay> {
                   ),
                 ),
                 rect: Rect.fromLTWH(
-                  element.offset.dx,
-                  element.offset.dy,
+                  0,
+                  0,
                   element.size.width,
                   element.size.height,
                 ),
@@ -146,13 +148,22 @@ class _OverlayState extends State<Overlay> {
 
 class WidgetInfo {
   final Size size;
-  final Offset offset;
-  final Key? key;
 
-  const WidgetInfo({required this.size, required this.offset, this.key});
+  final Key? key;
+  final String className;
+  final int indentation;
+  final Rect paintBounds;
+
+  const WidgetInfo({
+    required this.indentation,
+    required this.size,
+    required this.paintBounds,
+    required this.className,
+    this.key,
+  });
 
   @override
   String toString() {
-    return key.toString() + ' - ' + size.toString() + ' - ' + offset.toString();
+    return '$className-$size';
   }
 }

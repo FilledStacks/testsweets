@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:testsweets/src/app/app.logger.dart';
 import 'package:testsweets/src/setup_code.dart';
 import 'package:testsweets/src/ui/driver_layout/driver_layout_view.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.dart';
 
-class TestSweetsOverlayView extends StatelessWidget {
+class TestSweetsOverlayView extends StatefulWidget {
   final Widget child;
 
   /// The projectId as seen in the settings of the TestSweets project
@@ -25,13 +26,26 @@ class TestSweetsOverlayView extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<TestSweetsOverlayView> createState() => _TestSweetsOverlayViewState();
+}
+
+class _TestSweetsOverlayViewState extends State<TestSweetsOverlayView> {
+  final log = getLogger('_TestSweetsOverlayViewState');
+
+  @override
   Widget build(BuildContext context) {
     return Material(
-      child: enabled
-          ? (captureWidgets ?? !DRIVE_MODE)
-              ? WidgetCaptureView(child: child, projectId: projectId)
-              : DriverLayoutView(child: child, projectId: projectId)
-          : child,
+      child: widget.enabled
+          ? (widget.captureWidgets ?? !DRIVE_MODE)
+              ? WidgetCaptureView(
+                  child: widget.child,
+                  projectId: widget.projectId,
+                )
+              : DriverLayoutView(
+                  child: widget.child,
+                  projectId: widget.projectId,
+                )
+          : widget.child,
     );
   }
 }

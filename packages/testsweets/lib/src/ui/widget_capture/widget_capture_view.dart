@@ -9,6 +9,7 @@ import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/stop_inspect_controllers.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_description_dialog.dart';
+import 'package:testsweets/src/ui/widget_inspector.dart';
 
 import 'widget_capture_widgets/capture_controllers.dart';
 import 'widget_capture_widgets/capture_layout.dart';
@@ -27,13 +28,59 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
     this.apiKey,
   });
 
+  final List<String> _classesOfInterest = [
+    (GestureDetector).toString(),
+    (TextField).toString(),
+  ];
+
+  List<WidgetInfo> getElements(BuildContext context) {
+    var widgetsOfInterest = <WidgetInfo>[];
+    widgetsOfInterest.clear();
+
+    int indentation = 0;
+
+    void visitor(Element element) {
+      indentation++;
+
+      Key? key = element.widget.key;
+      String className = element.widget.runtimeType.toString();
+
+      while (element.findRenderObject() is! RenderBox) {}
+      RenderBox box = element.findRenderObject() as RenderBox;
+      var offset = box.getTransformTo(null).getTranslation();
+
+      if (_classesOfInterest.contains(className)) {
+        widgetsOfInterest.add(WidgetInfo(
+          indentation: indentation,
+          size: box.size,
+          paintBounds: box.paintBounds.shift(
+            Offset(offset.x, offset.y),
+          ),
+          key: key,
+          className: className,
+        ));
+      }
+
+      element.visitChildren(visitor);
+    }
+
+    context.visitChildElements(visitor);
+
+    return widgetsOfInterest;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<WidgetCaptureViewModel>.reactive(
       onModelReady: (model) {
         listenToFormUpdated(model);
+
         widgetNameFocusNode.addListener(() {
           model.setWidgetNameFocused(widgetNameFocusNode.hasFocus);
+        });
+
+        WidgetsBinding.instance?.addPostFrameCallback((_) {
+          model.setWidgetsOfInterest(getElements(context), verbose: true);
         });
       },
       builder: (context, model, _) => ScreenUtilInit(
@@ -107,7 +154,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                               ),
                               BusyIndicator(
                                 enable: model.isBusy,
-                              )
+                              ),
                             ],
                           ))
                 ],

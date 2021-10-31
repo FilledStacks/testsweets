@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/app/app.logger.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
@@ -9,6 +11,7 @@ import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
+import 'package:testsweets/src/ui/widget_inspector.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
 import 'widget_capture_view.form.dart';
@@ -19,6 +22,8 @@ class WidgetCaptureViewModel extends FormViewModel {
   final String projectId;
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
+  List<WidgetInfo> _widgetsOfInterest = <WidgetInfo>[];
+  List<WidgetInfo> get widgetsOfInterest => _widgetsOfInterest;
 
   bool _isDarkMode = true;
   bool get isDarkMode => _isDarkMode;
@@ -71,7 +76,15 @@ class WidgetCaptureViewModel extends FormViewModel {
   String _inputErrorMessage = '';
   String get nameInputErrorMessage => _inputErrorMessage;
 
+  List<WidgetDescription>? _autoCapturedDescriptions;
+
+  Map<String, WidgetType> _classNameToTypeMapping = {
+    (GestureDetector).toString(): WidgetType.touchable,
+    (TextField).toString(): WidgetType.input,
+  };
+
   List<WidgetDescription> get descriptionsForView =>
+      _autoCapturedDescriptions ??
       _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracker.currentRoute,
       );
@@ -87,6 +100,42 @@ class WidgetCaptureViewModel extends FormViewModel {
       log.e('Could not get widgetDescriptions: $e');
     }
     setBusy(false);
+  }
+
+  void setWidgetsOfInterest(List<WidgetInfo> widgets, {bool verbose = false}) {
+    _widgetsOfInterest = widgets;
+    _autoCapturedDescriptions =
+        getWidgetDescriptionsFromWidgetInfo(_widgetsOfInterest);
+    if (verbose) _printWidgets();
+    notifyListeners();
+  }
+
+  List<WidgetDescription> getWidgetDescriptionsFromWidgetInfo(
+    List<WidgetInfo> widgetInformation,
+  ) {
+    int widgetInfoIndex = 0;
+
+    return widgetInformation.map((e) {
+      widgetInfoIndex++;
+      return WidgetDescription(
+        viewName:
+            _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
+        originalViewName: _testSweetsRouteTracker.currentRoute,
+        name: '${e.className}_$widgetInfoIndex',
+        widgetType:
+            _classNameToTypeMapping[e.className] ?? WidgetType.touchable,
+        position: WidgetPosition.fromRect(e.paintBounds),
+      );
+    }).toList();
+  }
+
+  void _printWidgets() {
+    StringBuffer newBuffer = StringBuffer('');
+    for (var widgetItem in _widgetsOfInterest) {
+      final indent = ' ' * widgetItem.indentation;
+      newBuffer.writeln('$widgetItem');
+    }
+    log.i('\n' + newBuffer.toString());
   }
 
   void toggleCaptureView() {
@@ -134,10 +183,11 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     setBusy(true);
     _widgetDescription = _widgetDescription?.copyWith(
-        viewName:
-            _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
-        originalViewName: _testSweetsRouteTracker.currentRoute,
-        name: widgetNameValue!.convertWidgetNameToValidFormat);
+      viewName:
+          _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
+      originalViewName: _testSweetsRouteTracker.currentRoute,
+      name: widgetNameValue!.convertWidgetNameToValidFormat,
+    );
 
     log.i('descriptionToSave:$_widgetDescription');
 

@@ -32,8 +32,8 @@ import 'package:testsweets/src/services/widget_capture_service.dart' as _i16;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeFileSystemService_0 extends _i1.Fake
-    implements _i2.FileSystemService {}
+class _FakeFileSystemServiceImplementation_0 extends _i1.Fake
+    implements _i2.FileSystemServiceImplementation {}
 
 class _FakeBuildInfo_1 extends _i1.Fake implements _i3.BuildInfo {}
 
@@ -46,15 +46,19 @@ class _FakeDateTime_4 extends _i1.Fake implements DateTime {}
 
 class _FakeHttpService_5 extends _i1.Fake implements _i5.HttpService {}
 
+class _FakeFileSystemService_6 extends _i1.Fake
+    implements _i2.FileSystemService {}
+
 /// A class which mocks [TestSweetsConfigFileService].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockTestSweetsConfigFileService extends _i1.Mock
     implements _i6.TestSweetsConfigFileService {
   @override
-  _i2.FileSystemService get fileSystemService =>
+  _i2.FileSystemServiceImplementation get fileSystemService =>
       (super.noSuchMethod(Invocation.getter(#fileSystemService),
-          returnValue: _FakeFileSystemService_0()) as _i2.FileSystemService);
+              returnValue: _FakeFileSystemServiceImplementation_0())
+          as _i2.FileSystemServiceImplementation);
   @override
   String getValueFromConfigFileByKey(_i6.ConfigFileKeyType? keyType) => (super
       .noSuchMethod(Invocation.method(#getValueFromConfigFileByKey, [keyType]),
@@ -261,7 +265,7 @@ class MockDynamicKeysGenerator extends _i1.Mock
   @override
   _i2.FileSystemService get fileSystemService =>
       (super.noSuchMethod(Invocation.getter(#fileSystemService),
-          returnValue: _FakeFileSystemService_0()) as _i2.FileSystemService);
+          returnValue: _FakeFileSystemService_6()) as _i2.FileSystemService);
   @override
   List<String> generateAutomationKeysForDynamicKey(
           {String? key, int? numberOfAutomationKeysToGenerate}) =>

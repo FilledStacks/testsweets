@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/widget_type_string_extension.dart';
@@ -65,4 +67,9 @@ class WidgetPosition with _$WidgetPosition {
 
   factory WidgetPosition.fromJson(Map<String, dynamic> json) =>
       _$WidgetPositionFromJson(json);
+
+  factory WidgetPosition.fromRect(Rect paintBounds) => WidgetPosition(
+        x: paintBounds.center.dx,
+        y: paintBounds.center.dy,
+      );
 }
