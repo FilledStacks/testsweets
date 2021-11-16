@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
       ),
     // 3. Finally add TestSweetsNavigatorObserver() to determine what view you are on right now
       navigatorObservers: [
-        TestSweetsNavigatorObserver(),
+        TestSweetsNavigatorObserver.instance,
       ],
     );
   }
@@ -87,3 +87,11 @@ To run the app in capture mode you just start the application and capture mode w
 ### Putting the app in Drive Mode
 
 To ensure the app is built for TestSweets to be able to drive it you you should pass `--dart-define=DRIVE_MODE=true` when building or running the app for TestSweets.
+
+### Build the apk
+
+```dart
+
+flutter build apk --debug --dart-define=DRIVE_MODE=true
+
+```
