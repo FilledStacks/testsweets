@@ -12,7 +12,9 @@ dependencies:
   testsweets: [latest_version]
 ```
 
-and optionally if you want to add general keys to check for when a certain widget is visible like a dialog or a button
+
+### Optionally
+If you want to add general keys to check for when a certain widget is visible like a dialog or a button
 you have to add the testsweets_generator package too
 
 ```
