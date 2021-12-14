@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
@@ -45,20 +46,23 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
       Key? key = element.widget.key;
       String className = element.widget.runtimeType.toString();
 
-      while (element.findRenderObject() is! RenderBox) {}
-      RenderBox box = element.findRenderObject() as RenderBox;
-      var offset = box.getTransformTo(null).getTranslation();
+      if (element.findRenderObject() is RenderBox) {
+        RenderBox box = element.findRenderObject() as RenderBox;
+        var offset = box.getTransformTo(null).getTranslation();
 
-      if (_classesOfInterest.contains(className)) {
-        widgetsOfInterest.add(WidgetInfo(
-          indentation: indentation,
-          size: box.size,
-          paintBounds: box.paintBounds.shift(
-            Offset(offset.x, offset.y),
-          ),
-          key: key,
-          className: className,
-        ));
+        print('$className');
+
+        if (_classesOfInterest.contains(className)) {
+          widgetsOfInterest.add(WidgetInfo(
+            indentation: indentation,
+            size: box.size,
+            paintBounds: box.paintBounds.shift(
+              Offset(offset.x, offset.y),
+            ),
+            key: key,
+            className: className,
+          ));
+        }
       }
 
       element.visitChildren(visitor);
@@ -79,86 +83,97 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
           model.setWidgetNameFocused(widgetNameFocusNode.hasFocus);
         });
 
-        WidgetsBinding.instance?.addPostFrameCallback((_) {
-          model.setWidgetsOfInterest(getElements(context), verbose: true);
-        });
+        // model.setCaptureCallback(() {});
       },
-      builder: (context, model, _) => ScreenUtilInit(
-          builder: () => Overlay(
-                initialEntries: [
-                  OverlayEntry(
-                      builder: (context) => Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              child,
-                              if (model
-                                  .captureWidgetStatusEnum.isAtInspectModeMode)
-                                InspectControllers(
-                                    widgetNameController: widgetNameController,
-                                    widgetNameFocusNode: widgetNameFocusNode),
-                              if (model.captureWidgetStatusEnum.isAtCaptureMode)
-                                CaptureLayout(
-                                    widgetNameController: widgetNameController,
-                                    widgetNameFocusNode: widgetNameFocusNode),
-                              if (model.captureWidgetStatusEnum ==
-                                  CaptureWidgetStatusEnum.idle)
-                                IntroControllers(),
-                              if (model.captureWidgetStatusEnum ==
-                                  CaptureWidgetStatusEnum.inspectMode)
-                                StopInspectControllers(),
-                              Positioned(
-                                  bottom: 20,
-                                  child: Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 16.w),
-                                    width: ScreenUtil().screenWidth,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        if (model.captureWidgetStatusEnum ==
-                                                CaptureWidgetStatusEnum
-                                                    .captureMode ||
-                                            model.captureWidgetStatusEnum ==
-                                                CaptureWidgetStatusEnum
-                                                    .captureModeWidgetsContainerShow ||
-                                            model.captureWidgetStatusEnum ==
-                                                CaptureWidgetStatusEnum
-                                                    .captureModeAddWidget)
-                                          CaptureControllers(),
-                                      ],
-                                    ),
-                                  )),
-                              AnimatedPositioned(
-                                duration: Duration(milliseconds: 500),
-                                bottom: model.captureWidgetStatusEnum ==
-                                        CaptureWidgetStatusEnum
-                                            .inspectModeDialogShow
-                                    ? 20
-                                    : -200,
-                                child: AnimatedSwitcher(
+      builder: (context, model, _) {
+        if (model.rebuildAutomaticCapturedWidgets) {
+          SchedulerBinding.instance?.addPostFrameCallback((_) {
+            Future.delayed(Duration(seconds: 2)).then(
+                (value) => model.setWidgetsOfInterest(getElements(context)));
+          });
+        }
+        return ScreenUtilInit(
+            builder: () => Overlay(
+                  initialEntries: [
+                    OverlayEntry(
+                        builder: (context) => Stack(
+                              fit: StackFit.expand,
+                              children: [
+                                child,
+                                if (model.captureWidgetStatusEnum
+                                    .isAtInspectModeMode)
+                                  InspectControllers(
+                                      widgetNameController:
+                                          widgetNameController,
+                                      widgetNameFocusNode: widgetNameFocusNode),
+                                if (model
+                                    .captureWidgetStatusEnum.isAtCaptureMode)
+                                  CaptureLayout(
+                                      widgetNameController:
+                                          widgetNameController,
+                                      widgetNameFocusNode: widgetNameFocusNode),
+                                if (model.captureWidgetStatusEnum ==
+                                    CaptureWidgetStatusEnum.idle)
+                                  IntroControllers(),
+                                if (model.captureWidgetStatusEnum ==
+                                    CaptureWidgetStatusEnum.inspectMode)
+                                  StopInspectControllers(),
+                                Positioned(
+                                    bottom: 20,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 16.w),
+                                      width: ScreenUtil().screenWidth,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          if (model.captureWidgetStatusEnum ==
+                                                  CaptureWidgetStatusEnum
+                                                      .captureMode ||
+                                              model.captureWidgetStatusEnum ==
+                                                  CaptureWidgetStatusEnum
+                                                      .captureModeWidgetsContainerShow ||
+                                              model.captureWidgetStatusEnum ==
+                                                  CaptureWidgetStatusEnum
+                                                      .captureModeAddWidget)
+                                            CaptureControllers(),
+                                        ],
+                                      ),
+                                    )),
+                                AnimatedPositioned(
                                   duration: Duration(milliseconds: 500),
-                                  child: model.captureWidgetStatusEnum ==
+                                  bottom: model.captureWidgetStatusEnum ==
                                           CaptureWidgetStatusEnum
                                               .inspectModeDialogShow
-                                      ? Center(
-                                          child: WidgetDescriptionDialog(
-                                            updateTextControllerText: () {
-                                              widgetNameController.text =
-                                                  model.widgetDescription!.name;
-                                            },
-                                          ),
-                                        )
-                                      : SizedBox.shrink(),
+                                      ? 20
+                                      : -200,
+                                  child: AnimatedSwitcher(
+                                    duration: Duration(milliseconds: 500),
+                                    child: model.captureWidgetStatusEnum ==
+                                            CaptureWidgetStatusEnum
+                                                .inspectModeDialogShow
+                                        ? Center(
+                                            child: WidgetDescriptionDialog(
+                                              updateTextControllerText: () {
+                                                widgetNameController.text =
+                                                    model.widgetDescription!
+                                                        .name;
+                                              },
+                                            ),
+                                          )
+                                        : SizedBox.shrink(),
+                                  ),
                                 ),
-                              ),
-                              BusyIndicator(
-                                enable: model.isBusy,
-                              ),
-                            ],
-                          ))
-                ],
-              )),
+                                BusyIndicator(
+                                  enable: model.isBusy,
+                                ),
+                              ],
+                            ))
+                  ],
+                ));
+      },
       viewModelBuilder: () => WidgetCaptureViewModel(projectId: projectId),
     );
   }

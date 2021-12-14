@@ -25,17 +25,28 @@ class WidgetCaptureViewModel extends FormViewModel {
   List<WidgetInfo> _widgetsOfInterest = <WidgetInfo>[];
   List<WidgetInfo> get widgetsOfInterest => _widgetsOfInterest;
 
+  Function()? _recaptureAutomationPointData;
+
   bool _isDarkMode = true;
   bool get isDarkMode => _isDarkMode;
+
+  bool _rebuildAutoCapturedWidgets = false;
+  bool get rebuildAutomaticCapturedWidgets => _rebuildAutoCapturedWidgets;
 
   void toggleTheme() {
     _isDarkMode = !isDarkMode;
     notifyListeners();
   }
 
-  WidgetCaptureViewModel({required this.projectId}) {
+  WidgetCaptureViewModel({
+    required this.projectId,
+  }) {
     syncWithFirestoreWidgetKeys(projectId: projectId);
-    _testSweetsRouteTracker.addListener(notifyListeners);
+    _testSweetsRouteTracker.addListener(() {
+      notifyListeners();
+
+      _rebuildAutoCapturedWidgets = true;
+    });
   }
 
   String get rightViewName => _testSweetsRouteTracker.rightViewName;
@@ -103,10 +114,14 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void setWidgetsOfInterest(List<WidgetInfo> widgets, {bool verbose = false}) {
+    log.i('widgets:$widgets');
     _widgetsOfInterest = widgets;
     _autoCapturedDescriptions =
         getWidgetDescriptionsFromWidgetInfo(_widgetsOfInterest);
+
+    log.i('_autoCapturedDescriptions:${_autoCapturedDescriptions?.join('\n')}');
     if (verbose) _printWidgets();
+    _rebuildAutoCapturedWidgets = false;
     notifyListeners();
   }
 
@@ -347,5 +362,9 @@ class WidgetCaptureViewModel extends FormViewModel {
       setBusy(false);
       log.e('Couldn\'t update the widget. $e');
     }
+  }
+
+  void setCaptureCallback(Function() captureCallback) {
+    _recaptureAutomationPointData = captureCallback;
   }
 }
