@@ -7,6 +7,7 @@
 /// Maybe this should be generated for the user as well?
 ///
 /// import 'package:customer_app/services/stackdriver/stackdriver_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
 class SimpleLogPrinter extends LogPrinter {
@@ -45,7 +46,11 @@ class SimpleLogPrinter extends LogPrinter {
 
     for (var line in output.split('\n')) {
       result.addAll(pattern.allMatches(line).map((match) {
-        return color!(match.group(0)!);
+        if (kReleaseMode) {
+          return match.group(0)!;
+        } else {
+          return color!(match.group(0)!);
+        }
       }));
     }
 

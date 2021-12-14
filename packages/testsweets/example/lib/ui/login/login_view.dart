@@ -38,13 +38,28 @@ class LoginView extends StatelessWidget {
               ),
             ),
             Center(
-              child: MaterialButton(
-                color: Colors.blue,
-                child: Text(
-                  'Go to Home',
-                  style: TextStyle(color: Colors.red),
-                ),
-                onPressed: model.navigateToOtherView,
+              child: Column(
+                children: [
+                  TextField(
+                      decoration: InputDecoration(
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.red, width: 3.0),
+                    ),
+                    enabledBorder: const OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.red, width: 3.0),
+                    ),
+                  )),
+                  MaterialButton(
+                    color: Colors.blue,
+                    child: Text(
+                      'Go to Home',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    onPressed: model.navigateToOtherView,
+                  ),
+                ],
               ),
             ),
             Container(

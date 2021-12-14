@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:testsweets/src/locator.dart';
+import 'package:testsweets/src/models/build_error.dart';
 import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/utils/error_messages.dart';
