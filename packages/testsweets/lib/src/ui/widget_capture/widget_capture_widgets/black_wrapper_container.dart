@@ -89,37 +89,45 @@ class BlackWrapperContainer extends ViewModelWidget<WidgetCaptureViewModel> {
                 if (switchPositionTap != null)
                   RotatedBox(
                     quarterTurns: 1,
-                    child: TextButton.icon(
-                      onPressed: switchPositionTap,
-                      style: ButtonStyle(
-                        visualDensity: VisualDensity.compact,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        shape: MaterialStateProperty.all<OutlinedBorder>(
-                            RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(crButtonCornerRadius()))),
-                        backgroundColor: MaterialStateProperty.all(
-                            (isDarkMode ? kcHighlightGrey : kcPrimaryWhite)
-                                .withOpacity(0.7)),
-                      ),
-                      icon: RotatedBox(
-                        quarterTurns: 1,
-                        child: Icon(
-                          Icons.swap_vert,
-                          size: 16,
-                          color: isDarkMode
-                              ? kcPrimaryWhite
-                              : kcAutocompleteBackground,
+                    child: Material(
+                      type: MaterialType.card,
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(crButtonCornerRadius())),
+                      color: (isDarkMode ? kcHighlightGrey : kcPrimaryWhite)
+                          .withOpacity(0.7),
+                      child: InkWell(
+                        onTap: switchPositionTap,
+                        customBorder: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(crButtonCornerRadius())),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              RotatedBox(
+                                quarterTurns: 1,
+                                child: Icon(
+                                  Icons.swap_vert,
+                                  size: 16,
+                                  color: isDarkMode
+                                      ? kcPrimaryWhite
+                                      : kcAutocompleteBackground,
+                                ),
+                              ),
+                              Expanded(
+                                child: AutoSizeText('Switch Position',
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                    style: tsNormal().copyWith(
+                                        color: isDarkMode
+                                            ? kcPrimaryWhite
+                                            : kcAutocompleteBackground,
+                                        fontSize: 10.h)),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                      label: Center(
-                        child: AutoSizeText('Switch Position',
-                            maxLines: 1,
-                            style: tsNormal().copyWith(
-                                color: isDarkMode
-                                    ? kcPrimaryWhite
-                                    : kcAutocompleteBackground,
-                                fontSize: 14.w)),
                       ),
                     ),
                   ),

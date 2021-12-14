@@ -1,6 +1,5 @@
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/app/app.logger.dart';
-import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
@@ -57,10 +56,6 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   WidgetDescription? _widgetDescription;
   WidgetDescription? get widgetDescription => _widgetDescription;
-  double get descriptionTop =>
-      _widgetDescription!.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
-  double get descriptionLeft =>
-      _widgetDescription!.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
 
   bool _hasWidgetNameFocus = false;
   bool get hasWidgetNameFocus => _hasWidgetNameFocus;

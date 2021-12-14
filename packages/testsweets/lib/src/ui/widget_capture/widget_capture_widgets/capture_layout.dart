@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
+import 'package:testsweets/src/extensions/widget_description_extension.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_circle.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_name_input.dart';
@@ -26,8 +27,8 @@ class CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
         if (model.captureWidgetStatusEnum ==
             CaptureWidgetStatusEnum.captureModeWidgetNameInputShow)
           Positioned(
-              top: model.descriptionTop,
-              left: model.descriptionLeft,
+              top: model.widgetDescription!.responsiveHeight(size.height),
+              left: model.widgetDescription!.responsiveWidth(size.width),
               child: GestureDetector(
                 onPanUpdate: (panEvent) {
                   final x = panEvent.delta.dx;

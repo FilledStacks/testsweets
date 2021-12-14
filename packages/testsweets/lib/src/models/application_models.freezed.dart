@@ -350,17 +350,15 @@ class _$WidgetPositionTearOff {
   const _$WidgetPositionTearOff();
 
   _WidgetPosition call(
-      {required double capturedDeviceWidth,
-      required double capturedDeviceHeight,
-      required double x,
+      {required double x,
       required double y,
-      bool isPortraitMode = true}) {
+      required double capturedDeviceWidth,
+      required double capturedDeviceHeight}) {
     return _WidgetPosition(
-      capturedDeviceWidth: capturedDeviceWidth,
-      capturedDeviceHeight: capturedDeviceHeight,
       x: x,
       y: y,
-      isPortraitMode: isPortraitMode,
+      capturedDeviceWidth: capturedDeviceWidth,
+      capturedDeviceHeight: capturedDeviceHeight,
     );
   }
 
@@ -374,11 +372,10 @@ const $WidgetPosition = _$WidgetPositionTearOff();
 
 /// @nodoc
 mixin _$WidgetPosition {
-  double get capturedDeviceWidth => throw _privateConstructorUsedError;
-  double get capturedDeviceHeight => throw _privateConstructorUsedError;
   double get x => throw _privateConstructorUsedError;
   double get y => throw _privateConstructorUsedError;
-  bool get isPortraitMode => throw _privateConstructorUsedError;
+  double get capturedDeviceWidth => throw _privateConstructorUsedError;
+  double get capturedDeviceHeight => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -392,11 +389,10 @@ abstract class $WidgetPositionCopyWith<$Res> {
           WidgetPosition value, $Res Function(WidgetPosition) then) =
       _$WidgetPositionCopyWithImpl<$Res>;
   $Res call(
-      {double capturedDeviceWidth,
-      double capturedDeviceHeight,
-      double x,
+      {double x,
       double y,
-      bool isPortraitMode});
+      double capturedDeviceWidth,
+      double capturedDeviceHeight});
 }
 
 /// @nodoc
@@ -410,21 +406,12 @@ class _$WidgetPositionCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? capturedDeviceWidth = freezed,
-    Object? capturedDeviceHeight = freezed,
     Object? x = freezed,
     Object? y = freezed,
-    Object? isPortraitMode = freezed,
+    Object? capturedDeviceWidth = freezed,
+    Object? capturedDeviceHeight = freezed,
   }) {
     return _then(_value.copyWith(
-      capturedDeviceWidth: capturedDeviceWidth == freezed
-          ? _value.capturedDeviceWidth
-          : capturedDeviceWidth // ignore: cast_nullable_to_non_nullable
-              as double,
-      capturedDeviceHeight: capturedDeviceHeight == freezed
-          ? _value.capturedDeviceHeight
-          : capturedDeviceHeight // ignore: cast_nullable_to_non_nullable
-              as double,
       x: x == freezed
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
@@ -433,10 +420,14 @@ class _$WidgetPositionCopyWithImpl<$Res>
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
               as double,
-      isPortraitMode: isPortraitMode == freezed
-          ? _value.isPortraitMode
-          : isPortraitMode // ignore: cast_nullable_to_non_nullable
-              as bool,
+      capturedDeviceWidth: capturedDeviceWidth == freezed
+          ? _value.capturedDeviceWidth
+          : capturedDeviceWidth // ignore: cast_nullable_to_non_nullable
+              as double,
+      capturedDeviceHeight: capturedDeviceHeight == freezed
+          ? _value.capturedDeviceHeight
+          : capturedDeviceHeight // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -449,11 +440,10 @@ abstract class _$WidgetPositionCopyWith<$Res>
       __$WidgetPositionCopyWithImpl<$Res>;
   @override
   $Res call(
-      {double capturedDeviceWidth,
-      double capturedDeviceHeight,
-      double x,
+      {double x,
       double y,
-      bool isPortraitMode});
+      double capturedDeviceWidth,
+      double capturedDeviceHeight});
 }
 
 /// @nodoc
@@ -469,21 +459,12 @@ class __$WidgetPositionCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? capturedDeviceWidth = freezed,
-    Object? capturedDeviceHeight = freezed,
     Object? x = freezed,
     Object? y = freezed,
-    Object? isPortraitMode = freezed,
+    Object? capturedDeviceWidth = freezed,
+    Object? capturedDeviceHeight = freezed,
   }) {
     return _then(_WidgetPosition(
-      capturedDeviceWidth: capturedDeviceWidth == freezed
-          ? _value.capturedDeviceWidth
-          : capturedDeviceWidth // ignore: cast_nullable_to_non_nullable
-              as double,
-      capturedDeviceHeight: capturedDeviceHeight == freezed
-          ? _value.capturedDeviceHeight
-          : capturedDeviceHeight // ignore: cast_nullable_to_non_nullable
-              as double,
       x: x == freezed
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
@@ -492,10 +473,14 @@ class __$WidgetPositionCopyWithImpl<$Res>
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
               as double,
-      isPortraitMode: isPortraitMode == freezed
-          ? _value.isPortraitMode
-          : isPortraitMode // ignore: cast_nullable_to_non_nullable
-              as bool,
+      capturedDeviceWidth: capturedDeviceWidth == freezed
+          ? _value.capturedDeviceWidth
+          : capturedDeviceWidth // ignore: cast_nullable_to_non_nullable
+              as double,
+      capturedDeviceHeight: capturedDeviceHeight == freezed
+          ? _value.capturedDeviceHeight
+          : capturedDeviceHeight // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -504,59 +489,51 @@ class __$WidgetPositionCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_WidgetPosition implements _WidgetPosition {
   _$_WidgetPosition(
-      {required this.capturedDeviceWidth,
-      required this.capturedDeviceHeight,
-      required this.x,
+      {required this.x,
       required this.y,
-      this.isPortraitMode = true});
+      required this.capturedDeviceWidth,
+      required this.capturedDeviceHeight});
 
   factory _$_WidgetPosition.fromJson(Map<String, dynamic> json) =>
       _$$_WidgetPositionFromJson(json);
 
   @override
-  final double capturedDeviceWidth;
-  @override
-  final double capturedDeviceHeight;
-  @override
   final double x;
   @override
   final double y;
-  @JsonKey(defaultValue: true)
   @override
-  final bool isPortraitMode;
+  final double capturedDeviceWidth;
+  @override
+  final double capturedDeviceHeight;
 
   @override
   String toString() {
-    return 'WidgetPosition(capturedDeviceWidth: $capturedDeviceWidth, capturedDeviceHeight: $capturedDeviceHeight, x: $x, y: $y, isPortraitMode: $isPortraitMode)';
+    return 'WidgetPosition(x: $x, y: $y, capturedDeviceWidth: $capturedDeviceWidth, capturedDeviceHeight: $capturedDeviceHeight)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is _WidgetPosition &&
-            (identical(other.capturedDeviceWidth, capturedDeviceWidth) ||
-                const DeepCollectionEquality()
-                    .equals(other.capturedDeviceWidth, capturedDeviceWidth)) &&
-            (identical(other.capturedDeviceHeight, capturedDeviceHeight) ||
-                const DeepCollectionEquality().equals(
-                    other.capturedDeviceHeight, capturedDeviceHeight)) &&
             (identical(other.x, x) ||
                 const DeepCollectionEquality().equals(other.x, x)) &&
             (identical(other.y, y) ||
                 const DeepCollectionEquality().equals(other.y, y)) &&
-            (identical(other.isPortraitMode, isPortraitMode) ||
+            (identical(other.capturedDeviceWidth, capturedDeviceWidth) ||
                 const DeepCollectionEquality()
-                    .equals(other.isPortraitMode, isPortraitMode)));
+                    .equals(other.capturedDeviceWidth, capturedDeviceWidth)) &&
+            (identical(other.capturedDeviceHeight, capturedDeviceHeight) ||
+                const DeepCollectionEquality()
+                    .equals(other.capturedDeviceHeight, capturedDeviceHeight)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(capturedDeviceWidth) ^
-      const DeepCollectionEquality().hash(capturedDeviceHeight) ^
       const DeepCollectionEquality().hash(x) ^
       const DeepCollectionEquality().hash(y) ^
-      const DeepCollectionEquality().hash(isPortraitMode);
+      const DeepCollectionEquality().hash(capturedDeviceWidth) ^
+      const DeepCollectionEquality().hash(capturedDeviceHeight);
 
   @JsonKey(ignore: true)
   @override
@@ -571,25 +548,22 @@ class _$_WidgetPosition implements _WidgetPosition {
 
 abstract class _WidgetPosition implements WidgetPosition {
   factory _WidgetPosition(
-      {required double capturedDeviceWidth,
-      required double capturedDeviceHeight,
-      required double x,
+      {required double x,
       required double y,
-      bool isPortraitMode}) = _$_WidgetPosition;
+      required double capturedDeviceWidth,
+      required double capturedDeviceHeight}) = _$_WidgetPosition;
 
   factory _WidgetPosition.fromJson(Map<String, dynamic> json) =
       _$_WidgetPosition.fromJson;
 
   @override
-  double get capturedDeviceWidth => throw _privateConstructorUsedError;
-  @override
-  double get capturedDeviceHeight => throw _privateConstructorUsedError;
-  @override
   double get x => throw _privateConstructorUsedError;
   @override
   double get y => throw _privateConstructorUsedError;
   @override
-  bool get isPortraitMode => throw _privateConstructorUsedError;
+  double get capturedDeviceWidth => throw _privateConstructorUsedError;
+  @override
+  double get capturedDeviceHeight => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$WidgetPositionCopyWith<_WidgetPosition> get copyWith =>

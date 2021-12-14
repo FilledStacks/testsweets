@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
+import 'package:testsweets/src/extensions/widget_description_extension.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
@@ -42,8 +42,8 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
         if (model.captureWidgetStatusEnum ==
             CaptureWidgetStatusEnum.inspectModeUpdate)
           Positioned(
-              top: model.descriptionTop,
-              left: model.descriptionLeft,
+              top: model.widgetDescription!.responsiveHeight(size.height),
+              left: model.widgetDescription!.responsiveWidth(size.width),
               child: GestureDetector(
                 onPanUpdate: (panEvent) {
                   final x = panEvent.delta.dx;
@@ -56,10 +56,8 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
               )),
         ...model.descriptionsForView.where(filterUnWantedWidgets).map(
               (description) => Positioned(
-                top: description.position.y -
-                    (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
-                left: description.position.x -
-                    (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
+                top: description.responsiveHeight(size.height),
+                left: description.responsiveWidth(size.width),
                 child: IgnorePointer(
                   ignoring: model.captureWidgetStatusEnum.isSelectWidgetMode,
                   child: GestureDetector(
