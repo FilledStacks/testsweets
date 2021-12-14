@@ -49,7 +49,8 @@ void main() {
           id: 'widgetId',
           viewName: 'login',
           name: 'email',
-          position: WidgetPosition(x: 100, y: 199),
+          position: WidgetPosition(
+              x: 100, y: 199, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           widgetType: WidgetType.general,
         );
 
@@ -67,7 +68,8 @@ void main() {
           originalViewName: ' ',
           viewName: 'login',
           name: 'email',
-          position: WidgetPosition(x: 100, y: 199),
+          position: WidgetPosition(
+              x: 100, y: 199, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           widgetType: WidgetType.general,
         );
 
@@ -153,7 +155,8 @@ void main() {
           id: 'widgetId',
           viewName: 'login',
           name: 'email',
-          position: WidgetPosition(x: 100, y: 199),
+          position: WidgetPosition(
+              x: 100, y: 199, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           widgetType: WidgetType.general,
         );
         getAndRegisterWidgetCaptureService(
@@ -217,9 +220,11 @@ void main() {
           () {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         //initialise it cause it default to null
-        model.addNewWidget(WidgetType.touchable,
-            widgetPosition: WidgetPosition(x: 1, y: 1));
-        model.updateDescriptionPosition(2, 2);
+        model.addNewWidget(
+            WidgetType.touchable,
+            WidgetPosition(
+                x: 1, y: 1, capturedDeviceHeight: 0, capturedDeviceWidth: 0));
+        model.updateDescriptionPosition(2, 2, 0, 0);
         expect(model.widgetDescription!.position.x, 3);
         expect(model.widgetDescription!.position.y, 3);
       });
@@ -230,7 +235,7 @@ void main() {
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = '';
-        model.addNewWidget(WidgetType.input);
+        model.addNewWidget(WidgetType.input, WidgetPosition.empty());
         model.saveWidgetDescription();
         expect(
             model.nameInputErrorMessage, ErrorMessages.widgetInputNameIsEmpty);
@@ -242,7 +247,7 @@ void main() {
         getAndRegisterTestSweetsRouteTracker(currentRoute: 'current route');
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
-        await model.addNewWidget(WidgetType.input);
+        await model.addNewWidget(WidgetType.input, WidgetPosition.empty());
         model.saveWidgetDescription();
         expect(model.nameInputErrorMessage, isEmpty);
         expect(model.widgetDescription!.originalViewName, 'current route');
@@ -253,7 +258,7 @@ void main() {
         getAndRegisterTestSweetsRouteTracker(currentRoute: '/current route');
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
-        await model.addNewWidget(WidgetType.input);
+        await model.addNewWidget(WidgetType.input, WidgetPosition.empty());
         model.saveWidgetDescription();
         expect(model.widgetDescription!.viewName, 'currentRoute');
         expect(model.widgetDescription!.originalViewName, '/current route');
@@ -264,7 +269,7 @@ void main() {
         getAndRegisterTestSweetsRouteTracker(currentRoute: '/current route');
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'login-button';
-        await model.addNewWidget(WidgetType.input);
+        await model.addNewWidget(WidgetType.input, WidgetPosition.empty());
         model.saveWidgetDescription();
         expect(model.widgetDescription!.name, 'loginButton');
       });
@@ -278,12 +283,12 @@ void main() {
           viewName: 'login',
           id: 'id',
           name: 'email',
-          position: WidgetPosition(x: 100, y: 199),
+          position: WidgetPosition(
+              x: 100, y: 199, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           widgetType: WidgetType.general,
         );
         final model = WidgetCaptureViewModel(projectId: _projectId);
-        await model.addNewWidget(description.widgetType,
-            widgetPosition: description.position);
+        await model.addNewWidget(description.widgetType, description.position);
         await model.sendWidgetDescriptionToFirestore();
         expect(model.captureWidgetStatusEnum,
             CaptureWidgetStatusEnum.captureModeWidgetsContainerShow);
@@ -325,7 +330,7 @@ void main() {
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'my widget name';
-        model.addNewWidget(WidgetType.view);
+        model.addNewWidget(WidgetType.view, WidgetPosition.empty());
         expect(model.widgetDescription!.widgetType, WidgetType.view);
       });
       test(
@@ -333,7 +338,7 @@ void main() {
           () async {
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'my widget name';
-        await model.addNewWidget(WidgetType.input);
+        await model.addNewWidget(WidgetType.input, WidgetPosition.empty());
         expect(model.captureWidgetStatusEnum,
             CaptureWidgetStatusEnum.captureModeWidgetNameInputShow);
       });
@@ -345,7 +350,7 @@ void main() {
 
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'my widget name';
-        await model.addNewWidget(WidgetType.input);
+        await model.addNewWidget(WidgetType.input, WidgetPosition.empty());
 
         verify(widgetCaptureService
             .checkCurrentViewIfAlreadyCaptured('current route'));
@@ -382,7 +387,8 @@ void main() {
         viewName: 'login',
         id: 'id',
         name: 'email',
-        position: WidgetPosition(x: 100, y: 199),
+        position: WidgetPosition(
+            x: 100, y: 199, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
         widgetType: WidgetType.general,
       );
       test(
@@ -412,7 +418,8 @@ void main() {
         viewName: 'login',
         id: 'id',
         name: 'email',
-        position: WidgetPosition(x: 100, y: 199),
+        position: WidgetPosition(
+            x: 100, y: 199, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
         widgetType: WidgetType.general,
       );
       test(

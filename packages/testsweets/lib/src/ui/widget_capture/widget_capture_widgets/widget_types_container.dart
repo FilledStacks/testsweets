@@ -34,6 +34,7 @@ class _PortraitWidgetTypeContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Container(
       decoration: model.isDarkMode ? blackBoxDecoration : whiteBoxDecoration,
       width: 136.w,
@@ -43,10 +44,13 @@ class _PortraitWidgetTypeContainer extends StatelessWidget {
             height: 24.w,
           ),
           _WidgetTypeButton(
-            onTap: () => model.addNewWidget(WidgetType.touchable,
-                widgetPosition: WidgetPosition(
-                    x: ScreenUtil().screenWidth / 2,
-                    y: ScreenUtil().screenHeight / 2)),
+            onTap: () => model.addNewWidget(
+                WidgetType.touchable,
+                WidgetPosition(
+                    capturedDeviceHeight: size.height,
+                    capturedDeviceWidth: size.width,
+                    x: size.width / 2,
+                    y: size.height / 2)),
             title: 'Touchable',
             color: WidgetType.touchable.getColorOfWidgetType,
           ),
@@ -54,10 +58,13 @@ class _PortraitWidgetTypeContainer extends StatelessWidget {
             height: 16.w,
           ),
           _WidgetTypeButton(
-            onTap: () => model.addNewWidget(WidgetType.input,
-                widgetPosition: WidgetPosition(
-                    x: ScreenUtil().screenWidth / 2,
-                    y: ScreenUtil().screenHeight / 2)),
+            onTap: () => model.addNewWidget(
+                WidgetType.input,
+                WidgetPosition(
+                    capturedDeviceHeight: size.height,
+                    capturedDeviceWidth: size.width,
+                    x: size.width / 2,
+                    y: size.height / 2)),
             title: 'Input',
             color: WidgetType.input.getColorOfWidgetType,
           ),
@@ -65,10 +72,13 @@ class _PortraitWidgetTypeContainer extends StatelessWidget {
             height: 16.w,
           ),
           _WidgetTypeButton(
-            onTap: () => model.addNewWidget(WidgetType.scrollable,
-                widgetPosition: WidgetPosition(
-                    x: ScreenUtil().screenWidth / 2,
-                    y: ScreenUtil().screenHeight / 2)),
+            onTap: () => model.addNewWidget(
+                WidgetType.scrollable,
+                WidgetPosition(
+                    capturedDeviceHeight: size.height,
+                    capturedDeviceWidth: size.width,
+                    x: size.width / 2,
+                    y: size.height / 2)),
             title: 'Scrollable',
             color: WidgetType.scrollable.getColorOfWidgetType,
           ),
@@ -107,6 +117,7 @@ class _LandscapeWidgetTypeContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Container(
       decoration: model.isDarkMode ? blackBoxDecoration : whiteBoxDecoration,
       width: 42.w,
@@ -117,10 +128,13 @@ class _LandscapeWidgetTypeContainer extends StatelessWidget {
           ),
           _WidgetTypeButton(
             landscape: true,
-            onTap: () => model.addNewWidget(WidgetType.touchable,
-                widgetPosition: WidgetPosition(
-                    x: ScreenUtil().screenWidth / 2,
-                    y: ScreenUtil().screenHeight / 2)),
+            onTap: () => model.addNewWidget(
+                WidgetType.touchable,
+                WidgetPosition(
+                    capturedDeviceHeight: size.height,
+                    capturedDeviceWidth: size.width,
+                    x: size.width / 2,
+                    y: size.height / 2)),
             title: 'Touchable',
             color: WidgetType.touchable.getColorOfWidgetType,
           ),
@@ -129,10 +143,13 @@ class _LandscapeWidgetTypeContainer extends StatelessWidget {
           ),
           _WidgetTypeButton(
             landscape: true,
-            onTap: () => model.addNewWidget(WidgetType.input,
-                widgetPosition: WidgetPosition(
-                    x: ScreenUtil().screenWidth / 2,
-                    y: ScreenUtil().screenHeight / 2)),
+            onTap: () => model.addNewWidget(
+                WidgetType.input,
+                WidgetPosition(
+                    capturedDeviceHeight: size.height,
+                    capturedDeviceWidth: size.width,
+                    x: size.width / 2,
+                    y: size.height / 2)),
             title: 'Input',
             color: WidgetType.input.getColorOfWidgetType,
           ),
@@ -141,10 +158,13 @@ class _LandscapeWidgetTypeContainer extends StatelessWidget {
           ),
           _WidgetTypeButton(
             landscape: true,
-            onTap: () => model.addNewWidget(WidgetType.scrollable,
-                widgetPosition: WidgetPosition(
-                    x: ScreenUtil().screenWidth / 2,
-                    y: ScreenUtil().screenHeight / 2)),
+            onTap: () => model.addNewWidget(
+                WidgetType.scrollable,
+                WidgetPosition(
+                    capturedDeviceHeight: size.height,
+                    capturedDeviceWidth: size.width,
+                    x: size.width / 2,
+                    y: size.height / 2)),
             title: 'Scrollable',
             color: WidgetType.scrollable.getColorOfWidgetType,
           ),

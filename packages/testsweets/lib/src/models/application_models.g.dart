@@ -65,12 +65,18 @@ const _$WidgetTypeEnumMap = {
 
 _$_WidgetPosition _$$_WidgetPositionFromJson(Map<String, dynamic> json) =>
     _$_WidgetPosition(
+      capturedDeviceWidth: (json['capturedDeviceWidth'] as num).toDouble(),
+      capturedDeviceHeight: (json['capturedDeviceHeight'] as num).toDouble(),
       x: (json['x'] as num).toDouble(),
       y: (json['y'] as num).toDouble(),
+      isPortraitMode: json['isPortraitMode'] as bool? ?? true,
     );
 
 Map<String, dynamic> _$$_WidgetPositionToJson(_$_WidgetPosition instance) =>
     <String, dynamic>{
+      'capturedDeviceWidth': instance.capturedDeviceWidth,
+      'capturedDeviceHeight': instance.capturedDeviceHeight,
       'x': instance.x,
       'y': instance.y,
+      'isPortraitMode': instance.isPortraitMode,
     };

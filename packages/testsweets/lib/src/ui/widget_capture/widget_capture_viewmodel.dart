@@ -103,19 +103,16 @@ class WidgetCaptureViewModel extends FormViewModel {
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
   }
 
-  void updateDescriptionPosition(double x, double y) {
+  void updateDescriptionPosition(
+    double x,
+    double y,
+    double capturedDeviceWidth,
+    double capturedDeviceHeight,
+  ) {
     _widgetDescription = _widgetDescription!.copyWith(
       position: WidgetPosition(
-        x: _widgetDescription!.position.x + x,
-        y: _widgetDescription!.position.y + y,
-      ),
-    );
-    notifyListeners();
-  }
-
-  void updateActiveDescriptionPosition(double x, double y) {
-    _widgetDescription = _widgetDescription!.copyWith(
-      position: WidgetPosition(
+        capturedDeviceHeight: capturedDeviceHeight,
+        capturedDeviceWidth: capturedDeviceWidth,
         x: _widgetDescription!.position.x + x,
         y: _widgetDescription!.position.y + y,
       ),
@@ -185,8 +182,8 @@ class WidgetCaptureViewModel extends FormViewModel {
           CaptureWidgetStatusEnum.captureModeWidgetsContainerShow;
   }
 
-  Future<void> addNewWidget(WidgetType widgetType,
-      {WidgetPosition? widgetPosition}) async {
+  Future<void> addNewWidget(
+      WidgetType widgetType, WidgetPosition widgetPosition) async {
     _widgetDescription = WidgetDescription.addAtPosition(
         widgetType: widgetType, widgetPosition: widgetPosition);
 

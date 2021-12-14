@@ -36,16 +36,19 @@ class WidgetDescription with _$WidgetDescription {
           originalViewName: originalViewName,
           name: '',
           widgetType: WidgetType.view,
-          position: WidgetPosition(x: 0, y: 0));
+          position: WidgetPosition(
+              x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0));
 
-  factory WidgetDescription.addAtPosition(
-          {required WidgetType widgetType, WidgetPosition? widgetPosition}) =>
+  factory WidgetDescription.addAtPosition({
+    required WidgetType widgetType,
+    required WidgetPosition widgetPosition,
+  }) =>
       WidgetDescription(
           originalViewName: '',
           viewName: '',
           name: '',
           widgetType: widgetType,
-          position: widgetPosition ?? WidgetPosition(x: 0, y: 0));
+          position: widgetPosition);
 
   factory WidgetDescription.fromJson(Map<String, dynamic> json) =>
       _$WidgetDescriptionFromJson(json);
@@ -61,8 +64,11 @@ class WidgetPosition with _$WidgetPosition {
   factory WidgetPosition({
     required double x,
     required double y,
+    required double capturedDeviceWidth,
+    required double capturedDeviceHeight,
   }) = _WidgetPosition;
-
+  factory WidgetPosition.empty() => WidgetPosition(
+      x: 0, y: 0, capturedDeviceWidth: 0, capturedDeviceHeight: 0);
   factory WidgetPosition.fromJson(Map<String, dynamic> json) =>
       _$WidgetPositionFromJson(json);
 }

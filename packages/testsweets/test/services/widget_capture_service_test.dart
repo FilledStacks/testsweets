@@ -39,14 +39,22 @@ void main() {
                 viewName: 'loginView',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
               WidgetDescription(
                 originalViewName: 'signup_view',
                 viewName: 'signUpView',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
             ]);
         final service = WidgetCaptureService();
@@ -66,14 +74,22 @@ void main() {
                 viewName: 'loginView',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
               WidgetDescription(
                 originalViewName: 'login_view',
                 viewName: 'loginView',
                 name: 'loginButton2',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
             ]);
         final service = WidgetCaptureService();
@@ -91,7 +107,8 @@ void main() {
           originalViewName: '',
           viewName: 'login',
           name: 'email',
-          position: WidgetPosition(x: 100, y: 199),
+          position: WidgetPosition(
+              x: 100, y: 199, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           widgetType: WidgetType.general,
         );
 
@@ -117,7 +134,8 @@ void main() {
           originalViewName: 'login_view',
           viewName: 'loginView',
           name: 'email',
-          position: WidgetPosition(x: 100, y: 199),
+          position: WidgetPosition(
+              x: 100, y: 199, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           widgetType: WidgetType.general,
         );
 
@@ -145,21 +163,33 @@ void main() {
                 viewName: 'loginView',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
               WidgetDescription(
                 originalViewName: 'signUp_view',
                 viewName: 'signUpView',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
               WidgetDescription(
                 originalViewName: '/',
                 viewName: 'initialView',
                 name: '',
                 widgetType: WidgetType.view,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
             ]);
 
@@ -182,7 +212,8 @@ void main() {
             viewName: 'newView',
             name: 'button',
             widgetType: WidgetType.touchable,
-            position: WidgetPosition(x: 0, y: 0),
+            position: WidgetPosition(
+                x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           ),
         );
         expect(service.widgetDescriptionMap['/new_view']!.length, 1);
@@ -197,7 +228,8 @@ void main() {
             viewName: 'newView',
             name: 'button',
             widgetType: WidgetType.touchable,
-            position: WidgetPosition(x: 0, y: 0),
+            position: WidgetPosition(
+                x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           ),
         );
         expect(service.widgetDescriptionMap['/new_view']!.length, 1);
@@ -212,7 +244,8 @@ void main() {
             viewName: 'newView',
             name: 'button',
             widgetType: WidgetType.touchable,
-            position: WidgetPosition(x: 0, y: 0),
+            position: WidgetPosition(
+                x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           ),
         );
         service.addWidgetDescriptionToMap(
@@ -221,7 +254,8 @@ void main() {
             viewName: 'newView',
             name: 'inputField',
             widgetType: WidgetType.input,
-            position: WidgetPosition(x: 0, y: 0),
+            position: WidgetPosition(
+                x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           ),
         );
         expect(service.widgetDescriptionMap['/new_view']!.length, 2);
@@ -236,7 +270,8 @@ void main() {
           originalViewName: '/new_view',
           viewName: 'newView',
           name: 'email',
-          position: WidgetPosition(x: 100, y: 199),
+          position: WidgetPosition(
+              x: 100, y: 199, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           widgetType: WidgetType.general,
         );
 
@@ -261,14 +296,22 @@ void main() {
                 originalViewName: '/login_view',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
               WidgetDescription(
                 viewName: 'signUp',
                 originalViewName: '/login_view',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
             ]);
         final service = WidgetCaptureService();
@@ -279,7 +322,8 @@ void main() {
             originalViewName: '/signUp_view',
             name: 'loginButton',
             widgetType: WidgetType.touchable,
-            position: WidgetPosition(x: 0, y: 0),
+            position: WidgetPosition(
+                x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           ),
         );
 
@@ -298,14 +342,22 @@ void main() {
                 originalViewName: '/home_view',
                 name: 'bottomTab1',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
               WidgetDescription(
                 viewName: 'homeView',
                 originalViewName: '/home_view',
                 name: 'bottomTab2',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
             ]);
         final service = WidgetCaptureService();
@@ -326,28 +378,44 @@ void main() {
                 originalViewName: '/home_view',
                 name: 'bottomTab1',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
               WidgetDescription(
                 viewName: 'homeView',
                 originalViewName: '/home_view',
                 name: 'bottomTab2',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
               WidgetDescription(
                 viewName: 'homeView0',
                 originalViewName: '/home_view0',
                 name: 'bottomTab2',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
               WidgetDescription(
                 viewName: 'homeView1',
                 originalViewName: '/home_view1',
                 name: 'bottomTab2',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
             ]);
         final service = WidgetCaptureService();
@@ -368,35 +436,55 @@ void main() {
                 originalViewName: '/home_view',
                 name: 'bottomTab1',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
               WidgetDescription(
                 viewName: 'homeView',
                 originalViewName: '/home_view',
                 name: 'bottomTab2',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
               WidgetDescription(
                 viewName: 'homeView0',
                 originalViewName: '/home_view0',
                 name: 'bottomTab2',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
               WidgetDescription(
                 viewName: 'homeView1',
                 originalViewName: '/home_view1',
                 name: 'bottomTab2',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
               WidgetDescription(
                 viewName: 'homeView1',
                 originalViewName: '/home_view1',
                 name: 'bottomTab3',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
             ]);
         final service = WidgetCaptureService();
@@ -416,7 +504,8 @@ void main() {
           viewName: 'login',
           originalViewName: '/login_view',
           name: 'email',
-          position: WidgetPosition(x: 100, y: 199),
+          position: WidgetPosition(
+              x: 100, y: 199, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           widgetType: WidgetType.general,
         );
 
@@ -444,14 +533,22 @@ void main() {
                 originalViewName: '/login_view',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
               WidgetDescription(
                 viewName: 'signUp',
                 originalViewName: '/signUp_view',
                 name: 'loginButton',
                 widgetType: WidgetType.touchable,
-                position: WidgetPosition(x: 0, y: 0),
+                position: WidgetPosition(
+                    x: 0,
+                    y: 0,
+                    capturedDeviceHeight: 0,
+                    capturedDeviceWidth: 0),
               ),
             ]);
         final service = WidgetCaptureService();
@@ -462,7 +559,8 @@ void main() {
             viewName: 'signUp',
             name: 'loginBBButton',
             widgetType: WidgetType.touchable,
-            position: WidgetPosition(x: 0, y: 0),
+            position: WidgetPosition(
+                x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           ),
         );
 
@@ -474,7 +572,8 @@ void main() {
             viewName: 'signUp',
             name: 'loginBBButton',
             widgetType: WidgetType.touchable,
-            position: WidgetPosition(x: 0, y: 0),
+            position: WidgetPosition(
+                x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
           ),
         );
 

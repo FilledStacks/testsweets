@@ -19,6 +19,7 @@ class CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
 
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
+    final size = MediaQuery.of(context).size;
     return Stack(
       fit: StackFit.expand,
       children: [
@@ -31,7 +32,8 @@ class CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
                 onPanUpdate: (panEvent) {
                   final x = panEvent.delta.dx;
                   final y = panEvent.delta.dy;
-                  model.updateDescriptionPosition(x, y);
+                  model.updateDescriptionPosition(
+                      x, y, size.width, size.height);
                 },
                 child: WidgetCircle(
                     widgetType: model.widgetDescription!.widgetType),

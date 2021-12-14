@@ -21,6 +21,7 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
   final FocusNode widgetNameFocusNode;
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
+    final size = MediaQuery.of(context).size;
     bool widgetIsInTopLeftCornerMeaningItsAView(WidgetDescription element) =>
         element.position.x != 0 && element.position.y != 0;
 
@@ -47,7 +48,8 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
                 onPanUpdate: (panEvent) {
                   final x = panEvent.delta.dx;
                   final y = panEvent.delta.dy;
-                  model.updateActiveDescriptionPosition(x, y);
+                  model.updateDescriptionPosition(
+                      x, y, size.width, size.height);
                 },
                 child: WidgetCircle(
                     widgetType: model.widgetDescription!.widgetType),
@@ -65,7 +67,8 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
                     onPanUpdate: (panEvent) {
                       final x = panEvent.delta.dx;
                       final y = panEvent.delta.dy;
-                      model.updateActiveDescriptionPosition(x, y);
+                      model.updateDescriptionPosition(
+                          x, y, size.width, size.height);
                     },
                     child: AnimatedOpacity(
                         duration: const Duration(milliseconds: 300),
