@@ -1,13 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:testsweets/src/services/automation_keys_service.dart';
 
+import '../helpers/dart_only_test_helpers.dart';
 import '../helpers/test_consts.dart';
-import '../helpers/test_helpers.dart';
 
 void main() {
   group('AutomationKeysService -', () {
-    setUp(registerServices);
-    tearDown(unregisterServices);
+    setUp(registerDartOnlyServices);
+    tearDown(unregisterDartOnlyServices);
     group('extractKeysListFromJson -', () {
       test(
           'When give it a json of keys through FileSystemService , should return list of strings',

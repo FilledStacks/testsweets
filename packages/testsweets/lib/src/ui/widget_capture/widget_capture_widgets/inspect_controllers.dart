@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
+import 'package:testsweets/src/extensions/widget_description_extension.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
@@ -21,6 +21,7 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
   final FocusNode widgetNameFocusNode;
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
+    final size = MediaQuery.of(context).size;
     bool widgetIsInTopLeftCornerMeaningItsAView(WidgetDescription element) =>
         element.position.x != 0 && element.position.y != 0;
 
@@ -41,23 +42,22 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
         if (model.captureWidgetStatusEnum ==
             CaptureWidgetStatusEnum.inspectModeUpdate)
           Positioned(
-              top: model.descriptionTop,
-              left: model.descriptionLeft,
+              top: model.widgetDescription!.responsiveYPosition(size.height),
+              left: model.widgetDescription!.responsiveXPosition(size.width),
               child: GestureDetector(
                 onPanUpdate: (panEvent) {
                   final x = panEvent.delta.dx;
                   final y = panEvent.delta.dy;
-                  model.updateActiveDescriptionPosition(x, y);
+                  model.updateDescriptionPosition(
+                      x, y, size.width, size.height);
                 },
                 child: WidgetCircle(
                     widgetType: model.widgetDescription!.widgetType),
               )),
         ...model.descriptionsForView.where(filterUnWantedWidgets).map(
               (description) => Positioned(
-                top: description.position.y -
-                    (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
-                left: description.position.x -
-                    (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
+                top: description.responsiveYPosition(size.height),
+                left: description.responsiveXPosition(size.width),
                 child: IgnorePointer(
                   ignoring: model.captureWidgetStatusEnum.isSelectWidgetMode,
                   child: GestureDetector(
@@ -65,7 +65,8 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
                     onPanUpdate: (panEvent) {
                       final x = panEvent.delta.dx;
                       final y = panEvent.delta.dy;
-                      model.updateActiveDescriptionPosition(x, y);
+                      model.updateDescriptionPosition(
+                          x, y, size.width, size.height);
                     },
                     child: AnimatedOpacity(
                         duration: const Duration(milliseconds: 300),

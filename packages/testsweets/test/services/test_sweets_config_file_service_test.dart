@@ -1,17 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/build_error.dart';
-import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
+import '../helpers/dart_only_test_helpers.dart';
 import '../helpers/test_consts.dart';
-import '../helpers/test_helpers.dart';
 
 void main() {
   group("ConfigFileService Tests -", () {
-    setUp(registerServices);
-    tearDown(() => locator.reset());
+    setUp(registerDartOnlyServices);
+    tearDown(unregisterDartOnlyServices);
     test(
         "Should throw BuildError if the given app directory does not contain a .testsweets file",
         () async {

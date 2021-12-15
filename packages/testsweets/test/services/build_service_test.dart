@@ -1,18 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/build_error.dart';
 import 'package:testsweets/src/services/build_service.dart';
-import 'package:testsweets/src/services/runnable_process.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
+import '../helpers/dart_only_test_helpers.dart';
 import '../helpers/test_consts.dart';
-import '../helpers/test_helpers.dart';
 
 void main() {
   group("BuildService Tests -", () {
-    setUp(registerServices);
-    tearDown(() => locator.reset());
+    setUp(registerDartOnlyServices);
+    tearDown(unregisterDartOnlyServices);
 
     group("build -", () {
       test(
@@ -46,16 +44,13 @@ void main() {
       test(
           "Should call the current flutterProcess with args [build, appType, --buildMode]",
           () async {
-        //TODO: fix test name
         getAndRegisterFileSystemService(
             doesFileExist: true,
             readFileAsStringSyncResult: ksPubspecFileWithVersion,
             jsonFilesreadFileAsStringSyncResult: appAutomationKeysFile,
             jsonFilesDoesFileExist: true);
 
-        getAndRegisterFlutterProcess();
-
-        final flutterProcess = locator<FlutterProcess>();
+        final flutterProcess = getAndRegisterFlutterProcess();
 
         final instance = BuildServiceImplementation();
         await instance.build(

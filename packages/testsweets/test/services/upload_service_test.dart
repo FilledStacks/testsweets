@@ -2,17 +2,16 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/build_info.dart';
 import 'package:testsweets/src/services/upload_service.dart';
 
+import '../helpers/dart_only_test_helpers.dart';
 import '../helpers/test_consts.dart';
-import '../helpers/test_helpers.dart';
 
 void main() {
   group("UploadService Tests -", () {
-    setUp(registerServices);
-    tearDown(() => locator.reset());
+    setUp(registerDartOnlyServices);
+    tearDown(unregisterDartOnlyServices);
 
     group("uploadBuild(buildInfo, projectId, apiKey) -", () {
       final buildInfo = BuildInfo(

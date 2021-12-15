@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
+import 'package:testsweets/src/extensions/widget_description_extension.dart';
 import 'package:testsweets/src/ui/driver_layout/hittable_stack.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/busy_indecator.dart';
@@ -27,6 +28,7 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return ViewModelBuilder<DriverLayoutViewModel>.reactive(
       onModelReady: (model) =>
           SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
@@ -39,7 +41,13 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
               right: 15,
               top: 15,
               child: IconButton(
-                icon: Icon(Icons.remove_red_eye),
+                tooltip: 'Toggle to see the keys',
+                icon: Icon(
+                  Icons.remove_red_eye,
+                  color: _showDebugInformation
+                      ? kcSecondaryGreen
+                      : kcFailTestRedColor,
+                ),
                 onPressed: () {
                   setState(() {
                     _showDebugInformation = !_showDebugInformation;
@@ -51,10 +59,8 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
           ),
           ...model.descriptionsForView.map(
             (description) => Positioned(
-              top:
-                  description.position.y - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
-              left:
-                  description.position.x - (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
+              top: description.responsiveYPosition(size.height),
+              left: description.responsiveXPosition(size.width),
               child: Container(
                 key: Key(description.automationKey),
                 width: WIDGET_DESCRIPTION_VISUAL_SIZE,
