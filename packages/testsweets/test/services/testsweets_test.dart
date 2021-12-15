@@ -1,17 +1,16 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/models/build_error.dart';
-import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
 import '../../bin/testsweets.dart' as ts;
+import '../helpers/dart_only_test_helpers.dart';
 import '../helpers/test_consts.dart';
-import '../helpers/test_helpers.dart';
 
 void main() {
   group('Testsweets test -', () {
-    setUp(registerServices);
-    tearDown(unregisterServices);
+    setUp(registerDartOnlyServices);
+    tearDown(unregisterDartOnlyServices);
     group('main -', () {
       test('When args are less than one, should throw BuildError', () {
         expect(() => ts.main([]),

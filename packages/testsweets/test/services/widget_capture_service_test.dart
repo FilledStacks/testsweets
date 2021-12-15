@@ -113,9 +113,6 @@ void main() {
         );
 
         final cloudFunctionsService = getAndRegisterCloudFunctionsService();
-        getAndRegisterTestSweetsConfigFileService(
-          valueFromConfigFileByKey: 'projectId',
-        );
 
         final service = WidgetCaptureService();
         await service.captureWidgetDescription(
