@@ -2,10 +2,10 @@ import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/testsweets.dart';
 
 extension WidgetDescriptionUtils on WidgetDescription {
-  double responsiveWidth(double currentScreenWidth) =>
+  double responsiveXPosition(double currentScreenWidth) =>
       _calculateWidthRatio(currentScreenWidth) * this.position.x -
       (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
-  double responsiveHeight(double currentScreenHeight) =>
+  double responsiveYPosition(double currentScreenHeight) =>
       _calculateHeightRatio(currentScreenHeight) * this.position.y -
       (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
 

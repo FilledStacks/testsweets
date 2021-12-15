@@ -59,8 +59,8 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
           ),
           ...model.descriptionsForView.map(
             (description) => Positioned(
-              top: description.responsiveHeight(size.height),
-              left: description.responsiveWidth(size.width),
+              top: description.responsiveYPosition(size.height),
+              left: description.responsiveXPosition(size.width),
               child: Container(
                 key: Key(description.automationKey),
                 width: WIDGET_DESCRIPTION_VISUAL_SIZE,

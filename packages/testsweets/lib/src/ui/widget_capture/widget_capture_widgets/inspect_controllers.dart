@@ -42,8 +42,8 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
         if (model.captureWidgetStatusEnum ==
             CaptureWidgetStatusEnum.inspectModeUpdate)
           Positioned(
-              top: model.widgetDescription!.responsiveHeight(size.height),
-              left: model.widgetDescription!.responsiveWidth(size.width),
+              top: model.widgetDescription!.responsiveYPosition(size.height),
+              left: model.widgetDescription!.responsiveXPosition(size.width),
               child: GestureDetector(
                 onPanUpdate: (panEvent) {
                   final x = panEvent.delta.dx;
@@ -56,8 +56,8 @@ class InspectControllers extends ViewModelWidget<WidgetCaptureViewModel> {
               )),
         ...model.descriptionsForView.where(filterUnWantedWidgets).map(
               (description) => Positioned(
-                top: description.responsiveHeight(size.height),
-                left: description.responsiveWidth(size.width),
+                top: description.responsiveYPosition(size.height),
+                left: description.responsiveXPosition(size.width),
                 child: IgnorePointer(
                   ignoring: model.captureWidgetStatusEnum.isSelectWidgetMode,
                   child: GestureDetector(

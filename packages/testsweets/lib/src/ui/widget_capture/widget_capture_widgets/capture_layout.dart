@@ -27,8 +27,8 @@ class CaptureLayout extends ViewModelWidget<WidgetCaptureViewModel> {
         if (model.captureWidgetStatusEnum ==
             CaptureWidgetStatusEnum.captureModeWidgetNameInputShow)
           Positioned(
-              top: model.widgetDescription!.responsiveHeight(size.height),
-              left: model.widgetDescription!.responsiveWidth(size.width),
+              top: model.widgetDescription!.responsiveYPosition(size.height),
+              left: model.widgetDescription!.responsiveXPosition(size.width),
               child: GestureDetector(
                 onPanUpdate: (panEvent) {
                   final x = panEvent.delta.dx;
