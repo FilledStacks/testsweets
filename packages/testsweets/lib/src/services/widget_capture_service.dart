@@ -1,4 +1,4 @@
-import 'package:testsweets/src/app/app.logger.dart';
+import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
