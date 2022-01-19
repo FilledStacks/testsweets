@@ -33,23 +33,6 @@ class CloudFunctionsService {
       throw ret.body;
   }
 
-  // Future<void> uploadAutomationKeys(
-  //   String projectId,
-  //   String apiKey,
-  //   List<String> automationKeys,
-  // ) async {
-  //   final endpoint =
-  //       'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/uploadAutomationKeys';
-  //   print(
-  //       'projectId:$projectId,apiKey: $apiKey, automationKeys:$automationKeys ');
-  //   final ret = await httpService.postJson(to: endpoint, body: {
-  //     'projectId': projectId,
-  //     'automationKeys': automationKeys,
-  //   });
-
-  //   if (ret.statusCode != 200) throw ret.body;
-  // }
-
   Future<bool> doesBuildExistInProject(
     String projectId, {
     required String withVersion,

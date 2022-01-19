@@ -46,10 +46,6 @@ Future<void> main(
   if (!isMocking) await setupDartOnlyLocator();
   _testSweetsConfigFileService = dartOnlyLocator<TestSweetsConfigFileService>();
 
-  // print("Uploading automation keys ...");
-  // await extractAndUploadAutomationKeys();
-  // print('Successfully uploaded automation keys!');
-
   if (!onlyUploadAutomationKeys(command)) {
     final appType = args[1];
 
@@ -68,20 +64,6 @@ Future<void> main(
   }
   print("Done!");
 }
-
-// Future<void> extractAndUploadAutomationKeys() async {
-//   final automationKeys =
-//       dartOnlyLocator<AutomationKeysService>().extractKeysListFromJson();
-//   if (automationKeys.isNotEmpty) {
-//     final projectId = _testSweetsConfigFileService!
-//         .getValueFromConfigFileByKey(ConfigFileKeyType.ProjectId);
-//     final apiKey = _testSweetsConfigFileService!
-//         .getValueFromConfigFileByKey(ConfigFileKeyType.ApiKey);
-
-//     await dartOnlyLocator<CloudFunctionsService>()
-//         .uploadAutomationKeys(projectId, apiKey, automationKeys);
-//   }
-// }
 
 Future<void> uploadBuild(BuildInfo buildInfo) async {
   final projectId = _testSweetsConfigFileService!
