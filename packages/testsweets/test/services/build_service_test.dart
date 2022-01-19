@@ -18,7 +18,6 @@ void main() {
           () async {
         final buildService = BuildServiceImplementation();
 
-        ;
         expect(
             () => buildService.build(appType: testAppType),
             throwsA(BuildError(
@@ -90,12 +89,10 @@ void main() {
         final buildInfo = await instance.build(
             appType: testAppType, extraFlutterProcessArgs: testExtraArgs);
 
-        expect(buildInfo.pathToBuild,
-            r'myApp\build\app\outputs\flutter-apk\abc.apk');
+        expect(buildInfo.pathToBuild, 'myApp');
         expect(buildInfo.buildMode, testExtraArgs.first);
         expect(buildInfo.appType, testAppType);
         expect(buildInfo.version, '0.1.1');
-        // expect(buildInfo.automationKeysJson, ['home_view_home']);
       });
 
       test(
