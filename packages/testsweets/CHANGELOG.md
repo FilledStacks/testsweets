@@ -1,3 +1,7 @@
+### 1.6.0
+
+**Relative automation point placement**: We will now remember what the device resolution was that the automation point was captured on and try our best to scale in proportion those automation points to different size screens.
+
 ### 1.5.6
 
 - Fixes the testsweets run command
