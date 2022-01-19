@@ -2,15 +2,16 @@
 // in testsweets/test/helpers/test_helpers.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i5;
-import 'dart:ui' as _i7;
+import 'dart:async' as _i6;
+import 'dart:ui' as _i8;
 
+import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:testsweets/src/models/application_models.dart' as _i4;
-import 'package:testsweets/src/services/cloud_functions_service.dart' as _i8;
-import 'package:testsweets/src/services/http_service.dart' as _i2;
-import 'package:testsweets/src/services/testsweets_route_tracker.dart' as _i6;
-import 'package:testsweets/src/services/widget_capture_service.dart' as _i3;
+import 'package:testsweets/src/models/application_models.dart' as _i5;
+import 'package:testsweets/src/services/cloud_functions_service.dart' as _i9;
+import 'package:testsweets/src/services/http_service.dart' as _i3;
+import 'package:testsweets/src/services/testsweets_route_tracker.dart' as _i7;
+import 'package:testsweets/src/services/widget_capture_service.dart' as _i4;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -21,50 +22,56 @@ import 'package:testsweets/src/services/widget_capture_service.dart' as _i3;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeHttpService_0 extends _i1.Fake implements _i2.HttpService {}
+class _FakeLogger_0 extends _i1.Fake implements _i2.Logger {}
+
+class _FakeHttpService_1 extends _i1.Fake implements _i3.HttpService {}
 
 /// A class which mocks [WidgetCaptureService].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockWidgetCaptureService extends _i1.Mock
-    implements _i3.WidgetCaptureService {
+    implements _i4.WidgetCaptureService {
   @override
-  Map<String, List<_i4.WidgetDescription>> get widgetDescriptionMap =>
+  _i2.Logger get log =>
+      (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_0())
+          as _i2.Logger);
+  @override
+  Map<String, List<_i5.WidgetDescription>> get widgetDescriptionMap =>
       (super.noSuchMethod(Invocation.getter(#widgetDescriptionMap),
-              returnValue: <String, List<_i4.WidgetDescription>>{})
-          as Map<String, List<_i4.WidgetDescription>>);
+              returnValue: <String, List<_i5.WidgetDescription>>{})
+          as Map<String, List<_i5.WidgetDescription>>);
   @override
   bool get verbose =>
       (super.noSuchMethod(Invocation.getter(#verbose), returnValue: false)
           as bool);
   @override
-  _i5.Future<void> captureWidgetDescription(
-          {_i4.WidgetDescription? description, String? projectId}) =>
+  _i6.Future<void> captureWidgetDescription(
+          {_i5.WidgetDescription? description, String? projectId}) =>
       (super.noSuchMethod(
           Invocation.method(#captureWidgetDescription, [],
               {#description: description, #projectId: projectId}),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<void> loadWidgetDescriptionsForProject({String? projectId}) =>
+  _i6.Future<void> loadWidgetDescriptionsForProject({String? projectId}) =>
       (super.noSuchMethod(
           Invocation.method(
               #loadWidgetDescriptionsForProject, [], {#projectId: projectId}),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  void addWidgetDescriptionToMap({_i4.WidgetDescription? description}) =>
+  void addWidgetDescriptionToMap({_i5.WidgetDescription? description}) =>
       super.noSuchMethod(
           Invocation.method(
               #addWidgetDescriptionToMap, [], {#description: description}),
           returnValueForMissingStub: null);
   @override
-  List<_i4.WidgetDescription> getDescriptionsForView({String? currentRoute}) =>
+  List<_i5.WidgetDescription> getDescriptionsForView({String? currentRoute}) =>
       (super.noSuchMethod(
               Invocation.method(
                   #getDescriptionsForView, [], {#currentRoute: currentRoute}),
-              returnValue: <_i4.WidgetDescription>[])
-          as List<_i4.WidgetDescription>);
+              returnValue: <_i5.WidgetDescription>[])
+          as List<_i5.WidgetDescription>);
   @override
   bool checkCurrentViewIfAlreadyCaptured(String? originalViewName) =>
       (super.noSuchMethod(
@@ -72,21 +79,21 @@ class MockWidgetCaptureService extends _i1.Mock
               #checkCurrentViewIfAlreadyCaptured, [originalViewName]),
           returnValue: false) as bool);
   @override
-  _i5.Future<void> updateWidgetDescription(
-          {_i4.WidgetDescription? description, String? projectId}) =>
+  _i6.Future<void> updateWidgetDescription(
+          {_i5.WidgetDescription? description, String? projectId}) =>
       (super.noSuchMethod(
           Invocation.method(#updateWidgetDescription, [],
               {#description: description, #projectId: projectId}),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<void> deleteWidgetDescription(
-          {String? projectId, _i4.WidgetDescription? description}) =>
+  _i6.Future<void> deleteWidgetDescription(
+          {String? projectId, _i5.WidgetDescription? description}) =>
       (super.noSuchMethod(
           Invocation.method(#deleteWidgetDescription, [],
               {#projectId: projectId, #description: description}),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
   String toString() => super.toString();
 }
@@ -95,7 +102,11 @@ class MockWidgetCaptureService extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockTestSweetsRouteTracker extends _i1.Mock
-    implements _i6.TestSweetsRouteTracker {
+    implements _i7.TestSweetsRouteTracker {
+  @override
+  _i2.Logger get log =>
+      (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_0())
+          as _i2.Logger);
   @override
   bool get testMode =>
       (super.noSuchMethod(Invocation.getter(#testMode), returnValue: false)
@@ -160,11 +171,11 @@ class MockTestSweetsRouteTracker extends _i1.Mock
   void refreshUi() => super.noSuchMethod(Invocation.method(#refreshUi, []),
       returnValueForMissingStub: null);
   @override
-  void addListener(_i7.VoidCallback? listener) =>
+  void addListener(_i8.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#addListener, [listener]),
           returnValueForMissingStub: null);
   @override
-  void removeListener(_i7.VoidCallback? listener) =>
+  void removeListener(_i8.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#removeListener, [listener]),
           returnValueForMissingStub: null);
   @override
@@ -182,69 +193,73 @@ class MockTestSweetsRouteTracker extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockCloudFunctionsService extends _i1.Mock
-    implements _i8.CloudFunctionsService {
+    implements _i9.CloudFunctionsService {
   @override
-  _i2.HttpService get httpService =>
+  _i2.Logger get log =>
+      (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_0())
+          as _i2.Logger);
+  @override
+  _i3.HttpService get httpService =>
       (super.noSuchMethod(Invocation.getter(#httpService),
-          returnValue: _FakeHttpService_0()) as _i2.HttpService);
+          returnValue: _FakeHttpService_1()) as _i3.HttpService);
   @override
-  _i5.Future<String> getV4BuildUploadSignedUrl(
+  _i6.Future<String> getV4BuildUploadSignedUrl(
           String? projectId, String? apiKey,
           [Map<dynamic, dynamic>? extensionHeaders = const {}]) =>
       (super.noSuchMethod(
           Invocation.method(#getV4BuildUploadSignedUrl,
               [projectId, apiKey, extensionHeaders]),
-          returnValue: Future<String>.value('')) as _i5.Future<String>);
+          returnValue: Future<String>.value('')) as _i6.Future<String>);
   @override
-  _i5.Future<void> uploadAutomationKeys(
+  _i6.Future<void> uploadAutomationKeys(
           String? projectId, String? apiKey, List<String>? automationKeys) =>
       (super.noSuchMethod(
           Invocation.method(
               #uploadAutomationKeys, [projectId, apiKey, automationKeys]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i5.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i5.Future<bool> doesBuildExistInProject(String? projectId,
+  _i6.Future<bool> doesBuildExistInProject(String? projectId,
           {String? withVersion}) =>
       (super.noSuchMethod(
           Invocation.method(#doesBuildExistInProject, [projectId],
               {#withVersion: withVersion}),
-          returnValue: Future<bool>.value(false)) as _i5.Future<bool>);
+          returnValue: Future<bool>.value(false)) as _i6.Future<bool>);
   @override
-  _i5.Future<String> uploadWidgetDescriptionToProject(
-          {String? projectId, _i4.WidgetDescription? description}) =>
+  _i6.Future<String> uploadWidgetDescriptionToProject(
+          {String? projectId, _i5.WidgetDescription? description}) =>
       (super.noSuchMethod(
           Invocation.method(#uploadWidgetDescriptionToProject, [],
               {#projectId: projectId, #description: description}),
-          returnValue: Future<String>.value('')) as _i5.Future<String>);
+          returnValue: Future<String>.value('')) as _i6.Future<String>);
   @override
-  _i5.Future<List<_i4.WidgetDescription>> getWidgetDescriptionForProject(
+  _i6.Future<List<_i5.WidgetDescription>> getWidgetDescriptionForProject(
           {String? projectId}) =>
       (super.noSuchMethod(
               Invocation.method(
                   #getWidgetDescriptionForProject, [], {#projectId: projectId}),
-              returnValue: Future<List<_i4.WidgetDescription>>.value(
-                  <_i4.WidgetDescription>[]))
-          as _i5.Future<List<_i4.WidgetDescription>>);
+              returnValue: Future<List<_i5.WidgetDescription>>.value(
+                  <_i5.WidgetDescription>[]))
+          as _i6.Future<List<_i5.WidgetDescription>>);
   @override
-  _i5.Future<String> updateWidgetDescription(
+  _i6.Future<String> updateWidgetDescription(
           {String? projectId,
-          _i4.WidgetDescription? oldwidgetDescription,
-          _i4.WidgetDescription? newwidgetDescription}) =>
+          _i5.WidgetDescription? oldwidgetDescription,
+          _i5.WidgetDescription? newwidgetDescription}) =>
       (super.noSuchMethod(
           Invocation.method(#updateWidgetDescription, [], {
             #projectId: projectId,
             #oldwidgetDescription: oldwidgetDescription,
             #newwidgetDescription: newwidgetDescription
           }),
-          returnValue: Future<String>.value('')) as _i5.Future<String>);
+          returnValue: Future<String>.value('')) as _i6.Future<String>);
   @override
-  _i5.Future<String> deleteWidgetDescription(
-          {String? projectId, _i4.WidgetDescription? description}) =>
+  _i6.Future<String> deleteWidgetDescription(
+          {String? projectId, _i5.WidgetDescription? description}) =>
       (super.noSuchMethod(
           Invocation.method(#deleteWidgetDescription, [],
               {#projectId: projectId, #description: description}),
-          returnValue: Future<String>.value('')) as _i5.Future<String>);
+          returnValue: Future<String>.value('')) as _i6.Future<String>);
   @override
   String toString() => super.toString();
 }

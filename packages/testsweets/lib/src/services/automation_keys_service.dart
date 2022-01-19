@@ -17,9 +17,10 @@ class AutomationKeysServiceImplementation implements AutomationKeysService {
 
   @override
   List<String> extractKeysListFromJson() {
-    final flutterApp = _fileSystemService.fullPathToWorkingDirectory;
-    final pathToAppAutomationKeys = '$flutterApp\\app_automation_keys.json';
-    final pathToDynamicKeysFile = '$flutterApp\\dynamic_keys.json';
+    final pathToAppAutomationKeys = _fileSystemService
+        .fullPathToWorkingDirectory(fileName: 'app_automation_keys.json');
+    final pathToDynamicKeysFile = _fileSystemService.fullPathToWorkingDirectory(
+        fileName: 'dynamic_keys.json');
     List<String> appAutomationKeysJson = [];
 
     if (!_fileSystemService.doesFileExist(pathToAppAutomationKeys)) {
