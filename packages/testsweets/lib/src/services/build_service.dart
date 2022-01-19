@@ -84,7 +84,9 @@ class BuildServiceImplementation implements BuildService {
   }
 
   String findSubPathToBuild(String processStdout) {
-    final regexp = RegExp(r'build\\app\\outputs\\[\w-\\\.]+');
+    final regexp = !Platform.isWindows
+        ? RegExp(r'build\/app\/outputs\/[\w-\\\.]+')
+        : RegExp(r'build\\app\\outputs\\[\w-\\\.]+');
     final match = regexp.firstMatch(processStdout);
 
     if (match == null) throw BuildError('Could not find matches for $regexp');
