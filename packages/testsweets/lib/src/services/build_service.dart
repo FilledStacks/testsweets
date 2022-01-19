@@ -54,11 +54,9 @@ class BuildServiceImplementation implements BuildService {
 
     if (pathToBuild.isEmpty) {
       final flutterArgs = ['build', appType, ...extraFlutterProcessArgs];
-      print('flutterArgs: $flutterArgs');
       final runningFlutterProcess = await flutterProcess.startWith(
         args: flutterArgs,
       );
-
       final processStdoutCollector = Utf8CollectingStreamConsumer(stdout);
       final processStderrCollector = Utf8CollectingStreamConsumer(stderr);
 
@@ -72,8 +70,9 @@ class BuildServiceImplementation implements BuildService {
       }
 
       final processStdoutString = processStdoutCollector.collectAsString();
-      pathToBuild = fileSystemService.fullPathToWorkingDirectory(
-          fileName: findSubPathToBuild(processStdoutString));
+      final fileName = findSubPathToBuild(processStdoutString);
+      pathToBuild =
+          fileSystemService.fullPathToWorkingDirectory(fileName: fileName);
     }
     return BuildInfo(
       pathToBuild: pathToBuild,
@@ -85,7 +84,7 @@ class BuildServiceImplementation implements BuildService {
 
   String findSubPathToBuild(String processStdout) {
     final regexp = !Platform.isWindows
-        ? RegExp(r'build\/app\/outputs\/[\w-\\\.]+')
+        ? RegExp(r'build\/app\/outputs\/[\w-\\/.]+')
         : RegExp(r'build\\app\\outputs\\[\w-\\\.]+');
     final match = regexp.firstMatch(processStdout);
 
