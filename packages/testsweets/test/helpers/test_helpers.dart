@@ -66,12 +66,6 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
   _removeRegistrationIfExists<CloudFunctionsService>();
   final service = MockCloudFunctionsService();
 
-  when(service.uploadAutomationKeys(
-    any,
-    any,
-    any,
-  )).thenAnswer((_) => Future.value());
-
   when(service.getV4BuildUploadSignedUrl(
     any,
     any,
@@ -81,9 +75,6 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
   when(service.doesBuildExistInProject(any,
           withVersion: anyNamed('withVersion')))
       .thenAnswer((invocation) async => doesBuildExistInProjectResult);
-
-  when(service.uploadAutomationKeys(any, any, any))
-      .thenAnswer((realInvocation) => Future.value());
 
   when(service.uploadWidgetDescriptionToProject(
           projectId: anyNamed('projectId'),
