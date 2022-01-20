@@ -25,7 +25,6 @@ class FileSystemServiceImplementation implements FileSystemService {
 
   @override
   int getFileSizeInBytes(String path) {
-    print('path: $path');
     return File(path).lengthSync();
   }
 
