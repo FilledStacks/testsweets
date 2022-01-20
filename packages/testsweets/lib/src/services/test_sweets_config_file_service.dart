@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:testsweets/src/models/build_error.dart';
 import 'package:testsweets/utils/error_messages.dart';
@@ -21,9 +22,8 @@ class TestSweetsConfigFileService {
   final fileSystemService = FileSystemServiceImplementation();
 
   String getValueFromConfigFileByKey(ConfigFileKeyType keyType) {
-    final flutterProjectFullPath = fileSystemService.fullPathToWorkingDirectory;
-
-    final pathToTestSweetsConfigsFile = '$flutterProjectFullPath\\.testsweets';
+    final pathToTestSweetsConfigsFile =
+        fileSystemService.fullPathToWorkingDirectory(fileName: '.testsweets');
 
     if (!fileSystemService.doesFileExist(pathToTestSweetsConfigsFile)) {
       throw BuildError(ErrorMessages.projectConfigNotCreated);

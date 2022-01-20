@@ -57,7 +57,8 @@ MockFileSystemService getAndRegisterFileSystemService({
   });
   when(service.openFileForReading(any)).thenAnswer((_) => testDataStream);
   when(service.getFileSizeInBytes(any)).thenReturn(testContentLength);
-  when(service.fullPathToWorkingDirectory).thenReturn(testDirectoryPath);
+  when(service.fullPathToWorkingDirectory(fileName: anyNamed('fileName')))
+      .thenReturn(testDirectoryPath);
   dartOnlyLocator.registerSingleton<FileSystemService>(service);
   return service;
 }

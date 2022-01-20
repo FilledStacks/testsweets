@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:testsweets/src/app/app.logger.dart';
+import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/models/application_models.dart';
 
 import 'http_service.dart';
@@ -31,22 +31,6 @@ class CloudFunctionsService {
       return ret.parseBodyAsJsonMap()['url'];
     } else
       throw ret.body;
-  }
-
-  Future<void> uploadAutomationKeys(
-    String projectId,
-    String apiKey,
-    List<String> automationKeys,
-  ) async {
-    final endpoint =
-        'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/uploadAutomationKeys';
-
-    final ret = await httpService.postJson(to: endpoint, body: {
-      'projectId': projectId,
-      'automationKeys': automationKeys,
-    });
-
-    if (ret.statusCode != 200) throw ret.body;
   }
 
   Future<bool> doesBuildExistInProject(

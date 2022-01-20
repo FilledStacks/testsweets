@@ -38,15 +38,15 @@ class BuildServiceImplementation implements BuildService {
     List<String> extraFlutterProcessArgs = const <String>[],
     String pathToBuild = '',
   }) async {
-    final flutterApp = fileSystemService.fullPathToWorkingDirectory;
-    final pathToPubspecFile = '$flutterApp\\pubspec.yaml';
+    final pubspecYamlPath =
+        fileSystemService.fullPathToWorkingDirectory(fileName: 'pubspec.yaml');
 
-    if (!fileSystemService.doesFileExist(pathToPubspecFile)) {
-      throw BuildError(ErrorMessages.thereIsNoPubspecyamlFile(flutterApp));
+    if (!fileSystemService.doesFileExist(pubspecYamlPath)) {
+      throw BuildError(ErrorMessages.thereIsNoPubspecyamlFile(pubspecYamlPath));
     }
 
     YamlMap pubspec =
-        loadYaml(fileSystemService.readFileAsStringSync(pathToPubspecFile));
+        loadYaml(fileSystemService.readFileAsStringSync(pubspecYamlPath));
 
     if (pubspec['version'] == null) {
       throw BuildError(ErrorMessages.thereIsNoVersionInPubspecyamlFile);
@@ -72,7 +72,8 @@ class BuildServiceImplementation implements BuildService {
       }
 
       final processStdoutString = processStdoutCollector.collectAsString();
-      pathToBuild = '$flutterApp\\' + findSubPathToBuild(processStdoutString);
+      pathToBuild = fileSystemService.fullPathToWorkingDirectory(
+          fileName: findSubPathToBuild(processStdoutString));
     }
     return BuildInfo(
       pathToBuild: pathToBuild,

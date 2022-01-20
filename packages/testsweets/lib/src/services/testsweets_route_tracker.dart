@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:testsweets/src/app/app.logger.dart';
+import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
 
 class TestSweetsRouteTracker extends ChangeNotifier {
