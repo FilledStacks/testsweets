@@ -64,11 +64,10 @@ class WidgetPosition with _$WidgetPosition {
   factory WidgetPosition({
     required double x,
     required double y,
-    required double capturedDeviceWidth,
-    required double capturedDeviceHeight,
+    double? capturedDeviceWidth,
+    double? capturedDeviceHeight,
   }) = _WidgetPosition;
-  factory WidgetPosition.empty() => WidgetPosition(
-      x: 0, y: 0, capturedDeviceWidth: 0, capturedDeviceHeight: 0);
+  factory WidgetPosition.empty() => WidgetPosition(x: 0, y: 0);
   factory WidgetPosition.fromJson(Map<String, dynamic> json) =>
       _$WidgetPositionFromJson(json);
 }

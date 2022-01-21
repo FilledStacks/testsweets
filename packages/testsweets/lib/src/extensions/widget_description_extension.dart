@@ -10,13 +10,24 @@ extension WidgetDescriptionUtils on WidgetDescription {
       (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
 
   double _calculateHeightRatio(double currentScreenHeight) {
-    if (this.position.capturedDeviceHeight == 0) return 1;
-    return currentScreenHeight / this.position.capturedDeviceHeight;
+    /// If the [capturedDeviceHeight] is null or 0 return 1
+    /// which will leave the original hight unchanged
+    if (this.position.capturedDeviceHeight == 0 ||
+        this.position.capturedDeviceHeight == null) {
+      return 1;
+    } else {
+      return currentScreenHeight / this.position.capturedDeviceHeight!;
+    }
   }
 
   double _calculateWidthRatio(double currentScreenWidth) {
-    if (this.position.capturedDeviceWidth == 0) return 1;
-
-    return currentScreenWidth / this.position.capturedDeviceWidth;
+    /// If the [capturedDeviceHeight] is null or 0 return 1
+    /// which will leave the original hight unchanged
+    if (this.position.capturedDeviceWidth == 0 ||
+        this.position.capturedDeviceWidth == null) {
+      return 1;
+    } else {
+      return currentScreenWidth / this.position.capturedDeviceWidth!;
+    }
   }
 }

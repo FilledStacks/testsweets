@@ -67,8 +67,8 @@ _$_WidgetPosition _$$_WidgetPositionFromJson(Map<String, dynamic> json) =>
     _$_WidgetPosition(
       x: (json['x'] as num).toDouble(),
       y: (json['y'] as num).toDouble(),
-      capturedDeviceWidth: (json['capturedDeviceWidth'] as num).toDouble(),
-      capturedDeviceHeight: (json['capturedDeviceHeight'] as num).toDouble(),
+      capturedDeviceWidth: (json['capturedDeviceWidth'] as num?)?.toDouble(),
+      capturedDeviceHeight: (json['capturedDeviceHeight'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$_WidgetPositionToJson(_$_WidgetPosition instance) =>
