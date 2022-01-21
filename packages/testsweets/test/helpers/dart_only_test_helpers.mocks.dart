@@ -208,14 +208,6 @@ class MockCloudFunctionsService extends _i1.Mock
               [projectId, apiKey, extensionHeaders]),
           returnValue: Future<String>.value('')) as _i9.Future<String>);
   @override
-  _i9.Future<void> uploadAutomationKeys(
-          String? projectId, String? apiKey, List<String>? automationKeys) =>
-      (super.noSuchMethod(
-          Invocation.method(
-              #uploadAutomationKeys, [projectId, apiKey, automationKeys]),
-          returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
-  @override
   _i9.Future<bool> doesBuildExistInProject(String? projectId,
           {String? withVersion}) =>
       (super.noSuchMethod(

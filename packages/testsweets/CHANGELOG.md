@@ -1,3 +1,8 @@
+### 1.6.1
+
+- Fix `buildAndUpload` for windows and mac
+- Relative automation point is now optional(old keys will not break any more)
+
 ### 1.6.0
 
 **Relative automation point placement**: We will now remember what the device resolution was that the automation point was captured on and try our best to scale in proportion those automation points to different size screens.

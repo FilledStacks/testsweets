@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/dart_only_locator.dart';
@@ -70,7 +72,9 @@ MockFlutterProcess getAndRegisterFlutterProcess() {
     return Future.value(StubbedProcess(
         sExitCode: 0,
         sStdErr: '',
-        sStdOut: 'build\\app\\outputs\\flutter-apk\\abc.apk'));
+        sStdOut: !Platform.isWindows
+            ? 'build\/app\/outputs\/flutter-apk\/abc.apk'
+            : 'build\\app\\outputs\\flutter-apk\\abc.apk'));
   });
 
   dartOnlyLocator.registerSingleton<FlutterProcess>(service);
@@ -152,12 +156,6 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
   _removeRegistrationIfExists<CloudFunctionsService>();
   final service = MockCloudFunctionsService();
 
-  when(service.uploadAutomationKeys(
-    any,
-    any,
-    any,
-  )).thenAnswer((_) => Future.value());
-
   when(service.getV4BuildUploadSignedUrl(
     any,
     any,
@@ -167,9 +165,6 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
   when(service.doesBuildExistInProject(any,
           withVersion: anyNamed('withVersion')))
       .thenAnswer((invocation) async => doesBuildExistInProjectResult);
-
-  when(service.uploadAutomationKeys(any, any, any))
-      .thenAnswer((realInvocation) => Future.value());
 
   when(service.uploadWidgetDescriptionToProject(
           projectId: anyNamed('projectId'),

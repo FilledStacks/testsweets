@@ -41,7 +41,6 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
               right: 15,
               top: 15,
               child: IconButton(
-                tooltip: 'Toggle to see the keys',
                 icon: Icon(
                   Icons.remove_red_eye,
                   color: _showDebugInformation
@@ -68,9 +67,11 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
                 decoration: BoxDecoration(
                   color: Color(0x01000000),
                   borderRadius: BorderRadius.circular(5),
-                  border: _showDebugInformation
-                      ? Border.all(color: Colors.red, width: 1)
-                      : null,
+                  border: Border.all(
+                      color: _showDebugInformation
+                          ? Colors.red
+                          : Colors.transparent,
+                      width: 1),
                 ),
               ),
             ),
