@@ -1,4 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/build_info.dart';
+import 'package:testsweets/testsweets.dart';
+
+import 'test_helpers.dart';
 
 const String ksPubspecFileWithNoVersion = """
 name: myApp
@@ -66,3 +71,17 @@ const List<String> testDynamicAutomationKeys = ['orders_touchable_ready'];
 const int testContentLength = 2;
 final testDataStream = Stream.value([1, 2, 3]);
 final testDateTime = DateTime.utc(1993, 12, 12, 12);
+final testWidgetDescription = WidgetDescription(
+    viewName: 'viewName',
+    originalViewName: 'originalViewName',
+    name: 'widgetName',
+    widgetType: WidgetType.general,
+    position: WidgetPosition.empty());
+final scrollEndNotificationTest = ScrollEndNotification(
+    metrics: FixedScrollMetrics(
+        minScrollExtent: 50,
+        maxScrollExtent: 100,
+        pixels: 50,
+        viewportDimension: 33,
+        axisDirection: AxisDirection.right),
+    context: MockBuildContext());

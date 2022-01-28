@@ -28,6 +28,9 @@ class WidgetDescription with _$WidgetDescription {
 
     /// The position we defined for he widget
     required WidgetPosition position,
+
+    /// Whether the key will be visible to the driver or not
+    @Default(true) bool visibility,
   }) = _WidgetDescription;
   factory WidgetDescription.addView(
           {required String viewName, required String originalViewName}) =>

@@ -10,8 +10,11 @@ import 'package:mockito/mockito.dart' as _i1;
 import 'package:testsweets/src/models/application_models.dart' as _i5;
 import 'package:testsweets/src/services/cloud_functions_service.dart' as _i9;
 import 'package:testsweets/src/services/http_service.dart' as _i3;
+import 'package:testsweets/src/services/sweetcore_command.dart' as _i11;
 import 'package:testsweets/src/services/testsweets_route_tracker.dart' as _i7;
 import 'package:testsweets/src/services/widget_capture_service.dart' as _i4;
+import 'package:testsweets/src/services/widget_visibilty_changer_service.dart'
+    as _i10;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -252,6 +255,24 @@ class MockCloudFunctionsService extends _i1.Mock
           Invocation.method(#deleteWidgetDescription, [],
               {#projectId: projectId, #description: description}),
           returnValue: Future<String>.value('')) as _i6.Future<String>);
+  @override
+  String toString() => super.toString();
+}
+
+/// A class which mocks [WidgetVisibiltyChangerService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockWidgetVisibiltyChangerService extends _i1.Mock
+    implements _i10.WidgetVisibiltyChangerService {
+  @override
+  set latestSweetcoreCommand(_i11.SweetcoreCommand? _latestSweetcoreCommand) =>
+      super.noSuchMethod(
+          Invocation.setter(#latestSweetcoreCommand, _latestSweetcoreCommand),
+          returnValueForMissingStub: null);
+  @override
+  _i5.WidgetDescription? execute(_i5.WidgetDescription? widgetDescription) =>
+      (super.noSuchMethod(Invocation.method(#execute, [widgetDescription]))
+          as _i5.WidgetDescription?);
   @override
   String toString() => super.toString();
 }
