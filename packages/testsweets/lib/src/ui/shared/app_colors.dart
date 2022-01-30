@@ -5,6 +5,7 @@ const kcSweetsAppBarColor = const Color.fromARGB(255, 47, 46, 75);
 const kcAutoCompleteOptionViewNameColor =
     const Color.fromARGB(255, 137, 137, 167);
 const kcSweetsDarkerNavy = const Color.fromARGB(255, 30, 32, 47);
+const kcBottomSheetBackground = const Color.fromRGBO(32, 33, 41, 0.95);
 
 const kcPrimaryFuchsia = const Color.fromARGB(255, 253, 113, 215);
 const kcPrimaryPurple = const Color.fromARGB(255, 150, 144, 254);

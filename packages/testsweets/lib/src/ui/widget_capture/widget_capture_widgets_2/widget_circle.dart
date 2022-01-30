@@ -20,12 +20,9 @@ class WidgetCircle extends StatelessWidget {
         height: WIDGET_DESCRIPTION_VISUAL_SIZE,
         decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(
-              color: widgetType.getColorOfWidgetType,
-            )),
+            border:
+                Border.all(color: widgetType.getColorOfWidgetType, width: 2)),
         child: Text(widgetType.returnFirstLetterOfWidgetTypeCapitalized,
-            textAlign: TextAlign.center,
-            style: positionWidgetStyle.copyWith(
-                height: 1.15, color: widgetType.getColorOfWidgetType)));
+            textAlign: TextAlign.center, style: positionWidgetStyle));
   }
 }

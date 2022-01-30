@@ -22,7 +22,8 @@ dependencies:
   logger: ^1.1.0
   recase: ^4.0.0
   flutter_screenutil: ^5.0.0+2
-
+  solid_bottom_sheet: ^0.1.10
+  flutter_svg: ^1.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -33,3 +34,10 @@ dev_dependencies:
   freezed: ^0.14.5
   json_serializable: ^5.0.2
   mockito: ^5.0.16
+
+
+flutter:
+
+  assets:
+   - assets/svgs/
+

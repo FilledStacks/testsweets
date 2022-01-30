@@ -9,12 +9,26 @@ extension WidgetTypeFlutterExtension on WidgetType {
       case WidgetType.touchable:
         return kcPrimaryFuchsia;
       case WidgetType.input:
-        return kcPrimaryPurple;
+        return kcRunningTestYellowColor;
       case WidgetType.scrollable:
         return kcSecondaryGreen;
 
       default:
         return kcError;
+    }
+  }
+
+  String get getTitleOfWidgetType {
+    switch (this) {
+      case WidgetType.touchable:
+        return 'Touchable';
+      case WidgetType.input:
+        return 'Input';
+      case WidgetType.scrollable:
+        return 'Scrollable';
+
+      default:
+        return 'Unknown';
     }
   }
 }

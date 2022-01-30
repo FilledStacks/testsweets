@@ -28,6 +28,12 @@ class WidgetDescription with _$WidgetDescription {
 
     /// The position we defined for he widget
     required WidgetPosition position,
+
+    /// Whether the key will be visible to the driver or not
+    @Default(true) bool visibility,
+
+    /// Widget that we need to take
+    List<String>? targetedWidgets,
   }) = _WidgetDescription;
   factory WidgetDescription.addView(
           {required String viewName, required String originalViewName}) =>

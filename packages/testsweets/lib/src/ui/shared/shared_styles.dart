@@ -4,22 +4,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'app_colors.dart';
 
 TextStyle tsSmall() => TextStyle(
-      fontFamily: "Roboto",
-      fontWeight: FontWeight.w400,
-      fontSize: 12.sp,
-    );
+    fontFamily: "Roboto",
+    fontWeight: FontWeight.w400,
+    fontSize: 12.sp,
+    color: kcPrimaryWhite);
 TextStyle tsNormalBold() => TextStyle(
-      fontFamily: "Roboto",
-      fontWeight: FontWeight.w600,
-      fontSize: 14.sp,
-    );
+    fontFamily: "Roboto",
+    fontWeight: FontWeight.w600,
+    fontSize: 14.sp,
+    color: kcPrimaryWhite);
 TextStyle tsNormal() => TextStyle(
-      fontFamily: "Roboto",
-      fontWeight: FontWeight.w400,
-      fontSize: 16.sp,
-    );
+    fontFamily: "Roboto",
+    fontWeight: FontWeight.w400,
+    fontSize: 16.sp,
+    color: kcPrimaryWhite);
 TextStyle tsMedium() => TextStyle(
       fontFamily: "Roboto",
+      color: kcPrimaryWhite,
       fontWeight: FontWeight.w500,
       fontSize: 16.sp,
     );
@@ -52,7 +53,7 @@ const boldStyle =
 const lightStyle = TextStyle(fontSize: 19, color: Colors.white);
 
 const positionWidgetStyle = TextStyle(
-    fontSize: 40,
+    fontSize: 36,
     fontWeight: FontWeight.bold,
     color: Colors.white,
     height: 1.2);
