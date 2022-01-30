@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
-import 'package:testsweets/src/ui/shared/app_colors.dart';
+import 'package:testsweets/src/enums/capture_widget_enum.dart';
+import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets_2/bottom_sheet_body.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/info_form.dart';
 
-@FormView(fields: [FormTextField(name: 'widgetName')])
+import 'widget_capture_widgets/draggable_bottom_sheet.dart';
+
 class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
   final String projectId;
   final String? apiKey;
@@ -27,30 +28,25 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
     return ViewModelBuilder<WidgetCaptureViewModel>.reactive(
       onModelReady: (model) {
         listenToFormUpdated(model);
-        widgetNameFocusNode.addListener(() {
-          model.setWidgetNameFocused(widgetNameFocusNode.hasFocus);
-        });
+        // widgetNameFocusNode.addListener(() {
+        //   model.setWidgetNameFocused(widgetNameFocusNode.hasFocus);
+        // });
       },
-      builder: (context, model, _) => ScreenUtilInit(
-          builder: () => Scaffold(
-                body: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    child,
-                    SolidBottomSheet(
-                      headerBar: SvgPicture.asset(
-                        'packages/testsweets/assets/svgs/up_arrow_handle.svg',
-                      ),
-                      minHeight: 0,
-                      maxHeight: 125,
-                      toggleVisibilityOnTap: true,
-                      body: BottomSheetBody(
-                        onWidgetTypeTap: (widgetType) {},
-                      ),
-                    ),
-                  ],
-                ),
-              )),
+      builder: (context, model, _) => Scaffold(
+        body: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            child,
+            if (model.captureWidgetStatusEnum.selectWidgetTypeMode)
+              DraggableBottomSheet(),
+            if (model.captureWidgetStatusEnum.infoFormMode)
+              InfoForm(
+                submitWidgetInfoForm: model.submitWidgetInfoForm,
+                closeWidgetInfoForm: model.closeInfoForm,
+              ),
+          ],
+        ),
+      ),
       viewModelBuilder: () => WidgetCaptureViewModel(projectId: projectId),
     );
   }

@@ -7,4 +7,11 @@ enum CaptureWidgetStatusEnum {
   captureModeAddWidget,
   captureModeWidgetsContainerShow,
   captureModeWidgetNameInputShow,
+
+  ///
+  ///
+  ///
+  widgetTypeBottomSheetOpen,
+  widgetTypeBottomSheetClosed,
+  widgetInfoForm,
 }

@@ -1,65 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'app_colors.dart';
 
 TextStyle tsSmall() => TextStyle(
     fontFamily: "Roboto",
     fontWeight: FontWeight.w400,
-    fontSize: 12.sp,
+    fontSize: 12,
     color: kcPrimaryWhite);
 TextStyle tsNormalBold() => TextStyle(
     fontFamily: "Roboto",
     fontWeight: FontWeight.w600,
-    fontSize: 14.sp,
+    fontSize: 14,
     color: kcPrimaryWhite);
 TextStyle tsNormal() => TextStyle(
     fontFamily: "Roboto",
     fontWeight: FontWeight.w400,
-    fontSize: 16.sp,
+    fontSize: 16,
     color: kcPrimaryWhite);
 TextStyle tsMedium() => TextStyle(
       fontFamily: "Roboto",
       color: kcPrimaryWhite,
       fontWeight: FontWeight.w500,
-      fontSize: 16.sp,
+      fontSize: 16,
     );
 TextStyle tsLarge() => TextStyle(
       fontFamily: "Roboto",
       fontWeight: FontWeight.w600,
-      fontSize: 18.sp,
+      fontSize: 18,
     );
 
 TextStyle tsExtraLarge() => TextStyle(
       fontFamily: "Roboto",
       fontWeight: FontWeight.w700,
-      fontSize: 40.sp,
+      fontSize: 32,
     );
 TextStyle tsActiveRoute(bool darkMode) => TextStyle(
       fontFamily: "Roboto",
       color: darkMode ? kcPrimaryWhite : kcAutocompleteBackground,
       fontWeight: FontWeight.w600,
-      fontSize: 18.sp,
+      fontSize: 18,
     );
 TextStyle tsDisableRoute() => TextStyle(
       fontFamily: "Roboto",
       fontWeight: FontWeight.w600,
       color: kcSubtext,
-      fontSize: 16.sp,
+      fontSize: 16,
     );
 const boldStyle =
     TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white);
 
 const lightStyle = TextStyle(fontSize: 19, color: Colors.white);
 
-const positionWidgetStyle = TextStyle(
-    fontSize: 36,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-    height: 1.2);
-
 Radius crButtonCornerRadius() => Radius.circular(8);
-Radius crTextFieldCornerRadius() => Radius.circular(8.w);
+Radius crTextFieldCornerRadius() => Radius.circular(8);
 
 const EdgeInsets buttonPadding =
     const EdgeInsets.symmetric(horizontal: 20, vertical: 22);
@@ -143,3 +136,7 @@ class FadeInWidget extends StatelessWidget {
     );
   }
 }
+
+const kdBlackRoundedEdgeDecoration = BoxDecoration(
+    color: kcBottomSheetBackground,
+    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)));

@@ -13,4 +13,9 @@ extension CaptureWidgetEnumUnion on CaptureWidgetStatusEnum {
   bool get isSelectWidgetMode =>
       this == CaptureWidgetStatusEnum.inspectModeUpdate ||
       this == CaptureWidgetStatusEnum.inspectModeDialogShow;
+
+  bool get selectWidgetTypeMode =>
+      this == CaptureWidgetStatusEnum.widgetTypeBottomSheetClosed ||
+      this == CaptureWidgetStatusEnum.widgetTypeBottomSheetOpen;
+  bool get infoFormMode => this == CaptureWidgetStatusEnum.widgetInfoForm;
 }

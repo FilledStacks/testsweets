@@ -15,17 +15,10 @@ class MultiStyleText extends ViewModelWidget<WidgetCaptureViewModel> {
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
     return Text.rich(
       TextSpan(children: [
+        TextSpan(style: lightStyle.copyWith(color: kcCard), text: title),
         TextSpan(
             style: lightStyle.copyWith(
-                color: model.isDarkMode ? kcPrimaryPurple : kcCard),
-            text: title),
-        TextSpan(
-            style: lightStyle.copyWith(
-              color: body.isEmpty
-                  ? kcError
-                  : model.isDarkMode
-                      ? kcPrimaryWhite
-                      : kcSubtext,
+              color: body.isEmpty ? kcError : kcSubtext,
             ),
             text: body.isEmpty ? '(empty)' : body),
       ]),

@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 const String WidgetNameValueKey = 'widgetName';
+const String VisibleValueKey = 'visible';
 
 mixin $WidgetCaptureView on StatelessWidget {
   final TextEditingController widgetNameController = TextEditingController();
@@ -40,8 +41,25 @@ mixin $WidgetCaptureView on StatelessWidget {
 
 extension ValueProperties on FormViewModel {
   String? get widgetNameValue => this.formValueMap[WidgetNameValueKey];
+  DateTime? get visibleValue => this.formValueMap[VisibleValueKey];
 
   bool get hasWidgetName => this.formValueMap.containsKey(WidgetNameValueKey);
+  bool get hasVisible => this.formValueMap.containsKey(VisibleValueKey);
 }
 
-extension Methods on FormViewModel {}
+extension Methods on FormViewModel {
+  Future<void> selectVisible(
+      {required BuildContext context,
+      required DateTime initialDate,
+      required DateTime firstDate,
+      required DateTime lastDate}) async {
+    final selectedDate = await showDatePicker(
+        context: context,
+        initialDate: initialDate,
+        firstDate: firstDate,
+        lastDate: lastDate);
+    if (selectedDate != null) {
+      this.setData(this.formValueMap..addAll({VisibleValueKey: selectedDate}));
+    }
+  }
+}
