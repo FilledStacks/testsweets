@@ -8,13 +8,11 @@ import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.d
 import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/models/widget_form_info_model.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
-import 'package:testsweets/utils/error_messages.dart';
 
-import 'widget_capture_view.form.dart';
-
-class WidgetCaptureViewModel extends FormViewModel {
+class WidgetCaptureViewModel extends BaseViewModel {
   final log = getLogger('WidgetCaptureViewModel');
 
   final String projectId;
@@ -40,11 +38,31 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusy(false);
   }
 
-  @override
-  void setFormStatus() {
-    _widgetDescription =
-        _widgetDescription?.copyWith(name: widgetNameValue ?? '');
+  void onWidgetTypeSelected(WidgetType widgetType) async {
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetInfoForm;
   }
+
+  void addWidgetInfo() {}
+
+  void submitWidgetInfoForm(WidgetFormInfoModel widgetFormInfoModel) {}
+  void closeInfoForm() {
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetTypeSelector;
+  }
+
+  CaptureWidgetStatusEnum _captureWidgetStatusEnum =
+      CaptureWidgetStatusEnum.widgetTypeSelector;
+  set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
+    _captureWidgetStatusEnum = captureWidgetStatusEnum;
+    notifyListeners();
+  }
+
+  CaptureWidgetStatusEnum get captureWidgetStatusEnum =>
+      _captureWidgetStatusEnum;
+  List<WidgetDescription> get descriptionsForView =>
+      _widgetCaptureService.getDescriptionsForView(
+        currentRoute: _testSweetsRouteTracker.currentRoute,
+      );
+
   // bool _hasWidgetNameFocus = false;
   // bool get hasWidgetNameFocus => _hasWidgetNameFocus;
   // void setWidgetNameFocused(bool hasFocus) {
@@ -63,26 +81,12 @@ class WidgetCaptureViewModel extends FormViewModel {
   //     _testSweetsRouteTracker.toggleActivatedRouteBetweenParentAndChild();
 
   /// the status enum that express the current state of the view
-  CaptureWidgetStatusEnum _captureWidgetStatusEnum =
-      CaptureWidgetStatusEnum.widgetTypeBottomSheetClosed;
-  set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
-    _captureWidgetStatusEnum = captureWidgetStatusEnum;
-    notifyListeners();
-  }
-
-  CaptureWidgetStatusEnum get captureWidgetStatusEnum =>
-      _captureWidgetStatusEnum;
 
   // bool _widgetNameInputPositionIsDown = true;
   // bool get widgetNameInputPositionIsDown => _widgetNameInputPositionIsDown;
 
   // String _inputErrorMessage = '';
   // String get nameInputErrorMessage => _inputErrorMessage;
-
-  // List<WidgetDescription> get descriptionsForView =>
-  //     _widgetCaptureService.getDescriptionsForView(
-  //       currentRoute: _testSweetsRouteTracker.currentRoute,
-  //     );
 
   // void toggleCaptureView() {
   //   if (captureWidgetStatusEnum.isAtCaptureMode)
@@ -292,14 +296,4 @@ class WidgetCaptureViewModel extends FormViewModel {
   ///
   ///
 
-  void onWidgetTypeSelected(WidgetType widgetType) async {
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetInfoForm;
-  }
-
-  void addWidgetInfo() {}
-
-  void submitWidgetInfoForm() {}
-  void closeInfoForm() {
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetTypeBottomSheetOpen;
-  }
 }

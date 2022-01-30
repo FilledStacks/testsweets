@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
-import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
@@ -10,30 +9,16 @@ import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_c
 import 'package:provider/provider.dart';
 import 'widget_card.dart';
 
-class DraggableBottomSheet extends StatefulWidget {
-  const DraggableBottomSheet({
+class TypeSelector extends StatelessWidget {
+  const TypeSelector({
     Key? key,
   }) : super(key: key);
-
-  @override
-  State<DraggableBottomSheet> createState() => _DraggableBottomSheetState();
-}
-
-class _DraggableBottomSheetState extends State<DraggableBottomSheet> {
-  late SolidController solidController;
-  @override
-  void initState() {
-    solidController = SolidController();
-
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final model = context.watch<WidgetCaptureViewModel>();
 
     return SolidBottomSheet(
-      controller: solidController,
+      showOnAppear: true,
       headerBar: SvgPicture.asset(
         'packages/testsweets/assets/svgs/up_arrow_handle.svg',
       ),
