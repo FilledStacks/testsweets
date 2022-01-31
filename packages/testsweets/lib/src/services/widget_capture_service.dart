@@ -48,7 +48,7 @@ class WidgetCaptureService {
     if (widgetDescriptionMap.containsKey(description.originalViewName)) {
       widgetDescriptionMap[description.originalViewName]?.add(description);
     } else {
-      widgetDescriptionMap[description.originalViewName] = [description];
+      widgetDescriptionMap[description.originalViewName!] = [description];
     }
   }
 

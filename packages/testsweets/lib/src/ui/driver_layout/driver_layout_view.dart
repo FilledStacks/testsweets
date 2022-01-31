@@ -79,9 +79,9 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
           if (_showDebugInformation)
             ...model.descriptionsForView.map(
               (description) => Positioned(
-                top: description.position.y -
+                top: description.position!.y -
                     (WIDGET_DESCRIPTION_VISUAL_SIZE / 3),
-                left: description.position.x -
+                left: description.position!.x -
                     (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
                 child: Container(
                   color: kcFailTestRedColor,

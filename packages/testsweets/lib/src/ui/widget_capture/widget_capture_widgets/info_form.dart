@@ -7,16 +7,16 @@ import 'package:testsweets/src/ui/shared/icon_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
+import 'draggable_widget.dart';
+
 class InfoForm extends StatefulWidget {
   final Function(WidgetFormInfoModel) submitWidgetInfoForm;
   final VoidCallback closeWidgetInfoForm;
-  final WidgetFormInfoModel? widgetFormInfoModel;
 
   const InfoForm({
     Key? key,
     required this.submitWidgetInfoForm,
     required this.closeWidgetInfoForm,
-    this.widgetFormInfoModel,
   }) : super(key: key);
 
   @override
@@ -41,7 +41,7 @@ class _InfoFormState extends State<InfoForm> {
         'packages/testsweets/assets/svgs/up_arrow_handle.svg',
       ),
       minHeight: 0,
-      maxHeight: 150,
+      maxHeight: 156,
       toggleVisibilityOnTap: true,
       body: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -153,9 +153,6 @@ class _InfoFormState extends State<InfoForm> {
                     svgIcon: 'packages/testsweets/assets/svgs/tick.svg',
                     svgWidth: 30)
               ],
-            ),
-            const SizedBox(
-              width: 12,
             ),
           ],
         ),

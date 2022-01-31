@@ -9,12 +9,13 @@ part of 'application_models.dart';
 _$_WidgetDescription _$$_WidgetDescriptionFromJson(Map<String, dynamic> json) =>
     _$_WidgetDescription(
       id: json['id'] as String?,
-      viewName: json['viewName'] as String,
-      originalViewName: json['originalViewName'] as String,
-      name: json['name'] as String,
+      viewName: json['viewName'] as String?,
+      originalViewName: json['originalViewName'] as String?,
+      name: json['name'] as String?,
       widgetType: _$enumDecode(_$WidgetTypeEnumMap, json['widgetType']),
-      position:
-          WidgetPosition.fromJson(json['position'] as Map<String, dynamic>),
+      position: json['position'] == null
+          ? null
+          : WidgetPosition.fromJson(json['position'] as Map<String, dynamic>),
       visibility: json['visibility'] as bool? ?? true,
       targetedWidgets: (json['targetedWidgets'] as List<dynamic>?)
           ?.map((e) => e as String)

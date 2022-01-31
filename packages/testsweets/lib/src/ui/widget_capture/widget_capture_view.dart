@@ -5,6 +5,7 @@ import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.d
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/info_form.dart';
 
+import 'widget_capture_widgets/draggable_widget.dart';
 import 'widget_capture_widgets/type_selector.dart';
 
 class WidgetCaptureView extends StatelessWidget {
@@ -29,6 +30,7 @@ class WidgetCaptureView extends StatelessWidget {
             if (model.captureWidgetStatusEnum.widgetTypeSelector)
               TypeSelector(),
             if (model.captureWidgetStatusEnum.infoFormMode) ...[
+              DraggableWidget(),
               InfoForm(
                 submitWidgetInfoForm: model.submitWidgetInfoForm,
                 closeWidgetInfoForm: model.closeInfoForm,

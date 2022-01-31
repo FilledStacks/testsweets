@@ -25,6 +25,11 @@ class WidgetCaptureViewModel extends BaseViewModel {
   WidgetDescription? _widgetDescription;
   WidgetDescription? get widgetDescription => _widgetDescription;
 
+  List<WidgetDescription> get descriptionsForView =>
+      _widgetCaptureService.getDescriptionsForView(
+        currentRoute: _testSweetsRouteTracker.currentRoute,
+      );
+
   Future<void> syncWithFirestoreWidgetKeys(
       {required String projectId, bool enableBusy = true}) async {
     if (enableBusy) setBusy(true);
@@ -39,12 +44,14 @@ class WidgetCaptureViewModel extends BaseViewModel {
   }
 
   void onWidgetTypeSelected(WidgetType widgetType) async {
+    _widgetDescription = WidgetDescription(widgetType: widgetType);
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetInfoForm;
   }
 
   void addWidgetInfo() {}
 
   void submitWidgetInfoForm(WidgetFormInfoModel widgetFormInfoModel) {}
+
   void closeInfoForm() {
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetTypeSelector;
   }
@@ -58,11 +65,23 @@ class WidgetCaptureViewModel extends BaseViewModel {
 
   CaptureWidgetStatusEnum get captureWidgetStatusEnum =>
       _captureWidgetStatusEnum;
-  List<WidgetDescription> get descriptionsForView =>
-      _widgetCaptureService.getDescriptionsForView(
-        currentRoute: _testSweetsRouteTracker.currentRoute,
-      );
 
+  void updateDescriptionPosition(
+    double x,
+    double y,
+    double capturedDeviceWidth,
+    double capturedDeviceHeight,
+  ) {
+    _widgetDescription = _widgetDescription!.copyWith(
+      position: WidgetPosition(
+        capturedDeviceHeight: capturedDeviceHeight,
+        capturedDeviceWidth: capturedDeviceWidth,
+        x: (_widgetDescription!.position?.x ?? capturedDeviceWidth / 2) + x,
+        y: (_widgetDescription!.position?.y ?? capturedDeviceHeight / 2) + y,
+      ),
+    );
+    notifyListeners();
+  }
   // bool _hasWidgetNameFocus = false;
   // bool get hasWidgetNameFocus => _hasWidgetNameFocus;
   // void setWidgetNameFocused(bool hasFocus) {
@@ -100,23 +119,6 @@ class WidgetCaptureViewModel extends BaseViewModel {
   //     captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
   //   else
   //     captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
-  // }
-
-  // void updateDescriptionPosition(
-  //   double x,
-  //   double y,
-  //   double capturedDeviceWidth,
-  //   double capturedDeviceHeight,
-  // ) {
-  //   _widgetDescription = _widgetDescription!.copyWith(
-  //     position: WidgetPosition(
-  //       capturedDeviceHeight: capturedDeviceHeight,
-  //       capturedDeviceWidth: capturedDeviceWidth,
-  //       x: _widgetDescription!.position.x + x,
-  //       y: _widgetDescription!.position.y + y,
-  //     ),
-  //   );
-  //   notifyListeners();
   // }
 
   // Future<void> saveWidgetDescription() async {

@@ -15,19 +15,19 @@ class WidgetDescription with _$WidgetDescription {
     String? id,
 
     /// The name of the view this widget was captured on
-    required String viewName,
+    String? viewName,
 
     /// The orignal name of the view this widget was captured on before the prettify
-    required String originalViewName,
+    String? originalViewName,
 
     /// The name we want to use when referring to the widget in the scripts
-    required String name,
+    String? name,
 
     /// The type of the widget that's being added
     required WidgetType widgetType,
 
     /// The position we defined for he widget
-    required WidgetPosition position,
+    WidgetPosition? position,
 
     /// Whether the key will be visible to the driver or not
     @Default(true) bool visibility,
@@ -38,23 +38,16 @@ class WidgetDescription with _$WidgetDescription {
   factory WidgetDescription.addView(
           {required String viewName, required String originalViewName}) =>
       WidgetDescription(
-          viewName: viewName,
-          originalViewName: originalViewName,
-          name: '',
-          widgetType: WidgetType.view,
-          position: WidgetPosition(
-              x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0));
+        viewName: viewName,
+        originalViewName: originalViewName,
+        widgetType: WidgetType.view,
+      );
 
   factory WidgetDescription.addAtPosition({
     required WidgetType widgetType,
     required WidgetPosition widgetPosition,
   }) =>
-      WidgetDescription(
-          originalViewName: '',
-          viewName: '',
-          name: '',
-          widgetType: widgetType,
-          position: widgetPosition);
+      WidgetDescription(widgetType: widgetType, position: widgetPosition);
 
   factory WidgetDescription.fromJson(Map<String, dynamic> json) =>
       _$WidgetDescriptionFromJson(json);
