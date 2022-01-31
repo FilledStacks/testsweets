@@ -11,9 +11,9 @@ class DriverLayoutViewModel extends BaseViewModel {
   final _widgetCaptureService = locator<WidgetCaptureService>();
   final _testSweetsRouteTracer = locator<TestSweetsRouteTracker>();
 
-  final String projectId;
-
-  DriverLayoutViewModel({required this.projectId});
+  DriverLayoutViewModel({required projectId}) {
+    _widgetCaptureService.projectId = projectId;
+  }
 
   List<WidgetDescription> get descriptionsForView =>
       _widgetCaptureService.getDescriptionsForView(
@@ -23,9 +23,7 @@ class DriverLayoutViewModel extends BaseViewModel {
   Future<void> initialise() async {
     setBusy(true);
     try {
-      await _widgetCaptureService.loadWidgetDescriptionsForProject(
-        projectId: projectId,
-      );
+      await _widgetCaptureService.loadWidgetDescriptionsForProject();
     } catch (e) {
       log.e('Could not get widgetDescriptions: $e');
     }

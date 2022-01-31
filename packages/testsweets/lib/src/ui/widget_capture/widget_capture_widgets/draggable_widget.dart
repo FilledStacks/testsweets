@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/extensions/widget_description_extension.dart';
+import 'package:testsweets/src/ui/shared/utils.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
 import 'widget_circle.dart';
@@ -13,9 +14,9 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
     final size = MediaQuery.of(context).size;
     return Positioned(
         top: model.widgetDescription?.responsiveYPosition(size.height) ??
-            size.height / 2,
+            Utils.halfOfLengthMinusWidgetRadius(size.height),
         left: model.widgetDescription?.responsiveXPosition(size.width) ??
-            size.width / 2,
+            Utils.halfOfLengthMinusWidgetRadius(size.width),
         child: GestureDetector(
           onPanUpdate: (panEvent) {
             final x = panEvent.delta.dx;

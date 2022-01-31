@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
+import 'package:testsweets/src/ui/shared/busy_indecator.dart';
 
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/info_form.dart';
@@ -22,6 +23,7 @@ class WidgetCaptureView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<WidgetCaptureViewModel>.reactive(
+      onModelReady: (model) => model.loadWidgetDescriptions(),
       builder: (context, model, _) => Scaffold(
         body: Stack(
           alignment: Alignment.bottomCenter,
@@ -31,11 +33,11 @@ class WidgetCaptureView extends StatelessWidget {
               TypeSelector(),
             if (model.captureWidgetStatusEnum.infoFormMode) ...[
               DraggableWidget(),
-              InfoForm(
-                submitWidgetInfoForm: model.submitWidgetInfoForm,
-                closeWidgetInfoForm: model.closeInfoForm,
-              ),
-            ]
+              InfoForm(),
+            ],
+            BusyIndicator(
+              enable: model.isBusy,
+            )
           ],
         ),
       ),

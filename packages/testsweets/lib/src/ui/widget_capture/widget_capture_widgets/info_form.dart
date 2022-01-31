@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/src/provider.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
 import 'package:testsweets/src/models/widget_form_info_model.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/icon_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
-import 'draggable_widget.dart';
-
 class InfoForm extends StatefulWidget {
-  final Function(WidgetFormInfoModel) submitWidgetInfoForm;
-  final VoidCallback closeWidgetInfoForm;
-
   const InfoForm({
     Key? key,
-    required this.submitWidgetInfoForm,
-    required this.closeWidgetInfoForm,
   }) : super(key: key);
 
   @override
@@ -35,6 +30,7 @@ class _InfoFormState extends State<InfoForm> {
 
   @override
   Widget build(BuildContext context) {
+    final model = context.watch<WidgetCaptureViewModel>();
     return SolidBottomSheet(
       showOnAppear: true,
       headerBar: SvgPicture.asset(
@@ -44,7 +40,9 @@ class _InfoFormState extends State<InfoForm> {
       maxHeight: 156,
       toggleVisibilityOnTap: true,
       body: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+        ).copyWith(top: 16),
         decoration: kdBlackRoundedEdgeDecoration,
         child: ListView(
           padding: EdgeInsets.zero,
@@ -64,7 +62,7 @@ class _InfoFormState extends State<InfoForm> {
                         : 'packages/testsweets/assets/svgs/eye_closed.svg',
                     svgWidth: 24),
                 SweetIconButton(
-                    onTap: widget.closeWidgetInfoForm,
+                    onTap: model.closeInfoForm,
                     overlayColor: kcFailTestRedColor,
                     svgIcon: 'packages/testsweets/assets/svgs/close.svg',
                     svgWidth: 16)
@@ -139,15 +137,15 @@ class _InfoFormState extends State<InfoForm> {
                 ),
                 SweetIconButton(
                     backgroundColor: kcSecondaryGreen,
-                    onTap: () {
+                    onTap: () async {
                       if (nameController.text.trim().isEmpty) {
                         setState(() {
                           showErrorMessage = true;
                         });
                       } else {
-                        widget.submitWidgetInfoForm(WidgetFormInfoModel(
-                            name: nameController.text,
-                            visibilty: isWidgetVisible));
+                        await model.saveWidget(
+                            name: nameController.text.trim(),
+                            visibilty: isWidgetVisible);
                       }
                     },
                     svgIcon: 'packages/testsweets/assets/svgs/tick.svg',

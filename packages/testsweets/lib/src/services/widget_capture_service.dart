@@ -11,19 +11,23 @@ class WidgetCaptureService {
 
   final Map<String, List<WidgetDescription>> widgetDescriptionMap =
       Map<String, List<WidgetDescription>>();
-  final bool verbose;
+  late String _projectId;
 
+  set projectId(String projectId) {
+    _projectId = projectId;
+  }
+
+  final bool verbose;
   WidgetCaptureService({this.verbose = false});
 
   /// Captures a widgets description to the backend as well as locally in the [widgetDescriptionMap]
   Future<void> captureWidgetDescription({
     required WidgetDescription description,
-    required String projectId,
   }) async {
-    log.i('description:$description projectId:$projectId');
+    log.i('description:$description projectId:$_projectId');
     final descriptionId =
         await _cloudFunctionsService.uploadWidgetDescriptionToProject(
-      projectId: projectId,
+      projectId: _projectId,
       description: description,
     );
 
@@ -34,10 +38,9 @@ class WidgetCaptureService {
   }
 
   /// Gets all the widget descriptions the project and stores them in a map
-  Future<void> loadWidgetDescriptionsForProject(
-      {required String projectId}) async {
+  Future<void> loadWidgetDescriptionsForProject() async {
     final widgetDescriptions = await _cloudFunctionsService
-        .getWidgetDescriptionForProject(projectId: projectId);
+        .getWidgetDescriptionForProject(projectId: _projectId);
     widgetDescriptionMap.clear();
     for (final description in widgetDescriptions) {
       addWidgetDescriptionToMap(description: description);
@@ -81,15 +84,14 @@ class WidgetCaptureService {
   /// Updates a widget description to the backend as well as locally in the [widgetDescriptionMap]
   Future<void> updateWidgetDescription({
     required WidgetDescription description,
-    required String projectId,
   }) async {
-    log.i('description:$description projectId:$projectId');
+    log.i('description:$description projectId:$_projectId');
 
     final widgetToUpdate = widgetDescriptionMap[description.originalViewName]
         ?.firstWhere((element) => element.id == description.id);
 
     final descriptionId = await _cloudFunctionsService.updateWidgetDescription(
-        projectId: projectId,
+        projectId: _projectId,
         newwidgetDescription: description,
         oldwidgetDescription: widgetToUpdate!);
 
@@ -98,11 +100,21 @@ class WidgetCaptureService {
 
   /// Delete a widget descriptions from the project as well as locally
   Future<void> deleteWidgetDescription(
-      {required String projectId,
-      required WidgetDescription description}) async {
+      {required WidgetDescription description}) async {
     final descriptionId = await _cloudFunctionsService.deleteWidgetDescription(
-        projectId: projectId, description: description);
+        projectId: _projectId, description: description);
 
     log.i('descriptionId from Cloud: $descriptionId');
+  }
+
+  Future<String?> createWidgetDescription(
+      {required WidgetDescription description}) async {
+    try {
+      await captureWidgetDescription(
+        description: description,
+      );
+    } catch (e) {
+      log.e('Couldn\'t save the widget. $e');
+    }
   }
 }

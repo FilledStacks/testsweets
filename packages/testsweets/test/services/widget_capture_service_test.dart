@@ -23,10 +23,8 @@ void main() {
           () async {
         final cloudFunctionsService = getAndRegisterCloudFunctionsService();
         final service = WidgetCaptureService();
-        await service.loadWidgetDescriptionsForProject(projectId: 'proj');
-        verify(cloudFunctionsService.getWidgetDescriptionForProject(
-          projectId: 'proj',
-        ));
+        await service.loadWidgetDescriptionsForProject();
+        verify(cloudFunctionsService.getWidgetDescriptionForProject());
       });
 
       test(
@@ -58,7 +56,7 @@ void main() {
               ),
             ]);
         final service = WidgetCaptureService();
-        await service.loadWidgetDescriptionsForProject(projectId: 'proj');
+        await service.loadWidgetDescriptionsForProject();
 
         expect(service.widgetDescriptionMap.containsKey('login_view'), true);
         expect(service.widgetDescriptionMap.containsKey('signup_view'), true);
@@ -93,7 +91,7 @@ void main() {
               ),
             ]);
         final service = WidgetCaptureService();
-        await service.loadWidgetDescriptionsForProject(projectId: 'proj');
+        await service.loadWidgetDescriptionsForProject();
 
         expect(service.widgetDescriptionMap['login_view']?.length, 2);
       });
@@ -116,10 +114,10 @@ void main() {
 
         final service = WidgetCaptureService();
         await service.captureWidgetDescription(
-            description: description, projectId: 'proj');
+          description: description,
+        );
 
         verify(cloudFunctionsService.uploadWidgetDescriptionToProject(
-          projectId: 'proj',
           description: description,
         ));
       });
@@ -143,7 +141,8 @@ void main() {
 
         final service = WidgetCaptureService();
         await service.captureWidgetDescription(
-            description: description, projectId: 'prodj');
+          description: description,
+        );
 
         expect(
           service.widgetDescriptionMap[description.originalViewName]?.first.id,
@@ -191,7 +190,7 @@ void main() {
             ]);
 
         final service = WidgetCaptureService();
-        await service.loadWidgetDescriptionsForProject(projectId: 'proj');
+        await service.loadWidgetDescriptionsForProject();
 
         bool isViewAlreadyExist =
             service.checkCurrentViewIfAlreadyCaptured('/');
@@ -275,12 +274,11 @@ void main() {
         final cloudFunctionsService = getAndRegisterCloudFunctionsService();
         final service = WidgetCaptureService();
         await service.deleteWidgetDescription(
-          projectId: 'proJ',
           description: description,
         );
 
         verify(cloudFunctionsService.deleteWidgetDescription(
-            projectId: 'proJ', description: description));
+            description: description));
       });
 
       test(
@@ -313,7 +311,6 @@ void main() {
             ]);
         final service = WidgetCaptureService();
         await service.deleteWidgetDescription(
-          projectId: 'proj',
           description: WidgetDescription(
             viewName: 'signUp',
             originalViewName: '/signUp_view',
@@ -358,7 +355,7 @@ void main() {
               ),
             ]);
         final service = WidgetCaptureService();
-        await service.loadWidgetDescriptionsForProject(projectId: 'projectId');
+        await service.loadWidgetDescriptionsForProject();
 
         final result =
             service.getDescriptionsForView(currentRoute: '/home_view');
@@ -416,7 +413,7 @@ void main() {
               ),
             ]);
         final service = WidgetCaptureService();
-        await service.loadWidgetDescriptionsForProject(projectId: 'projectId');
+        await service.loadWidgetDescriptionsForProject();
 
         final result =
             service.getDescriptionsForView(currentRoute: '/home_view0');
@@ -485,7 +482,7 @@ void main() {
               ),
             ]);
         final service = WidgetCaptureService();
-        await service.loadWidgetDescriptionsForProject(projectId: 'projectId');
+        await service.loadWidgetDescriptionsForProject();
 
         final result =
             service.getDescriptionsForView(currentRoute: '/home_view1');
@@ -510,13 +507,11 @@ void main() {
         final service = WidgetCaptureService();
         service.addWidgetDescriptionToMap(description: description);
         await service.updateWidgetDescription(
-          projectId: 'proJ',
           description: description,
         );
 
         verify(cloudFunctionsService.updateWidgetDescription(
             oldwidgetDescription: description,
-            projectId: 'proJ',
             newwidgetDescription: description));
       });
 
@@ -562,7 +557,6 @@ void main() {
         );
 
         await service.updateWidgetDescription(
-          projectId: 'proj',
           description: WidgetDescription(
             id: '1234',
             originalViewName: '/signUp_view',

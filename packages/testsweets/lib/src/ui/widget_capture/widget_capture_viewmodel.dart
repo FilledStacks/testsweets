@@ -15,13 +15,19 @@ import 'package:testsweets/src/services/widget_capture_service.dart';
 class WidgetCaptureViewModel extends BaseViewModel {
   final log = getLogger('WidgetCaptureViewModel');
 
-  final String projectId;
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
-
-  WidgetCaptureViewModel({required this.projectId}) {
-    syncWithFirestoreWidgetKeys(projectId: projectId);
+  CaptureWidgetStatusEnum _captureWidgetStatusEnum =
+      CaptureWidgetStatusEnum.widgetTypeSelector;
+  set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
+    _captureWidgetStatusEnum = captureWidgetStatusEnum;
+    notifyListeners();
   }
+
+  WidgetCaptureViewModel({required String projectId}) {
+    _widgetCaptureService.projectId = projectId;
+  }
+
   WidgetDescription? _widgetDescription;
   WidgetDescription? get widgetDescription => _widgetDescription;
 
@@ -30,15 +36,13 @@ class WidgetCaptureViewModel extends BaseViewModel {
         currentRoute: _testSweetsRouteTracker.currentRoute,
       );
 
-  Future<void> syncWithFirestoreWidgetKeys(
-      {required String projectId, bool enableBusy = true}) async {
-    if (enableBusy) setBusy(true);
+  Future<void> loadWidgetDescriptions() async {
+    setBusy(true);
     try {
-      await _widgetCaptureService.loadWidgetDescriptionsForProject(
-        projectId: projectId,
-      );
+      await _widgetCaptureService.loadWidgetDescriptionsForProject();
     } catch (e) {
       log.e('Could not get widgetDescriptions: $e');
+      setError('Could not get widgetDescriptions: $e');
     }
     setBusy(false);
   }
@@ -48,19 +52,33 @@ class WidgetCaptureViewModel extends BaseViewModel {
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetInfoForm;
   }
 
-  void addWidgetInfo() {}
+  Future<void> saveWidget(
+      {required String name, required bool visibilty}) async {
+    setBusy(true);
+    _widgetDescription = _widgetDescription?.copyWith(
+        visibility: visibilty,
+        viewName:
+            _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
+        originalViewName: _testSweetsRouteTracker.currentRoute,
+        name: name.convertWidgetNameToValidFormat);
 
-  void submitWidgetInfoForm(WidgetFormInfoModel widgetFormInfoModel) {}
+    log.i('descriptionToSave:$_widgetDescription');
+
+    final result = await _widgetCaptureService.createWidgetDescription(
+        description: widgetDescription!);
+
+    if (result is String) {
+      setError(result);
+    } else {
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetTypeSelector;
+      _widgetDescription = null;
+    }
+
+    setBusy(false);
+  }
 
   void closeInfoForm() {
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetTypeSelector;
-  }
-
-  CaptureWidgetStatusEnum _captureWidgetStatusEnum =
-      CaptureWidgetStatusEnum.widgetTypeSelector;
-  set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
-    _captureWidgetStatusEnum = captureWidgetStatusEnum;
-    notifyListeners();
   }
 
   CaptureWidgetStatusEnum get captureWidgetStatusEnum =>
@@ -146,20 +164,6 @@ class WidgetCaptureViewModel extends BaseViewModel {
   //   } else {
   //     _inputErrorMessage = '';
   //     return false;
-  //   }
-  // }
-
-  // Future<void> sendWidgetDescriptionToFirestore() async {
-  //   try {
-  //     await _widgetCaptureService.captureWidgetDescription(
-  //       description: _widgetDescription!,
-  //       projectId: projectId,
-  //     );
-  //     captureWidgetStatusEnum =
-  //         CaptureWidgetStatusEnum.captureModeWidgetsContainerShow;
-  //     _widgetDescription = null;
-  //   } catch (e) {
-  //     log.e('Couldn\'t save the widget. $e');
   //   }
   // }
 
