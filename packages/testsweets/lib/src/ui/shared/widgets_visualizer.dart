@@ -13,8 +13,6 @@ import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_circle.dart';
 import 'package:testsweets/testsweets.dart';
 
-import 'custom_popup_menu_item.dart';
-
 class WidgetsVisualizer extends StatelessWidget {
   final List<WidgetDescription> widgetDescriptions;
   final bool driveMode;
