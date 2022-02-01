@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
+import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
@@ -104,6 +105,12 @@ class WidgetCaptureViewModel extends BaseViewModel {
       ),
     );
     notifyListeners();
+  }
+
+  void executeAction(
+      {required WidgetDescription description,
+      required PopupMenuAction popupMenuAction}) {
+    _widgetDescription = description;
   }
   // bool _hasWidgetNameFocus = false;
   // bool get hasWidgetNameFocus => _hasWidgetNameFocus;

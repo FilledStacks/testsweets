@@ -24,6 +24,7 @@ dependencies:
   recase: ^4.0.0
   solid_bottom_sheet: ^0.1.10
   flutter_svg: ^1.0.3
+  custom_pop_up_menu: ^1.2.3+1
 dev_dependencies:
   flutter_test:
     sdk: flutter

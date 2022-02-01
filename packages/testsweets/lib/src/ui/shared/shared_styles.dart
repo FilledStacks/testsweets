@@ -140,3 +140,6 @@ class FadeInWidget extends StatelessWidget {
 const kdBlackRoundedEdgeDecoration = BoxDecoration(
     color: kcBottomSheetBackground,
     borderRadius: const BorderRadius.vertical(top: Radius.circular(12)));
+const kdPopupDecoration = BoxDecoration(
+    color: kcBottomSheetBackground,
+    borderRadius: const BorderRadius.all(Radius.circular(12)));
