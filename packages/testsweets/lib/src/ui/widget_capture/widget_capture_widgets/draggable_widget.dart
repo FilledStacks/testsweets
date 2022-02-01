@@ -12,18 +12,21 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
     final size = MediaQuery.of(context).size;
-    return Positioned(
-        top: model.widgetDescription?.responsiveYPosition(size.height) ??
-            Utils.halfOfLengthMinusWidgetRadius(size.height),
-        left: model.widgetDescription?.responsiveXPosition(size.width) ??
-            Utils.halfOfLengthMinusWidgetRadius(size.width),
-        child: GestureDetector(
-          onPanUpdate: (panEvent) {
-            final x = panEvent.delta.dx;
-            final y = panEvent.delta.dy;
-            model.updateDescriptionPosition(x, y, size.width, size.height);
-          },
-          child: WidgetCircle(widgetType: model.widgetDescription!.widgetType),
-        ));
+    return model.widgetDescription == null
+        ? const SizedBox.shrink()
+        : Positioned(
+            top: model.widgetDescription?.responsiveYPosition(size.height) ??
+                Utils.halfOfLengthMinusWidgetRadius(size.height),
+            left: model.widgetDescription?.responsiveXPosition(size.width) ??
+                Utils.halfOfLengthMinusWidgetRadius(size.width),
+            child: GestureDetector(
+              onPanUpdate: (panEvent) {
+                final x = panEvent.delta.dx;
+                final y = panEvent.delta.dy;
+                model.updateDescriptionPosition(x, y, size.width, size.height);
+              },
+              child:
+                  WidgetCircle(widgetType: model.widgetDescription!.widgetType),
+            ));
   }
 }

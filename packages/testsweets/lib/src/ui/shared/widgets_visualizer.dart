@@ -32,7 +32,7 @@ class WidgetsVisualizer extends StatelessWidget {
                   ? 0
                   : description.visibility
                       ? 1
-                      : 0.5,
+                      : 0.3,
               key: Key(description.automationKey),
               widgetType: description.widgetType,
             ),

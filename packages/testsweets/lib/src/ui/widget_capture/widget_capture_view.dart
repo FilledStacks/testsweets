@@ -8,7 +8,6 @@ import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/info_form.dart';
 
 import 'widget_capture_widgets/draggable_widget.dart';
-import 'widget_capture_widgets/type_selector.dart';
 
 class WidgetCaptureView extends StatelessWidget {
   final String projectId;
@@ -30,15 +29,12 @@ class WidgetCaptureView extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           children: [
             child,
-            if (model.captureWidgetStatusEnum.widgetTypeSelector)
-              TypeSelector(),
-            if (model.captureWidgetStatusEnum.infoFormMode) ...[
-              DraggableWidget(),
-              InfoForm(),
-            ],
-            WidgetsVisualizer(
-              widgetDescriptions: model.descriptionsForView,
-            ),
+            model.captureWidgetStatusEnum.infoFormMode
+                ? DraggableWidget()
+                : WidgetsVisualizer(
+                    widgetDescriptions: model.descriptionsForView,
+                  ),
+            InfoForm(),
             BusyIndicator(
               enable: model.isBusy,
             )

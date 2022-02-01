@@ -18,7 +18,7 @@ class WidgetCaptureViewModel extends BaseViewModel {
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
   CaptureWidgetStatusEnum _captureWidgetStatusEnum =
-      CaptureWidgetStatusEnum.widgetTypeSelector;
+      CaptureWidgetStatusEnum.idle;
   set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
     _captureWidgetStatusEnum = captureWidgetStatusEnum;
     notifyListeners();
@@ -52,7 +52,7 @@ class WidgetCaptureViewModel extends BaseViewModel {
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetInfoForm;
   }
 
-  Future<void> saveWidget(
+  Future<String?> saveWidget(
       {required String name, required bool visibilty}) async {
     setBusy(true);
     _widgetDescription = _widgetDescription?.copyWith(
@@ -70,15 +70,20 @@ class WidgetCaptureViewModel extends BaseViewModel {
     if (result is String) {
       setError(result);
     } else {
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetTypeSelector;
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
       _widgetDescription = null;
     }
-
     setBusy(false);
+    return result;
   }
 
-  void closeInfoForm() {
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetTypeSelector;
+  void toggleInfoForm(bool show) {
+    if (show) {
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetInfoForm;
+    } else {
+      _widgetDescription = null;
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+    }
   }
 
   CaptureWidgetStatusEnum get captureWidgetStatusEnum =>

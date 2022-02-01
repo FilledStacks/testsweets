@@ -1,4 +1,4 @@
 enum CaptureWidgetStatusEnum {
-  widgetTypeSelector,
+  idle,
   widgetInfoForm,
 }
