@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/ui/shared/busy_indecator.dart';
+import 'package:testsweets/src/ui/shared/widgets_visualizer.dart';
 
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/info_form.dart';
@@ -35,6 +36,9 @@ class WidgetCaptureView extends StatelessWidget {
               DraggableWidget(),
               InfoForm(),
             ],
+            WidgetsVisualizer(
+              widgetDescriptions: model.descriptionsForView,
+            ),
             BusyIndicator(
               enable: model.isBusy,
             )

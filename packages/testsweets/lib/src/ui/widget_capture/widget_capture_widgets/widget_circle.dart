@@ -7,10 +7,14 @@ import 'package:testsweets/src/ui/shared/shared_styles.dart';
 
 class WidgetCircle extends StatelessWidget {
   final WidgetType widgetType;
+  final double transparency;
+
   const WidgetCircle({
     Key? key,
     required this.widgetType,
-  }) : super(key: key);
+    this.transparency = 1.0,
+  })  : assert(transparency <= 1 && transparency >= 0),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +24,14 @@ class WidgetCircle extends StatelessWidget {
         height: WIDGET_DESCRIPTION_VISUAL_SIZE,
         decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border:
-                Border.all(color: widgetType.getColorOfWidgetType, width: 2)),
+            border: Border.all(
+                color:
+                    widgetType.getColorOfWidgetType.withOpacity(transparency),
+                width: 2)),
         child: Text(widgetType.returnFirstLetterOfWidgetTypeCapitalized,
             textAlign: TextAlign.center,
             style: tsExtraLarge().copyWith(
-              color: widgetType.getColorOfWidgetType,
+              color: widgetType.getColorOfWidgetType.withOpacity(transparency),
             )));
   }
 }
