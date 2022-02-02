@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:testsweets/src/enums/widget_type.dart';
-
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_circle.dart';
 
 import 'widget_card.dart';
 
 class TypeSelector extends StatelessWidget {
   final void Function(WidgetType) onTap;
+  final WidgetType? selectedWidgetType;
   const TypeSelector({
     Key? key,
     required this.onTap,
+    this.selectedWidgetType,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -23,20 +24,20 @@ class TypeSelector extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         children: [
           WidgetCard(
-              onTap: onTap,
-              widgetCircle: WidgetCircle(
-                widgetType: WidgetType.touchable,
-              )),
+            selected: selectedWidgetType == WidgetType.touchable,
+            onTap: onTap,
+            widgetType: WidgetType.touchable,
+          ),
           WidgetCard(
-              onTap: onTap,
-              widgetCircle: WidgetCircle(
-                widgetType: WidgetType.scrollable,
-              )),
+            selected: selectedWidgetType == WidgetType.scrollable,
+            onTap: onTap,
+            widgetType: WidgetType.scrollable,
+          ),
           WidgetCard(
-              onTap: onTap,
-              widgetCircle: WidgetCircle(
-                widgetType: WidgetType.input,
-              )),
+            selected: selectedWidgetType == WidgetType.input,
+            onTap: onTap,
+            widgetType: WidgetType.input,
+          ),
         ],
       ),
     );

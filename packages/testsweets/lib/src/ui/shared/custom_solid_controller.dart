@@ -168,7 +168,6 @@ class _CustomSolidBottomSheetState extends State<CustomSolidBottomSheet> {
                     widget.draggableBody ? _onVerticalDragUpdate : null,
                 onVerticalDragEnd:
                     widget.autoSwiped ? _onVerticalDragEnd : null,
-                onTap: widget.toggleVisibilityOnTap ? _onTap : null,
                 child: widget.body,
               ),
             );

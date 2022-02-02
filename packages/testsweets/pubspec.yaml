@@ -19,7 +19,8 @@ dependencies:
   provider: ^6.0.2
   freezed_annotation: ^0.14.3
   json_annotation: ^4.1.0
-  stacked: ^2.2.5
+  stacked: ^2.2.8
+  stacked_services: ^0.8.16
   logger: ^1.1.0
   recase: ^4.0.0
   solid_bottom_sheet: ^0.1.10

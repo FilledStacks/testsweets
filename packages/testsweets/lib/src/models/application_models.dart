@@ -21,10 +21,10 @@ class WidgetDescription with _$WidgetDescription {
     String? originalViewName,
 
     /// The name we want to use when referring to the widget in the scripts
-    String? name,
+    @Default('') String name,
 
     /// The type of the widget that's being added
-    required WidgetType widgetType,
+    WidgetType? widgetType,
 
     /// The position we defined for he widget
     WidgetPosition? position,
@@ -44,17 +44,16 @@ class WidgetDescription with _$WidgetDescription {
       );
 
   factory WidgetDescription.addAtPosition({
-    required WidgetType widgetType,
     required WidgetPosition widgetPosition,
   }) =>
-      WidgetDescription(widgetType: widgetType, position: widgetPosition);
+      WidgetDescription(position: widgetPosition);
 
   factory WidgetDescription.fromJson(Map<String, dynamic> json) =>
       _$WidgetDescriptionFromJson(json);
 
   String get automationKey => widgetType == WidgetType.view
-      ? '$viewName\_${widgetType.shortName}'
-      : '$viewName\_${widgetType.shortName}\_$name';
+      ? '$viewName\_${widgetType!.shortName}'
+      : '$viewName\_${widgetType!.shortName}\_$name';
 }
 
 /// The position of the widget as we captured it on device

@@ -27,7 +27,7 @@ class WidgetDescriptionDialog extends StatelessWidget {
             ),
             MultiStyleText(
               title: 'Name: ',
-              body: widgetDescription!.name!,
+              body: widgetDescription!.name,
             ),
             MultiStyleText(
               title: 'Widget Type: ',

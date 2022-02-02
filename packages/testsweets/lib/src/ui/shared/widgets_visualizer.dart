@@ -53,7 +53,7 @@ class WidgetsVisualizer extends StatelessWidget {
                         ? 1
                         : 0.3,
                 key: Key(description.automationKey),
-                widgetType: description.widgetType,
+                widgetType: description.widgetType!,
               ),
             ),
           ),
@@ -70,10 +70,10 @@ class WidgetsVisualizer extends StatelessWidget {
                 child: SizedBox(
                     width: WIDGET_DESCRIPTION_VISUAL_SIZE,
                     child: Text(
-                      description.name ?? '',
+                      description.name,
                       textAlign: TextAlign.center,
                       style: tsSmall().copyWith(
-                          color: description.widgetType.getColorOfWidgetType),
+                          color: description.widgetType!.getColorOfWidgetType),
                     )),
               ),
             ),

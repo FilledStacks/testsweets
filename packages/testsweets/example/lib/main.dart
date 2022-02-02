@@ -14,21 +14,20 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return TestSweetsOverlayView(
+      projectId: 'AKg6SMD3PB7bEohAY9FG',
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        initialRoute: Routes.signUpView,
+        navigatorKey: StackedService.navigatorKey,
+        onGenerateRoute: StackedRouter().onGenerateRoute,
+        navigatorObservers: [
+          TestSweetsNavigatorObserver.instance,
+        ],
       ),
-      builder: (context, child) => TestSweetsOverlayView(
-        projectId: 'AKg6SMD3PB7bEohAY9FG',
-        child: child!,
-      ),
-      initialRoute: Routes.signUpView,
-      navigatorKey: StackedService.navigatorKey,
-      onGenerateRoute: StackedRouter().onGenerateRoute,
-      navigatorObservers: [
-        TestSweetsNavigatorObserver.instance,
-      ],
     );
   }
 }

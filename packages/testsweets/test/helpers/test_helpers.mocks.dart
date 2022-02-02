@@ -45,20 +45,22 @@ class MockWidgetCaptureService extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#verbose), returnValue: false)
           as bool);
   @override
+  set projectId(String? projectId) =>
+      super.noSuchMethod(Invocation.setter(#projectId, projectId),
+          returnValueForMissingStub: null);
+  @override
   _i6.Future<void> captureWidgetDescription(
-          {_i5.WidgetDescription? description, String? projectId}) =>
+          {_i5.WidgetDescription? description}) =>
       (super.noSuchMethod(
-          Invocation.method(#captureWidgetDescription, [],
-              {#description: description, #projectId: projectId}),
+          Invocation.method(
+              #captureWidgetDescription, [], {#description: description}),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
-  _i6.Future<void> loadWidgetDescriptionsForProject({String? projectId}) =>
-      (super.noSuchMethod(
-          Invocation.method(
-              #loadWidgetDescriptionsForProject, [], {#projectId: projectId}),
-          returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+  _i6.Future<void> loadWidgetDescriptionsForProject() => (super.noSuchMethod(
+      Invocation.method(#loadWidgetDescriptionsForProject, []),
+      returnValue: Future<void>.value(),
+      returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
   void addWidgetDescriptionToMap({_i5.WidgetDescription? description}) =>
       super.noSuchMethod(
@@ -80,20 +82,27 @@ class MockWidgetCaptureService extends _i1.Mock
           returnValue: false) as bool);
   @override
   _i6.Future<void> updateWidgetDescription(
-          {_i5.WidgetDescription? description, String? projectId}) =>
+          {_i5.WidgetDescription? description}) =>
       (super.noSuchMethod(
-          Invocation.method(#updateWidgetDescription, [],
-              {#description: description, #projectId: projectId}),
+          Invocation.method(
+              #updateWidgetDescription, [], {#description: description}),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
   @override
   _i6.Future<void> deleteWidgetDescription(
-          {String? projectId, _i5.WidgetDescription? description}) =>
+          {_i5.WidgetDescription? description}) =>
       (super.noSuchMethod(
-          Invocation.method(#deleteWidgetDescription, [],
-              {#projectId: projectId, #description: description}),
+          Invocation.method(
+              #deleteWidgetDescription, [], {#description: description}),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+  @override
+  _i6.Future<String?> createWidgetDescription(
+          {_i5.WidgetDescription? description}) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #createWidgetDescription, [], {#description: description}),
+          returnValue: Future<String?>.value()) as _i6.Future<String?>);
 }
 
 /// A class which mocks [TestSweetsRouteTracker].

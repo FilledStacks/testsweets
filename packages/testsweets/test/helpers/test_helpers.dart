@@ -22,15 +22,12 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
   final service = MockWidgetCaptureService();
 
   when(service.captureWidgetDescription(
-          description: anyNamed('description'),
-          projectId: anyNamed('projectId')))
-      .thenAnswer((realInvocation) => Future.value());
+    description: anyNamed('description'),
+  )).thenAnswer((realInvocation) => Future.value());
 
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
       .thenReturn(listOfWidgetDescription);
-  when(service.updateWidgetDescription(
-          projectId: anyNamed('projectId'),
-          description: anyNamed('description')))
+  when(service.updateWidgetDescription(description: anyNamed('description')))
       .thenAnswer((_) => Future.value());
 
   when(service.checkCurrentViewIfAlreadyCaptured(any))

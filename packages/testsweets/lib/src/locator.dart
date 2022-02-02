@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
 import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
@@ -11,6 +12,7 @@ Future<void> setupLocator() async {
         httpService: HttpServiceImplementation(),
       ));
   locator.registerLazySingleton(() => TestSweetsRouteTracker());
+  locator.registerLazySingleton(() => SnackbarService());
   locator.registerLazySingleton(() => WidgetCaptureService(verbose: true));
 
   locatorSetup = true;

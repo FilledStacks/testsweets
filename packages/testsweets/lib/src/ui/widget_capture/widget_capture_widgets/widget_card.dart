@@ -6,10 +6,14 @@ import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_circle.dart';
 
 class WidgetCard extends StatelessWidget {
-  final WidgetCircle widgetCircle;
-
+  final WidgetType widgetType;
+  final bool selected;
   final void Function(WidgetType) onTap;
-  const WidgetCard({Key? key, required this.widgetCircle, required this.onTap})
+  const WidgetCard(
+      {Key? key,
+      required this.widgetType,
+      required this.onTap,
+      this.selected = false})
       : super(key: key);
 
   @override
@@ -23,24 +27,28 @@ class WidgetCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         child: InkWell(
           highlightColor: Colors.transparent,
-          splashColor:
-              widgetCircle.widgetType.getColorOfWidgetType.withOpacity(0.7),
+          splashColor: widgetType.getColorOfWidgetType.withOpacity(0.7),
           borderRadius: BorderRadius.circular(24),
-          onTap: () => onTap(widgetCircle.widgetType),
+          onTap: () => onTap(widgetType),
           child: Container(
             height: 50,
             decoration: BoxDecoration(
                 border: Border.all(
-                    color: widgetCircle.widgetType.getColorOfWidgetType),
+                    color: selected
+                        ? widgetType.getColorOfWidgetType
+                        : kcPrimaryWhite),
                 borderRadius: BorderRadius.circular(24)),
             child: Row(
               children: [
                 const SizedBox(
                   width: 2,
                 ),
-                widgetCircle,
+                WidgetCircle(
+                  widgetType: widgetType,
+                  selected: selected,
+                ),
                 Expanded(
-                  child: Text(widgetCircle.widgetType.getTitleOfWidgetType,
+                  child: Text(widgetType.getTitleOfWidgetType,
                       textAlign: TextAlign.center, style: tsNormalBold()),
                 )
               ],

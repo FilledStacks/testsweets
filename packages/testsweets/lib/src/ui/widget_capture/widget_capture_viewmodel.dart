@@ -1,23 +1,24 @@
 import 'dart:async';
 
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
-import 'package:testsweets/src/models/widget_form_info_model.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 
-class WidgetCaptureViewModel extends BaseViewModel {
+class WidgetCaptureViewModel extends FormViewModel {
   final log = getLogger('WidgetCaptureViewModel');
 
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
+  final _snackbarService = locator<SnackbarService>();
 
   CaptureWidgetStatusEnum _captureWidgetStatusEnum =
       CaptureWidgetStatusEnum.idle;
@@ -34,8 +35,7 @@ class WidgetCaptureViewModel extends BaseViewModel {
     _widgetCaptureService.projectId = projectId;
   }
 
-  WidgetDescription? _widgetDescription;
-  WidgetDescription? get widgetDescription => _widgetDescription;
+  WidgetDescription? widgetDescription;
 
   List<WidgetDescription> get descriptionsForView =>
       _widgetCaptureService.getDescriptionsForView(
@@ -43,6 +43,7 @@ class WidgetCaptureViewModel extends BaseViewModel {
       );
 
   Future<void> loadWidgetDescriptions() async {
+    log.v('');
     setBusy(true);
     try {
       await _widgetCaptureService.loadWidgetDescriptionsForProject();
@@ -53,31 +54,40 @@ class WidgetCaptureViewModel extends BaseViewModel {
     setBusy(false);
   }
 
-  void onWidgetTypeSelected(WidgetType widgetType) async {
-    _widgetDescription = WidgetDescription(widgetType: widgetType);
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetInfoForm;
+  set setWidgetType(WidgetType widgetType) {
+    log.v(widgetType);
+    widgetDescription = widgetDescription!.copyWith(widgetType: widgetType);
+    notifyListeners();
   }
 
-  Future<String?> saveWidget(
-      {required String name, required bool visibilty}) async {
-    setBusy(true);
-    _widgetDescription = _widgetDescription?.copyWith(
-        visibility: visibilty,
-        viewName:
-            _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
-        originalViewName: _testSweetsRouteTracker.currentRoute,
-        name: name.convertWidgetNameToValidFormat);
+  set setVisibilty(bool visible) {
+    log.v(visible);
+    widgetDescription = widgetDescription!.copyWith(visibility: visible);
+    notifyListeners();
+  }
 
-    log.i('descriptionToSave:$_widgetDescription');
+  Future<String?> saveWidget() async {
+    log.i(widgetDescription.toString());
+
+    setBusy(true);
+    widgetDescription = widgetDescription?.copyWith(
+      name: widgetNameValue!.convertWidgetNameToValidFormat,
+      viewName:
+          _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
+      originalViewName: _testSweetsRouteTracker.currentRoute,
+    );
+
+    log.i('descriptionToSave:$widgetDescription');
 
     final result = await _widgetCaptureService.createWidgetDescription(
         description: widgetDescription!);
 
     if (result is String) {
       setError(result);
+      _snackbarService.showSnackbar(message: result);
     } else {
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
-      _widgetDescription = null;
+      widgetDescription = null;
     }
     setBusy(false);
     return result;
@@ -85,9 +95,9 @@ class WidgetCaptureViewModel extends BaseViewModel {
 
   void toggleInfoForm(bool show) {
     if (show) {
+      widgetDescription = WidgetDescription();
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetInfoForm;
     } else {
-      _widgetDescription = null;
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
   }
@@ -98,12 +108,12 @@ class WidgetCaptureViewModel extends BaseViewModel {
     double capturedDeviceWidth,
     double capturedDeviceHeight,
   ) {
-    _widgetDescription = _widgetDescription!.copyWith(
+    widgetDescription = widgetDescription!.copyWith(
       position: WidgetPosition(
         capturedDeviceHeight: capturedDeviceHeight,
         capturedDeviceWidth: capturedDeviceWidth,
-        x: (_widgetDescription!.position?.x ?? capturedDeviceWidth / 2) + x,
-        y: (_widgetDescription!.position?.y ?? capturedDeviceHeight / 2) + y,
+        x: (widgetDescription!.position?.x ?? capturedDeviceWidth / 2) + x,
+        y: (widgetDescription!.position?.y ?? capturedDeviceHeight / 2) + y,
       ),
     );
     notifyListeners();
@@ -112,6 +122,13 @@ class WidgetCaptureViewModel extends BaseViewModel {
   void executeAction(
       {required WidgetDescription description,
       required PopupMenuAction popupMenuAction}) {
-    _widgetDescription = description;
+    widgetDescription = description;
+  }
+
+  @override
+  void setFormStatus() {
+    widgetDescription =
+        widgetDescription?.copyWith(name: widgetNameValue ?? '');
+    notifyListeners();
   }
 }
