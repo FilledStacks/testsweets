@@ -118,9 +118,9 @@ class _InfoFormState extends State<InfoForm> {
                                       ),
                                     ),
                                     hintStyle: tsNormal().copyWith(
-                                      color: kcTextFieldHintTextColor,
+                                      color: kcSubtext,
                                     ),
-                                    fillColor: kcTestItemCardColor,
+                                    fillColor: kcTextField,
                                     filled: true,
                                     hintText: 'Widget Name',
                                     contentPadding: EdgeInsets.only(
@@ -139,7 +139,7 @@ class _InfoFormState extends State<InfoForm> {
                                     enabledBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                         width: 1,
-                                        color: kcBackground,
+                                        color: kcCard,
                                       ),
                                       borderRadius: BorderRadius.all(
                                         crTextFieldCornerRadius(),
@@ -151,7 +151,7 @@ class _InfoFormState extends State<InfoForm> {
                               width: 8,
                             ),
                             SweetIconButton(
-                                backgroundColor: kcBackground,
+                                backgroundColor: kcCard,
                                 onTap: () {
                                   model.setVisibilty =
                                       !widgetDescription.visibility;

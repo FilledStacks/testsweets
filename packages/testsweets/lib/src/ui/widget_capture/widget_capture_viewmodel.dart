@@ -127,6 +127,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   @override
   void setFormStatus() {
+    log.v('widgetNameValue: $widgetNameValue');
     widgetDescription =
         widgetDescription?.copyWith(name: widgetNameValue ?? '');
     notifyListeners();

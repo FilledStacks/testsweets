@@ -39,11 +39,10 @@ class SweetIconButton extends StatelessWidget {
         visualDensity: VisualDensity.compact,
         iconSize: svgWidth,
         onPressed: isEnable ? onTap : null,
-        backroundColor: backgroundColor,
+        backroundColor: kcTextField,
         icon: SvgPicture.asset(
           svgIcon,
-          color:
-              !isEnable ? kcTextFieldHintTextColor : iconColor ?? overlayColor,
+          color: !isEnable ? kcSubtext : iconColor ?? overlayColor,
           width: svgWidth,
           fit: BoxFit.cover,
         ));

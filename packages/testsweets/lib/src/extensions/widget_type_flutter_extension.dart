@@ -9,9 +9,9 @@ extension WidgetTypeFlutterExtension on WidgetType {
       case WidgetType.touchable:
         return kcPrimaryFuchsia;
       case WidgetType.input:
-        return kcRunningTestYellowColor;
+        return kcYellow;
       case WidgetType.scrollable:
-        return kcSecondaryGreen;
+        return kcGreen;
 
       default:
         return kcError;

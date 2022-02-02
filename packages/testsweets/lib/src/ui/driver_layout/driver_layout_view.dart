@@ -43,9 +43,7 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
               child: IconButton(
                 icon: Icon(
                   Icons.remove_red_eye,
-                  color: _showDebugInformation
-                      ? kcSecondaryGreen
-                      : kcFailTestRedColor,
+                  color: _showDebugInformation ? kcGreen : kcError,
                 ),
                 onPressed: () {
                   setState(() {
@@ -84,7 +82,7 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
                 left: description.position!.x -
                     (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
                 child: Container(
-                  color: kcFailTestRedColor,
+                  color: kcError,
                   padding: const EdgeInsets.symmetric(
                     horizontal: 15,
                     vertical: 5,

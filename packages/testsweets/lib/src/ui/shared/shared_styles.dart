@@ -34,12 +34,7 @@ TextStyle tsExtraLarge() => TextStyle(
       fontWeight: FontWeight.w700,
       fontSize: 32,
     );
-TextStyle tsActiveRoute(bool darkMode) => TextStyle(
-      fontFamily: "Roboto",
-      color: darkMode ? kcPrimaryWhite : kcAutocompleteBackground,
-      fontWeight: FontWeight.w600,
-      fontSize: 18,
-    );
+
 TextStyle tsDisableRoute() => TextStyle(
       fontFamily: "Roboto",
       fontWeight: FontWeight.w600,
@@ -93,15 +88,6 @@ final viewNameBlackBoxDecoration = BoxDecoration(
   borderRadius: BorderRadius.vertical(top: crButtonCornerRadius()),
 );
 
-final viewNameWhiteBoxDecoration = BoxDecoration(
-  gradient: LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [kcGrey.withOpacity(0.7), kcSubtext],
-  ),
-  borderRadius: BorderRadius.vertical(top: crButtonCornerRadius()),
-);
-
 final buttonDarkBoxDecoration = BoxDecoration(
   gradient: LinearGradient(
     begin: Alignment.topCenter,
@@ -138,8 +124,7 @@ class FadeInWidget extends StatelessWidget {
 }
 
 const kdBlackRoundedEdgeDecoration = BoxDecoration(
-    color: kcBottomSheetBackground,
+    color: kcCard,
     borderRadius: const BorderRadius.vertical(top: Radius.circular(12)));
 const kdPopupDecoration = BoxDecoration(
-    color: kcBottomSheetBackground,
-    borderRadius: const BorderRadius.all(Radius.circular(12)));
+    color: kcCard, borderRadius: const BorderRadius.all(Radius.circular(12)));
