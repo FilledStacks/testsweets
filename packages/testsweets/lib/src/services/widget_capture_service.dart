@@ -21,20 +21,24 @@ class WidgetCaptureService {
   WidgetCaptureService({this.verbose = false});
 
   /// Captures a widgets description to the backend as well as locally in the [widgetDescriptionMap]
-  Future<void> captureWidgetDescription({
+  Future<String?> captureWidgetDescription({
     required WidgetDescription description,
   }) async {
     log.i('description:$description projectId:$_projectId');
-    final descriptionId =
-        await _cloudFunctionsService.uploadWidgetDescriptionToProject(
-      projectId: _projectId,
-      description: description,
-    );
+    try {
+      final descriptionId =
+          await _cloudFunctionsService.uploadWidgetDescriptionToProject(
+        projectId: _projectId,
+        description: description,
+      );
+      log.i('descriptionId from Cloud: $descriptionId');
 
-    log.i('descriptionId from Cloud: $descriptionId');
-
-    addWidgetDescriptionToMap(
-        description: description.copyWith(id: descriptionId));
+      addWidgetDescriptionToMap(
+          description: description.copyWith(id: descriptionId));
+    } catch (e) {
+      log.e(e);
+      return e.toString();
+    }
   }
 
   /// Gets all the widget descriptions the project and stores them in a map
@@ -105,16 +109,5 @@ class WidgetCaptureService {
         projectId: _projectId, description: description);
 
     log.i('descriptionId from Cloud: $descriptionId');
-  }
-
-  Future<String?> createWidgetDescription(
-      {required WidgetDescription description}) async {
-    try {
-      await captureWidgetDescription(
-        description: description,
-      );
-    } catch (e) {
-      log.e('Couldn\'t save the widget. $e');
-    }
   }
 }

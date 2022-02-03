@@ -49,7 +49,8 @@ class WidgetCaptureViewModel extends FormViewModel {
       await _widgetCaptureService.loadWidgetDescriptionsForProject();
     } catch (e) {
       log.e('Could not get widgetDescriptions: $e');
-      setError('Could not get widgetDescriptions: $e');
+      _snackbarService.showSnackbar(
+          message: 'Could not get widgetDescriptions: $e');
     }
     setBusy(false);
   }
@@ -79,11 +80,10 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     log.i('descriptionToSave:$widgetDescription');
 
-    final result = await _widgetCaptureService.createWidgetDescription(
+    final result = await _widgetCaptureService.captureWidgetDescription(
         description: widgetDescription!);
 
     if (result is String) {
-      setError(result);
       _snackbarService.showSnackbar(message: result);
     } else {
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
@@ -95,7 +95,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void toggleInfoForm(bool show) {
     if (show) {
-      widgetDescription = WidgetDescription();
+      widgetDescription = widgetDescription ?? WidgetDescription();
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetInfoForm;
     } else {
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;

@@ -1,44 +1,72 @@
-// import 'package:flutter_test/flutter_test.dart';
-// import 'package:mockito/mockito.dart';
-// import 'package:testsweets/src/enums/capture_widget_enum.dart';
-// import 'package:testsweets/src/enums/widget_type.dart';
-// import 'package:testsweets/src/models/application_models.dart';
-// import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
-// import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
-// import 'package:testsweets/utils/error_messages.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:testsweets/src/enums/capture_widget_enum.dart';
+import 'package:testsweets/src/enums/widget_type.dart';
+import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
+import 'package:testsweets/utils/error_messages.dart';
 
-// import '../helpers/test_helpers.dart';
+import '../helpers/test_helpers.dart';
 
-// final _projectId = 'testSweets Id';
-// void main() {
-//   group('WidgetCaptureViewModelTest -', () {
-//     setUp(registerServices);
-//     tearDown(unregisterServices);
-//     group('constructor -', () {
-//       test('When called, should call initialize and set viewmodel busy',
-//           () async {
-//         final model = WidgetCaptureViewModel(projectId: _projectId);
+final _projectId = 'projectId';
+void main() {
+  group('WidgetCaptureViewModelTest -', () {
+    setUp(registerServices);
+    tearDown(unregisterServices);
+    group('constructor -', () {
+      test('When called, should set the project id in WidgetCaptureService',
+          () async {
+        final service = getAndRegisterWidgetCaptureService();
 
-//         expect(model.isBusy, true);
-//       });
-//       test('When call the constructor, Should call the initialise function',
-//           () {
-//         final service = getAndRegisterWidgetCaptureService();
+        WidgetCaptureViewModel(projectId: _projectId);
 
-//         WidgetCaptureViewModel(projectId: _projectId);
-//         verify(service.loadWidgetDescriptionsForProject(projectId: _projectId));
-//       });
-//     });
-//     group('initialize -', () {
-//       test('When called, should get all widget description for project',
-//           () async {
-//         final service = getAndRegisterWidgetCaptureService();
+        verify(service.projectId = _projectId);
+      });
+    });
+    group('saveWidget -', () {
+      test('''When called on route `current route`,
+           Should added it to widgetDescription and send it to server''',
+          () async {
+        getAndRegisterTestSweetsRouteTracker(currentRoute: 'current route');
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
+        model.toggleInfoForm(true);
+        model.widgetDescription!.copyWith(widgetType: WidgetType.scrollable);
+        model.saveWidget();
+        expect(model.widgetDescription!.originalViewName, 'current route');
+      });
+      test('''When called and the current route is `/current route`,
+           Should convert it to `currentRoute` in viewName proberty before send it to backend''',
+          () async {
+        getAndRegisterTestSweetsRouteTracker(currentRoute: '/current route');
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
+        model.toggleInfoForm(true);
+        model.widgetDescription!.copyWith(widgetType: WidgetType.scrollable);
+        model.saveWidget();
+        expect(model.widgetDescription!.viewName, 'currentRoute');
+        expect(model.widgetDescription!.originalViewName, '/current route');
+      });
+      test('''When called and the current widget name is `login-button`,
+           Should convert it to `loginButton` in name proberty before send it to backend''',
+          () async {
+        getAndRegisterTestSweetsRouteTracker(currentRoute: '/current route');
+        final model = WidgetCaptureViewModel(projectId: _projectId);
+        model.toggleInfoForm(true);
 
-//         WidgetCaptureViewModel(projectId: _projectId);
+        model.formValueMap[WidgetNameValueKey] = 'login-button';
 
-//         verify(service.loadWidgetDescriptionsForProject(projectId: _projectId));
-//       });
-//     });
+        model.widgetDescription =
+            model.widgetDescription!.copyWith(widgetType: WidgetType.touchable);
+        model.saveWidget();
+        expect(model.widgetDescription!.name, 'loginButton');
+      });
+    });
+  });
+}
+
+
 
 //     group('showWidgetDescription -', () {
 //       test(
@@ -229,51 +257,7 @@
 //         expect(model.widgetDescription!.position.y, 3);
 //       });
 //     });
-//     group('saveWidgetDescription -', () {
-//       test(
-//           "When called and textfield controller text is empty and WidgetType is not view, Should show a validation that say's 'Widget name must not be empty'",
-//           () async {
-//         final model = WidgetCaptureViewModel(projectId: _projectId);
-//         model.formValueMap[WidgetNameValueKey] = '';
-//         model.addNewWidget(WidgetType.input, WidgetPosition.empty());
-//         model.saveWidgetDescription();
-//         expect(
-//             model.nameInputErrorMessage, ErrorMessages.widgetInputNameIsEmpty);
-//       });
-
-//       test(
-//           'When called with textfield controller is not empty and not have spaces or underscores, Should empty nameInputErrorMessage and add the current route as the view name of widgetDescription',
-//           () async {
-//         getAndRegisterTestSweetsRouteTracker(currentRoute: 'current route');
-//         final model = WidgetCaptureViewModel(projectId: _projectId);
-//         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
-//         await model.addNewWidget(WidgetType.input, WidgetPosition.empty());
-//         model.saveWidgetDescription();
-//         expect(model.nameInputErrorMessage, isEmpty);
-//         expect(model.widgetDescription!.originalViewName, 'current route');
-//       });
-//       test(
-//           'When called and the current route is `/current route`, Should convert it to `currentRoute` in viewName proberty before send it to backend',
-//           () async {
-//         getAndRegisterTestSweetsRouteTracker(currentRoute: '/current route');
-//         final model = WidgetCaptureViewModel(projectId: _projectId);
-//         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
-//         await model.addNewWidget(WidgetType.input, WidgetPosition.empty());
-//         model.saveWidgetDescription();
-//         expect(model.widgetDescription!.viewName, 'currentRoute');
-//         expect(model.widgetDescription!.originalViewName, '/current route');
-//       });
-//       test(
-//           'When called and the current widget name is `login-button`, Should convert it to `loginButton` in name proberty before send it to backend',
-//           () async {
-//         getAndRegisterTestSweetsRouteTracker(currentRoute: '/current route');
-//         final model = WidgetCaptureViewModel(projectId: _projectId);
-//         model.formValueMap[WidgetNameValueKey] = 'login-button';
-//         await model.addNewWidget(WidgetType.input, WidgetPosition.empty());
-//         model.saveWidgetDescription();
-//         expect(model.widgetDescription!.name, 'loginButton');
-//       });
-//     });
+ 
 //     group('sendWidgetDescriptionToFirestore -', () {
 //       test(
 //           'When called, Should set captureWidgetStatusEnum to captureModeWidgetsContainerShow and widgetDescription to null',
