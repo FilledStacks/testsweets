@@ -28,8 +28,7 @@ class _$WidgetDescriptionTearOff {
       String name = '',
       WidgetType? widgetType,
       WidgetPosition? position,
-      bool visibility = true,
-      List<String>? targetedWidgets}) {
+      bool visibility = true}) {
     return _WidgetDescription(
       id: id,
       viewName: viewName,
@@ -38,7 +37,6 @@ class _$WidgetDescriptionTearOff {
       widgetType: widgetType,
       position: position,
       visibility: visibility,
-      targetedWidgets: targetedWidgets,
     );
   }
 
@@ -73,9 +71,6 @@ mixin _$WidgetDescription {
   /// Whether the key will be visible to the driver or not
   bool get visibility => throw _privateConstructorUsedError;
 
-  /// Widget that we need to take
-  List<String>? get targetedWidgets => throw _privateConstructorUsedError;
-
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $WidgetDescriptionCopyWith<WidgetDescription> get copyWith =>
@@ -94,8 +89,7 @@ abstract class $WidgetDescriptionCopyWith<$Res> {
       String name,
       WidgetType? widgetType,
       WidgetPosition? position,
-      bool visibility,
-      List<String>? targetedWidgets});
+      bool visibility});
 
   $WidgetPositionCopyWith<$Res>? get position;
 }
@@ -118,7 +112,6 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
     Object? widgetType = freezed,
     Object? position = freezed,
     Object? visibility = freezed,
-    Object? targetedWidgets = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -149,10 +142,6 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
           ? _value.visibility
           : visibility // ignore: cast_nullable_to_non_nullable
               as bool,
-      targetedWidgets: targetedWidgets == freezed
-          ? _value.targetedWidgets
-          : targetedWidgets // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
     ));
   }
 
@@ -182,8 +171,7 @@ abstract class _$WidgetDescriptionCopyWith<$Res>
       String name,
       WidgetType? widgetType,
       WidgetPosition? position,
-      bool visibility,
-      List<String>? targetedWidgets});
+      bool visibility});
 
   @override
   $WidgetPositionCopyWith<$Res>? get position;
@@ -209,7 +197,6 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
     Object? widgetType = freezed,
     Object? position = freezed,
     Object? visibility = freezed,
-    Object? targetedWidgets = freezed,
   }) {
     return _then(_WidgetDescription(
       id: id == freezed
@@ -240,10 +227,6 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
           ? _value.visibility
           : visibility // ignore: cast_nullable_to_non_nullable
               as bool,
-      targetedWidgets: targetedWidgets == freezed
-          ? _value.targetedWidgets
-          : targetedWidgets // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
     ));
   }
 }
@@ -258,8 +241,7 @@ class _$_WidgetDescription extends _WidgetDescription {
       this.name = '',
       this.widgetType,
       this.position,
-      this.visibility = true,
-      this.targetedWidgets})
+      this.visibility = true})
       : super._();
 
   factory _$_WidgetDescription.fromJson(Map<String, dynamic> json) =>
@@ -295,14 +277,10 @@ class _$_WidgetDescription extends _WidgetDescription {
 
   /// Whether the key will be visible to the driver or not
   final bool visibility;
-  @override
-
-  /// Widget that we need to take
-  final List<String>? targetedWidgets;
 
   @override
   String toString() {
-    return 'WidgetDescription(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility, targetedWidgets: $targetedWidgets)';
+    return 'WidgetDescription(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility)';
   }
 
   @override
@@ -327,10 +305,7 @@ class _$_WidgetDescription extends _WidgetDescription {
                     .equals(other.position, position)) &&
             (identical(other.visibility, visibility) ||
                 const DeepCollectionEquality()
-                    .equals(other.visibility, visibility)) &&
-            (identical(other.targetedWidgets, targetedWidgets) ||
-                const DeepCollectionEquality()
-                    .equals(other.targetedWidgets, targetedWidgets)));
+                    .equals(other.visibility, visibility)));
   }
 
   @override
@@ -342,8 +317,7 @@ class _$_WidgetDescription extends _WidgetDescription {
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(widgetType) ^
       const DeepCollectionEquality().hash(position) ^
-      const DeepCollectionEquality().hash(visibility) ^
-      const DeepCollectionEquality().hash(targetedWidgets);
+      const DeepCollectionEquality().hash(visibility);
 
   @JsonKey(ignore: true)
   @override
@@ -364,8 +338,7 @@ abstract class _WidgetDescription extends WidgetDescription {
       String name,
       WidgetType? widgetType,
       WidgetPosition? position,
-      bool visibility,
-      List<String>? targetedWidgets}) = _$_WidgetDescription;
+      bool visibility}) = _$_WidgetDescription;
   _WidgetDescription._() : super._();
 
   factory _WidgetDescription.fromJson(Map<String, dynamic> json) =
@@ -399,10 +372,6 @@ abstract class _WidgetDescription extends WidgetDescription {
 
   /// Whether the key will be visible to the driver or not
   bool get visibility => throw _privateConstructorUsedError;
-  @override
-
-  /// Widget that we need to take
-  List<String>? get targetedWidgets => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$WidgetDescriptionCopyWith<_WidgetDescription> get copyWith =>

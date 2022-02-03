@@ -31,9 +31,6 @@ class WidgetDescription with _$WidgetDescription {
 
     /// Whether the key will be visible to the driver or not
     @Default(true) bool visibility,
-
-    /// Widget that we need to take
-    List<String>? targetedWidgets,
   }) = _WidgetDescription;
   factory WidgetDescription.addView(
           {required String viewName, required String originalViewName}) =>
@@ -42,11 +39,6 @@ class WidgetDescription with _$WidgetDescription {
         originalViewName: originalViewName,
         widgetType: WidgetType.view,
       );
-
-  factory WidgetDescription.addAtPosition({
-    required WidgetPosition widgetPosition,
-  }) =>
-      WidgetDescription(position: widgetPosition);
 
   factory WidgetDescription.fromJson(Map<String, dynamic> json) =>
       _$WidgetDescriptionFromJson(json);

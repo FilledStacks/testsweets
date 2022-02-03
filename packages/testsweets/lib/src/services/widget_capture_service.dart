@@ -1,4 +1,5 @@
 import 'package:testsweets/src/app/logger.dart';
+import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
@@ -18,7 +19,11 @@ class WidgetCaptureService {
   }
 
   final bool verbose;
-  WidgetCaptureService({this.verbose = false});
+  WidgetCaptureService({this.verbose = false}) {
+    if (verbose) {
+      projectId = 'projectId';
+    }
+  }
 
   /// Captures a widgets description to the backend as well as locally in the [widgetDescriptionMap]
   Future<String?> captureWidgetDescription({
@@ -26,6 +31,8 @@ class WidgetCaptureService {
   }) async {
     log.i('description:$description projectId:$_projectId');
     try {
+      await _checkViewIfExistOrCaptureIt(description.originalViewName!);
+
       final descriptionId =
           await _cloudFunctionsService.uploadWidgetDescriptionToProject(
         projectId: _projectId,
@@ -33,8 +40,7 @@ class WidgetCaptureService {
       );
       log.i('descriptionId from Cloud: $descriptionId');
 
-      addWidgetDescriptionToMap(
-          description: description.copyWith(id: descriptionId));
+      addWidgetDescriptionToMap = description.copyWith(id: descriptionId);
     } catch (e) {
       log.e(e);
       return e.toString();
@@ -47,11 +53,12 @@ class WidgetCaptureService {
         .getWidgetDescriptionForProject(projectId: _projectId);
     widgetDescriptionMap.clear();
     for (final description in widgetDescriptions) {
-      addWidgetDescriptionToMap(description: description);
+      addWidgetDescriptionToMap = description;
     }
   }
 
-  void addWidgetDescriptionToMap({required WidgetDescription description}) {
+  set addWidgetDescriptionToMap(WidgetDescription description) {
+    log.v(description);
     if (widgetDescriptionMap.containsKey(description.originalViewName)) {
       widgetDescriptionMap[description.originalViewName]?.add(description);
     } else {
@@ -109,5 +116,24 @@ class WidgetCaptureService {
         projectId: _projectId, description: description);
 
     log.i('descriptionId from Cloud: $descriptionId');
+  }
+
+  Future<void> _checkViewIfExistOrCaptureIt(String originalViewName) async {
+    if (!checkCurrentViewIfAlreadyCaptured(originalViewName)) {
+      log.i('originalViewName:$originalViewName projectId:$_projectId');
+
+      final viewDescription = WidgetDescription.addView(
+          viewName: originalViewName.convertViewNameToValidFormat,
+          originalViewName: originalViewName);
+
+      final descriptionId =
+          await _cloudFunctionsService.uploadWidgetDescriptionToProject(
+        projectId: _projectId,
+        description: viewDescription,
+      );
+      log.v('descriptionId from Cloud: $descriptionId');
+
+      addWidgetDescriptionToMap = viewDescription.copyWith(id: descriptionId);
+    }
   }
 }
