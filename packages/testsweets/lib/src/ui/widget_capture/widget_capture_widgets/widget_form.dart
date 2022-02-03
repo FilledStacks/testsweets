@@ -2,31 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/src/provider.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
-import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/custom_solid_controller.dart';
 import 'package:testsweets/src/ui/shared/icon_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
-import 'package:testsweets/utils/error_messages.dart';
 
 import 'type_selector.dart';
 
-class InfoForm extends StatefulWidget {
+class WidgetForm extends StatefulWidget {
   final TextEditingController textEditingController;
   final FocusNode focusNode;
-  const InfoForm({
+  const WidgetForm({
     Key? key,
     required this.textEditingController,
     required this.focusNode,
   }) : super(key: key);
 
   @override
-  State<InfoForm> createState() => _InfoFormState();
+  State<WidgetForm> createState() => _WidgetFormState();
 }
 
-class _InfoFormState extends State<InfoForm> {
+class _WidgetFormState extends State<WidgetForm> {
   late SolidController solidController;
   @override
   void initState() {
@@ -47,6 +45,9 @@ class _InfoFormState extends State<InfoForm> {
 
     return CustomSolidBottomSheet(
       controller: solidController,
+      // Close the keyboard when you hide the bottomsheet
+      onHide: widget.focusNode.unfocus,
+      onShow: model.showWidgetForm,
       headerBar: SvgPicture.asset(
         'packages/testsweets/assets/svgs/up_arrow_handle.svg',
       ),
@@ -55,12 +56,6 @@ class _InfoFormState extends State<InfoForm> {
       canUserSwipe: false,
       minHeight: 0,
       maxHeight: 300,
-      onHide: () {
-        model.toggleInfoForm(false);
-      },
-      onShow: () {
-        model.toggleInfoForm(true);
-      },
       body: widgetDescription == null
           ? const SizedBox.shrink()
           : Container(
@@ -166,30 +161,57 @@ class _InfoFormState extends State<InfoForm> {
                     ),
                   ),
                   const SizedBox(
-                    height: 16,
+                    height: 20,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: CtaButton(
-                        isDisabled: widgetDescription.name.isEmpty ||
-                            widgetDescription.widgetType == null,
-                        onTap: () async {
-                          final result = await model.saveWidget();
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 5,
+                          child: CtaButton(
+                              isDisabled: widgetDescription.name.isEmpty ||
+                                  widgetDescription.widgetType == null,
+                              onTap: () async {
+                                final result = await model.saveWidget();
 
-                          /// When widget is saved successfully hide
-                          /// the bottom sheet and clear the text
-                          if (result == null) {
-                            widget.textEditingController.clear();
-                            widget.focusNode.unfocus();
-                            solidController.hide();
-                          }
-                        },
-                        fillColor: kcPrimaryPurple,
-                        title: 'Save'),
+                                /// When widget is saved successfully hide
+                                /// the bottom sheet and clear the text
+                                if (result == null) {
+                                  await closeBottomSheet();
+                                }
+                              },
+                              fillColor: kcPrimaryPurple,
+                              title: 'Save'),
+                        ),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: CtaButton(
+                              isDisabled: widgetDescription.name.isEmpty &&
+                                  widgetDescription.widgetType == null,
+                              onTap: () async {
+                                await closeBottomSheet();
+                                model.clearWidgetDescriptionForm();
+                              },
+                              fillColor: kcError,
+                              title: 'Clear'),
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
             ),
     );
+  }
+
+  Future<void> closeBottomSheet() async {
+    widget.textEditingController.clear();
+    widget.focusNode.unfocus();
+    solidController.hide();
+    await Future.delayed(const Duration(milliseconds: 350));
   }
 }

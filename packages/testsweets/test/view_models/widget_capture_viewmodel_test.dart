@@ -31,7 +31,7 @@ void main() {
         getAndRegisterTestSweetsRouteTracker(currentRoute: 'current route');
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
-        model.toggleInfoForm(true);
+        model.showWidgetForm();
         model.widgetDescription!.copyWith(widgetType: WidgetType.scrollable);
         model.saveWidget();
         expect(model.widgetDescription!.originalViewName, 'current route');
@@ -42,7 +42,7 @@ void main() {
         getAndRegisterTestSweetsRouteTracker(currentRoute: '/current route');
         final model = WidgetCaptureViewModel(projectId: _projectId);
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
-        model.toggleInfoForm(true);
+        model.showWidgetForm();
         model.widgetDescription!.copyWith(widgetType: WidgetType.scrollable);
         model.saveWidget();
         expect(model.widgetDescription!.viewName, 'currentRoute');
@@ -53,7 +53,7 @@ void main() {
           () async {
         getAndRegisterTestSweetsRouteTracker(currentRoute: '/current route');
         final model = WidgetCaptureViewModel(projectId: _projectId);
-        model.toggleInfoForm(true);
+        model.showWidgetForm();
 
         model.formValueMap[WidgetNameValueKey] = 'login-button';
 

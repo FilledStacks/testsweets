@@ -7,7 +7,7 @@ import 'package:testsweets/src/ui/shared/widgets_visualizer.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/info_form.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_form.dart';
 
 import 'widget_capture_widgets/draggable_widget.dart';
 
@@ -42,7 +42,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                 : WidgetsVisualizer(
                     widgetDescriptions: model.descriptionsForView,
                   ),
-            InfoForm(
+            WidgetForm(
               focusNode: widgetNameFocusNode,
               textEditingController: widgetNameController,
             ),

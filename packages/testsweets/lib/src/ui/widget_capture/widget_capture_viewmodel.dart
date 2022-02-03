@@ -67,6 +67,12 @@ class WidgetCaptureViewModel extends FormViewModel {
     notifyListeners();
   }
 
+  void clearWidgetDescriptionForm() {
+    log.v('');
+    widgetDescription = null;
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+  }
+
   Future<String?> saveWidget() async {
     log.i(widgetDescription.toString());
 
@@ -93,13 +99,11 @@ class WidgetCaptureViewModel extends FormViewModel {
     return result;
   }
 
-  void toggleInfoForm(bool show) {
-    if (show) {
-      widgetDescription = widgetDescription ?? WidgetDescription();
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetInfoForm;
-    } else {
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
-    }
+  /// When open the form create new instance of widgetDescription
+  /// if it's null and set [CaptureWidgetStatusEnum.widgetInfoForm]
+  void showWidgetForm() {
+    widgetDescription = widgetDescription ?? WidgetDescription();
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetInfoForm;
   }
 
   void updateDescriptionPosition(

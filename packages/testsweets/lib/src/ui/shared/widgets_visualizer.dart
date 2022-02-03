@@ -33,10 +33,10 @@ class WidgetsVisualizer extends StatelessWidget {
       children: [
         ...widgetDescriptions.map(
           (description) => Positioned(
-            top: description.responsiveYPosition(size.height),
-            left: description.responsiveXPosition(size.width),
+            top: description.responsiveYPosition(size.height) ?? 0,
+            left: description.responsiveXPosition(size.width) ?? 0,
             child: CustomPopupMenu(
-              barrierColor: kcCard.withOpacity(0.3),
+              barrierColor: kcBackground.withOpacity(0.3),
               showArrow: false,
               menuBuilder: () => PopupMenu(
                 onMenuAction: (popupMenuAction) {
