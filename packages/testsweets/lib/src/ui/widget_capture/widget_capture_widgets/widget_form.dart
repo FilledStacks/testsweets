@@ -45,7 +45,7 @@ class _WidgetFormState extends State<WidgetForm> {
   Widget build(BuildContext context) {
     final model = context.watch<WidgetCaptureViewModel>();
     final widgetDescription = model.widgetDescription;
-
+    final size = MediaQuery.of(context).size;
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
@@ -56,168 +56,173 @@ class _WidgetFormState extends State<WidgetForm> {
             widget.textEditingController.text = model.widgetDescription!.name;
             solidController.show();
           }),
-        CustomSolidBottomSheet(
-          controller: solidController,
-          // Close the keyboard when you hide the bottomsheet
-          onHide: widget.focusNode.unfocus,
-          onShow: model.showWidgetForm,
-          headerBar: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              SvgPicture.asset(
-                'packages/testsweets/assets/svgs/eclipse.svg',
-              ),
-              StreamBuilder<bool>(
-                  stream: solidController.isOpenStream,
-                  builder: (context, snapshot) {
-                    return ar.AnimatedRotation(
-                      duration: const Duration(milliseconds: 350),
-                      angle: snapshot.data ?? false ? 180 : 0,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: SvgPicture.asset(
-                          'packages/testsweets/assets/svgs/arrow_up.svg',
-                        ),
-                      ),
-                    );
-                  }),
-            ],
-          ),
-
-          toggleVisibilityOnTap: true,
-          autoSwiped: false,
-          canUserSwipe: false,
-          minHeight: 0,
-          maxHeight: 300,
-          body: widgetDescription == null
-              ? const SizedBox.shrink()
-              : Container(
-                  decoration: kdBlackRoundedEdgeDecoration,
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text('Select widget type:',
-                            textAlign: TextAlign.left, style: tsMedium()),
-                      ),
-                      TypeSelector(
-                        selectedWidgetType: widgetDescription.widgetType,
-                        onTap: (widgetType) => model.setWidgetType = widgetType,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Select widget name and visibilty:',
-                                textAlign: TextAlign.left, style: tsMedium()),
-                            const SizedBox(
-                              height: 8,
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: TextFormField(
-                                    focusNode: widget.focusNode,
-                                    controller: widget.textEditingController,
-                                    style: tsNormal()
-                                        .copyWith(color: kcPrimaryWhite),
-                                    decoration: InputDecoration(
-                                        hintStyle: tsNormal().copyWith(
-                                          color: kcSubtext,
-                                        ),
-                                        fillColor: kcTextField,
-                                        filled: true,
-                                        hintText: 'Widget Name',
-                                        contentPadding: const EdgeInsets.only(
-                                          left: 16,
-                                          right: 16,
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            width: 1,
-                                            color: kcPrimaryPurple,
-                                          ),
-                                          borderRadius: BorderRadius.all(
-                                            crTextFieldCornerRadius(),
-                                          ),
-                                        ),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(
-                                            width: 1,
-                                            color: kcCard,
-                                          ),
-                                          borderRadius: BorderRadius.all(
-                                            crTextFieldCornerRadius(),
-                                          ),
-                                        )),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 8,
-                                ),
-                                SweetIconButton(
-                                    backgroundColor: kcCard,
-                                    onTap: () {
-                                      model.setVisibilty =
-                                          !widgetDescription.visibility;
-                                    },
-                                    svgIcon: widgetDescription.visibility
-                                        ? 'packages/testsweets/assets/svgs/eye.svg'
-                                        : 'packages/testsweets/assets/svgs/eye_closed.svg',
-                                    svgWidth: 30),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              flex: 5,
-                              child: CtaButton(
-                                  isDisabled: widgetDescription.name.isEmpty ||
-                                      widgetDescription.widgetType == null,
-                                  onTap: () async {
-                                    final result = await model.submitForm();
-
-                                    /// When widget is saved successfully hide
-                                    /// the bottom sheet and clear the text
-                                    if (result == null) {
-                                      await closeBottomSheet();
-                                    }
-                                  },
-                                  fillColor: kcPrimaryPurple,
-                                  title: widgetDescription.id != null
-                                      ? 'Update'
-                                      : 'Create'),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Expanded(
-                              flex: 2,
-                              child: CtaButton(
-                                  onTap: () async {
-                                    await closeBottomSheet();
-                                    model.clearWidgetDescriptionForm();
-                                  },
-                                  fillColor: kcError,
-                                  title: 'Clear'),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+        SizedBox(
+          width: size.width > 500 ? 500 : size.width,
+          child: CustomSolidBottomSheet(
+            controller: solidController,
+            // Close the keyboard when you hide the bottomsheet
+            onHide: widget.focusNode.unfocus,
+            onShow: model.showWidgetForm,
+            headerBar: Stack(
+              alignment: Alignment.bottomCenter,
+              children: [
+                SvgPicture.asset(
+                  'packages/testsweets/assets/svgs/eclipse.svg',
                 ),
+                StreamBuilder<bool>(
+                    stream: solidController.isOpenStream,
+                    builder: (context, snapshot) {
+                      return ar.AnimatedRotation(
+                        duration: const Duration(milliseconds: 350),
+                        angle: snapshot.data ?? false ? 180 : 0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: SvgPicture.asset(
+                            'packages/testsweets/assets/svgs/arrow_up.svg',
+                          ),
+                        ),
+                      );
+                    }),
+              ],
+            ),
+
+            toggleVisibilityOnTap: true,
+            autoSwiped: false,
+            canUserSwipe: false,
+            minHeight: 0,
+            maxHeight: 300,
+            body: widgetDescription == null
+                ? const SizedBox.shrink()
+                : Container(
+                    decoration: kdBlackRoundedEdgeDecoration,
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Text('Select widget type:',
+                              textAlign: TextAlign.left, style: tsMedium()),
+                        ),
+                        TypeSelector(
+                          selectedWidgetType: widgetDescription.widgetType,
+                          onTap: (widgetType) =>
+                              model.setWidgetType = widgetType,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Select widget name and visibilty:',
+                                  textAlign: TextAlign.left, style: tsMedium()),
+                              const SizedBox(
+                                height: 8,
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: TextFormField(
+                                      focusNode: widget.focusNode,
+                                      controller: widget.textEditingController,
+                                      style: tsNormal()
+                                          .copyWith(color: kcPrimaryWhite),
+                                      decoration: InputDecoration(
+                                          hintStyle: tsNormal().copyWith(
+                                            color: kcSubtext,
+                                          ),
+                                          fillColor: kcTextField,
+                                          filled: true,
+                                          hintText: 'Widget Name',
+                                          contentPadding: const EdgeInsets.only(
+                                            left: 16,
+                                            right: 16,
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: kcPrimaryPurple,
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                              crTextFieldCornerRadius(),
+                                            ),
+                                          ),
+                                          enabledBorder: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: kcCard,
+                                            ),
+                                            borderRadius: BorderRadius.all(
+                                              crTextFieldCornerRadius(),
+                                            ),
+                                          )),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  SweetIconButton(
+                                      backgroundColor: kcCard,
+                                      onTap: () {
+                                        model.setVisibilty =
+                                            !widgetDescription.visibility;
+                                      },
+                                      svgIcon: widgetDescription.visibility
+                                          ? 'packages/testsweets/assets/svgs/eye.svg'
+                                          : 'packages/testsweets/assets/svgs/eye_closed.svg',
+                                      svgWidth: 30),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 5,
+                                child: CtaButton(
+                                    isDisabled: widgetDescription
+                                            .name.isEmpty ||
+                                        widgetDescription.widgetType == null,
+                                    onTap: () async {
+                                      final result = await model.submitForm();
+
+                                      /// When widget is saved successfully hide
+                                      /// the bottom sheet and clear the text
+                                      if (result == null) {
+                                        await closeBottomSheet();
+                                      }
+                                    },
+                                    fillColor: kcPrimaryPurple,
+                                    title: widgetDescription.id != null
+                                        ? 'Update'
+                                        : 'Create'),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: CtaButton(
+                                    onTap: () async {
+                                      await closeBottomSheet();
+                                      model.clearWidgetDescriptionForm();
+                                    },
+                                    fillColor: kcError,
+                                    title: 'Clear'),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+          ),
         ),
       ],
     );

@@ -16,7 +16,7 @@ class RouteBanner extends StatelessWidget {
       child: SafeArea(
         child: Container(
           margin: const EdgeInsets.all(4),
-          padding: const EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
           decoration: kdRouteNameDecoration,
           child: Row(
             mainAxisSize: MainAxisSize.min,

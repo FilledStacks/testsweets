@@ -63,17 +63,10 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                       routeName: model.currentViewName,
                     ),
                   ),
-                  LayoutBuilder(builder: (context, boxConstraints) {
-                    return SizedBox(
-                      width: boxConstraints.maxWidth > 500
-                          ? 500
-                          : boxConstraints.maxWidth,
-                      child: WidgetForm(
-                        focusNode: widgetNameFocusNode,
-                        textEditingController: widgetNameController,
-                      ),
-                    );
-                  }),
+                  WidgetForm(
+                    focusNode: widgetNameFocusNode,
+                    textEditingController: widgetNameController,
+                  )
                 ],
               ),
       ),

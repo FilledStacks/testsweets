@@ -5,14 +5,17 @@ extension WidgetDescriptionUtils on WidgetDescription {
   double? responsiveXPosition(double currentScreenWidth) {
     if (this.position == null) return null;
 
-    return _calculateWidthRatio(currentScreenWidth) * this.position!.x -
+    final result = _calculateWidthRatio(currentScreenWidth) * this.position!.x -
         (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
+    return result;
   }
 
   double? responsiveYPosition(double currentScreenHeight) {
     if (this.position == null) return null;
-    return _calculateHeightRatio(currentScreenHeight) * this.position!.y -
-        (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
+    final result =
+        _calculateHeightRatio(currentScreenHeight) * this.position!.y -
+            (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
+    return result;
   }
 
   double _calculateHeightRatio(double currentScreenHeight) {

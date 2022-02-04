@@ -37,20 +37,20 @@ class WidgetsVisualizer extends StatelessWidget {
             .where((element) => element.widgetType != WidgetType.view)
             .map(
               (description) => Positioned(
-                top: description.responsiveYPosition(size.height) ?? 0,
-                left: description.responsiveXPosition(size.width) ?? 0,
+                top: description.responsiveYPosition(size.height),
+                left: description.responsiveXPosition(size.width),
                 child: CustomPopupMenu(
                   barrierColor: kcBackground.withOpacity(0.3),
                   showArrow: false,
                   menuBuilder: () => PopupMenu(
-                    onMenuAction: (popupMenuAction) {
+                    onMenuAction: (popupMenuAction) async {
                       if (popupMenuAction == PopupMenuAction.edit) {
                         model.editMode(
                           description,
                         );
                         onEdit();
                       } else if (popupMenuAction == PopupMenuAction.remove) {
-                        model.removeWidgetDescription(description);
+                        await model.removeWidgetDescription(description);
                       }
                     },
                   ),
