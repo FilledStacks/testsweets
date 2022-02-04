@@ -40,12 +40,13 @@ class WidgetsVisualizer extends StatelessWidget {
               showArrow: false,
               menuBuilder: () => PopupMenu(
                 onMenuAction: (popupMenuAction) {
-                  model.executeAction(
-                      description: description,
-                      popupMenuAction: popupMenuAction);
-
                   if (popupMenuAction == PopupMenuAction.edit) {
+                    model.editMode(
+                      description,
+                    );
                     onEdit();
+                  } else if (popupMenuAction == PopupMenuAction.remove) {
+                    model.removeWidgetDescription(description);
                   }
                 },
               ),

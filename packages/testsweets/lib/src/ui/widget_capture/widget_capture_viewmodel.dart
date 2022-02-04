@@ -4,7 +4,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
-import 'package:testsweets/src/enums/popup_menu_action.dart';
+import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/locator.dart';
@@ -22,6 +22,9 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   CaptureWidgetStatusEnum _captureWidgetStatusEnum =
       CaptureWidgetStatusEnum.idle;
+
+  /// We use this position as the starter point of any new widget
+  late WidgetPosition screenCenterPosition;
 
   set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
     _captureWidgetStatusEnum = captureWidgetStatusEnum;
@@ -50,8 +53,9 @@ class WidgetCaptureViewModel extends FormViewModel {
       setBusy(false);
     } catch (e) {
       log.e('Could not get widgetDescriptions: $e');
-      _snackbarService.showSnackbar(
-          message: 'Could not get widgetDescriptions: $e');
+      _snackbarService.showCustomSnackBar(
+          message: 'Could not get widgetDescriptions: $e',
+          variant: ToastType.failed);
     }
   }
 
@@ -76,7 +80,8 @@ class WidgetCaptureViewModel extends FormViewModel {
   /// When open the form create new instance of widgetDescription
   /// if it's null and set [CaptureWidgetStatusEnum.widgetInfoForm]
   void showWidgetForm() {
-    widgetDescription = widgetDescription ?? WidgetDescription();
+    widgetDescription =
+        widgetDescription ?? WidgetDescription(position: screenCenterPosition);
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetInfoForm;
   }
 
@@ -97,15 +102,13 @@ class WidgetCaptureViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  void executeAction(
-      {required WidgetDescription description,
-      required PopupMenuAction popupMenuAction}) {
+  void editMode(WidgetDescription description) {
     widgetDescription = description;
     showWidgetForm();
     notifyListeners();
   }
 
-  Future<String?> saveWidget() async {
+  Future<String?> saveWidget({WidgetPosition? screenCenter}) async {
     log.i(widgetDescription);
 
     setBusy(true);
@@ -122,7 +125,8 @@ class WidgetCaptureViewModel extends FormViewModel {
         description: widgetDescription!);
 
     if (result is String) {
-      _snackbarService.showSnackbar(message: result);
+      _snackbarService.showCustomSnackBar(
+          message: result, variant: ToastType.failed);
     } else {
       widgetDescription = null;
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
@@ -133,42 +137,39 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   Future<String?> updateWidgetDescription() async {
     log.i(widgetDescription);
-    try {
-      setBusy(true);
 
-      final result = await _widgetCaptureService.updateWidgetDescription(
-          description: widgetDescription!);
+    setBusy(true);
 
-      if (result is String) {
-        _snackbarService.showSnackbar(message: result);
-      } else {
-        captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
-        widgetDescription = null;
-      }
-    } catch (e) {
-      log.e('Couldn\'t update the widget. $e');
+    final result = await _widgetCaptureService.updateWidgetDescription(
+        description: widgetDescription!);
+
+    if (result is String) {
+      _snackbarService.showCustomSnackBar(
+          message: result, variant: ToastType.failed);
+    } else {
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+      widgetDescription = null;
     }
+
     setBusy(false);
+    return result;
   }
 
-  Future<void> deleteWidgetDescription() async {
+  Future<String?> removeWidgetDescription(
+      WidgetDescription widgetDescription) async {
     log.i(widgetDescription);
 
-    try {
-      setBusy(true);
+    setBusy(true);
 
-      final result = await _widgetCaptureService.deleteWidgetDescription(
-          description: widgetDescription!);
-      if (result is String) {
-        _snackbarService.showSnackbar(message: result);
-      } else {
-        captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
-        widgetDescription = null;
-      }
-    } catch (e) {
-      log.e('Couldn\'t delete the widget. $e');
+    final result = await _widgetCaptureService.deleteWidgetDescription(
+        description: widgetDescription);
+    if (result is String) {
+      _snackbarService.showCustomSnackBar(
+          message: result, variant: ToastType.failed);
     }
+
     setBusy(false);
+    return result;
   }
 
   @override
@@ -178,5 +179,13 @@ class WidgetCaptureViewModel extends FormViewModel {
     widgetDescription =
         widgetDescription?.copyWith(name: widgetNameValue ?? '');
     notifyListeners();
+  }
+
+  Future<String?> submitForm() async {
+    if (widgetDescription?.id != null) {
+      return await updateWidgetDescription();
+    } else {
+      return await saveWidget();
+    }
   }
 }

@@ -10,7 +10,7 @@ import 'package:testsweets/src/ui/shared/icon_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/shared/widgets_visualizer.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
-
+import 'package:testsweets/src/ui/shared/animation_rotation.dart' as ar;
 import 'type_selector.dart';
 
 class WidgetForm extends StatefulWidget {
@@ -51,7 +51,8 @@ class _WidgetFormState extends State<WidgetForm> {
       children: [
         if (model.captureWidgetStatusEnum.idleMode)
           WidgetsVisualizer(onEdit: () {
-            // Set the value of the edited widget to the form textfield
+            /// Set the value of the edited widget to the form textfield
+            /// and show the bottomsheet
             widget.textEditingController.text = model.widgetDescription!.name;
             solidController.show();
           }),
@@ -60,9 +61,29 @@ class _WidgetFormState extends State<WidgetForm> {
           // Close the keyboard when you hide the bottomsheet
           onHide: widget.focusNode.unfocus,
           onShow: model.showWidgetForm,
-          headerBar: SvgPicture.asset(
-            'packages/testsweets/assets/svgs/up_arrow_handle.svg',
+          headerBar: Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              SvgPicture.asset(
+                'packages/testsweets/assets/svgs/eclipse.svg',
+              ),
+              StreamBuilder<bool>(
+                  stream: solidController.isOpenStream,
+                  builder: (context, snapshot) {
+                    return ar.AnimatedRotation(
+                      duration: const Duration(milliseconds: 350),
+                      angle: snapshot.data ?? false ? 180 : 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: SvgPicture.asset(
+                          'packages/testsweets/assets/svgs/arrow_up.svg',
+                        ),
+                      ),
+                    );
+                  }),
+            ],
           ),
+
           toggleVisibilityOnTap: true,
           autoSwiped: false,
           canUserSwipe: false,
@@ -165,7 +186,7 @@ class _WidgetFormState extends State<WidgetForm> {
                                   isDisabled: widgetDescription.name.isEmpty ||
                                       widgetDescription.widgetType == null,
                                   onTap: () async {
-                                    final result = await model.saveWidget();
+                                    final result = await model.submitForm();
 
                                     /// When widget is saved successfully hide
                                     /// the bottom sheet and clear the text
@@ -174,10 +195,12 @@ class _WidgetFormState extends State<WidgetForm> {
                                     }
                                   },
                                   fillColor: kcPrimaryPurple,
-                                  title: 'Save'),
+                                  title: widgetDescription.id != null
+                                      ? 'Update'
+                                      : 'Create'),
                             ),
                             const SizedBox(
-                              width: 4,
+                              width: 8,
                             ),
                             Expanded(
                               flex: 2,
@@ -187,7 +210,7 @@ class _WidgetFormState extends State<WidgetForm> {
                                     model.clearWidgetDescriptionForm();
                                   },
                                   fillColor: kcError,
-                                  title: 'Cancel'),
+                                  title: 'Clear'),
                             ),
                           ],
                         ),

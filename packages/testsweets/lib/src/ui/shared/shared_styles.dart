@@ -24,10 +24,10 @@ TextStyle tsMedium() => TextStyle(
       fontSize: 16,
     );
 TextStyle tsLarge() => TextStyle(
-      fontFamily: "Roboto",
-      fontWeight: FontWeight.w600,
-      fontSize: 18,
-    );
+    fontFamily: "Roboto",
+    fontWeight: FontWeight.w600,
+    fontSize: 18,
+    color: kcPrimaryWhite);
 
 TextStyle tsExtraLarge() => TextStyle(
       fontFamily: "Roboto",

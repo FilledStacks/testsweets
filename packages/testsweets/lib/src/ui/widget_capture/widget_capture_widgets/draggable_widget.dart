@@ -15,10 +15,8 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
     return model.widgetDescription?.widgetType == null
         ? const SizedBox.shrink()
         : Positioned(
-            top: model.widgetDescription?.responsiveYPosition(size.height) ??
-                Utils.halfOfLengthMinusWidgetRadius(size.height),
-            left: model.widgetDescription?.responsiveXPosition(size.width) ??
-                Utils.halfOfLengthMinusWidgetRadius(size.width),
+            top: model.widgetDescription?.responsiveYPosition(size.height),
+            left: model.widgetDescription?.responsiveXPosition(size.width),
             child: GestureDetector(
               onPanUpdate: (panEvent) {
                 final x = panEvent.delta.dx;

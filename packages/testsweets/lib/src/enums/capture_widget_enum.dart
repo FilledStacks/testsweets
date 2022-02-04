@@ -1,4 +1,1 @@
-enum CaptureWidgetStatusEnum {
-  idle,
-  widgetInfoForm,
-}
+enum CaptureWidgetStatusEnum { idle, widgetInfoForm, removeMode }

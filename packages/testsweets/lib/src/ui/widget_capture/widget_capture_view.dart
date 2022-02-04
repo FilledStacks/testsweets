@@ -3,11 +3,13 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/ui/shared/busy_indecator.dart';
+import 'package:testsweets/src/ui/shared/utils.dart';
 import 'package:testsweets/src/ui/shared/widgets_visualizer.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_form.dart';
+import 'package:testsweets/testsweets.dart';
 
 import 'widget_capture_widgets/draggable_widget.dart';
 
@@ -29,9 +31,16 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return ViewModelBuilder<WidgetCaptureViewModel>.reactive(
       onModelReady: (model) {
         model.loadWidgetDescriptions();
+        model.screenCenterPosition = WidgetPosition(
+            capturedDeviceHeight: size.height,
+            capturedDeviceWidth: size.width,
+            x: size.width / 2,
+            y: size.height / 2);
         listenToFormUpdated(model);
       },
       builder: (context, model, _) => Scaffold(
