@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
+import 'package:testsweets/src/enums/widget_type.dart';
 
 import 'package:testsweets/src/extensions/widget_description_extension.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/popup_menu.dart';
+import 'package:testsweets/src/ui/shared/route_banner.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/extensions/widget_type_flutter_extension.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
@@ -31,38 +33,40 @@ class WidgetsVisualizer extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        ...model.descriptionsForView.map(
-          (description) => Positioned(
-            top: description.responsiveYPosition(size.height) ?? 0,
-            left: description.responsiveXPosition(size.width) ?? 0,
-            child: CustomPopupMenu(
-              barrierColor: kcBackground.withOpacity(0.3),
-              showArrow: false,
-              menuBuilder: () => PopupMenu(
-                onMenuAction: (popupMenuAction) {
-                  if (popupMenuAction == PopupMenuAction.edit) {
-                    model.editMode(
-                      description,
-                    );
-                    onEdit();
-                  } else if (popupMenuAction == PopupMenuAction.remove) {
-                    model.removeWidgetDescription(description);
-                  }
-                },
-              ),
-              pressType: PressType.longPress,
-              child: WidgetCircle(
-                transparency: driveMode
-                    ? 0
-                    : description.visibility
-                        ? 1
-                        : 0.3,
-                key: Key(description.automationKey),
-                widgetType: description.widgetType!,
+        ...model.descriptionsForView
+            .where((element) => element.widgetType != WidgetType.view)
+            .map(
+              (description) => Positioned(
+                top: description.responsiveYPosition(size.height) ?? 0,
+                left: description.responsiveXPosition(size.width) ?? 0,
+                child: CustomPopupMenu(
+                  barrierColor: kcBackground.withOpacity(0.3),
+                  showArrow: false,
+                  menuBuilder: () => PopupMenu(
+                    onMenuAction: (popupMenuAction) {
+                      if (popupMenuAction == PopupMenuAction.edit) {
+                        model.editMode(
+                          description,
+                        );
+                        onEdit();
+                      } else if (popupMenuAction == PopupMenuAction.remove) {
+                        model.removeWidgetDescription(description);
+                      }
+                    },
+                  ),
+                  pressType: PressType.longPress,
+                  child: WidgetCircle(
+                    transparency: driveMode
+                        ? 0
+                        : description.visibility
+                            ? 1
+                            : 0.3,
+                    key: Key(description.automationKey),
+                    widgetType: description.widgetType!,
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
         if (showWidgetName)
           ...model.descriptionsForView.map(
             (description) => Positioned(

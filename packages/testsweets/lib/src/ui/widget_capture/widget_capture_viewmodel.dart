@@ -36,6 +36,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   WidgetCaptureViewModel({required String projectId}) {
     _widgetCaptureService.projectId = projectId;
+    _testSweetsRouteTracker.addListener(notifyListeners);
   }
 
   WidgetDescription? widgetDescription;
@@ -44,7 +45,10 @@ class WidgetCaptureViewModel extends FormViewModel {
       _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracker.currentRoute,
       );
-
+  bool get currentViewIsCaptured => descriptionsForView.any(
+        (element) => element.widgetType == WidgetType.view,
+      );
+  String get currentViewName => _testSweetsRouteTracker.formatedCurrentRoute;
   Future<void> loadWidgetDescriptions() async {
     log.v('');
     setBusy(true);

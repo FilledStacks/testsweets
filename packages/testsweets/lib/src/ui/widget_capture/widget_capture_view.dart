@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked/stacked_annotations.dart';
+import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/ui/shared/busy_indecator.dart';
+import 'package:testsweets/src/ui/shared/route_banner.dart';
 import 'package:testsweets/src/ui/shared/utils.dart';
 import 'package:testsweets/src/ui/shared/widgets_visualizer.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
@@ -34,8 +36,8 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
     final size = MediaQuery.of(context).size;
 
     return ViewModelBuilder<WidgetCaptureViewModel>.reactive(
-      onModelReady: (model) {
-        model.loadWidgetDescriptions();
+      onModelReady: (model) async {
+        await model.loadWidgetDescriptions();
         model.screenCenterPosition = WidgetPosition(
             capturedDeviceHeight: size.height,
             capturedDeviceWidth: size.width,
@@ -44,20 +46,36 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
         listenToFormUpdated(model);
       },
       builder: (context, model, _) => Scaffold(
-        body: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            child,
-            if (model.captureWidgetStatusEnum.infoFormMode) DraggableWidget(),
-            WidgetForm(
-              focusNode: widgetNameFocusNode,
-              textEditingController: widgetNameController,
-            ),
-            BusyIndicator(
-              enable: model.isBusy,
-            )
-          ],
-        ),
+        body: model.isBusy
+            ? BusyIndicator(
+                enable: model.isBusy,
+              )
+            : Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  child,
+                  if (model.captureWidgetStatusEnum.infoFormMode)
+                    DraggableWidget(),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: RouteBanner(
+                      isCaptured: model.currentViewIsCaptured,
+                      routeName: model.currentViewName,
+                    ),
+                  ),
+                  LayoutBuilder(builder: (context, boxConstraints) {
+                    return SizedBox(
+                      width: boxConstraints.maxWidth > 500
+                          ? 500
+                          : boxConstraints.maxWidth,
+                      child: WidgetForm(
+                        focusNode: widgetNameFocusNode,
+                        textEditingController: widgetNameController,
+                      ),
+                    );
+                  }),
+                ],
+              ),
       ),
       viewModelBuilder: () => WidgetCaptureViewModel(projectId: projectId),
     );

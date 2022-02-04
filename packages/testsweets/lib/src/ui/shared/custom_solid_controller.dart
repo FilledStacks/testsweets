@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
+import 'package:testsweets/src/ui/shared/app_colors.dart';
 
 class CustomSolidBottomSheet extends StatefulWidget {
   // This controls the minimum height of the body. Must be greater or equal of
@@ -159,6 +160,12 @@ class _CustomSolidBottomSheetState extends State<CustomSolidBottomSheet> {
           initialData: widget.controller!.height,
           builder: (_, snapshot) {
             return AnimatedContainer(
+              decoration: BoxDecoration(boxShadow: [
+                BoxShadow(
+                    spreadRadius: 8,
+                    color: kcPrimaryWhite.withOpacity(0.2),
+                    blurRadius: 24)
+              ]),
               curve: Curves.easeOut,
               duration:
                   Duration(milliseconds: widget.controller!.smoothness!.value),

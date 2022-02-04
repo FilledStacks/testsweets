@@ -7,6 +7,11 @@ TextStyle tsSmall() => TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 12,
     color: kcPrimaryWhite);
+TextStyle tsSmallBold() => TextStyle(
+    fontFamily: "Roboto",
+    fontWeight: FontWeight.bold,
+    fontSize: 12,
+    color: kcPrimaryWhite);
 TextStyle tsNormalBold() => TextStyle(
     fontFamily: "Roboto",
     fontWeight: FontWeight.w600,
@@ -128,3 +133,6 @@ const kdBlackRoundedEdgeDecoration = BoxDecoration(
     borderRadius: const BorderRadius.vertical(top: Radius.circular(12)));
 const kdPopupDecoration = BoxDecoration(
     color: kcCard, borderRadius: const BorderRadius.all(Radius.circular(12)));
+final kdRouteNameDecoration = BoxDecoration(
+    color: kcCard.withOpacity(0.2),
+    borderRadius: const BorderRadius.all(Radius.circular(4)));
