@@ -25,28 +25,6 @@ class WidgetCaptureService {
     }
   }
 
-  /// Captures a widgets description to the backend as well as locally in the [widgetDescriptionMap]
-  Future<String?> captureWidgetDescription({
-    required WidgetDescription description,
-  }) async {
-    log.i('description:$description projectId:$_projectId');
-    try {
-      await _checkViewIfExistOrCaptureIt(description.originalViewName!);
-
-      final descriptionId =
-          await _cloudFunctionsService.uploadWidgetDescriptionToProject(
-        projectId: _projectId,
-        description: description,
-      );
-      log.i('descriptionId from Cloud: $descriptionId');
-
-      addWidgetDescriptionToMap = description.copyWith(id: descriptionId);
-    } catch (e) {
-      log.e(e);
-      return e.toString();
-    }
-  }
-
   /// Gets all the widget descriptions the project and stores them in a map
   Future<void> loadWidgetDescriptionsForProject() async {
     final widgetDescriptions = await _cloudFunctionsService
@@ -92,30 +70,67 @@ class WidgetCaptureService {
               .any((element) => element.name == '')
           : false;
 
-  /// Updates a widget description to the backend as well as locally in the [widgetDescriptionMap]
-  Future<void> updateWidgetDescription({
+  /// Captures a widgets description to the backend as well as locally in the [widgetDescriptionMap]
+  Future<String?> captureWidgetDescription({
     required WidgetDescription description,
   }) async {
     log.i('description:$description projectId:$_projectId');
+    try {
+      await _checkViewIfExistOrCaptureIt(description.originalViewName!);
 
-    final widgetToUpdate = widgetDescriptionMap[description.originalViewName]
-        ?.firstWhere((element) => element.id == description.id);
-
-    final descriptionId = await _cloudFunctionsService.updateWidgetDescription(
+      final descriptionId =
+          await _cloudFunctionsService.uploadWidgetDescriptionToProject(
         projectId: _projectId,
-        newwidgetDescription: description,
-        oldwidgetDescription: widgetToUpdate!);
+        description: description,
+      );
+      // Request all keys from firestore
+      await loadWidgetDescriptionsForProject();
+      log.i('descriptionId from Cloud: $descriptionId');
+    } catch (e) {
+      log.e(e);
+      return e.toString();
+    }
+  }
 
-    log.i('descriptionId from Cloud: $descriptionId');
+  /// Updates a widget description to the backend as well as locally in the [widgetDescriptionMap]
+  Future<String?> updateWidgetDescription({
+    required WidgetDescription description,
+  }) async {
+    try {
+      log.i('description:$description projectId:$_projectId');
+
+      final widgetToUpdate = widgetDescriptionMap[description.originalViewName]
+          ?.firstWhere((element) => element.id == description.id);
+
+      final descriptionId =
+          await _cloudFunctionsService.updateWidgetDescription(
+              projectId: _projectId,
+              newwidgetDescription: description,
+              oldwidgetDescription: widgetToUpdate!);
+      // Request all keys from firestore
+      await loadWidgetDescriptionsForProject();
+      log.i('descriptionId from Cloud: $descriptionId');
+    } catch (e) {
+      log.e(e);
+      return e.toString();
+    }
   }
 
   /// Delete a widget descriptions from the project as well as locally
-  Future<void> deleteWidgetDescription(
+  Future<String?> deleteWidgetDescription(
       {required WidgetDescription description}) async {
-    final descriptionId = await _cloudFunctionsService.deleteWidgetDescription(
-        projectId: _projectId, description: description);
+    try {
+      final descriptionId =
+          await _cloudFunctionsService.deleteWidgetDescription(
+              projectId: _projectId, description: description);
+      // Request all keys from firestore
+      await loadWidgetDescriptionsForProject();
 
-    log.i('descriptionId from Cloud: $descriptionId');
+      log.i('descriptionId from Cloud: $descriptionId');
+    } catch (e) {
+      log.e(e);
+      return e.toString();
+    }
   }
 
   Future<void> _checkViewIfExistOrCaptureIt(String originalViewName) async {
@@ -133,7 +148,8 @@ class WidgetCaptureService {
       );
       log.v('descriptionId from Cloud: $descriptionId');
 
-      addWidgetDescriptionToMap = viewDescription.copyWith(id: descriptionId);
+      // Request all keys from firestore
+      await loadWidgetDescriptionsForProject();
     }
   }
 }

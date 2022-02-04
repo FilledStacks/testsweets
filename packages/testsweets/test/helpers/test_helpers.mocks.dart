@@ -5,7 +5,7 @@
 import 'dart:async' as _i7;
 import 'dart:ui' as _i11;
 
-import 'package:flutter/cupertino.dart' as _i6;
+import 'package:flutter/material.dart' as _i6;
 import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked_services/src/snackbar/snackbar_config.dart' as _i5;
@@ -131,13 +131,6 @@ class MockWidgetCaptureService extends _i1.Mock
       .noSuchMethod(Invocation.setter(#addWidgetDescriptionToMap, description),
           returnValueForMissingStub: null);
   @override
-  _i7.Future<String?> captureWidgetDescription(
-          {_i9.WidgetDescription? description}) =>
-      (super.noSuchMethod(
-          Invocation.method(
-              #captureWidgetDescription, [], {#description: description}),
-          returnValue: Future<String?>.value()) as _i7.Future<String?>);
-  @override
   _i7.Future<void> loadWidgetDescriptionsForProject() => (super.noSuchMethod(
       Invocation.method(#loadWidgetDescriptionsForProject, []),
       returnValue: Future<void>.value(),
@@ -156,21 +149,26 @@ class MockWidgetCaptureService extends _i1.Mock
               #checkCurrentViewIfAlreadyCaptured, [originalViewName]),
           returnValue: false) as bool);
   @override
-  _i7.Future<void> updateWidgetDescription(
+  _i7.Future<String?> captureWidgetDescription(
+          {_i9.WidgetDescription? description}) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #captureWidgetDescription, [], {#description: description}),
+          returnValue: Future<String?>.value()) as _i7.Future<String?>);
+  @override
+  _i7.Future<String?> updateWidgetDescription(
           {_i9.WidgetDescription? description}) =>
       (super.noSuchMethod(
           Invocation.method(
               #updateWidgetDescription, [], {#description: description}),
-          returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValue: Future<String?>.value()) as _i7.Future<String?>);
   @override
-  _i7.Future<void> deleteWidgetDescription(
+  _i7.Future<String?> deleteWidgetDescription(
           {_i9.WidgetDescription? description}) =>
       (super.noSuchMethod(
           Invocation.method(
               #deleteWidgetDescription, [], {#description: description}),
-          returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i7.Future<void>);
+          returnValue: Future<String?>.value()) as _i7.Future<String?>);
 }
 
 /// A class which mocks [TestSweetsRouteTracker].

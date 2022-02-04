@@ -14,14 +14,14 @@ import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_c
 import 'package:testsweets/testsweets.dart';
 
 class WidgetsVisualizer extends StatelessWidget {
-  final List<WidgetDescription> widgetDescriptions;
   final bool driveMode;
   final bool showWidgetName;
+  final Function onEdit;
   const WidgetsVisualizer({
     Key? key,
-    required this.widgetDescriptions,
     this.showWidgetName = false,
     this.driveMode = false,
+    required this.onEdit,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class WidgetsVisualizer extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        ...widgetDescriptions.map(
+        ...model.descriptionsForView.map(
           (description) => Positioned(
             top: description.responsiveYPosition(size.height) ?? 0,
             left: description.responsiveXPosition(size.width) ?? 0,
@@ -43,6 +43,10 @@ class WidgetsVisualizer extends StatelessWidget {
                   model.executeAction(
                       description: description,
                       popupMenuAction: popupMenuAction);
+
+                  if (popupMenuAction == PopupMenuAction.edit) {
+                    onEdit();
+                  }
                 },
               ),
               pressType: PressType.longPress,
@@ -59,7 +63,7 @@ class WidgetsVisualizer extends StatelessWidget {
           ),
         ),
         if (showWidgetName)
-          ...widgetDescriptions.map(
+          ...model.descriptionsForView.map(
             (description) => Positioned(
               top: description.responsiveYPosition(size.height),
               left: description.responsiveXPosition(size.width),

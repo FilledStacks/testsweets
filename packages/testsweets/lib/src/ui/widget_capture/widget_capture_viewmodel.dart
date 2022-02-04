@@ -47,12 +47,12 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusy(true);
     try {
       await _widgetCaptureService.loadWidgetDescriptionsForProject();
+      setBusy(false);
     } catch (e) {
       log.e('Could not get widgetDescriptions: $e');
       _snackbarService.showSnackbar(
           message: 'Could not get widgetDescriptions: $e');
     }
-    setBusy(false);
   }
 
   set setWidgetType(WidgetType widgetType) {
@@ -71,32 +71,6 @@ class WidgetCaptureViewModel extends FormViewModel {
     log.v('');
     widgetDescription = null;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
-  }
-
-  Future<String?> saveWidget() async {
-    log.i(widgetDescription.toString());
-
-    setBusy(true);
-    widgetDescription = widgetDescription?.copyWith(
-      name: widgetNameValue!.convertWidgetNameToValidFormat,
-      viewName:
-          _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
-      originalViewName: _testSweetsRouteTracker.currentRoute,
-    );
-
-    log.i('descriptionToSave:$widgetDescription');
-
-    final result = await _widgetCaptureService.captureWidgetDescription(
-        description: widgetDescription!);
-
-    if (result is String) {
-      _snackbarService.showSnackbar(message: result);
-    } else {
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
-      widgetDescription = null;
-    }
-    setBusy(false);
-    return result;
   }
 
   /// When open the form create new instance of widgetDescription
@@ -127,11 +101,80 @@ class WidgetCaptureViewModel extends FormViewModel {
       {required WidgetDescription description,
       required PopupMenuAction popupMenuAction}) {
     widgetDescription = description;
+    showWidgetForm();
+    notifyListeners();
+  }
+
+  Future<String?> saveWidget() async {
+    log.i(widgetDescription);
+
+    setBusy(true);
+    widgetDescription = widgetDescription?.copyWith(
+      name: widgetNameValue!.convertWidgetNameToValidFormat,
+      viewName:
+          _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
+      originalViewName: _testSweetsRouteTracker.currentRoute,
+    );
+
+    log.i('descriptionToSave:$widgetDescription');
+
+    final result = await _widgetCaptureService.captureWidgetDescription(
+        description: widgetDescription!);
+
+    if (result is String) {
+      _snackbarService.showSnackbar(message: result);
+    } else {
+      widgetDescription = null;
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+    }
+    setBusy(false);
+    return result;
+  }
+
+  Future<String?> updateWidgetDescription() async {
+    log.i(widgetDescription);
+    try {
+      setBusy(true);
+
+      final result = await _widgetCaptureService.updateWidgetDescription(
+          description: widgetDescription!);
+
+      if (result is String) {
+        _snackbarService.showSnackbar(message: result);
+      } else {
+        captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+        widgetDescription = null;
+      }
+    } catch (e) {
+      log.e('Couldn\'t update the widget. $e');
+    }
+    setBusy(false);
+  }
+
+  Future<void> deleteWidgetDescription() async {
+    log.i(widgetDescription);
+
+    try {
+      setBusy(true);
+
+      final result = await _widgetCaptureService.deleteWidgetDescription(
+          description: widgetDescription!);
+      if (result is String) {
+        _snackbarService.showSnackbar(message: result);
+      } else {
+        captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+        widgetDescription = null;
+      }
+    } catch (e) {
+      log.e('Couldn\'t delete the widget. $e');
+    }
+    setBusy(false);
   }
 
   @override
   void setFormStatus() {
     log.v('widgetNameValue: $widgetNameValue');
+
     widgetDescription =
         widgetDescription?.copyWith(name: widgetNameValue ?? '');
     notifyListeners();

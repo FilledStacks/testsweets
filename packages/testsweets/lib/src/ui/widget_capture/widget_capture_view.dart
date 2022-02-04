@@ -12,7 +12,9 @@ import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_f
 import 'widget_capture_widgets/draggable_widget.dart';
 
 @FormView(fields: [
-  FormTextField(name: 'widgetName'),
+  FormTextField(
+    name: 'widgetName',
+  ),
 ])
 class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
   final String projectId;
@@ -30,18 +32,14 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
     return ViewModelBuilder<WidgetCaptureViewModel>.reactive(
       onModelReady: (model) {
         model.loadWidgetDescriptions();
-        return listenToFormUpdated(model);
+        listenToFormUpdated(model);
       },
       builder: (context, model, _) => Scaffold(
         body: Stack(
           alignment: Alignment.bottomCenter,
           children: [
             child,
-            model.captureWidgetStatusEnum.infoFormMode
-                ? DraggableWidget()
-                : WidgetsVisualizer(
-                    widgetDescriptions: model.descriptionsForView,
-                  ),
+            if (model.captureWidgetStatusEnum.infoFormMode) DraggableWidget(),
             WidgetForm(
               focusNode: widgetNameFocusNode,
               textEditingController: widgetNameController,
