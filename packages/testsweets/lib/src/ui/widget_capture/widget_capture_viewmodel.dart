@@ -147,26 +147,26 @@ class WidgetCaptureViewModel extends FormViewModel {
       _snackbarService.showCustomSnackBar(
           message: result, variant: ToastType.failed);
     } else {
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
       widgetDescription = null;
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
 
     setBusy(false);
     return result;
   }
 
-  Future<String?> removeWidgetDescription(
-      WidgetDescription widgetDescription) async {
+  Future<String?> removeWidgetDescription() async {
     log.i(widgetDescription);
 
     setBusy(true);
 
     final result = await _widgetCaptureService.deleteWidgetDescription(
-        description: widgetDescription);
+        description: widgetDescription!);
     if (result is String) {
       _snackbarService.showCustomSnackBar(
           message: result, variant: ToastType.failed);
     } else {
+      widgetDescription = null;
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
 
@@ -198,7 +198,7 @@ class WidgetCaptureViewModel extends FormViewModel {
         captureWidgetStatusEnum = CaptureWidgetStatusEnum.editWidget;
         break;
       case PopupMenuAction.remove:
-        await removeWidgetDescription(widgetDescription!);
+        await removeWidgetDescription();
 
         break;
       case PopupMenuAction.attachToKey:

@@ -37,6 +37,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
 
     return ViewModelBuilder<WidgetCaptureViewModel>.reactive(
       staticChild: child,
+      disposeViewModel: false,
       onModelReady: (model) async {
         await model.loadWidgetDescriptions();
         model.screenCenterPosition = WidgetPosition(
@@ -47,32 +48,31 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
         listenToFormUpdated(model);
       },
       builder: (context, model, child) => Scaffold(
-        body: model.isBusy
-            ? BusyIndicator(
-                enable: model.isBusy,
-              )
-            : Stack(
-                alignment: Alignment.bottomCenter,
-                children: [
-                  // Client app
-                  child ?? const SizedBox.shrink(),
+        body: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            // Client app
+            child ?? const SizedBox.shrink(),
 
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: RouteBanner(
-                      isCaptured: model.currentViewIsCaptured,
-                      routeName: model.currentViewName,
-                    ),
-                  ),
-                  if (model.captureWidgetStatusEnum.showDraggableWidget)
-                    DraggableWidget(),
-
-                  WidgetForm(
-                    focusNode: widgetNameFocusNode,
-                    textEditingController: widgetNameController,
-                  )
-                ],
+            Align(
+              alignment: Alignment.topLeft,
+              child: RouteBanner(
+                isCaptured: model.currentViewIsCaptured,
+                routeName: model.currentViewName,
               ),
+            ),
+            DraggableWidget(),
+
+            WidgetForm(
+              focusNode: widgetNameFocusNode,
+              textEditingController: widgetNameController,
+            ),
+
+            BusyIndicator(
+              enable: model.isBusy,
+            )
+          ],
+        ),
       ),
       viewModelBuilder: () => WidgetCaptureViewModel(projectId: projectId),
     );
