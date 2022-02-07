@@ -83,8 +83,9 @@ class WidgetCaptureService {
         projectId: _projectId,
         description: description,
       );
-      // Request all keys from firestore
-      await loadWidgetDescriptionsForProject();
+      // Add description to descriptionMap with id from the backend
+      addWidgetDescriptionToMap = description.copyWith(id: descriptionId);
+
       log.i('descriptionId from Cloud: $descriptionId');
     } catch (e) {
       log.e(e);
@@ -148,8 +149,8 @@ class WidgetCaptureService {
       );
       log.v('descriptionId from Cloud: $descriptionId');
 
-      // Request all keys from firestore
-      await loadWidgetDescriptionsForProject();
+      // Add view to descriptionMap with id from the backend
+      addWidgetDescriptionToMap = viewDescription.copyWith(id: descriptionId);
     }
   }
 }

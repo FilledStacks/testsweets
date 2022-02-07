@@ -31,6 +31,8 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
       .thenReturn(listOfWidgetDescription);
   when(service.updateWidgetDescription(description: anyNamed('description')))
       .thenAnswer((_) => Future.value());
+  when(service.deleteWidgetDescription(description: anyNamed('description')))
+      .thenAnswer((_) => Future.value());
 
   when(service.checkCurrentViewIfAlreadyCaptured(any))
       .thenReturn(currentViewIsAlreadyCaptured);

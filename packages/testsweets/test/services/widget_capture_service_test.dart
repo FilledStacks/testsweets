@@ -5,6 +5,7 @@ import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 
+import '../helpers/test_consts.dart';
 import '../helpers/test_helpers.dart';
 
 WidgetCaptureService get _getService => WidgetCaptureService(verbose: true);
@@ -533,55 +534,21 @@ void main() {
           () async {
         getAndRegisterCloudFunctionsService(
             getWidgetDescriptionForProjectResult: [
-              WidgetDescription(
-                viewName: 'login',
-                originalViewName: '/login_view',
-                name: 'loginButton',
-                widgetType: WidgetType.touchable,
-                position: WidgetPosition(
-                    x: 0,
-                    y: 0,
-                    capturedDeviceHeight: 0,
-                    capturedDeviceWidth: 0),
-              ),
-              WidgetDescription(
-                viewName: 'signUp',
-                originalViewName: '/signUp_view',
-                name: 'loginButton',
-                widgetType: WidgetType.touchable,
-                position: WidgetPosition(
-                    x: 0,
-                    y: 0,
-                    capturedDeviceHeight: 0,
-                    capturedDeviceWidth: 0),
-              ),
+              kWidgetDescription,
+              kWidgetDescriptionView
             ]);
         final _service = _getService;
 
-        _service.addWidgetDescriptionToMap = WidgetDescription(
-          id: '1234',
-          originalViewName: '/signUp_view',
-          viewName: 'signUp',
-          name: 'loginBBButton',
-          widgetType: WidgetType.touchable,
-          position: WidgetPosition(
-              x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
-        );
+        // load the project keys first
+        await _service.loadWidgetDescriptionsForProject();
 
+        // update [kWidgetDescription] key
         await _service.updateWidgetDescription(
-          description: WidgetDescription(
-            id: '1234',
-            originalViewName: '/signUp_view',
-            viewName: 'signUp',
-            name: 'loginBBButton',
-            widgetType: WidgetType.touchable,
-            position: WidgetPosition(
-                x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
-          ),
+          description: kWidgetDescription.copyWith(name: 'login22'),
         );
 
-        expect(_service.widgetDescriptionMap['/signUp_view']!.last.name,
-            'loginBBButton');
+        expect(_service.widgetDescriptionMap['/']!.first.name,
+            kWidgetDescription.name);
       });
     });
   });
