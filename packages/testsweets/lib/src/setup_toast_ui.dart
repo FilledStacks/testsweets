@@ -6,7 +6,7 @@ import 'enums/toast_type.dart';
 import 'locator.dart';
 import 'ui/shared/app_colors.dart';
 
-void setupToastUi() {
+void setupSnackbarUi() {
   final service = locator<SnackbarService>();
 
   // Failed case

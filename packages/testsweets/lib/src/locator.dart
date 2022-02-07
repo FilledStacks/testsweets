@@ -15,6 +15,6 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => TestSweetsRouteTracker());
   locator.registerLazySingleton(() => SnackbarService());
   locator.registerLazySingleton(() => WidgetCaptureService(verbose: true));
-  setupToastUi();
+  setupSnackbarUi();
   locatorSetup = true;
 }
