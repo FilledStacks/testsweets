@@ -16,16 +16,14 @@ import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/draggabl
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_circle.dart';
 import 'package:testsweets/testsweets.dart';
 
-import 'popup_menu/custom_popup_menu.dart';
+import '../../shared/popup_menu/custom_popup_menu.dart';
 
 class WidgetsVisualizer extends StatelessWidget {
-  final bool driveMode;
   final bool showWidgetName;
   final Function editActionSelected;
   const WidgetsVisualizer({
     Key? key,
     this.showWidgetName = false,
-    this.driveMode = false,
     required this.editActionSelected,
   }) : super(key: key);
   @override
@@ -37,6 +35,7 @@ class WidgetsVisualizer extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         ...model.descriptionsForView
+            // Show all the widgetTypes except views
             .where((element) => element.widgetType != WidgetType.view)
             .map(
               (description) => Positioned(
@@ -64,16 +63,16 @@ class WidgetsVisualizer extends StatelessWidget {
                     },
                   ),
                   pressType: PressType.longPress,
-                  child: WidgetCircle(
-                    transparency: driveMode ||
-                            description.id == model.widgetDescription?.id
-                        ? 0
-                        : description.visibility
-                            ? 1
-                            : 0.3,
-                    key: Key(description.automationKey),
-                    widgetType: description.widgetType!,
-                  ),
+
+                  /// When you long press and drag replace this widget with sizedbox cause
+                  /// it is displayed with DraggableWidget while you move it
+                  child: description.id == model.widgetDescription?.id
+                      ? const SizedBox.shrink()
+                      : WidgetCircle(
+                          transparency: description.visibility ? 1 : 0.3,
+                          key: Key(description.automationKey),
+                          widgetType: description.widgetType!,
+                        ),
                 ),
               ),
             ),

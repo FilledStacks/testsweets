@@ -6,7 +6,7 @@ import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.d
 import 'package:testsweets/src/ui/shared/busy_indecator.dart';
 import 'package:testsweets/src/ui/shared/route_banner.dart';
 import 'package:testsweets/src/ui/shared/utils.dart';
-import 'package:testsweets/src/ui/shared/widgets_visualizer.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widgets_visualizer.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
