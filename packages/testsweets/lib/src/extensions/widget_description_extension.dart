@@ -31,7 +31,7 @@ extension WidgetDescriptionUtils on WidgetDescription {
 
   double _calculateWidthRatio(double currentScreenWidth) {
     /// If the [capturedDeviceHeight] is null or 0 return 1
-    /// which will leave the original hight unchanged
+    /// which will leave the original width unchanged
     if (this.position!.capturedDeviceWidth == null ||
         this.position!.capturedDeviceWidth == 0) {
       return 1;
