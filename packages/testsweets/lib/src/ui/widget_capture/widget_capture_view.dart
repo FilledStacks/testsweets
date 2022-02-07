@@ -36,6 +36,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
     final size = MediaQuery.of(context).size;
 
     return ViewModelBuilder<WidgetCaptureViewModel>.reactive(
+      staticChild: child,
       onModelReady: (model) async {
         await model.loadWidgetDescriptions();
         model.screenCenterPosition = WidgetPosition(
@@ -45,7 +46,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
             y: size.height / 2);
         listenToFormUpdated(model);
       },
-      builder: (context, model, _) => Scaffold(
+      builder: (context, model, child) => Scaffold(
         body: model.isBusy
             ? BusyIndicator(
                 enable: model.isBusy,
@@ -53,8 +54,10 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
             : Stack(
                 alignment: Alignment.bottomCenter,
                 children: [
-                  child,
-                  if (model.captureWidgetStatusEnum.infoFormMode)
+                  // Client app
+                  child ?? const SizedBox.shrink(),
+
+                  if (model.captureWidgetStatusEnum.createWidgetMode)
                     DraggableWidget(),
                   Align(
                     alignment: Alignment.topLeft,

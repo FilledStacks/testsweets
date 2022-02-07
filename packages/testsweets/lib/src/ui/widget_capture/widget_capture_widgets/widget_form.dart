@@ -49,8 +49,8 @@ class _WidgetFormState extends State<WidgetForm> {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        if (model.captureWidgetStatusEnum.idleMode)
-          WidgetsVisualizer(onEdit: () {
+        if (model.captureWidgetStatusEnum.showWidgetVisulizer)
+          WidgetsVisualizer(editActionSelected: () {
             /// Set the value of the edited widget to the form textfield
             /// and show the bottomsheet
             widget.textEditingController.text = model.widgetDescription!.name;

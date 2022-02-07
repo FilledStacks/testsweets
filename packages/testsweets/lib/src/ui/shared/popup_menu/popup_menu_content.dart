@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
 
 import 'custom_popup_menu_item.dart';
-import 'shared_styles.dart';
+import '../shared_styles.dart';
 
-class PopupMenu extends StatelessWidget {
+class PopupMenuContent extends StatelessWidget {
   final void Function(PopupMenuAction) onMenuAction;
-  const PopupMenu({
+  const PopupMenuContent({
     Key? key,
     required this.onMenuAction,
   }) : super(key: key);

@@ -1,6 +1,11 @@
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 
 extension CaptureWidgetEnumUnion on CaptureWidgetStatusEnum {
-  bool get infoFormMode => this == CaptureWidgetStatusEnum.widgetInfoForm;
+  bool get createWidgetMode =>
+      this == CaptureWidgetStatusEnum.createWidget ||
+      this == CaptureWidgetStatusEnum.popupMenuShown;
   bool get idleMode => this == CaptureWidgetStatusEnum.idle;
+  bool get showWidgetVisulizer =>
+      this == CaptureWidgetStatusEnum.idle ||
+      this == CaptureWidgetStatusEnum.popupMenuShown;
 }

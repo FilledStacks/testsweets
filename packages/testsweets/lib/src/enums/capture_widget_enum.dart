@@ -1,1 +1,1 @@
-enum CaptureWidgetStatusEnum { idle, widgetInfoForm, removeMode }
+enum CaptureWidgetStatusEnum { idle, createWidget, editWidget, popupMenuShown }

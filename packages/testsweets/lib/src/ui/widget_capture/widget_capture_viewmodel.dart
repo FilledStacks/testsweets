@@ -4,6 +4,7 @@ import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
+import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
@@ -27,6 +28,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   late WidgetPosition screenCenterPosition;
 
   set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
+    log.i(captureWidgetStatusEnum);
     _captureWidgetStatusEnum = captureWidgetStatusEnum;
     notifyListeners();
   }
@@ -82,11 +84,11 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   /// When open the form create new instance of widgetDescription
-  /// if it's null and set [CaptureWidgetStatusEnum.widgetInfoForm]
+  /// if it's null and set [CaptureWidgetStatusEnum.createWidget]
   void showWidgetForm() {
     widgetDescription =
         widgetDescription ?? WidgetDescription(position: screenCenterPosition);
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.widgetInfoForm;
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.createWidget;
   }
 
   void updateDescriptionPosition(
@@ -99,16 +101,10 @@ class WidgetCaptureViewModel extends FormViewModel {
       position: WidgetPosition(
         capturedDeviceHeight: capturedDeviceHeight,
         capturedDeviceWidth: capturedDeviceWidth,
-        x: (widgetDescription!.position?.x ?? capturedDeviceWidth / 2) + x,
-        y: (widgetDescription!.position?.y ?? capturedDeviceHeight / 2) + y,
+        x: x,
+        y: y,
       ),
     );
-    notifyListeners();
-  }
-
-  void editMode(WidgetDescription description) {
-    widgetDescription = description;
-    showWidgetForm();
     notifyListeners();
   }
 
@@ -170,6 +166,8 @@ class WidgetCaptureViewModel extends FormViewModel {
     if (result is String) {
       _snackbarService.showCustomSnackBar(
           message: result, variant: ToastType.failed);
+    } else {
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
 
     setBusy(false);
@@ -191,5 +189,38 @@ class WidgetCaptureViewModel extends FormViewModel {
     } else {
       return await saveWidget();
     }
+  }
+
+  Future<void> popupMenuActionSelected(PopupMenuAction popupMenuAction) async {
+    log.v(popupMenuAction);
+    switch (popupMenuAction) {
+      case PopupMenuAction.edit:
+        captureWidgetStatusEnum = CaptureWidgetStatusEnum.editWidget;
+        break;
+      case PopupMenuAction.remove:
+        await removeWidgetDescription(widgetDescription!);
+
+        break;
+      case PopupMenuAction.attachToKey:
+        // TODO: Handle this case.
+        break;
+    }
+  }
+
+  Future<void> finishAdjustingWidgetPosition() async {
+    log.v(captureWidgetStatusEnum);
+
+    /// This means that we show the menu but didn't choose any action
+    /// Which leave us with the only option of drag the widget
+    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.popupMenuShown) {
+      await updateWidgetDescription();
+    }
+  }
+
+  void popupMenuShown(WidgetDescription description) {
+    log.v(description);
+
+    widgetDescription = description;
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.popupMenuShown;
   }
 }
