@@ -227,8 +227,10 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
           }
         },
         onLongPressMoveUpdate: (details) {
-          _controller?.hideMenu();
-          widget.onLongPressMoveUpdate(details);
+          if (details.offsetFromOrigin.distance > 8) {
+            _controller?.hideMenu();
+            widget.onLongPressMoveUpdate(details);
+          }
         },
         child: widget.child,
         onTap: () {
