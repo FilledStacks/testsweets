@@ -134,5 +134,4 @@ const kdBlackRoundedEdgeDecoration = BoxDecoration(
 const kdPopupDecoration = BoxDecoration(
     color: kcCard, borderRadius: const BorderRadius.all(Radius.circular(12)));
 final kdRouteNameDecoration = BoxDecoration(
-    color: kcCard.withOpacity(0.2),
-    borderRadius: const BorderRadius.all(Radius.circular(4)));
+    color: kcCard, borderRadius: const BorderRadius.all(Radius.circular(8)));

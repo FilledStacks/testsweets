@@ -14,31 +14,23 @@ class RouteBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return IgnorePointer(
       child: SafeArea(
-        child: Container(
-          margin: const EdgeInsets.all(4),
-          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
-          decoration: kdRouteNameDecoration,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(
-                width: 4,
-              ),
-              Text(
-                routeName,
-                style: tsSmallBold()
-                    .copyWith(color: kcPrimaryWhite.withOpacity(0.7)),
-              ),
-              Container(
-                width: 4,
-                height: 4,
-                decoration: isCaptured
-                    ? BoxDecoration(
-                        color: kcError.withOpacity(0.7), shape: BoxShape.circle)
-                    : null,
-              ),
-            ],
+        child: Opacity(
+          opacity: 0.4,
+          child: Container(
+            margin: const EdgeInsets.all(4),
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            decoration: kdRouteNameDecoration.copyWith(
+              border: isCaptured
+                  ? Border.all(
+                      width: 3,
+                      color: kcPrimaryPurple,
+                    )
+                  : null,
+            ),
+            child: Text(
+              routeName,
+              style: tsSmallBold().copyWith(color: kcSubtext),
+            ),
           ),
         ),
       ),

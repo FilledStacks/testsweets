@@ -57,8 +57,6 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                   // Client app
                   child ?? const SizedBox.shrink(),
 
-                  if (model.captureWidgetStatusEnum.createWidgetMode)
-                    DraggableWidget(),
                   Align(
                     alignment: Alignment.topLeft,
                     child: RouteBanner(
@@ -66,6 +64,9 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                       routeName: model.currentViewName,
                     ),
                   ),
+                  if (model.captureWidgetStatusEnum.showDraggableWidget)
+                    DraggableWidget(),
+
                   WidgetForm(
                     focusNode: widgetNameFocusNode,
                     textEditingController: widgetNameController,

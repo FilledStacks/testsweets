@@ -3,6 +3,7 @@ import 'package:provider/src/provider.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
+import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 
 import 'package:testsweets/src/extensions/widget_description_extension.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
@@ -11,6 +12,7 @@ import 'package:testsweets/src/ui/shared/route_banner.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/extensions/widget_type_flutter_extension.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/draggable_widget.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_circle.dart';
 import 'package:testsweets/testsweets.dart';
 

@@ -11,6 +11,7 @@ import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/shared/widgets_visualizer.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/src/ui/shared/animation_rotation.dart' as ar;
+import 'draggable_widget.dart';
 import 'type_selector.dart';
 
 class WidgetForm extends StatefulWidget {

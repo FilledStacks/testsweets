@@ -21,8 +21,8 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
             left: model.widgetDescription?.responsiveXPosition(size.width),
             child: GestureDetector(
               onPanUpdate: (panEvent) {
-                final x = panEvent.delta.dx;
-                final y = panEvent.delta.dy;
+                final x = panEvent.globalPosition.dx;
+                final y = panEvent.globalPosition.dy;
                 model.updateDescriptionPosition(x, y, size.width, size.height);
               },
               child: WidgetCircle(
