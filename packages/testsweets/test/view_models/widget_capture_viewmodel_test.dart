@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
+import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
@@ -156,6 +157,16 @@ void main() {
         expect(model.captureWidgetStatusEnum,
             CaptureWidgetStatusEnum.attachWidget);
       });
+      test('''When popupMenuAction is attachToKey, Should show
+           a toast to let the user know that he need to choose a target''', () {
+        final snackbarService = getAndRegisterSnackbarService();
+        final model = _getViewModel();
+        model.popupMenuShown(kWidgetDescription);
+        model.popupMenuActionSelected(PopupMenuAction.attachToKey);
+        verify(snackbarService.showCustomSnackBar(
+            message: 'Select Key to associate with Scroll View',
+            variant: ToastType.info));
+      });
     });
     group('addNewTargetId -', () {
       test(
@@ -172,6 +183,7 @@ void main() {
         expect(model.captureWidgetStatusEnum,
             CaptureWidgetStatusEnum.attachWidget);
       });
+
       test(
           '''After adding a new target widget and update the widget on the backend,
            Should set the widgetDescription to null and captureWidgetStatusEnum to idle''',

@@ -33,14 +33,14 @@ class PopupMenuContent extends StatelessWidget {
             title: 'Remove',
             svgPath: 'packages/testsweets/assets/svgs/bin.svg',
           ),
-          // const SizedBox(
-          //   width: 8,
-          // ),
-          // CustomPopupMenuItem(
-          //   onTap: () => onMenuAction(PopupMenuAction.attachToKey),
-          //   title: 'Attach',
-          //   svgPath: 'packages/testsweets/assets/svgs/attach.svg',
-          // ),
+          const SizedBox(
+            width: 8,
+          ),
+          CustomPopupMenuItem(
+            onTap: () => onMenuAction(PopupMenuAction.attachToKey),
+            title: 'Attach',
+            svgPath: 'packages/testsweets/assets/svgs/attach.svg',
+          ),
         ],
       ),
     );

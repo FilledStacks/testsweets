@@ -218,6 +218,9 @@ class WidgetCaptureViewModel extends FormViewModel {
         break;
       case PopupMenuAction.attachToKey:
         captureWidgetStatusEnum = CaptureWidgetStatusEnum.attachWidget;
+        _snackbarService.showCustomSnackBar(
+            message: 'Select Key to associate with Scroll View',
+            variant: ToastType.info);
         break;
     }
   }

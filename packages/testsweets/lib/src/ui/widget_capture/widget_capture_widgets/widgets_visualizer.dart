@@ -76,26 +76,6 @@ class WidgetsVisualizer extends StatelessWidget {
                 ),
               ),
             ),
-        if (showWidgetName)
-          ...model.descriptionsForView.map(
-            (description) => Positioned(
-              top: description.responsiveYPosition(size.height),
-              left: description.responsiveXPosition(size.width),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  top: WIDGET_DESCRIPTION_VISUAL_SIZE,
-                ),
-                child: SizedBox(
-                    width: WIDGET_DESCRIPTION_VISUAL_SIZE,
-                    child: Text(
-                      description.name,
-                      textAlign: TextAlign.center,
-                      style: tsSmall().copyWith(
-                          color: description.widgetType!.getColorOfWidgetType),
-                    )),
-              ),
-            ),
-          )
       ],
     );
   }
