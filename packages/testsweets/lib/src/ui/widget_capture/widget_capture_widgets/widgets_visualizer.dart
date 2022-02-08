@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
-import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
@@ -8,32 +7,40 @@ import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.d
 import 'package:testsweets/src/extensions/widget_description_extension.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/popup_menu/popup_menu_content.dart';
-import 'package:testsweets/src/ui/shared/route_banner.dart';
-import 'package:testsweets/src/ui/shared/shared_styles.dart';
-import 'package:testsweets/src/extensions/widget_type_flutter_extension.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/draggable_widget.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/connection_painter.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_circle.dart';
-import 'package:testsweets/testsweets.dart';
 
 import '../../shared/popup_menu/custom_popup_menu.dart';
 
 class WidgetsVisualizer extends StatelessWidget {
-  final bool showWidgetName;
   final Function editActionSelected;
   const WidgetsVisualizer({
     Key? key,
-    this.showWidgetName = false,
     required this.editActionSelected,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final model = context.watch<WidgetCaptureViewModel>();
-
     final size = MediaQuery.of(context).size;
+
     return Stack(
       fit: StackFit.expand,
       children: [
+        ...model.descriptionsForView
+            // All the widgets that have a connections
+            .where((element) => element.targetIds.isNotEmpty)
+            .map((description) => CustomPaint(
+                  size: size,
+                  painter: ConnectionPainter(
+                      sourcePointType: description.widgetType!,
+                      sourcePoint: description.responsiveOffset(size),
+                      targetPoints: model.descriptionsForView.where((point) {
+                        return description.targetIds.contains(point.id);
+                      }).map((e) {
+                        return e.responsiveOffset(size);
+                      }).toList()),
+                )),
         ...model.descriptionsForView
             // Show all the widgetTypes except views
             .where((element) => element.widgetType != WidgetType.view)
@@ -42,6 +49,9 @@ class WidgetsVisualizer extends StatelessWidget {
                 top: description.responsiveYPosition(size.height),
                 left: description.responsiveXPosition(size.width),
                 child: CustomPopupMenu(
+                  onTap: model.captureWidgetStatusEnum.attachMode
+                      ? () => model.addNewTargetId(description.id!)
+                      : null,
                   onLongPressDown: () => model.popupMenuShown(description),
                   onLongPressUpWhilePopupHidden:
                       model.finishAdjustingWidgetPosition,
@@ -64,8 +74,8 @@ class WidgetsVisualizer extends StatelessWidget {
                   ),
                   pressType: PressType.longPress,
 
-                  /// When you long press and drag replace this widget with sizedbox cause
-                  /// it is displayed with DraggableWidget while you move it
+                  /// When you long press and drag replace this widget with sizedbox
+                  /// to avoid dublicates, cause it's using DraggableWidget while you move it
                   child: description.id == model.widgetDescription?.id
                       ? const SizedBox.shrink()
                       : WidgetCircle(

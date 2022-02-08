@@ -53,6 +53,7 @@ class CustomPopupMenu extends StatefulWidget {
     required this.onLongPressMoveUpdate,
     required this.onLongPressUpWhilePopupHidden,
     required this.onLongPressDown,
+    this.onTap,
     this.enablePassEvent = true,
   });
 
@@ -71,6 +72,7 @@ class CustomPopupMenu extends StatefulWidget {
   final void Function(LongPressMoveUpdateDetails) onLongPressMoveUpdate;
   final void Function() onLongPressUpWhilePopupHidden;
   final void Function() onLongPressDown;
+  final void Function()? onTap;
 
   /// Pass tap event to the widgets below the mask.
   /// It only works when [barrierColor] is transparent.
@@ -233,11 +235,7 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
           }
         },
         child: widget.child,
-        onTap: () {
-          if (widget.pressType == PressType.singleClick && _canResponse) {
-            _controller?.showMenu();
-          }
-        },
+        onTap: widget.onTap,
         onLongPress: () {
           if (widget.pressType == PressType.longPress && _canResponse) {
             _controller?.showMenu();
