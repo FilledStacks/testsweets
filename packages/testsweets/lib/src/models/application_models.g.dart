@@ -9,26 +9,31 @@ part of 'application_models.dart';
 _$_WidgetDescription _$$_WidgetDescriptionFromJson(Map<String, dynamic> json) =>
     _$_WidgetDescription(
       id: json['id'] as String?,
-      viewName: json['viewName'] as String?,
       originalViewName: json['originalViewName'] as String?,
+      viewName: json['viewName'] as String?,
       name: json['name'] as String? ?? '',
       widgetType: _$enumDecodeNullable(_$WidgetTypeEnumMap, json['widgetType']),
       position: json['position'] == null
           ? null
           : WidgetPosition.fromJson(json['position'] as Map<String, dynamic>),
       visibility: json['visibility'] as bool? ?? true,
+      targetIds: (json['targetIds'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
     );
 
 Map<String, dynamic> _$$_WidgetDescriptionToJson(
         _$_WidgetDescription instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'viewName': instance.viewName,
       'originalViewName': instance.originalViewName,
+      'viewName': instance.viewName,
       'name': instance.name,
       'widgetType': _$WidgetTypeEnumMap[instance.widgetType],
       'position': instance.position,
       'visibility': instance.visibility,
+      'targetIds': instance.targetIds,
     };
 
 K _$enumDecode<K, V>(

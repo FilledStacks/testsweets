@@ -14,11 +14,11 @@ class WidgetDescription with _$WidgetDescription {
     /// The Id from the firebase backend
     String? id,
 
-    /// The name of the view this widget was captured on
-    String? viewName,
-
-    /// The orignal name of the view this widget was captured on before the prettify
+    /// The orignal name of the view this widget was captured on before the formating
     String? originalViewName,
+
+    /// The name of the view this widget was captured on after formatted it
+    String? viewName,
 
     /// The name we want to use when referring to the widget in the scripts
     @Default('') String name,
@@ -31,6 +31,9 @@ class WidgetDescription with _$WidgetDescription {
 
     /// Whether the key will be visible to the driver or not
     @Default(true) bool visibility,
+
+    /// Target widgets ids that will be affected when this widget activated
+    @Default([]) List<String> targetIds,
   }) = _WidgetDescription;
   factory WidgetDescription.addView(
           {required String viewName, required String originalViewName}) =>

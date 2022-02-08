@@ -126,5 +126,64 @@ void main() {
         expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
       });
     });
+
+    group('popupMenuActionSelected -', () {
+      test(
+          'When popupMenuAction is edit, Should set the captureWidgetStatusEnum to editWidget',
+          () {
+        final model = _getViewModel();
+        model.popupMenuActionSelected(PopupMenuAction.edit);
+        expect(
+            model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.editWidget);
+      });
+      test(
+          'When popupMenuAction is remove, Should call deleteWidgetDescription from captureService',
+          () {
+        final widgetCaptureService = getAndRegisterWidgetCaptureService();
+
+        final model = _getViewModel();
+        model.popupMenuShown(kWidgetDescription);
+        model.popupMenuActionSelected(PopupMenuAction.remove);
+        verify(widgetCaptureService.deleteWidgetDescription(
+            description: kWidgetDescription));
+      });
+      test(
+          'When popupMenuAction is attachToKey, Should call deleteWidgetDescription from captureService',
+          () {
+        final model = _getViewModel();
+        model.popupMenuShown(kWidgetDescription);
+        model.popupMenuActionSelected(PopupMenuAction.attachToKey);
+        expect(model.captureWidgetStatusEnum,
+            CaptureWidgetStatusEnum.attachWidget);
+      });
+    });
+    group('addNewTargetId -', () {
+      test(
+          '''When selecting target widget but before calling updateWidgetDescription,
+           Should add it to current widgetDescription target ids list''',
+          () async {
+        final model = _getViewModel();
+        model.popupMenuShown(kWidgetDescription);
+        model.popupMenuActionSelected(PopupMenuAction.attachToKey);
+
+        /// I didn't add await inorder to expect the state before the updateWidgetDescription call
+        model.addNewTargetId('targetId');
+        expect(model.widgetDescription!.targetIds.first, 'targetId');
+        expect(model.captureWidgetStatusEnum,
+            CaptureWidgetStatusEnum.attachWidget);
+      });
+      test(
+          '''After adding a new target widget and update the widget on the backend,
+           Should set the widgetDescription to null and captureWidgetStatusEnum to idle''',
+          () async {
+        final model = _getViewModel();
+        model.popupMenuShown(kWidgetDescription);
+        model.popupMenuActionSelected(PopupMenuAction.attachToKey);
+
+        await model.addNewTargetId('targetId');
+        expect(model.widgetDescription, isNull);
+        expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
+      });
+    });
   });
 }

@@ -27,6 +27,34 @@ class WidgetCaptureViewModel extends FormViewModel {
   /// We use this position as the starter point of any new widget
   late WidgetPosition screenCenterPosition;
 
+  Future<String?> addNewTargetId(String targetId) async {
+    log.v(
+        'already added ids: ${widgetDescription?.targetIds} , new id: $targetId');
+    if (widgetDescription != null) {
+      final List<String> targetsList = [
+        ...widgetDescription!.targetIds,
+        targetId,
+      ];
+      widgetDescription = widgetDescription!.copyWith(targetIds: targetsList);
+
+      return await updateWidgetDescription();
+    }
+
+    notifyListeners();
+  }
+
+  set setWidgetType(WidgetType widgetType) {
+    log.v(widgetType);
+    widgetDescription = widgetDescription!.copyWith(widgetType: widgetType);
+    notifyListeners();
+  }
+
+  set setVisibilty(bool visible) {
+    log.v(visible);
+    widgetDescription = widgetDescription!.copyWith(visibility: visible);
+    notifyListeners();
+  }
+
   set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
     log.i(captureWidgetStatusEnum);
     _captureWidgetStatusEnum = captureWidgetStatusEnum;
@@ -63,18 +91,6 @@ class WidgetCaptureViewModel extends FormViewModel {
           message: 'Could not get widgetDescriptions: $e',
           variant: ToastType.failed);
     }
-  }
-
-  set setWidgetType(WidgetType widgetType) {
-    log.v(widgetType);
-    widgetDescription = widgetDescription!.copyWith(widgetType: widgetType);
-    notifyListeners();
-  }
-
-  set setVisibilty(bool visible) {
-    log.v(visible);
-    widgetDescription = widgetDescription!.copyWith(visibility: visible);
-    notifyListeners();
   }
 
   void clearWidgetDescriptionForm() {
@@ -199,10 +215,9 @@ class WidgetCaptureViewModel extends FormViewModel {
         break;
       case PopupMenuAction.remove:
         await removeWidgetDescription();
-
         break;
       case PopupMenuAction.attachToKey:
-        // TODO: Handle this case.
+        captureWidgetStatusEnum = CaptureWidgetStatusEnum.attachWidget;
         break;
     }
   }

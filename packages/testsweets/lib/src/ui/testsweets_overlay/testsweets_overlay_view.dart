@@ -1,9 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/setup_code.dart';
 import 'package:testsweets/src/ui/driver_layout/driver_layout_view.dart';
-import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.dart';
 
 class TestSweetsOverlayView extends StatelessWidget {

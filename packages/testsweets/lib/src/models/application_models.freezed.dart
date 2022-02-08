@@ -23,20 +23,22 @@ class _$WidgetDescriptionTearOff {
 
   _WidgetDescription call(
       {String? id,
-      String? viewName,
       String? originalViewName,
+      String? viewName,
       String name = '',
       WidgetType? widgetType,
       WidgetPosition? position,
-      bool visibility = true}) {
+      bool visibility = true,
+      List<String> targetIds = const []}) {
     return _WidgetDescription(
       id: id,
-      viewName: viewName,
       originalViewName: originalViewName,
+      viewName: viewName,
       name: name,
       widgetType: widgetType,
       position: position,
       visibility: visibility,
+      targetIds: targetIds,
     );
   }
 
@@ -53,11 +55,11 @@ mixin _$WidgetDescription {
   /// The Id from the firebase backend
   String? get id => throw _privateConstructorUsedError;
 
-  /// The name of the view this widget was captured on
-  String? get viewName => throw _privateConstructorUsedError;
-
-  /// The orignal name of the view this widget was captured on before the prettify
+  /// The orignal name of the view this widget was captured on before the formating
   String? get originalViewName => throw _privateConstructorUsedError;
+
+  /// The name of the view this widget was captured on after formatted it
+  String? get viewName => throw _privateConstructorUsedError;
 
   /// The name we want to use when referring to the widget in the scripts
   String get name => throw _privateConstructorUsedError;
@@ -70,6 +72,9 @@ mixin _$WidgetDescription {
 
   /// Whether the key will be visible to the driver or not
   bool get visibility => throw _privateConstructorUsedError;
+
+  /// Target widgets ids that will be affected when this widget activated
+  List<String> get targetIds => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -84,12 +89,13 @@ abstract class $WidgetDescriptionCopyWith<$Res> {
       _$WidgetDescriptionCopyWithImpl<$Res>;
   $Res call(
       {String? id,
-      String? viewName,
       String? originalViewName,
+      String? viewName,
       String name,
       WidgetType? widgetType,
       WidgetPosition? position,
-      bool visibility});
+      bool visibility,
+      List<String> targetIds});
 
   $WidgetPositionCopyWith<$Res>? get position;
 }
@@ -106,25 +112,26 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? viewName = freezed,
     Object? originalViewName = freezed,
+    Object? viewName = freezed,
     Object? name = freezed,
     Object? widgetType = freezed,
     Object? position = freezed,
     Object? visibility = freezed,
+    Object? targetIds = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String?,
-      viewName: viewName == freezed
-          ? _value.viewName
-          : viewName // ignore: cast_nullable_to_non_nullable
-              as String?,
       originalViewName: originalViewName == freezed
           ? _value.originalViewName
           : originalViewName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      viewName: viewName == freezed
+          ? _value.viewName
+          : viewName // ignore: cast_nullable_to_non_nullable
               as String?,
       name: name == freezed
           ? _value.name
@@ -142,6 +149,10 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
           ? _value.visibility
           : visibility // ignore: cast_nullable_to_non_nullable
               as bool,
+      targetIds: targetIds == freezed
+          ? _value.targetIds
+          : targetIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 
@@ -166,12 +177,13 @@ abstract class _$WidgetDescriptionCopyWith<$Res>
   @override
   $Res call(
       {String? id,
-      String? viewName,
       String? originalViewName,
+      String? viewName,
       String name,
       WidgetType? widgetType,
       WidgetPosition? position,
-      bool visibility});
+      bool visibility,
+      List<String> targetIds});
 
   @override
   $WidgetPositionCopyWith<$Res>? get position;
@@ -191,25 +203,26 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? viewName = freezed,
     Object? originalViewName = freezed,
+    Object? viewName = freezed,
     Object? name = freezed,
     Object? widgetType = freezed,
     Object? position = freezed,
     Object? visibility = freezed,
+    Object? targetIds = freezed,
   }) {
     return _then(_WidgetDescription(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String?,
-      viewName: viewName == freezed
-          ? _value.viewName
-          : viewName // ignore: cast_nullable_to_non_nullable
-              as String?,
       originalViewName: originalViewName == freezed
           ? _value.originalViewName
           : originalViewName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      viewName: viewName == freezed
+          ? _value.viewName
+          : viewName // ignore: cast_nullable_to_non_nullable
               as String?,
       name: name == freezed
           ? _value.name
@@ -227,6 +240,10 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
           ? _value.visibility
           : visibility // ignore: cast_nullable_to_non_nullable
               as bool,
+      targetIds: targetIds == freezed
+          ? _value.targetIds
+          : targetIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -236,12 +253,13 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
 class _$_WidgetDescription extends _WidgetDescription {
   _$_WidgetDescription(
       {this.id,
-      this.viewName,
       this.originalViewName,
+      this.viewName,
       this.name = '',
       this.widgetType,
       this.position,
-      this.visibility = true})
+      this.visibility = true,
+      this.targetIds = const []})
       : super._();
 
   factory _$_WidgetDescription.fromJson(Map<String, dynamic> json) =>
@@ -253,12 +271,12 @@ class _$_WidgetDescription extends _WidgetDescription {
   final String? id;
   @override
 
-  /// The name of the view this widget was captured on
-  final String? viewName;
+  /// The orignal name of the view this widget was captured on before the formating
+  final String? originalViewName;
   @override
 
-  /// The orignal name of the view this widget was captured on before the prettify
-  final String? originalViewName;
+  /// The name of the view this widget was captured on after formatted it
+  final String? viewName;
   @JsonKey(defaultValue: '')
   @override
 
@@ -277,10 +295,15 @@ class _$_WidgetDescription extends _WidgetDescription {
 
   /// Whether the key will be visible to the driver or not
   final bool visibility;
+  @JsonKey(defaultValue: const [])
+  @override
+
+  /// Target widgets ids that will be affected when this widget activated
+  final List<String> targetIds;
 
   @override
   String toString() {
-    return 'WidgetDescription(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility)';
+    return 'WidgetDescription(id: $id, originalViewName: $originalViewName, viewName: $viewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility, targetIds: $targetIds)';
   }
 
   @override
@@ -289,12 +312,12 @@ class _$_WidgetDescription extends _WidgetDescription {
         (other is _WidgetDescription &&
             (identical(other.id, id) ||
                 const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.viewName, viewName) ||
-                const DeepCollectionEquality()
-                    .equals(other.viewName, viewName)) &&
             (identical(other.originalViewName, originalViewName) ||
                 const DeepCollectionEquality()
                     .equals(other.originalViewName, originalViewName)) &&
+            (identical(other.viewName, viewName) ||
+                const DeepCollectionEquality()
+                    .equals(other.viewName, viewName)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
             (identical(other.widgetType, widgetType) ||
@@ -305,19 +328,23 @@ class _$_WidgetDescription extends _WidgetDescription {
                     .equals(other.position, position)) &&
             (identical(other.visibility, visibility) ||
                 const DeepCollectionEquality()
-                    .equals(other.visibility, visibility)));
+                    .equals(other.visibility, visibility)) &&
+            (identical(other.targetIds, targetIds) ||
+                const DeepCollectionEquality()
+                    .equals(other.targetIds, targetIds)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(viewName) ^
       const DeepCollectionEquality().hash(originalViewName) ^
+      const DeepCollectionEquality().hash(viewName) ^
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(widgetType) ^
       const DeepCollectionEquality().hash(position) ^
-      const DeepCollectionEquality().hash(visibility);
+      const DeepCollectionEquality().hash(visibility) ^
+      const DeepCollectionEquality().hash(targetIds);
 
   @JsonKey(ignore: true)
   @override
@@ -333,12 +360,13 @@ class _$_WidgetDescription extends _WidgetDescription {
 abstract class _WidgetDescription extends WidgetDescription {
   factory _WidgetDescription(
       {String? id,
-      String? viewName,
       String? originalViewName,
+      String? viewName,
       String name,
       WidgetType? widgetType,
       WidgetPosition? position,
-      bool visibility}) = _$_WidgetDescription;
+      bool visibility,
+      List<String> targetIds}) = _$_WidgetDescription;
   _WidgetDescription._() : super._();
 
   factory _WidgetDescription.fromJson(Map<String, dynamic> json) =
@@ -350,12 +378,12 @@ abstract class _WidgetDescription extends WidgetDescription {
   String? get id => throw _privateConstructorUsedError;
   @override
 
-  /// The name of the view this widget was captured on
-  String? get viewName => throw _privateConstructorUsedError;
+  /// The orignal name of the view this widget was captured on before the formating
+  String? get originalViewName => throw _privateConstructorUsedError;
   @override
 
-  /// The orignal name of the view this widget was captured on before the prettify
-  String? get originalViewName => throw _privateConstructorUsedError;
+  /// The name of the view this widget was captured on after formatted it
+  String? get viewName => throw _privateConstructorUsedError;
   @override
 
   /// The name we want to use when referring to the widget in the scripts
@@ -372,6 +400,10 @@ abstract class _WidgetDescription extends WidgetDescription {
 
   /// Whether the key will be visible to the driver or not
   bool get visibility => throw _privateConstructorUsedError;
+  @override
+
+  /// Target widgets ids that will be affected when this widget activated
+  List<String> get targetIds => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$WidgetDescriptionCopyWith<_WidgetDescription> get copyWith =>

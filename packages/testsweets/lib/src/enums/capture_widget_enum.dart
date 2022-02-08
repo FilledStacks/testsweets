@@ -1,1 +1,7 @@
-enum CaptureWidgetStatusEnum { idle, createWidget, editWidget, popupMenuShown }
+enum CaptureWidgetStatusEnum {
+  idle,
+  createWidget,
+  editWidget,
+  attachWidget,
+  popupMenuShown
+}
