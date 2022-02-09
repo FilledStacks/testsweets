@@ -55,11 +55,13 @@ class CustomPopupMenu extends StatefulWidget {
     required this.onMoveStart,
     this.onTap,
     this.enablePassEvent = true,
+    this.disable = false,
   });
 
   final Widget child;
   final PressType pressType;
   final bool showArrow;
+  final bool disable;
   final Color arrowColor;
   final Color barrierColor;
   final double horizontalMargin;
@@ -147,6 +149,9 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
           ),
         );
         return Listener(
+          onPointerUp: (event) {
+            _controller?.hideMenu();
+          },
           behavior: widget.enablePassEvent
               ? HitTestBehavior.translucent
               : HitTestBehavior.opaque,
@@ -235,7 +240,9 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
         child: widget.child,
         onTap: widget.onTap,
         onLongPress: () {
-          if (widget.pressType == PressType.longPress && _canResponse) {
+          if (widget.pressType == PressType.longPress &&
+              _canResponse &&
+              !widget.disable) {
             _controller?.showMenu();
           }
         },

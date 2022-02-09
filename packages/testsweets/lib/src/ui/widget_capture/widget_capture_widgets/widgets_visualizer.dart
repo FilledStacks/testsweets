@@ -52,6 +52,7 @@ class WidgetsVisualizer extends StatelessWidget {
                   top: description.responsiveYPosition(size.height),
                   left: description.responsiveXPosition(size.width),
                   child: CustomPopupMenu(
+                    disable: model.captureWidgetStatusEnum.attachMode,
                     onMoveStart: () =>
                         model.startQuickPositionEdit(description),
                     menuOnChange: model.menuOnChange,
@@ -68,15 +69,15 @@ class WidgetsVisualizer extends StatelessWidget {
                     barrierColor: kcBackground.withOpacity(0.3),
                     showArrow: false,
                     menuBuilder: () => PopupMenuContent(
-                      onlyOneWidget: model.descriptionsForView.length ==
+                      onlyOneItem: model.descriptionsForView.length ==
                           2, // 2 is for one widget and its view
                       onMenuAction: (popupMenuAction) async {
-                        // await model.popupMenuActionSelected(
-                        //     description, popupMenuAction);
-                        // if (popupMenuAction == PopupMenuAction.edit) {
-                        //   /// This will show the widgetform when fired
-                        //   editActionSelected();
-                        // }
+                        await model.popupMenuActionSelected(
+                            description, popupMenuAction);
+                        if (popupMenuAction == PopupMenuAction.edit) {
+                          /// This will show the widgetform when fired
+                          editActionSelected();
+                        }
                       },
                     ),
                     pressType: PressType.longPress,
