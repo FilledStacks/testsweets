@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:testsweets/src/enums/popup_menu_action.dart';
 
-import 'custom_popup_menu_item.dart';
 import '../shared_styles.dart';
+import 'custom_popup_menu_item.dart';
 
 class PopupMenuContent extends StatelessWidget {
+  final bool onlyOneItem;
   final void Function(PopupMenuAction) onMenuAction;
   const PopupMenuContent({
     Key? key,
+    required this.onlyOneItem,
     required this.onMenuAction,
   }) : super(key: key);
 
@@ -33,14 +35,16 @@ class PopupMenuContent extends StatelessWidget {
             title: 'Remove',
             svgPath: 'packages/testsweets/assets/svgs/bin.svg',
           ),
-          const SizedBox(
-            width: 8,
-          ),
-          CustomPopupMenuItem(
-            onTap: () => onMenuAction(PopupMenuAction.attachToKey),
-            title: 'Attach',
-            svgPath: 'packages/testsweets/assets/svgs/attach.svg',
-          ),
+          if (!onlyOneItem) ...[
+            const SizedBox(
+              width: 8,
+            ),
+            CustomPopupMenuItem(
+              onTap: () => onMenuAction(PopupMenuAction.attachToKey),
+              title: 'Attach',
+              svgPath: 'packages/testsweets/assets/svgs/attach.svg',
+            ),
+          ]
         ],
       ),
     );

@@ -2,11 +2,15 @@ import 'package:testsweets/src/enums/capture_widget_enum.dart';
 
 extension CaptureWidgetEnumUnion on CaptureWidgetStatusEnum {
   bool get createWidgetMode => this == CaptureWidgetStatusEnum.createWidget;
-
-  bool get idleMode => this == CaptureWidgetStatusEnum.idle;
   bool get attachMode => this == CaptureWidgetStatusEnum.attachWidget;
-  bool get showWidgetVisulizer =>
+  bool get showWidgetForm =>
+      this == CaptureWidgetStatusEnum.idle ||
+      this == CaptureWidgetStatusEnum.editWidget ||
+      this == CaptureWidgetStatusEnum.createWidget;
+  bool get showConnections => this == CaptureWidgetStatusEnum.idle;
+  bool get showWidgets =>
       this == CaptureWidgetStatusEnum.idle ||
       this == CaptureWidgetStatusEnum.attachWidget ||
-      this == CaptureWidgetStatusEnum.popupMenuShown;
+      this == CaptureWidgetStatusEnum.quickPositionEdit;
+  bool get showDraggableWidget => !attachMode;
 }

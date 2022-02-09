@@ -79,7 +79,7 @@ void main() {
         final service = getAndRegisterWidgetCaptureService();
 
         final model = _getViewModel();
-        model.popupMenuShown(kWidgetDescription);
+        model.menuOnChange(true);
 
         model.formValueMap[WidgetNameValueKey] = 'loginButton';
         model.setFormStatus();
@@ -111,7 +111,7 @@ void main() {
         final widgetCaptureService = getAndRegisterWidgetCaptureService();
         final model = _getViewModel();
         model.showWidgetForm();
-        model.popupMenuShown(kWidgetDescription);
+        model.menuOnChange(true);
 
         await model.removeWidgetDescription();
         verify(widgetCaptureService.deleteWidgetDescription(
@@ -133,7 +133,7 @@ void main() {
           'When popupMenuAction is edit, Should set the captureWidgetStatusEnum to editWidget',
           () {
         final model = _getViewModel();
-        model.popupMenuActionSelected(PopupMenuAction.edit);
+        model.popupMenuActionSelected(kWidgetDescription, PopupMenuAction.edit);
         expect(
             model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.editWidget);
       });
@@ -143,8 +143,9 @@ void main() {
         final widgetCaptureService = getAndRegisterWidgetCaptureService();
 
         final model = _getViewModel();
-        model.popupMenuShown(kWidgetDescription);
-        model.popupMenuActionSelected(PopupMenuAction.remove);
+        model.menuOnChange(true);
+        model.popupMenuActionSelected(
+            kWidgetDescription, PopupMenuAction.remove);
         verify(widgetCaptureService.deleteWidgetDescription(
             description: kWidgetDescription));
       });
@@ -152,8 +153,9 @@ void main() {
           'When popupMenuAction is attachToKey, Should call deleteWidgetDescription from captureService',
           () {
         final model = _getViewModel();
-        model.popupMenuShown(kWidgetDescription);
-        model.popupMenuActionSelected(PopupMenuAction.attachToKey);
+        model.menuOnChange(true);
+        model.popupMenuActionSelected(
+            kWidgetDescription, PopupMenuAction.attachToKey);
         expect(model.captureWidgetStatusEnum,
             CaptureWidgetStatusEnum.attachWidget);
       });
@@ -161,8 +163,9 @@ void main() {
            a toast to let the user know that he need to choose a target''', () {
         final snackbarService = getAndRegisterSnackbarService();
         final model = _getViewModel();
-        model.popupMenuShown(kWidgetDescription);
-        model.popupMenuActionSelected(PopupMenuAction.attachToKey);
+        model.menuOnChange(true);
+        model.popupMenuActionSelected(
+            kWidgetDescription, PopupMenuAction.attachToKey);
         verify(snackbarService.showCustomSnackBar(
             message: 'Select Key to associate with Scroll View',
             variant: ToastType.info));
@@ -174,8 +177,9 @@ void main() {
            Should add it to current widgetDescription target ids list''',
           () async {
         final model = _getViewModel();
-        model.popupMenuShown(kWidgetDescription);
-        model.popupMenuActionSelected(PopupMenuAction.attachToKey);
+        model.menuOnChange(true);
+        model.popupMenuActionSelected(
+            kWidgetDescription, PopupMenuAction.attachToKey);
 
         /// I didn't add await inorder to expect the state before the updateWidgetDescription call
         model.addNewTargetId('targetId');
@@ -189,12 +193,20 @@ void main() {
            Should set the widgetDescription to null and captureWidgetStatusEnum to idle''',
           () async {
         final model = _getViewModel();
-        model.popupMenuShown(kWidgetDescription);
-        model.popupMenuActionSelected(PopupMenuAction.attachToKey);
+        model.menuOnChange(true);
+        model.popupMenuActionSelected(
+            kWidgetDescription, PopupMenuAction.attachToKey);
 
         await model.addNewTargetId('targetId');
         expect(model.widgetDescription, isNull);
         expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
+      });
+    });
+    group('popUpMenuOptions -', () {
+      test('''When show menuOnChange,
+      Should set captureWidgetStatusEnum to popupMenuShown''', () {
+        final model = _getViewModel();
+        model.menuOnChange(true);
       });
     });
   });

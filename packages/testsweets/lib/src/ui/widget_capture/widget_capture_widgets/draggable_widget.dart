@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:testsweets/src/enums/widget_type.dart';
+import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/extensions/widget_description_extension.dart';
-import 'package:testsweets/src/ui/shared/route_banner.dart';
-import 'package:testsweets/src/ui/shared/utils.dart';
+
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
 import 'widget_circle.dart';
@@ -14,8 +13,8 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
     final size = MediaQuery.of(context).size;
-    return model.widgetDescription?.widgetType == null
-        ? const SizedBox.shrink()
+    return model.widgetDescription == null
+        ? const SizedBox()
         : Positioned(
             top: model.widgetDescription?.responsiveYPosition(size.height),
             left: model.widgetDescription?.responsiveXPosition(size.width),

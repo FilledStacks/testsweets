@@ -3,5 +3,5 @@ enum CaptureWidgetStatusEnum {
   createWidget,
   editWidget,
   attachWidget,
-  popupMenuShown
+  quickPositionEdit,
 }

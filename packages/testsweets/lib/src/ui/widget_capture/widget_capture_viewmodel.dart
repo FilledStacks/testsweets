@@ -23,6 +23,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   CaptureWidgetStatusEnum _captureWidgetStatusEnum =
       CaptureWidgetStatusEnum.idle;
+  bool popUpMenuVisible = false;
 
   /// We use this position as the starter point of any new widget
   late WidgetPosition screenCenterPosition;
@@ -102,8 +103,9 @@ class WidgetCaptureViewModel extends FormViewModel {
   /// When open the form create new instance of widgetDescription
   /// if it's null and set [CaptureWidgetStatusEnum.createWidget]
   void showWidgetForm() {
-    widgetDescription =
-        widgetDescription ?? WidgetDescription(position: screenCenterPosition);
+    widgetDescription = widgetDescription ??
+        WidgetDescription(
+            position: screenCenterPosition, widgetType: WidgetType.touchable);
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.createWidget;
   }
 
@@ -207,8 +209,11 @@ class WidgetCaptureViewModel extends FormViewModel {
     }
   }
 
-  Future<void> popupMenuActionSelected(PopupMenuAction popupMenuAction) async {
-    log.v(popupMenuAction);
+  Future<void> popupMenuActionSelected(
+      WidgetDescription description, PopupMenuAction popupMenuAction) async {
+    log.v(popupMenuAction, description);
+    widgetDescription = description;
+
     switch (popupMenuAction) {
       case PopupMenuAction.edit:
         captureWidgetStatusEnum = CaptureWidgetStatusEnum.editWidget;
@@ -225,20 +230,27 @@ class WidgetCaptureViewModel extends FormViewModel {
     }
   }
 
-  Future<void> finishAdjustingWidgetPosition() async {
+  Future<void> onLongPressUp() async {
     log.v(captureWidgetStatusEnum);
 
-    /// This means that we show the menu but didn't choose any action
-    /// Which leave us with the only option of drag the widget
-    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.popupMenuShown) {
+    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.quickPositionEdit) {
       await updateWidgetDescription();
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
+    widgetDescription = null;
   }
 
-  void popupMenuShown(WidgetDescription description) {
-    log.v(description);
+  void menuOnChange(bool show) {
+    // log.v('show: $show');
+    // popUpMenuVisible = show;
+    // notifyListeners();
+  }
 
+  void startQuickPositionEdit(
+    WidgetDescription description,
+  ) {
+    log.v(description);
     widgetDescription = description;
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.popupMenuShown;
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.quickPositionEdit;
   }
 }
