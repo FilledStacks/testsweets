@@ -23,7 +23,7 @@ class WidgetDescriptionDialog extends StatelessWidget {
           ...[
             MultiStyleText(
               title: 'View Name: ',
-              body: widgetDescription!.viewName!,
+              body: widgetDescription!.viewName,
             ),
             MultiStyleText(
               title: 'Name: ',
@@ -39,11 +39,11 @@ class WidgetDescriptionDialog extends StatelessWidget {
             MultiStyleText(
               title: 'Position: ',
               body:
-                  '( x: ${widgetDescription!.position!.x.toStringAsFixed(1)}, y: ${widgetDescription!.position!.y.toStringAsFixed(1)} )',
+                  '( x: ${widgetDescription!.position.x.toStringAsFixed(1)}, y: ${widgetDescription!.position.y.toStringAsFixed(1)} )',
             ),
           ].expand((element) => [
                 element,
-                SizedBox(
+                const SizedBox(
                   height: 3,
                 )
               ]),

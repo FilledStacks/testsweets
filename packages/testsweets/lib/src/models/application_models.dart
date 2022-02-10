@@ -1,3 +1,5 @@
+import 'dart:core';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/widget_type_extension.dart';
@@ -14,20 +16,20 @@ class WidgetDescription with _$WidgetDescription {
     /// The Id from the firebase backend
     String? id,
 
-    /// The orignal name of the view this widget was captured on before the formating
-    String? originalViewName,
+    /// The name of the view this widget was captured on
+    required String viewName,
 
-    /// The name of the view this widget was captured on after formatted it
-    String? viewName,
+    /// The orignal name of the view this widget was captured on before the prettify
+    required String originalViewName,
 
     /// The name we want to use when referring to the widget in the scripts
     @Default('') String name,
 
     /// The type of the widget that's being added
-    WidgetType? widgetType,
+    required WidgetType widgetType,
 
     /// The position we defined for he widget
-    WidgetPosition? position,
+    required WidgetPosition position,
 
     /// Whether the key will be visible to the driver or not
     @Default(true) bool visibility,
@@ -35,20 +37,21 @@ class WidgetDescription with _$WidgetDescription {
     /// Target widgets ids that will be affected when this widget activated
     @Default([]) List<String> targetIds,
   }) = _WidgetDescription;
-  factory WidgetDescription.addView(
+  factory WidgetDescription.view(
           {required String viewName, required String originalViewName}) =>
       WidgetDescription(
         viewName: viewName,
         originalViewName: originalViewName,
         widgetType: WidgetType.view,
+        position: WidgetPosition.empty(),
       );
 
   factory WidgetDescription.fromJson(Map<String, dynamic> json) =>
       _$WidgetDescriptionFromJson(json);
 
   String get automationKey => widgetType == WidgetType.view
-      ? '$viewName\_${widgetType!.shortName}'
-      : '$viewName\_${widgetType!.shortName}\_$name';
+      ? '$viewName\_${widgetType.shortName}'
+      : '$viewName\_${widgetType.shortName}\_$name';
 }
 
 /// The position of the widget as we captured it on device

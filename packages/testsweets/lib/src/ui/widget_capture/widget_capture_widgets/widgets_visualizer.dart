@@ -35,7 +35,7 @@ class WidgetsVisualizer extends StatelessWidget {
               .map((description) => CustomPaint(
                     size: size,
                     painter: ConnectionPainter(
-                        sourcePointType: description.widgetType!,
+                        sourcePointType: description.widgetType,
                         sourcePoint: description.responsiveOffset(size),
                         targetPoints: model.descriptionsForView.where((point) {
                           return description.targetIds.contains(point.id);
@@ -55,7 +55,6 @@ class WidgetsVisualizer extends StatelessWidget {
                     disable: model.captureWidgetStatusEnum.attachMode,
                     onMoveStart: () =>
                         model.startQuickPositionEdit(description),
-                    menuOnChange: model.menuOnChange,
                     onTap: model.captureWidgetStatusEnum.attachMode
                         ? () => model.addNewTargetId(description.id!)
                         : null,
@@ -87,9 +86,9 @@ class WidgetsVisualizer extends StatelessWidget {
                     child: description.id == model.widgetDescription?.id
                         ? const SizedBox.shrink()
                         : WidgetCircle(
-                            transparency: description.visibility ? 1 : 0.3,
+                            transparency: description.visibility ? 1 : 0.5,
                             key: Key(description.automationKey),
-                            widgetType: description.widgetType!,
+                            widgetType: description.widgetType,
                           ),
                   ),
                 ),

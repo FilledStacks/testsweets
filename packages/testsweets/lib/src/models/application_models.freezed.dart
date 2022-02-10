@@ -23,17 +23,17 @@ class _$WidgetDescriptionTearOff {
 
   _WidgetDescription call(
       {String? id,
-      String? originalViewName,
-      String? viewName,
+      required String viewName,
+      required String originalViewName,
       String name = '',
-      WidgetType? widgetType,
-      WidgetPosition? position,
+      required WidgetType widgetType,
+      required WidgetPosition position,
       bool visibility = true,
       List<String> targetIds = const []}) {
     return _WidgetDescription(
       id: id,
-      originalViewName: originalViewName,
       viewName: viewName,
+      originalViewName: originalViewName,
       name: name,
       widgetType: widgetType,
       position: position,
@@ -55,20 +55,20 @@ mixin _$WidgetDescription {
   /// The Id from the firebase backend
   String? get id => throw _privateConstructorUsedError;
 
-  /// The orignal name of the view this widget was captured on before the formating
-  String? get originalViewName => throw _privateConstructorUsedError;
+  /// The name of the view this widget was captured on
+  String get viewName => throw _privateConstructorUsedError;
 
-  /// The name of the view this widget was captured on after formatted it
-  String? get viewName => throw _privateConstructorUsedError;
+  /// The orignal name of the view this widget was captured on before the prettify
+  String get originalViewName => throw _privateConstructorUsedError;
 
   /// The name we want to use when referring to the widget in the scripts
   String get name => throw _privateConstructorUsedError;
 
   /// The type of the widget that's being added
-  WidgetType? get widgetType => throw _privateConstructorUsedError;
+  WidgetType get widgetType => throw _privateConstructorUsedError;
 
   /// The position we defined for he widget
-  WidgetPosition? get position => throw _privateConstructorUsedError;
+  WidgetPosition get position => throw _privateConstructorUsedError;
 
   /// Whether the key will be visible to the driver or not
   bool get visibility => throw _privateConstructorUsedError;
@@ -89,15 +89,15 @@ abstract class $WidgetDescriptionCopyWith<$Res> {
       _$WidgetDescriptionCopyWithImpl<$Res>;
   $Res call(
       {String? id,
-      String? originalViewName,
-      String? viewName,
+      String viewName,
+      String originalViewName,
       String name,
-      WidgetType? widgetType,
-      WidgetPosition? position,
+      WidgetType widgetType,
+      WidgetPosition position,
       bool visibility,
       List<String> targetIds});
 
-  $WidgetPositionCopyWith<$Res>? get position;
+  $WidgetPositionCopyWith<$Res> get position;
 }
 
 /// @nodoc
@@ -112,8 +112,8 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? originalViewName = freezed,
     Object? viewName = freezed,
+    Object? originalViewName = freezed,
     Object? name = freezed,
     Object? widgetType = freezed,
     Object? position = freezed,
@@ -125,14 +125,14 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String?,
-      originalViewName: originalViewName == freezed
-          ? _value.originalViewName
-          : originalViewName // ignore: cast_nullable_to_non_nullable
-              as String?,
       viewName: viewName == freezed
           ? _value.viewName
           : viewName // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
+      originalViewName: originalViewName == freezed
+          ? _value.originalViewName
+          : originalViewName // ignore: cast_nullable_to_non_nullable
+              as String,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -140,11 +140,11 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
       widgetType: widgetType == freezed
           ? _value.widgetType
           : widgetType // ignore: cast_nullable_to_non_nullable
-              as WidgetType?,
+              as WidgetType,
       position: position == freezed
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
-              as WidgetPosition?,
+              as WidgetPosition,
       visibility: visibility == freezed
           ? _value.visibility
           : visibility // ignore: cast_nullable_to_non_nullable
@@ -157,12 +157,8 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
   }
 
   @override
-  $WidgetPositionCopyWith<$Res>? get position {
-    if (_value.position == null) {
-      return null;
-    }
-
-    return $WidgetPositionCopyWith<$Res>(_value.position!, (value) {
+  $WidgetPositionCopyWith<$Res> get position {
+    return $WidgetPositionCopyWith<$Res>(_value.position, (value) {
       return _then(_value.copyWith(position: value));
     });
   }
@@ -177,16 +173,16 @@ abstract class _$WidgetDescriptionCopyWith<$Res>
   @override
   $Res call(
       {String? id,
-      String? originalViewName,
-      String? viewName,
+      String viewName,
+      String originalViewName,
       String name,
-      WidgetType? widgetType,
-      WidgetPosition? position,
+      WidgetType widgetType,
+      WidgetPosition position,
       bool visibility,
       List<String> targetIds});
 
   @override
-  $WidgetPositionCopyWith<$Res>? get position;
+  $WidgetPositionCopyWith<$Res> get position;
 }
 
 /// @nodoc
@@ -203,8 +199,8 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? originalViewName = freezed,
     Object? viewName = freezed,
+    Object? originalViewName = freezed,
     Object? name = freezed,
     Object? widgetType = freezed,
     Object? position = freezed,
@@ -216,14 +212,14 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String?,
-      originalViewName: originalViewName == freezed
-          ? _value.originalViewName
-          : originalViewName // ignore: cast_nullable_to_non_nullable
-              as String?,
       viewName: viewName == freezed
           ? _value.viewName
           : viewName // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
+      originalViewName: originalViewName == freezed
+          ? _value.originalViewName
+          : originalViewName // ignore: cast_nullable_to_non_nullable
+              as String,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -231,11 +227,11 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
       widgetType: widgetType == freezed
           ? _value.widgetType
           : widgetType // ignore: cast_nullable_to_non_nullable
-              as WidgetType?,
+              as WidgetType,
       position: position == freezed
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
-              as WidgetPosition?,
+              as WidgetPosition,
       visibility: visibility == freezed
           ? _value.visibility
           : visibility // ignore: cast_nullable_to_non_nullable
@@ -253,11 +249,11 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
 class _$_WidgetDescription extends _WidgetDescription {
   _$_WidgetDescription(
       {this.id,
-      this.originalViewName,
-      this.viewName,
+      required this.viewName,
+      required this.originalViewName,
       this.name = '',
-      this.widgetType,
-      this.position,
+      required this.widgetType,
+      required this.position,
       this.visibility = true,
       this.targetIds = const []})
       : super._();
@@ -271,12 +267,12 @@ class _$_WidgetDescription extends _WidgetDescription {
   final String? id;
   @override
 
-  /// The orignal name of the view this widget was captured on before the formating
-  final String? originalViewName;
+  /// The name of the view this widget was captured on
+  final String viewName;
   @override
 
-  /// The name of the view this widget was captured on after formatted it
-  final String? viewName;
+  /// The orignal name of the view this widget was captured on before the prettify
+  final String originalViewName;
   @JsonKey(defaultValue: '')
   @override
 
@@ -285,11 +281,11 @@ class _$_WidgetDescription extends _WidgetDescription {
   @override
 
   /// The type of the widget that's being added
-  final WidgetType? widgetType;
+  final WidgetType widgetType;
   @override
 
   /// The position we defined for he widget
-  final WidgetPosition? position;
+  final WidgetPosition position;
   @JsonKey(defaultValue: true)
   @override
 
@@ -303,7 +299,7 @@ class _$_WidgetDescription extends _WidgetDescription {
 
   @override
   String toString() {
-    return 'WidgetDescription(id: $id, originalViewName: $originalViewName, viewName: $viewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility, targetIds: $targetIds)';
+    return 'WidgetDescription(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility, targetIds: $targetIds)';
   }
 
   @override
@@ -312,12 +308,12 @@ class _$_WidgetDescription extends _WidgetDescription {
         (other is _WidgetDescription &&
             (identical(other.id, id) ||
                 const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.originalViewName, originalViewName) ||
-                const DeepCollectionEquality()
-                    .equals(other.originalViewName, originalViewName)) &&
             (identical(other.viewName, viewName) ||
                 const DeepCollectionEquality()
                     .equals(other.viewName, viewName)) &&
+            (identical(other.originalViewName, originalViewName) ||
+                const DeepCollectionEquality()
+                    .equals(other.originalViewName, originalViewName)) &&
             (identical(other.name, name) ||
                 const DeepCollectionEquality().equals(other.name, name)) &&
             (identical(other.widgetType, widgetType) ||
@@ -338,8 +334,8 @@ class _$_WidgetDescription extends _WidgetDescription {
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(originalViewName) ^
       const DeepCollectionEquality().hash(viewName) ^
+      const DeepCollectionEquality().hash(originalViewName) ^
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(widgetType) ^
       const DeepCollectionEquality().hash(position) ^
@@ -360,11 +356,11 @@ class _$_WidgetDescription extends _WidgetDescription {
 abstract class _WidgetDescription extends WidgetDescription {
   factory _WidgetDescription(
       {String? id,
-      String? originalViewName,
-      String? viewName,
+      required String viewName,
+      required String originalViewName,
       String name,
-      WidgetType? widgetType,
-      WidgetPosition? position,
+      required WidgetType widgetType,
+      required WidgetPosition position,
       bool visibility,
       List<String> targetIds}) = _$_WidgetDescription;
   _WidgetDescription._() : super._();
@@ -378,12 +374,12 @@ abstract class _WidgetDescription extends WidgetDescription {
   String? get id => throw _privateConstructorUsedError;
   @override
 
-  /// The orignal name of the view this widget was captured on before the formating
-  String? get originalViewName => throw _privateConstructorUsedError;
+  /// The name of the view this widget was captured on
+  String get viewName => throw _privateConstructorUsedError;
   @override
 
-  /// The name of the view this widget was captured on after formatted it
-  String? get viewName => throw _privateConstructorUsedError;
+  /// The orignal name of the view this widget was captured on before the prettify
+  String get originalViewName => throw _privateConstructorUsedError;
   @override
 
   /// The name we want to use when referring to the widget in the scripts
@@ -391,11 +387,11 @@ abstract class _WidgetDescription extends WidgetDescription {
   @override
 
   /// The type of the widget that's being added
-  WidgetType? get widgetType => throw _privateConstructorUsedError;
+  WidgetType get widgetType => throw _privateConstructorUsedError;
   @override
 
   /// The position we defined for he widget
-  WidgetPosition? get position => throw _privateConstructorUsedError;
+  WidgetPosition get position => throw _privateConstructorUsedError;
   @override
 
   /// Whether the key will be visible to the driver or not
