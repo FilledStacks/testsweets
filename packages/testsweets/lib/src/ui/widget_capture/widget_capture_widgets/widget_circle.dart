@@ -22,7 +22,6 @@ class WidgetCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 4),
         alignment: Alignment.center,
         width: minify
             ? WIDGET_DESCRIPTION_VISUAL_SIZE / 1.2

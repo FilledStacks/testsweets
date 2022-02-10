@@ -35,9 +35,12 @@ class WidgetCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                WidgetCircle(
-                  minify: true,
-                  widgetType: widgetType,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: WidgetCircle(
+                    minify: true,
+                    widgetType: widgetType,
+                  ),
                 ),
                 Expanded(
                   child: Text(widgetType.getTitleOfWidgetType,
