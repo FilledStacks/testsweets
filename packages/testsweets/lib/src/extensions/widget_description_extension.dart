@@ -6,22 +6,19 @@ extension WidgetDescriptionUtils on WidgetDescription {
   Offset responsiveOffset(Size screenSize) {
     final responsiveWidth = responsiveXPosition(screenSize.width);
     final responsiveHeight = responsiveYPosition(screenSize.height);
-    return Offset(responsiveWidth! + WIDGET_DESCRIPTION_VISUAL_SIZE / 2,
-        responsiveHeight! + WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
+    return Offset(responsiveWidth + WIDGET_DESCRIPTION_VISUAL_SIZE / 2,
+        responsiveHeight + WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
   }
 
-  double? responsiveXPosition(double currentScreenWidth) {
-    if (this.position == null) return null;
-
-    final result = _calculateWidthRatio(currentScreenWidth) * this.position!.x -
+  double responsiveXPosition(double currentScreenWidth) {
+    final result = _calculateWidthRatio(currentScreenWidth) * this.position.x -
         (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
     return result;
   }
 
-  double? responsiveYPosition(double currentScreenHeight) {
-    if (this.position == null) return null;
+  double responsiveYPosition(double currentScreenHeight) {
     final result =
-        _calculateHeightRatio(currentScreenHeight) * this.position!.y -
+        _calculateHeightRatio(currentScreenHeight) * this.position.y -
             (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
     return result;
   }
@@ -29,22 +26,22 @@ extension WidgetDescriptionUtils on WidgetDescription {
   double _calculateHeightRatio(double currentScreenHeight) {
     /// If the [capturedDeviceHeight] is null or 0 return 1
     /// which will leave the original hight unchanged
-    if (this.position!.capturedDeviceHeight == null ||
-        this.position!.capturedDeviceHeight == 0) {
+    if (this.position.capturedDeviceHeight == null ||
+        this.position.capturedDeviceHeight == 0) {
       return 1;
     } else {
-      return currentScreenHeight / this.position!.capturedDeviceHeight!;
+      return currentScreenHeight / this.position.capturedDeviceHeight!;
     }
   }
 
   double _calculateWidthRatio(double currentScreenWidth) {
     /// If the [capturedDeviceHeight] is null or 0 return 1
     /// which will leave the original width unchanged
-    if (this.position!.capturedDeviceWidth == null ||
-        this.position!.capturedDeviceWidth == 0) {
+    if (this.position.capturedDeviceWidth == null ||
+        this.position.capturedDeviceWidth == 0) {
       return 1;
     } else {
-      return currentScreenWidth / this.position!.capturedDeviceWidth!;
+      return currentScreenWidth / this.position.capturedDeviceWidth!;
     }
   }
 }

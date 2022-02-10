@@ -105,7 +105,10 @@ class WidgetCaptureViewModel extends FormViewModel {
   void showWidgetForm() {
     widgetDescription = widgetDescription ??
         WidgetDescription(
-            position: screenCenterPosition, widgetType: WidgetType.touchable);
+            position: screenCenterPosition,
+            viewName: '',
+            originalViewName: '',
+            widgetType: WidgetType.touchable);
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.createWidget;
   }
 

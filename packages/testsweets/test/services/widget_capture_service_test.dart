@@ -121,7 +121,7 @@ void main() {
 
         final cloudFunctionsService = getAndRegisterCloudFunctionsService();
         final _service = _getService;
-        _service.addWidgetDescriptionToMap = WidgetDescription.addView(
+        _service.addWidgetDescriptionToMap = WidgetDescription.view(
             viewName: 'OriginalLoginView',
             originalViewName: 'OriginalLoginView');
         await _service.captureWidgetDescription(

@@ -33,6 +33,11 @@ TextStyle tsLarge() => TextStyle(
     fontWeight: FontWeight.w600,
     fontSize: 18,
     color: kcPrimaryWhite);
+TextStyle tsLargeBold() => TextStyle(
+    fontFamily: "Roboto",
+    fontWeight: FontWeight.bold,
+    fontSize: 24,
+    color: kcPrimaryWhite);
 
 TextStyle tsExtraLarge() => TextStyle(
       fontFamily: "Roboto",

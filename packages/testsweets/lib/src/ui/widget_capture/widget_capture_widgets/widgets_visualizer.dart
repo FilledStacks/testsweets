@@ -35,7 +35,7 @@ class WidgetsVisualizer extends StatelessWidget {
               .map((description) => CustomPaint(
                     size: size,
                     painter: ConnectionPainter(
-                        sourcePointType: description.widgetType!,
+                        sourcePointType: description.widgetType,
                         sourcePoint: description.responsiveOffset(size),
                         targetPoints: model.descriptionsForView.where((point) {
                           return description.targetIds.contains(point.id);
@@ -89,7 +89,7 @@ class WidgetsVisualizer extends StatelessWidget {
                         : WidgetCircle(
                             transparency: description.visibility ? 1 : 0.3,
                             key: Key(description.automationKey),
-                            widgetType: description.widgetType!,
+                            widgetType: description.widgetType,
                           ),
                   ),
                 ),
