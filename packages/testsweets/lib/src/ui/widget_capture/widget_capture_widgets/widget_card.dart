@@ -23,29 +23,21 @@ class WidgetCard extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       child: Material(
         type: MaterialType.card,
-        color: Colors.transparent,
-        borderRadius: BorderRadius.circular(24),
+        color: widgetType.getColorOfWidgetType,
+        borderRadius: BorderRadius.circular(12),
         child: InkWell(
           highlightColor: Colors.transparent,
           splashColor: widgetType.getColorOfWidgetType.withOpacity(0.7),
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(12),
           onTap: () => onTap(widgetType),
           child: Container(
             height: 50,
-            decoration: BoxDecoration(
-                border: Border.all(
-                    color: selected
-                        ? widgetType.getColorOfWidgetType
-                        : kcPrimaryWhite),
-                borderRadius: BorderRadius.circular(24)),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const SizedBox(
-                  width: 2,
-                ),
                 WidgetCircle(
+                  minify: true,
                   widgetType: widgetType,
-                  selected: selected,
                 ),
                 Expanded(
                   child: Text(widgetType.getTitleOfWidgetType,

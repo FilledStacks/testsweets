@@ -10,34 +10,40 @@ import 'package:testsweets/src/ui/shared/shared_styles.dart';
 class WidgetCircle extends StatelessWidget {
   final WidgetType widgetType;
   final double transparency;
-  final bool selected;
+  final bool minify;
   const WidgetCircle({
     Key? key,
     required this.widgetType,
     this.transparency = 1.0,
-    this.selected = true,
+    this.minify = false,
   })  : assert(transparency <= 1 && transparency >= 0),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 4),
         alignment: Alignment.center,
-        width: WIDGET_DESCRIPTION_VISUAL_SIZE,
+        width: minify
+            ? WIDGET_DESCRIPTION_VISUAL_SIZE / 1.2
+            : WIDGET_DESCRIPTION_VISUAL_SIZE,
         height: WIDGET_DESCRIPTION_VISUAL_SIZE,
         decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
-                color: selected
-                    ? widgetType.getColorOfWidgetType.withOpacity(transparency)
-                    : kcPrimaryWhite,
+                color: minify
+                    ? kcPrimaryWhite
+                    : widgetType.getColorOfWidgetType.withOpacity(transparency),
                 width: 2)),
         child: Text(widgetType.returnFirstLetterOfWidgetTypeCapitalized,
             textAlign: TextAlign.center,
-            style: tsExtraLarge().copyWith(
-              color: selected
-                  ? widgetType.getColorOfWidgetType.withOpacity(transparency)
-                  : kcPrimaryWhite,
-            )));
+            style: minify
+                ? tsLargeBold().copyWith(
+                    color: kcPrimaryWhite,
+                  )
+                : tsExtraLarge().copyWith(
+                    color: widgetType.getColorOfWidgetType
+                        .withOpacity(transparency),
+                  )));
   }
 }

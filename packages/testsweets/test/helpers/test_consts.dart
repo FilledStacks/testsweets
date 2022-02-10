@@ -82,6 +82,6 @@ final kWidgetDescriptionView = WidgetDescription(
   viewName: 'login',
   id: 'viewId',
   name: '',
-  position: null,
+  position: WidgetPosition.empty(),
   widgetType: WidgetType.view,
 );

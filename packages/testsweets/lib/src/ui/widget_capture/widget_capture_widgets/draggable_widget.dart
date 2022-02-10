@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/widget_description_extension.dart';
-import 'package:testsweets/src/ui/shared/route_banner.dart';
-import 'package:testsweets/src/ui/shared/utils.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
 import 'widget_circle.dart';
@@ -27,7 +24,7 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
               },
               child: WidgetCircle(
                 transparency: model.widgetDescription!.visibility ? 1 : 0.3,
-                widgetType: model.widgetDescription!.widgetType!,
+                widgetType: model.widgetDescription!.widgetType,
               ),
             ));
   }
