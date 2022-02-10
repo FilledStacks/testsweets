@@ -5,7 +5,7 @@
 import 'dart:async' as _i7;
 import 'dart:ui' as _i11;
 
-import 'package:flutter/cupertino.dart' as _i6;
+import 'package:flutter/material.dart' as _i6;
 import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked_services/src/snackbar/snackbar_config.dart' as _i5;
@@ -13,8 +13,11 @@ import 'package:stacked_services/src/snackbar/snackbar_service.dart' as _i4;
 import 'package:testsweets/src/models/application_models.dart' as _i9;
 import 'package:testsweets/src/services/cloud_functions_service.dart' as _i12;
 import 'package:testsweets/src/services/http_service.dart' as _i3;
+import 'package:testsweets/src/services/sweetcore_command.dart' as _i14;
 import 'package:testsweets/src/services/testsweets_route_tracker.dart' as _i10;
 import 'package:testsweets/src/services/widget_capture_service.dart' as _i8;
+import 'package:testsweets/src/services/widget_visibilty_changer_service.dart'
+    as _i13;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters
@@ -323,4 +326,20 @@ class MockCloudFunctionsService extends _i1.Mock
           Invocation.method(#deleteWidgetDescription, [],
               {#projectId: projectId, #description: description}),
           returnValue: Future<String>.value('')) as _i7.Future<String>);
+}
+
+/// A class which mocks [WidgetVisibiltyChangerService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockWidgetVisibiltyChangerService extends _i1.Mock
+    implements _i13.WidgetVisibiltyChangerService {
+  @override
+  set latestSweetcoreCommand(_i14.SweetcoreCommand? _latestSweetcoreCommand) =>
+      super.noSuchMethod(
+          Invocation.setter(#latestSweetcoreCommand, _latestSweetcoreCommand),
+          returnValueForMissingStub: null);
+  @override
+  _i9.WidgetDescription? execute(_i9.WidgetDescription? widgetDescription) =>
+      (super.noSuchMethod(Invocation.method(#execute, [widgetDescription]))
+          as _i9.WidgetDescription?);
 }

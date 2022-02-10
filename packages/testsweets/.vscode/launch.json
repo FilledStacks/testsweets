@@ -5,11 +5,23 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Testsweets Example",
+            "name": "Testsweets Example capture mode",
             "request": "launch",
             "type": "dart",
             "cwd": "example/",
-        },   
+        },
+        {
+            "name": "Testsweets Example Drive mode",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "-t",
+                "lib/main.dart",
+                "--debug",
+                "--dart-define=DRIVE_MODE=true"
+            ],
+            "cwd": "example/",
+        },
         {
             "name": "Run Testsweets Unit tests",
             "request": "launch",

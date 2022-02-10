@@ -36,7 +36,10 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
       }),
       builder: (context, model, _) => HittableStack(
         children: [
-          widget.child,
+          NotificationListener(
+            onNotification: model.onClientAppEvent,
+            child: widget.child,
+          ),
           Positioned(
               right: 15,
               top: 15,

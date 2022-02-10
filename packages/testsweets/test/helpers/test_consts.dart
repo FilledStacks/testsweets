@@ -1,6 +1,10 @@
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
+import 'package:flutter/material.dart';
 import 'package:testsweets/src/models/build_info.dart';
+import 'package:testsweets/testsweets.dart';
+
+import 'test_helpers.dart';
 
 const String ksPubspecFileWithNoVersion = """
 name: myApp
@@ -85,3 +89,17 @@ final kWidgetDescriptionView = WidgetDescription(
   position: null,
   widgetType: WidgetType.view,
 );
+final testWidgetDescription = WidgetDescription(
+    viewName: 'viewName',
+    originalViewName: 'originalViewName',
+    name: 'widgetName',
+    widgetType: WidgetType.general,
+    position: WidgetPosition.empty());
+final scrollEndNotificationTest = ScrollEndNotification(
+    metrics: FixedScrollMetrics(
+        minScrollExtent: 50,
+        maxScrollExtent: 100,
+        pixels: 50,
+        viewportDimension: 33,
+        axisDirection: AxisDirection.right),
+    context: MockBuildContext());
