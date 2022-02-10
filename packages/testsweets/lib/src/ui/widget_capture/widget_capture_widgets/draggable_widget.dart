@@ -24,7 +24,7 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
                 model.updateDescriptionPosition(x, y, size.width, size.height);
               },
               child: WidgetCircle(
-                transparency: model.widgetDescription!.visibility ? 1 : 0.3,
+                transparency: model.widgetDescription!.visibility ? 1 : 0.5,
                 widgetType: model.widgetDescription!.widgetType,
               ),
             ));

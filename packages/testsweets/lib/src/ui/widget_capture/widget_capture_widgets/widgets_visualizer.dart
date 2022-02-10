@@ -87,7 +87,7 @@ class WidgetsVisualizer extends StatelessWidget {
                     child: description.id == model.widgetDescription?.id
                         ? const SizedBox.shrink()
                         : WidgetCircle(
-                            transparency: description.visibility ? 1 : 0.3,
+                            transparency: description.visibility ? 1 : 0.5,
                             key: Key(description.automationKey),
                             widgetType: description.widgetType,
                           ),
