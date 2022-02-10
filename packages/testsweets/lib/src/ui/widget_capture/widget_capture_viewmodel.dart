@@ -23,7 +23,6 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   CaptureWidgetStatusEnum _captureWidgetStatusEnum =
       CaptureWidgetStatusEnum.idle;
-  bool popUpMenuVisible = false;
 
   /// We use this position as the starter point of any new widget
   late WidgetPosition screenCenterPosition;
@@ -129,7 +128,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  Future<String?> saveWidget({WidgetPosition? screenCenter}) async {
+  Future<String?> saveWidget() async {
     log.i(widgetDescription);
 
     setBusy(true);
@@ -241,12 +240,6 @@ class WidgetCaptureViewModel extends FormViewModel {
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
     widgetDescription = null;
-  }
-
-  void menuOnChange(bool show) {
-    // log.v('show: $show');
-    // popUpMenuVisible = show;
-    // notifyListeners();
   }
 
   void startQuickPositionEdit(

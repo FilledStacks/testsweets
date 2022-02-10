@@ -55,7 +55,6 @@ class WidgetsVisualizer extends StatelessWidget {
                     disable: model.captureWidgetStatusEnum.attachMode,
                     onMoveStart: () =>
                         model.startQuickPositionEdit(description),
-                    menuOnChange: model.menuOnChange,
                     onTap: model.captureWidgetStatusEnum.attachMode
                         ? () => model.addNewTargetId(description.id!)
                         : null,

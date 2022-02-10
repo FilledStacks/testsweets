@@ -79,10 +79,11 @@ void main() {
         final service = getAndRegisterWidgetCaptureService();
 
         final model = _getViewModel();
-        model.menuOnChange(true);
-
+        await model.popupMenuActionSelected(
+            kWidgetDescription, PopupMenuAction.edit);
         model.formValueMap[WidgetNameValueKey] = 'loginButton';
         model.setFormStatus();
+
         await model.updateWidgetDescription();
 
         verify(service.updateWidgetDescription(
@@ -110,8 +111,8 @@ void main() {
           () async {
         final widgetCaptureService = getAndRegisterWidgetCaptureService();
         final model = _getViewModel();
-        model.showWidgetForm();
-        model.menuOnChange(true);
+        model.popupMenuActionSelected(
+            kWidgetDescription, PopupMenuAction.remove);
 
         await model.removeWidgetDescription();
         verify(widgetCaptureService.deleteWidgetDescription(
@@ -143,7 +144,7 @@ void main() {
         final widgetCaptureService = getAndRegisterWidgetCaptureService();
 
         final model = _getViewModel();
-        model.menuOnChange(true);
+
         model.popupMenuActionSelected(
             kWidgetDescription, PopupMenuAction.remove);
         verify(widgetCaptureService.deleteWidgetDescription(
@@ -153,7 +154,7 @@ void main() {
           'When popupMenuAction is attachToKey, Should call deleteWidgetDescription from captureService',
           () {
         final model = _getViewModel();
-        model.menuOnChange(true);
+
         model.popupMenuActionSelected(
             kWidgetDescription, PopupMenuAction.attachToKey);
         expect(model.captureWidgetStatusEnum,
@@ -163,7 +164,7 @@ void main() {
            a toast to let the user know that he need to choose a target''', () {
         final snackbarService = getAndRegisterSnackbarService();
         final model = _getViewModel();
-        model.menuOnChange(true);
+
         model.popupMenuActionSelected(
             kWidgetDescription, PopupMenuAction.attachToKey);
         verify(snackbarService.showCustomSnackBar(
@@ -177,7 +178,7 @@ void main() {
            Should add it to current widgetDescription target ids list''',
           () async {
         final model = _getViewModel();
-        model.menuOnChange(true);
+
         model.popupMenuActionSelected(
             kWidgetDescription, PopupMenuAction.attachToKey);
 
@@ -193,7 +194,7 @@ void main() {
            Should set the widgetDescription to null and captureWidgetStatusEnum to idle''',
           () async {
         final model = _getViewModel();
-        model.menuOnChange(true);
+
         model.popupMenuActionSelected(
             kWidgetDescription, PopupMenuAction.attachToKey);
 
@@ -206,7 +207,6 @@ void main() {
       test('''When show menuOnChange,
       Should set captureWidgetStatusEnum to popupMenuShown''', () {
         final model = _getViewModel();
-        model.menuOnChange(true);
       });
     });
   });
