@@ -1,10 +1,1 @@
-enum CaptureWidgetStatusEnum {
-  idle,
-  inspectMode,
-  inspectModeDialogShow,
-  inspectModeUpdate,
-  captureMode,
-  captureModeAddWidget,
-  captureModeWidgetsContainerShow,
-  captureModeWidgetNameInputShow,
-}
+enum CaptureWidgetStatusEnum { idle, createWidget, editWidget, popupMenuShown }

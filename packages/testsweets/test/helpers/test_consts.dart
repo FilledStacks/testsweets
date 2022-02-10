@@ -1,3 +1,5 @@
+import 'package:testsweets/src/enums/widget_type.dart';
+import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/models/build_info.dart';
 
 const String ksPubspecFileWithNoVersion = """
@@ -66,3 +68,20 @@ const List<String> testDynamicAutomationKeys = ['orders_touchable_ready'];
 const int testContentLength = 2;
 final testDataStream = Stream.value([1, 2, 3]);
 final testDateTime = DateTime.utc(1993, 12, 12, 12);
+final kWidgetDescription = WidgetDescription(
+  originalViewName: '/',
+  viewName: 'login',
+  id: 'id',
+  name: 'email',
+  position: WidgetPosition(
+      x: 100, y: 199, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
+  widgetType: WidgetType.general,
+);
+final kWidgetDescriptionView = WidgetDescription(
+  originalViewName: '/',
+  viewName: 'login',
+  id: 'viewId',
+  name: '',
+  position: WidgetPosition.empty(),
+  widgetType: WidgetType.view,
+);

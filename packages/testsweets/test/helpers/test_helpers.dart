@@ -1,5 +1,6 @@
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
@@ -9,6 +10,7 @@ import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'test_helpers.mocks.dart';
 
 @GenerateMocks([], customMocks: [
+  MockSpec<SnackbarService>(returnNullOnMissingStub: true),
   MockSpec<WidgetCaptureService>(returnNullOnMissingStub: true),
   MockSpec<TestSweetsRouteTracker>(returnNullOnMissingStub: true),
   MockSpec<CloudFunctionsService>(returnNullOnMissingStub: true),
@@ -20,17 +22,16 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
     bool currentViewIsAlreadyCaptured = false}) {
   _removeRegistrationIfExists<WidgetCaptureService>();
   final service = MockWidgetCaptureService();
-
   when(service.captureWidgetDescription(
-          description: anyNamed('description'),
-          projectId: anyNamed('projectId')))
-      .thenAnswer((realInvocation) => Future.value());
-
+    description: anyNamed('description'),
+  )).thenAnswer((realInvocation) => Future.value());
+  when(service.captureWidgetDescription(description: anyNamed('description')))
+      .thenAnswer((_) => Future.value());
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
       .thenReturn(listOfWidgetDescription);
-  when(service.updateWidgetDescription(
-          projectId: anyNamed('projectId'),
-          description: anyNamed('description')))
+  when(service.updateWidgetDescription(description: anyNamed('description')))
+      .thenAnswer((_) => Future.value());
+  when(service.deleteWidgetDescription(description: anyNamed('description')))
       .thenAnswer((_) => Future.value());
 
   when(service.checkCurrentViewIfAlreadyCaptured(any))
@@ -101,16 +102,25 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
   return service;
 }
 
+SnackbarService getAndRegisterSnackbarService() {
+  _removeRegistrationIfExists<SnackbarService>();
+  final service = MockSnackbarService();
+  locator.registerSingleton<SnackbarService>(service);
+  return service;
+}
+
 void registerServices() {
   getAndRegisterTestSweetsRouteTracker();
   getAndRegisterWidgetCaptureService();
   getAndRegisterCloudFunctionsService();
+  getAndRegisterSnackbarService();
 }
 
 void unregisterServices() {
   _removeRegistrationIfExists<TestSweetsRouteTracker>();
   _removeRegistrationIfExists<WidgetCaptureService>();
   _removeRegistrationIfExists<CloudFunctionsService>();
+  _removeRegistrationIfExists<SnackbarService>();
 }
 
 // Call this before any service registration helper. This is to ensure that if there

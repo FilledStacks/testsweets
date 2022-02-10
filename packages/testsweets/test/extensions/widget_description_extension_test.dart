@@ -10,7 +10,7 @@ void main() {
     setUp(registerServices);
     tearDown(unregisterServices);
     group('responsiveXPosition -', () {
-      /// take into consideration the WIDGET_DESCRIPTION_VISUAL_SIZE= 50
+      /// take into consideration the [WIDGET_DESCRIPTION_VISUAL_SIZE= 42]
       /// which is the key circle radius
       test('''When capture a key with position x=100 on screenWidth = 200
    and new screenWidth is 500, Should adjust the position to x=225
@@ -26,7 +26,7 @@ void main() {
               capturedDeviceWidth: 200,
               capturedDeviceHeight: 0,
             ));
-        expect(description.responsiveXPosition(500), 225);
+        expect(description.responsiveXPosition(500), 229);
       });
 
       /// take into consideration the WIDGET_DESCRIPTION_VISUAL_SIZE= 50
@@ -45,7 +45,7 @@ void main() {
               capturedDeviceWidth: 0,
               capturedDeviceHeight: 200,
             ));
-        expect(description.responsiveYPosition(500), 225);
+        expect(description.responsiveYPosition(500), 229);
       });
     });
   });

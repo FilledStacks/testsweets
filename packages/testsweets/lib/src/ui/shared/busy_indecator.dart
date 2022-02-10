@@ -11,7 +11,7 @@ class BusyIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return enable
         ? Container(
-            color: kcBackground.withOpacity(0.3),
+            color: kcCard.withOpacity(0.3),
             child: Center(
               child: Container(
                 padding: const EdgeInsets.all(16),

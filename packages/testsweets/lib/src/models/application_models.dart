@@ -21,34 +21,25 @@ class WidgetDescription with _$WidgetDescription {
     required String originalViewName,
 
     /// The name we want to use when referring to the widget in the scripts
-    required String name,
+    @Default('') String name,
 
     /// The type of the widget that's being added
     required WidgetType widgetType,
 
     /// The position we defined for he widget
     required WidgetPosition position,
+
+    /// Whether the key will be visible to the driver or not
+    @Default(true) bool visibility,
   }) = _WidgetDescription;
-  factory WidgetDescription.addView(
+  factory WidgetDescription.view(
           {required String viewName, required String originalViewName}) =>
       WidgetDescription(
-          viewName: viewName,
-          originalViewName: originalViewName,
-          name: '',
-          widgetType: WidgetType.view,
-          position: WidgetPosition(
-              x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0));
-
-  factory WidgetDescription.addAtPosition({
-    required WidgetType widgetType,
-    required WidgetPosition widgetPosition,
-  }) =>
-      WidgetDescription(
-          originalViewName: '',
-          viewName: '',
-          name: '',
-          widgetType: widgetType,
-          position: widgetPosition);
+        viewName: viewName,
+        originalViewName: originalViewName,
+        widgetType: WidgetType.view,
+        position: WidgetPosition.empty(),
+      );
 
   factory WidgetDescription.fromJson(Map<String, dynamic> json) =>
       _$WidgetDescriptionFromJson(json);

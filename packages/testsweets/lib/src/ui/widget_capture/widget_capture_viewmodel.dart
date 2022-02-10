@@ -1,52 +1,34 @@
+import 'dart:async';
+
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
+import 'package:testsweets/src/enums/popup_menu_action.dart';
+import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
-import 'package:testsweets/utils/error_messages.dart';
-
-import 'widget_capture_view.form.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 
 class WidgetCaptureViewModel extends FormViewModel {
   final log = getLogger('WidgetCaptureViewModel');
 
-  final String projectId;
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
+  final _snackbarService = locator<SnackbarService>();
 
-  bool _isDarkMode = true;
-  bool get isDarkMode => _isDarkMode;
-
-  void toggleTheme() {
-    _isDarkMode = !isDarkMode;
-    notifyListeners();
-  }
-
-  WidgetCaptureViewModel({required this.projectId}) {
-    syncWithFirestoreWidgetKeys(projectId: projectId);
-    _testSweetsRouteTracker.addListener(notifyListeners);
-  }
-
-  String get rightViewName => _testSweetsRouteTracker.rightViewName;
-
-  String get leftViewName => _testSweetsRouteTracker.leftViewName;
-
-  bool get isNestedView => _testSweetsRouteTracker.isNestedView;
-  bool get isChildRouteActivated =>
-      _testSweetsRouteTracker.isChildRouteActivated;
-
-  void toggleBetweenParentRouteAndChildRoute() =>
-      _testSweetsRouteTracker.toggleActivatedRouteBetweenParentAndChild();
-
-  /// the status enum that express the current state of the view
   CaptureWidgetStatusEnum _captureWidgetStatusEnum =
       CaptureWidgetStatusEnum.idle;
+
+  /// We use this position as the starter point of any new widget
+  late WidgetPosition screenCenterPosition;
+
   set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
+    log.i(captureWidgetStatusEnum);
     _captureWidgetStatusEnum = captureWidgetStatusEnum;
     notifyListeners();
   }
@@ -54,48 +36,63 @@ class WidgetCaptureViewModel extends FormViewModel {
   CaptureWidgetStatusEnum get captureWidgetStatusEnum =>
       _captureWidgetStatusEnum;
 
-  WidgetDescription? _widgetDescription;
-  WidgetDescription? get widgetDescription => _widgetDescription;
+  WidgetCaptureViewModel({required String projectId}) {
+    _widgetCaptureService.projectId = projectId;
+    _testSweetsRouteTracker.addListener(notifyListeners);
+  }
 
-  bool _hasWidgetNameFocus = false;
-  bool get hasWidgetNameFocus => _hasWidgetNameFocus;
-
-  bool _widgetNameInputPositionIsDown = true;
-  bool get widgetNameInputPositionIsDown => _widgetNameInputPositionIsDown;
-
-  String _inputErrorMessage = '';
-  String get nameInputErrorMessage => _inputErrorMessage;
+  WidgetDescription? widgetDescription;
 
   List<WidgetDescription> get descriptionsForView =>
       _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracker.currentRoute,
       );
-
-  Future<void> syncWithFirestoreWidgetKeys(
-      {required String projectId, bool enableBusy = true}) async {
-    if (enableBusy) setBusy(true);
-    try {
-      await _widgetCaptureService.loadWidgetDescriptionsForProject(
-        projectId: projectId,
+  bool get currentViewIsCaptured => descriptionsForView.any(
+        (element) => element.widgetType == WidgetType.view,
       );
+  String get currentViewName => _testSweetsRouteTracker.formatedCurrentRoute;
+  Future<void> loadWidgetDescriptions() async {
+    log.v('');
+    setBusy(true);
+    try {
+      await _widgetCaptureService.loadWidgetDescriptionsForProject();
+      setBusy(false);
     } catch (e) {
       log.e('Could not get widgetDescriptions: $e');
+      _snackbarService.showCustomSnackBar(
+          message: 'Could not get widgetDescriptions: $e',
+          variant: ToastType.failed);
     }
-    setBusy(false);
   }
 
-  void toggleCaptureView() {
-    if (captureWidgetStatusEnum.isAtCaptureMode)
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
-    else
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.captureMode;
+  set setWidgetType(WidgetType widgetType) {
+    log.v(widgetType);
+    widgetDescription = widgetDescription!.copyWith(widgetType: widgetType);
+    notifyListeners();
   }
 
-  void toggleInspectLayout() {
-    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.inspectMode)
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
-    else
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
+  set setVisibilty(bool visible) {
+    log.v(visible);
+    widgetDescription = widgetDescription!.copyWith(visibility: visible);
+    notifyListeners();
+  }
+
+  void clearWidgetDescriptionForm() {
+    log.v('');
+    widgetDescription = null;
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+  }
+
+  /// When open the form create new instance of widgetDescription
+  /// if it's null and set [CaptureWidgetStatusEnum.createWidget]
+  void showWidgetForm() {
+    widgetDescription = widgetDescription ??
+        WidgetDescription(
+            position: screenCenterPosition,
+            viewName: '',
+            originalViewName: '',
+            widgetType: WidgetType.touchable);
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.createWidget;
   }
 
   void updateDescriptionPosition(
@@ -104,190 +101,130 @@ class WidgetCaptureViewModel extends FormViewModel {
     double capturedDeviceWidth,
     double capturedDeviceHeight,
   ) {
-    _widgetDescription = _widgetDescription!.copyWith(
+    widgetDescription = widgetDescription!.copyWith(
       position: WidgetPosition(
         capturedDeviceHeight: capturedDeviceHeight,
         capturedDeviceWidth: capturedDeviceWidth,
-        x: _widgetDescription!.position.x + x,
-        y: _widgetDescription!.position.y + y,
+        x: x,
+        y: y,
       ),
     );
     notifyListeners();
   }
 
-  @override
-  void setFormStatus() {
-    _widgetDescription =
-        _widgetDescription?.copyWith(name: widgetNameValue ?? '');
-  }
-
-  Future<void> saveWidgetDescription() async {
-    if (_isEmpty()) return;
+  Future<String?> saveWidget({WidgetPosition? screenCenter}) async {
+    log.i(widgetDescription);
 
     setBusy(true);
-    _widgetDescription = _widgetDescription?.copyWith(
-        viewName:
-            _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
-        originalViewName: _testSweetsRouteTracker.currentRoute,
-        name: widgetNameValue!.convertWidgetNameToValidFormat);
+    widgetDescription = widgetDescription?.copyWith(
+      name: widgetNameValue!.convertWidgetNameToValidFormat,
+      viewName:
+          _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
+      originalViewName: _testSweetsRouteTracker.currentRoute,
+    );
 
-    log.i('descriptionToSave:$_widgetDescription');
+    log.i('descriptionToSave:$widgetDescription');
 
-    await sendWidgetDescriptionToFirestore();
+    final result = await _widgetCaptureService.captureWidgetDescription(
+        description: widgetDescription!);
+
+    if (result is String) {
+      _snackbarService.showCustomSnackBar(
+          message: result, variant: ToastType.failed);
+    } else {
+      widgetDescription = null;
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+    }
+    setBusy(false);
+    return result;
+  }
+
+  Future<String?> updateWidgetDescription() async {
+    log.i(widgetDescription);
+
+    setBusy(true);
+
+    final result = await _widgetCaptureService.updateWidgetDescription(
+        description: widgetDescription!);
+
+    if (result is String) {
+      _snackbarService.showCustomSnackBar(
+          message: result, variant: ToastType.failed);
+    } else {
+      widgetDescription = null;
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+    }
 
     setBusy(false);
+    return result;
   }
 
-  bool _isEmpty() {
-    if (widgetNameValue!.trim().isEmpty) {
-      _inputErrorMessage = ErrorMessages.widgetInputNameIsEmpty;
-      notifyListeners();
-      return true;
+  Future<String?> removeWidgetDescription() async {
+    log.i(widgetDescription);
+
+    setBusy(true);
+
+    final result = await _widgetCaptureService.deleteWidgetDescription(
+        description: widgetDescription!);
+    if (result is String) {
+      _snackbarService.showCustomSnackBar(
+          message: result, variant: ToastType.failed);
     } else {
-      _inputErrorMessage = '';
-      return false;
+      widgetDescription = null;
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
+
+    setBusy(false);
+    return result;
   }
 
-  Future<void> sendWidgetDescriptionToFirestore() async {
-    try {
-      await _widgetCaptureService.captureWidgetDescription(
-        description: _widgetDescription!,
-        projectId: projectId,
-      );
-      captureWidgetStatusEnum =
-          CaptureWidgetStatusEnum.captureModeWidgetsContainerShow;
-      _widgetDescription = null;
-    } catch (e) {
-      log.e('Couldn\'t save the widget. $e');
-    }
-  }
+  @override
+  void setFormStatus() {
+    log.v('widgetNameValue: $widgetNameValue');
 
-  void setWidgetNameFocused(bool hasFocus) {
-    _hasWidgetNameFocus = hasFocus;
+    widgetDescription =
+        widgetDescription?.copyWith(name: widgetNameValue ?? '');
     notifyListeners();
   }
 
-  void toggleWidgetsContainer() {
-    if (captureWidgetStatusEnum ==
-        CaptureWidgetStatusEnum.captureModeWidgetsContainerShow)
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.captureModeAddWidget;
-    else
-      captureWidgetStatusEnum =
-          CaptureWidgetStatusEnum.captureModeWidgetsContainerShow;
-  }
-
-  Future<void> addNewWidget(
-      WidgetType widgetType, WidgetPosition widgetPosition) async {
-    _widgetDescription = WidgetDescription.addAtPosition(
-        widgetType: widgetType, widgetPosition: widgetPosition);
-
-    if (!_widgetCaptureService.checkCurrentViewIfAlreadyCaptured(
-        _testSweetsRouteTracker.currentRoute))
-      _captureViewWhenItsNotAlreadyCaptured();
-
-    _showInputTextField();
-  }
-
-  Future<void> _captureViewWhenItsNotAlreadyCaptured() async {
-    try {
-      _widgetCaptureService.captureWidgetDescription(
-          description: WidgetDescription.addView(
-              viewName: _testSweetsRouteTracker
-                  .currentRoute.convertViewNameToValidFormat,
-              originalViewName: _testSweetsRouteTracker.currentRoute),
-          projectId: projectId);
-      syncWithFirestoreWidgetKeys(projectId: projectId, enableBusy: false);
-    } catch (e) {
-      log.e("couldn't capture the view : $e");
-      //should add a way to notify the user that something wrong happened
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.captureMode;
-    }
-  }
-
-  void _showInputTextField() {
-    toggleWidgetsContainer();
-    captureWidgetStatusEnum =
-        CaptureWidgetStatusEnum.captureModeWidgetNameInputShow;
-  }
-
-  void switchWidgetNameInputPosition() {
-    _widgetNameInputPositionIsDown = !widgetNameInputPositionIsDown;
-    notifyListeners();
-  }
-
-  void closeWidgetNameInput() {
-    _inputErrorMessage = '';
-    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.inspectModeUpdate) {
-      toggleUpdateMode();
+  Future<String?> submitForm() async {
+    if (widgetDescription?.id != null) {
+      return await updateWidgetDescription();
     } else {
-      _widgetDescription = null;
-      toggleWidgetsContainer();
+      return await saveWidget();
     }
   }
 
-  void showWidgetDescription(WidgetDescription description) {
-    _widgetDescription = description;
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectModeDialogShow;
-  }
+  Future<void> popupMenuActionSelected(PopupMenuAction popupMenuAction) async {
+    log.v(popupMenuAction);
+    switch (popupMenuAction) {
+      case PopupMenuAction.edit:
+        captureWidgetStatusEnum = CaptureWidgetStatusEnum.editWidget;
+        break;
+      case PopupMenuAction.remove:
+        await removeWidgetDescription();
 
-  void closeWidgetDescription() {
-    _widgetDescription = null;
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
-  }
-
-  void toggleUpdateMode() {
-    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.inspectModeUpdate)
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectMode;
-    else
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.inspectModeUpdate;
-  }
-
-  Future<void> deleteWidgetDescription() async {
-    try {
-      setBusy(true);
-
-      log.i('descriptionToDelete:$_widgetDescription');
-
-      await _widgetCaptureService.deleteWidgetDescription(
-          projectId: projectId, description: _widgetDescription!);
-
-      setBusy(false);
-
-      await syncWithFirestoreWidgetKeys(
-          projectId: projectId, enableBusy: false);
-
-      closeWidgetDescription();
-      setBusy(false);
-    } catch (e) {
-      setBusy(false);
-      log.e('Couldn\'t delete the widget. $e');
+        break;
+      case PopupMenuAction.attachToKey:
+        // TODO: Handle this case.
+        break;
     }
   }
 
-  Future<void> updateWidgetDescription(
-      WidgetDescription updatedWidgetDescription) async {
-    if (_isEmpty()) return;
+  Future<void> finishAdjustingWidgetPosition() async {
+    log.v(captureWidgetStatusEnum);
 
-    _inputErrorMessage = '';
-
-    try {
-      setBusy(true);
-
-      log.i('descriptionToUpdate:$_widgetDescription');
-
-      await _widgetCaptureService.updateWidgetDescription(
-          projectId: projectId,
-          description:
-              updatedWidgetDescription.copyWith(name: widgetNameValue!));
-
-      toggleUpdateMode();
-      await syncWithFirestoreWidgetKeys(
-          projectId: projectId, enableBusy: false);
-      setBusy(false);
-    } catch (e) {
-      setBusy(false);
-      log.e('Couldn\'t update the widget. $e');
+    /// This means that we show the menu but didn't choose any action
+    /// Which leave us with the only option of drag the widget
+    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.popupMenuShown) {
+      await updateWidgetDescription();
     }
+  }
+
+  void popupMenuShown(WidgetDescription description) {
+    log.v(description);
+
+    widgetDescription = description;
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.popupMenuShown;
   }
 }

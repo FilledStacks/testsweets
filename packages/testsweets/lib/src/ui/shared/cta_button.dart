@@ -25,14 +25,16 @@ class CtaButton extends StatelessWidget {
       width: maxWidth,
       child: MaterialButton(
         visualDensity: VisualDensity.compact,
-        disabledColor: kcBackground,
+        disabledColor: kcTextField,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(crButtonCornerRadius())),
         onPressed: isDisabled ? null : onTap,
         color: fillColor,
         padding: buttonPadding,
         child: AutoSizeText(title,
-            maxLines: 1, style: tsMedium().copyWith(color: Colors.white)),
+            maxLines: 1,
+            style: tsMedium().copyWith(
+                color: kcPrimaryWhite.withOpacity(isDisabled ? 0.5 : 1))),
       ),
     );
   }

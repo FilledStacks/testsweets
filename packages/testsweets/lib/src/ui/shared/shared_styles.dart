@@ -1,64 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'app_colors.dart';
 
 TextStyle tsSmall() => TextStyle(
-      fontFamily: "Roboto",
-      fontWeight: FontWeight.w400,
-      fontSize: 12.sp,
-    );
+    fontFamily: "Roboto",
+    fontWeight: FontWeight.w400,
+    fontSize: 12,
+    color: kcPrimaryWhite);
+TextStyle tsSmallBold() => TextStyle(
+    fontFamily: "Roboto",
+    fontWeight: FontWeight.bold,
+    fontSize: 12,
+    color: kcPrimaryWhite);
 TextStyle tsNormalBold() => TextStyle(
-      fontFamily: "Roboto",
-      fontWeight: FontWeight.w600,
-      fontSize: 14.sp,
-    );
+    fontFamily: "Roboto",
+    fontWeight: FontWeight.w600,
+    fontSize: 14,
+    color: kcPrimaryWhite);
 TextStyle tsNormal() => TextStyle(
-      fontFamily: "Roboto",
-      fontWeight: FontWeight.w400,
-      fontSize: 16.sp,
-    );
+    fontFamily: "Roboto",
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+    color: kcPrimaryWhite);
 TextStyle tsMedium() => TextStyle(
       fontFamily: "Roboto",
+      color: kcPrimaryWhite,
       fontWeight: FontWeight.w500,
-      fontSize: 16.sp,
+      fontSize: 16,
     );
 TextStyle tsLarge() => TextStyle(
-      fontFamily: "Roboto",
-      fontWeight: FontWeight.w600,
-      fontSize: 18.sp,
-    );
+    fontFamily: "Roboto",
+    fontWeight: FontWeight.w600,
+    fontSize: 18,
+    color: kcPrimaryWhite);
+TextStyle tsLargeBold() => TextStyle(
+    fontFamily: "Roboto",
+    fontWeight: FontWeight.bold,
+    fontSize: 24,
+    color: kcPrimaryWhite);
 
 TextStyle tsExtraLarge() => TextStyle(
       fontFamily: "Roboto",
       fontWeight: FontWeight.w700,
-      fontSize: 40.sp,
+      fontSize: 32,
     );
-TextStyle tsActiveRoute(bool darkMode) => TextStyle(
-      fontFamily: "Roboto",
-      color: darkMode ? kcPrimaryWhite : kcAutocompleteBackground,
-      fontWeight: FontWeight.w600,
-      fontSize: 18.sp,
-    );
+
 TextStyle tsDisableRoute() => TextStyle(
       fontFamily: "Roboto",
       fontWeight: FontWeight.w600,
       color: kcSubtext,
-      fontSize: 16.sp,
+      fontSize: 16,
     );
 const boldStyle =
     TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white);
 
 const lightStyle = TextStyle(fontSize: 19, color: Colors.white);
 
-const positionWidgetStyle = TextStyle(
-    fontSize: 40,
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-    height: 1.2);
-
 Radius crButtonCornerRadius() => Radius.circular(8);
-Radius crTextFieldCornerRadius() => Radius.circular(8.w);
+Radius crTextFieldCornerRadius() => Radius.circular(8);
 
 const EdgeInsets buttonPadding =
     const EdgeInsets.symmetric(horizontal: 20, vertical: 22);
@@ -99,15 +98,6 @@ final viewNameBlackBoxDecoration = BoxDecoration(
   borderRadius: BorderRadius.vertical(top: crButtonCornerRadius()),
 );
 
-final viewNameWhiteBoxDecoration = BoxDecoration(
-  gradient: LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [kcGrey.withOpacity(0.7), kcSubtext],
-  ),
-  borderRadius: BorderRadius.vertical(top: crButtonCornerRadius()),
-);
-
 final buttonDarkBoxDecoration = BoxDecoration(
   gradient: LinearGradient(
     begin: Alignment.topCenter,
@@ -142,3 +132,11 @@ class FadeInWidget extends StatelessWidget {
     );
   }
 }
+
+const kdBlackRoundedEdgeDecoration = BoxDecoration(
+    color: kcCard,
+    borderRadius: const BorderRadius.vertical(top: Radius.circular(12)));
+const kdPopupDecoration = BoxDecoration(
+    color: kcCard, borderRadius: const BorderRadius.all(Radius.circular(12)));
+final kdRouteNameDecoration = BoxDecoration(
+    color: kcCard, borderRadius: const BorderRadius.all(Radius.circular(8)));

@@ -16,13 +16,15 @@ dependencies:
   yaml: ^3.0.0
   meta: ^1.3.0
   get_it: ^7.2.0
+  provider: ^6.0.2
   freezed_annotation: ^0.14.3
   json_annotation: ^4.1.0
-  stacked: ^2.2.5
+  stacked: ^2.2.8
+  stacked_services: ^0.8.16
   logger: ^1.1.0
   recase: ^4.0.0
-  flutter_screenutil: ^5.0.0+2
-
+  solid_bottom_sheet: ^0.1.10
+  flutter_svg: ^1.0.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -33,3 +35,10 @@ dev_dependencies:
   freezed: ^0.14.5
   json_serializable: ^5.0.2
   mockito: ^5.0.16
+
+
+flutter:
+
+  assets:
+   - assets/svgs/
+
