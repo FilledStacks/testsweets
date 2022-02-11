@@ -18,7 +18,8 @@ void main() {
       test(
           'When the latestSweetcoreCommand is not null, Should toggle visiabilty of the widget',
           () {
-        _service.sweetcoreCommand = ScrollableCommand(widgetName: 'widgetName');
+        _service.automationKeyName =
+            ScrollableCommand(widgetName: 'widgetName');
 
         /// Sence default visibilty is true
         expect(_service.toggleVisibilty([kTestWidgetDescription]),

@@ -43,14 +43,12 @@ class DriverLayoutViewModel extends BaseViewModel {
   /// This will triggered whenever the client app
   /// populate a new event aka `notification`
   bool onClientAppEvent(Notification notification) {
-    final latestSweetcoreCommandWidgetName =
-        _widgetVisibiltyChangerService.sweetcoreCommand?.widgetName;
+    final automationKeyName =
+        _widgetVisibiltyChangerService.automationKeyName?.widgetName;
     try {
-      if (notification is ScrollEndNotification &&
-          latestSweetcoreCommandWidgetName != null) {
+      if (notification is ScrollEndNotification && automationKeyName != null) {
         final triggerWidget = descriptionsForView.firstWhere(
-          (element) =>
-              element.automationKey == latestSweetcoreCommandWidgetName,
+          (element) => element.automationKey == automationKeyName,
         );
         final targetedWidgets = filterTargetedWidgets(triggerWidget);
 
@@ -64,7 +62,7 @@ class DriverLayoutViewModel extends BaseViewModel {
 
       /// Reset the sweetcore command to prevent duplicated calls
       /// incase there is another scroll event
-      _widgetVisibiltyChangerService.sweetcoreCommand = null;
+      _widgetVisibiltyChangerService.automationKeyName = null;
       notifyListeners();
     } on StateError catch (e) {
       log.e(

@@ -21,7 +21,7 @@ Future<void> setupTestSweets() async {
         if (message != null) {
           final widgetVisibiltyChangerService =
               locator<WidgetVisibiltyChangerService>();
-          widgetVisibiltyChangerService.sweetcoreCommand =
+          widgetVisibiltyChangerService.automationKeyName =
               SweetcoreCommand.fromString(message);
 
           return await widgetVisibiltyChangerService.completer.future;
