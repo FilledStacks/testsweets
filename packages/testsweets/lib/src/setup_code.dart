@@ -14,10 +14,10 @@ Future<void> setupTestSweets() async {
   if (DRIVE_MODE) {
     enableFlutterDriverExtension(
       handler: (message) async {
-        if (message != null) {
-          locator<WidgetVisibiltyChangerService>().latestSweetcoreCommand =
-              SweetcoreCommand.fromString(message);
-        }
+        // if (message != null) {
+        //   locator<WidgetVisibiltyChangerService>().latestSweetcoreCommand =
+        //       SweetcoreCommand.fromString(message);
+        // }
         return 'Helloooo $message';
       },
     );

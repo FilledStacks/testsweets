@@ -34,69 +34,71 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
           SchedulerBinding.instance?.addPostFrameCallback((timeStamp) {
         model.initialise();
       }),
-      builder: (context, model, _) => HittableStack(
-        children: [
-          NotificationListener(
-            onNotification: model.onClientAppEvent,
-            child: widget.child,
-          ),
-          Positioned(
-              right: 15,
-              top: 15,
-              child: IconButton(
-                icon: Icon(
-                  Icons.remove_red_eye,
-                  color: _showDebugInformation ? kcGreen : kcError,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _showDebugInformation = !_showDebugInformation;
-                  });
-                },
-              )),
-          BusyIndicator(
-            enable: model.isBusy,
-          ),
-          ...model.descriptionsForView.map(
-            (description) => Positioned(
-              top: description.responsiveYPosition(size.height),
-              left: description.responsiveXPosition(size.width),
-              child: Container(
-                key: Key(description.automationKey),
-                width: WIDGET_DESCRIPTION_VISUAL_SIZE,
-                height: WIDGET_DESCRIPTION_VISUAL_SIZE,
-                decoration: BoxDecoration(
-                  color: Color(0x01000000),
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(
-                      color: _showDebugInformation
-                          ? Colors.red
-                          : Colors.transparent,
-                      width: 1),
+      builder: (context, model, _) => Scaffold(
+        body: HittableStack(
+          children: [
+            NotificationListener(
+              onNotification: model.onClientAppEvent,
+              child: widget.child,
+            ),
+            Positioned(
+                right: 15,
+                top: 15,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.remove_red_eye,
+                    color: _showDebugInformation ? kcGreen : kcError,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _showDebugInformation = !_showDebugInformation;
+                    });
+                  },
+                )),
+            BusyIndicator(
+              enable: model.isBusy,
+            ),
+            ...model.descriptionsForView.map(
+              (description) => Positioned(
+                top: description.responsiveYPosition(size.height),
+                left: description.responsiveXPosition(size.width),
+                child: Container(
+                  key: Key(description.automationKey),
+                  width: WIDGET_DESCRIPTION_VISUAL_SIZE,
+                  height: WIDGET_DESCRIPTION_VISUAL_SIZE,
+                  decoration: BoxDecoration(
+                    color: Color(0x01000000),
+                    borderRadius: BorderRadius.circular(5),
+                    border: Border.all(
+                        color: _showDebugInformation
+                            ? Colors.red
+                            : Colors.transparent,
+                        width: 1),
+                  ),
                 ),
               ),
             ),
-          ),
-          if (_showDebugInformation)
-            ...model.descriptionsForView.map(
-              (description) => Positioned(
-                top: description.position.y -
-                    (WIDGET_DESCRIPTION_VISUAL_SIZE / 3),
-                left: description.position.x -
-                    (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
-                child: Container(
-                  color: kcError,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 5,
-                  ),
-                  child: Text(
-                    description.automationKey,
+            if (_showDebugInformation)
+              ...model.descriptionsForView.map(
+                (description) => Positioned(
+                  top: description.position.y -
+                      (WIDGET_DESCRIPTION_VISUAL_SIZE / 3),
+                  left: description.position.x -
+                      (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
+                  child: Container(
+                    color: kcError,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 5,
+                    ),
+                    child: Text(
+                      description.automationKey,
+                    ),
                   ),
                 ),
-              ),
-            )
-        ],
+              )
+          ],
+        ),
       ),
       viewModelBuilder: () =>
           DriverLayoutViewModel(projectId: widget.projectId),
