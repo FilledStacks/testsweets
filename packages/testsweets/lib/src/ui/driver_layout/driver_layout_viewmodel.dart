@@ -54,18 +54,13 @@ class DriverLayoutViewModel extends BaseViewModel {
           (element) =>
               element.automationKey == latestSweetcoreCommandWidgetName,
         );
+        final targetedWidgets = filterTargetedWidgets(triggerWidget);
 
-        final widgetAfterToggleVisibilty =
-            _widgetVisibiltyChangerService.execute(descriptionsForView
-                .where(
-                    (element) => triggerWidget.targetIds.contains(element.id))
-                .toList());
-        if (widgetAfterToggleVisibilty != null) {
-          widgetAfterToggleVisibilty.forEach((toggledItem) {
-            descriptionsForView
-                .removeWhere((element) => element.id == toggledItem.id);
-            descriptionsForView.add(toggledItem);
-          });
+        final toggledWidgets =
+            _widgetVisibiltyChangerService.toggleVisibilty(targetedWidgets);
+
+        if (toggledWidgets != null && toggledWidgets.isNotEmpty) {
+          updateViewWidgetsList(toggledWidgets);
         }
       }
       notifyListeners();
@@ -77,5 +72,20 @@ class DriverLayoutViewModel extends BaseViewModel {
     /// By returning false we don't resolve the notification
     /// so it keeps populating up through the widget tree
     return false;
+  }
+
+  void updateViewWidgetsList(
+      Iterable<WidgetDescription> widgetAfterToggleVisibilty) {
+    for (var widget in widgetAfterToggleVisibilty) {
+      final widgetIndex =
+          descriptionsForView.indexWhere((element) => element.id == widget.id);
+      descriptionsForView[widgetIndex] = widget;
+    }
+  }
+
+  Iterable<WidgetDescription> filterTargetedWidgets(
+      WidgetDescription triggerWidget) {
+    return descriptionsForView
+        .where((element) => triggerWidget.targetIds.contains(element.id));
   }
 }

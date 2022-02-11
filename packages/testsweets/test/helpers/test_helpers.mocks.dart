@@ -345,8 +345,9 @@ class MockWidgetVisibiltyChangerService extends _i1.Mock
           Invocation.setter(#latestSweetcoreCommand, _latestSweetcoreCommand),
           returnValueForMissingStub: null);
   @override
-  List<_i9.WidgetDescription>? execute(
-          List<_i9.WidgetDescription>? widgetDescriptions) =>
-      (super.noSuchMethod(Invocation.method(#execute, [widgetDescriptions]))
-          as List<_i9.WidgetDescription>?);
+  Iterable<_i9.WidgetDescription>? toggleVisibilty(
+          Iterable<_i9.WidgetDescription>? widgetDescriptions) =>
+      (super.noSuchMethod(
+              Invocation.method(#toggleVisibilty, [widgetDescriptions]))
+          as Iterable<_i9.WidgetDescription>?);
 }

@@ -89,7 +89,8 @@ final kWidgetDescriptionView = WidgetDescription(
   position: WidgetPosition.empty(),
   widgetType: WidgetType.view,
 );
-final testWidgetDescription = WidgetDescription(
+final kTestWidgetDescription = WidgetDescription(
+    id: 'testWidgetDescriptionId',
     viewName: 'viewName',
     originalViewName: 'originalViewName',
     name: 'widgetName',

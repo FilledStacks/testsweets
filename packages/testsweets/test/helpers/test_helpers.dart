@@ -121,7 +121,7 @@ WidgetVisibiltyChangerService getAndRegisterWidgetVisibiltyChangerService(
     SweetcoreCommand? latestSweetcoreCommand}) {
   _removeRegistrationIfExists<WidgetVisibiltyChangerService>();
   final service = MockWidgetVisibiltyChangerService();
-  when(service.execute(any)).thenReturn(widgetDescriptions);
+  when(service.toggleVisibilty(any)).thenReturn(widgetDescriptions);
   when(service.latestSweetcoreCommand).thenReturn(latestSweetcoreCommand);
   locator.registerSingleton<WidgetVisibiltyChangerService>(service);
   return service;
