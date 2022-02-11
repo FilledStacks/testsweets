@@ -340,9 +340,8 @@ class MockWidgetVisibiltyChangerService extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#completer),
           returnValue: _FakeCompleter_2<dynamic>()) as _i4.Completer<dynamic>);
   @override
-  set latestSweetcoreCommand(_i14.SweetcoreCommand? _latestSweetcoreCommand) =>
-      super.noSuchMethod(
-          Invocation.setter(#latestSweetcoreCommand, _latestSweetcoreCommand),
+  set sweetcoreCommand(_i14.SweetcoreCommand? _sweetcoreCommand) => super
+      .noSuchMethod(Invocation.setter(#sweetcoreCommand, _sweetcoreCommand),
           returnValueForMissingStub: null);
   @override
   Iterable<_i9.WidgetDescription>? toggleVisibilty(

@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/src/widgets/notification_listener.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/locator.dart';
@@ -7,7 +6,6 @@ import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
-import 'package:collection/collection.dart';
 
 class DriverLayoutViewModel extends BaseViewModel {
   final log = getLogger('DriverLayoutViewModel');
@@ -46,7 +44,7 @@ class DriverLayoutViewModel extends BaseViewModel {
   /// populate a new event aka `notification`
   bool onClientAppEvent(Notification notification) {
     final latestSweetcoreCommandWidgetName =
-        _widgetVisibiltyChangerService.latestSweetcoreCommand?.widgetName;
+        _widgetVisibiltyChangerService.sweetcoreCommand?.widgetName;
     try {
       if (notification is ScrollEndNotification &&
           latestSweetcoreCommandWidgetName != null) {
@@ -63,6 +61,10 @@ class DriverLayoutViewModel extends BaseViewModel {
           updateViewWidgetsList(toggledWidgets);
         }
       }
+
+      /// Reset the sweetcore command to prevent duplicated calls
+      /// incase there is another scroll event
+      _widgetVisibiltyChangerService.sweetcoreCommand = null;
       notifyListeners();
     } on StateError catch (e) {
       log.e(
