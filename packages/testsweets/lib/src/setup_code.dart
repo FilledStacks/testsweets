@@ -14,11 +14,19 @@ Future<void> setupTestSweets() async {
   if (DRIVE_MODE) {
     enableFlutterDriverExtension(
       handler: (message) async {
-        // if (message != null) {
-        //   locator<WidgetVisibiltyChangerService>().latestSweetcoreCommand =
-        //       SweetcoreCommand.fromString(message);
-        // }
-        return 'Helloooo $message';
+        ///
+        /// take this message and await till the a notification
+        /// arrives to the appropriate notification listener of the driver layout
+        ///
+
+        if (message != null) {
+          locator<WidgetVisibiltyChangerService>().latestSweetcoreCommand =
+              SweetcoreCommand.fromString(message);
+          return await locator<WidgetVisibiltyChangerService>()
+              .completer
+              .future;
+        }
+        return 'Message is null';
       },
     );
   }

@@ -117,11 +117,11 @@ SnackbarService getAndRegisterSnackbarService() {
 }
 
 WidgetVisibiltyChangerService getAndRegisterWidgetVisibiltyChangerService(
-    {WidgetDescription? widgetDescription,
+    {List<WidgetDescription>? widgetDescriptions,
     SweetcoreCommand? latestSweetcoreCommand}) {
   _removeRegistrationIfExists<WidgetVisibiltyChangerService>();
   final service = MockWidgetVisibiltyChangerService();
-  when(service.execute(any)).thenReturn(widgetDescription);
+  when(service.execute(any)).thenReturn(widgetDescriptions);
   when(service.latestSweetcoreCommand).thenReturn(latestSweetcoreCommand);
   locator.registerSingleton<WidgetVisibiltyChangerService>(service);
   return service;

@@ -7,6 +7,7 @@ import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
+import 'package:collection/collection.dart';
 
 class DriverLayoutViewModel extends BaseViewModel {
   final log = getLogger('DriverLayoutViewModel');
@@ -41,7 +42,7 @@ class DriverLayoutViewModel extends BaseViewModel {
     });
   }
 
-  /// This will triggered when ever the client app
+  /// This will triggered whenever the client app
   /// populate a new event aka `notification`
   bool onClientAppEvent(Notification notification) {
     final latestSweetcoreCommandWidgetName =
@@ -50,16 +51,24 @@ class DriverLayoutViewModel extends BaseViewModel {
       if (notification is ScrollEndNotification &&
           latestSweetcoreCommandWidgetName != null) {
         final triggerWidget = descriptionsForView.firstWhere(
-          (element) => element.name == latestSweetcoreCommandWidgetName,
+          (element) =>
+              element.automationKey == latestSweetcoreCommandWidgetName,
         );
+
         final widgetAfterToggleVisibilty =
-            _widgetVisibiltyChangerService.execute(triggerWidget);
+            _widgetVisibiltyChangerService.execute(descriptionsForView
+                .where(
+                    (element) => triggerWidget.targetIds.contains(element.id))
+                .toList());
         if (widgetAfterToggleVisibilty != null) {
-          descriptionsForView.removeWhere(
-              (element) => element.id == widgetAfterToggleVisibilty.id);
-          descriptionsForView.add(widgetAfterToggleVisibilty);
+          widgetAfterToggleVisibilty.forEach((toggledItem) {
+            descriptionsForView
+                .removeWhere((element) => element.id == toggledItem.id);
+            descriptionsForView.add(toggledItem);
+          });
         }
       }
+      notifyListeners();
     } on StateError catch (e) {
       log.e(
           'Coudn\'t find the widget name in the descriptionsForView list, $e');

@@ -13,15 +13,15 @@ class SweetcoreCommand with _$SweetcoreCommand {
   }) = ScrollableCommand;
 
   factory SweetcoreCommand.fromString(String message) {
-    final messageMap = json.decode(message) as Map<String, String>;
+    final messageMap = json.decode(message) as Map<String, dynamic>;
     final commandType = messageMap['commandType'];
     final widgetName = messageMap['widgetName'];
     switch (commandType) {
-      case 'Scrollable':
+      case 'ScrollCommand':
         return SweetcoreCommand.scrollable(widgetName: widgetName!);
       default:
         throw Exception(
-            'We couldn\'t recognize this command from this message: $message');
+            'We couldn\'t extract the command from this message: $message');
     }
   }
   WidgetType get toWidgetType {
