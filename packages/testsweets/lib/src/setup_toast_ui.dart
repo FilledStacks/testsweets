@@ -35,4 +35,18 @@ void setupSnackbarUi() {
         shouldIconPulse: true,
         textColor: kcPrimaryWhite,
       ));
+
+  // Info case
+  service.registerCustomSnackbarConfig(
+      variant: ToastType.info,
+      config: SnackbarConfig(
+        backgroundColor: kcCard,
+        icon: SvgPicture.asset(
+          'packages/testsweets/assets/svgs/info.svg',
+          width: 15,
+          color: kcPrimaryWhite,
+        ),
+        shouldIconPulse: true,
+        textColor: kcPrimaryWhite,
+      ));
 }

@@ -105,6 +105,9 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
 SnackbarService getAndRegisterSnackbarService() {
   _removeRegistrationIfExists<SnackbarService>();
   final service = MockSnackbarService();
+  when(service.showCustomSnackBar(
+          message: anyNamed('message'), variant: anyNamed('variant')))
+      .thenAnswer((_) => Future.value());
   locator.registerSingleton<SnackbarService>(service);
   return service;
 }

@@ -51,14 +51,17 @@ class CustomPopupMenu extends StatefulWidget {
     this.position,
     this.menuOnChange,
     required this.onLongPressMoveUpdate,
-    required this.onLongPressUpWhilePopupHidden,
-    required this.onLongPressDown,
+    required this.onLongPressUp,
+    required this.onMoveStart,
+    this.onTap,
     this.enablePassEvent = true,
+    this.disable = false,
   });
 
   final Widget child;
   final PressType pressType;
   final bool showArrow;
+  final bool disable;
   final Color arrowColor;
   final Color barrierColor;
   final double horizontalMargin;
@@ -69,8 +72,9 @@ class CustomPopupMenu extends StatefulWidget {
   final PreferredPosition? position;
   final void Function(bool)? menuOnChange;
   final void Function(LongPressMoveUpdateDetails) onLongPressMoveUpdate;
-  final void Function() onLongPressUpWhilePopupHidden;
-  final void Function() onLongPressDown;
+  final void Function() onLongPressUp;
+  final void Function() onMoveStart;
+  final void Function()? onTap;
 
   /// Pass tap event to the widgets below the mask.
   /// It only works when [barrierColor] is transparent.
@@ -145,6 +149,9 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
           ),
         );
         return Listener(
+          onPointerUp: (event) {
+            _controller?.hideMenu();
+          },
           behavior: widget.enablePassEvent
               ? HitTestBehavior.translucent
               : HitTestBehavior.opaque,
@@ -220,26 +227,22 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
   Widget build(BuildContext context) {
     var child = Material(
       child: GestureDetector(
-        onLongPressStart: (_) => widget.onLongPressDown(),
-        onLongPressUp: () {
-          if (!_controller!.menuIsShowing) {
-            widget.onLongPressUpWhilePopupHidden();
-          }
-        },
+        onLongPressUp: widget.onLongPressUp,
         onLongPressMoveUpdate: (details) {
+          if (_controller!.menuIsShowing) {
+            _controller!.hideMenu();
+            widget.onMoveStart();
+          }
           if (details.offsetFromOrigin.distance > 8) {
-            _controller?.hideMenu();
             widget.onLongPressMoveUpdate(details);
           }
         },
         child: widget.child,
-        onTap: () {
-          if (widget.pressType == PressType.singleClick && _canResponse) {
-            _controller?.showMenu();
-          }
-        },
+        onTap: widget.onTap,
         onLongPress: () {
-          if (widget.pressType == PressType.longPress && _canResponse) {
+          if (widget.pressType == PressType.longPress &&
+              _canResponse &&
+              !widget.disable) {
             _controller?.showMenu();
           }
         },

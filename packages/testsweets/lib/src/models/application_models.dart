@@ -1,6 +1,8 @@
+import 'dart:core';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/extensions/widget_type_string_extension.dart';
+import 'package:testsweets/src/extensions/widget_type_extension.dart';
 
 part 'application_models.freezed.dart';
 part 'application_models.g.dart';
@@ -31,6 +33,9 @@ class WidgetDescription with _$WidgetDescription {
 
     /// Whether the key will be visible to the driver or not
     @Default(true) bool visibility,
+
+    /// Target widgets ids that will be affected when this widget activated
+    @Default([]) List<String> targetIds,
   }) = _WidgetDescription;
   factory WidgetDescription.view(
           {required String viewName, required String originalViewName}) =>

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/extensions/widget_type_flutter_extension.dart';
+import 'package:testsweets/src/extensions/widget_type_extension.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_circle.dart';
@@ -35,9 +35,12 @@ class WidgetCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                WidgetCircle(
-                  minify: true,
-                  widgetType: widgetType,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: WidgetCircle(
+                    minify: true,
+                    widgetType: widgetType,
+                  ),
                 ),
                 Expanded(
                   child: Text(widgetType.getTitleOfWidgetType,

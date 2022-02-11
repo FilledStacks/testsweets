@@ -27,6 +27,34 @@ class WidgetCaptureViewModel extends FormViewModel {
   /// We use this position as the starter point of any new widget
   late WidgetPosition screenCenterPosition;
 
+  Future<String?> addNewTargetId(String targetId) async {
+    log.v(
+        'already added ids: ${widgetDescription?.targetIds} , new id: $targetId');
+    if (widgetDescription != null) {
+      final List<String> targetsList = [
+        ...widgetDescription!.targetIds,
+        targetId,
+      ];
+      widgetDescription = widgetDescription!.copyWith(targetIds: targetsList);
+
+      return await updateWidgetDescription();
+    }
+
+    notifyListeners();
+  }
+
+  set setWidgetType(WidgetType widgetType) {
+    log.v(widgetType);
+    widgetDescription = widgetDescription!.copyWith(widgetType: widgetType);
+    notifyListeners();
+  }
+
+  set setVisibilty(bool visible) {
+    log.v(visible);
+    widgetDescription = widgetDescription!.copyWith(visibility: visible);
+    notifyListeners();
+  }
+
   set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
     log.i(captureWidgetStatusEnum);
     _captureWidgetStatusEnum = captureWidgetStatusEnum;
@@ -65,18 +93,6 @@ class WidgetCaptureViewModel extends FormViewModel {
     }
   }
 
-  set setWidgetType(WidgetType widgetType) {
-    log.v(widgetType);
-    widgetDescription = widgetDescription!.copyWith(widgetType: widgetType);
-    notifyListeners();
-  }
-
-  set setVisibilty(bool visible) {
-    log.v(visible);
-    widgetDescription = widgetDescription!.copyWith(visibility: visible);
-    notifyListeners();
-  }
-
   void clearWidgetDescriptionForm() {
     log.v('');
     widgetDescription = null;
@@ -112,7 +128,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  Future<String?> saveWidget({WidgetPosition? screenCenter}) async {
+  Future<String?> saveWidget() async {
     log.i(widgetDescription);
 
     setBusy(true);
@@ -195,36 +211,42 @@ class WidgetCaptureViewModel extends FormViewModel {
     }
   }
 
-  Future<void> popupMenuActionSelected(PopupMenuAction popupMenuAction) async {
-    log.v(popupMenuAction);
+  Future<void> popupMenuActionSelected(
+      WidgetDescription description, PopupMenuAction popupMenuAction) async {
+    log.v(popupMenuAction, description);
+    widgetDescription = description;
+
     switch (popupMenuAction) {
       case PopupMenuAction.edit:
         captureWidgetStatusEnum = CaptureWidgetStatusEnum.editWidget;
         break;
       case PopupMenuAction.remove:
         await removeWidgetDescription();
-
         break;
       case PopupMenuAction.attachToKey:
-        // TODO: Handle this case.
+        captureWidgetStatusEnum = CaptureWidgetStatusEnum.attachWidget;
+        _snackbarService.showCustomSnackBar(
+            message: 'Select Key to associate with Scroll View',
+            variant: ToastType.info);
         break;
     }
   }
 
-  Future<void> finishAdjustingWidgetPosition() async {
+  Future<void> onLongPressUp() async {
     log.v(captureWidgetStatusEnum);
 
-    /// This means that we show the menu but didn't choose any action
-    /// Which leave us with the only option of drag the widget
-    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.popupMenuShown) {
+    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.quickPositionEdit) {
       await updateWidgetDescription();
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
+    widgetDescription = null;
   }
 
-  void popupMenuShown(WidgetDescription description) {
+  void startQuickPositionEdit(
+    WidgetDescription description,
+  ) {
     log.v(description);
-
     widgetDescription = description;
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.popupMenuShown;
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.quickPositionEdit;
   }
 }

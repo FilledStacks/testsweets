@@ -28,7 +28,8 @@ class _$WidgetDescriptionTearOff {
       String name = '',
       required WidgetType widgetType,
       required WidgetPosition position,
-      bool visibility = true}) {
+      bool visibility = true,
+      List<String> targetIds = const []}) {
     return _WidgetDescription(
       id: id,
       viewName: viewName,
@@ -37,6 +38,7 @@ class _$WidgetDescriptionTearOff {
       widgetType: widgetType,
       position: position,
       visibility: visibility,
+      targetIds: targetIds,
     );
   }
 
@@ -71,6 +73,9 @@ mixin _$WidgetDescription {
   /// Whether the key will be visible to the driver or not
   bool get visibility => throw _privateConstructorUsedError;
 
+  /// Target widgets ids that will be affected when this widget activated
+  List<String> get targetIds => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $WidgetDescriptionCopyWith<WidgetDescription> get copyWith =>
@@ -89,7 +94,8 @@ abstract class $WidgetDescriptionCopyWith<$Res> {
       String name,
       WidgetType widgetType,
       WidgetPosition position,
-      bool visibility});
+      bool visibility,
+      List<String> targetIds});
 
   $WidgetPositionCopyWith<$Res> get position;
 }
@@ -112,6 +118,7 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
     Object? widgetType = freezed,
     Object? position = freezed,
     Object? visibility = freezed,
+    Object? targetIds = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -142,6 +149,10 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
           ? _value.visibility
           : visibility // ignore: cast_nullable_to_non_nullable
               as bool,
+      targetIds: targetIds == freezed
+          ? _value.targetIds
+          : targetIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 
@@ -167,7 +178,8 @@ abstract class _$WidgetDescriptionCopyWith<$Res>
       String name,
       WidgetType widgetType,
       WidgetPosition position,
-      bool visibility});
+      bool visibility,
+      List<String> targetIds});
 
   @override
   $WidgetPositionCopyWith<$Res> get position;
@@ -193,6 +205,7 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
     Object? widgetType = freezed,
     Object? position = freezed,
     Object? visibility = freezed,
+    Object? targetIds = freezed,
   }) {
     return _then(_WidgetDescription(
       id: id == freezed
@@ -223,6 +236,10 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
           ? _value.visibility
           : visibility // ignore: cast_nullable_to_non_nullable
               as bool,
+      targetIds: targetIds == freezed
+          ? _value.targetIds
+          : targetIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -237,7 +254,8 @@ class _$_WidgetDescription extends _WidgetDescription {
       this.name = '',
       required this.widgetType,
       required this.position,
-      this.visibility = true})
+      this.visibility = true,
+      this.targetIds = const []})
       : super._();
 
   factory _$_WidgetDescription.fromJson(Map<String, dynamic> json) =>
@@ -273,10 +291,15 @@ class _$_WidgetDescription extends _WidgetDescription {
 
   /// Whether the key will be visible to the driver or not
   final bool visibility;
+  @JsonKey(defaultValue: const [])
+  @override
+
+  /// Target widgets ids that will be affected when this widget activated
+  final List<String> targetIds;
 
   @override
   String toString() {
-    return 'WidgetDescription(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility)';
+    return 'WidgetDescription(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility, targetIds: $targetIds)';
   }
 
   @override
@@ -301,7 +324,10 @@ class _$_WidgetDescription extends _WidgetDescription {
                     .equals(other.position, position)) &&
             (identical(other.visibility, visibility) ||
                 const DeepCollectionEquality()
-                    .equals(other.visibility, visibility)));
+                    .equals(other.visibility, visibility)) &&
+            (identical(other.targetIds, targetIds) ||
+                const DeepCollectionEquality()
+                    .equals(other.targetIds, targetIds)));
   }
 
   @override
@@ -313,7 +339,8 @@ class _$_WidgetDescription extends _WidgetDescription {
       const DeepCollectionEquality().hash(name) ^
       const DeepCollectionEquality().hash(widgetType) ^
       const DeepCollectionEquality().hash(position) ^
-      const DeepCollectionEquality().hash(visibility);
+      const DeepCollectionEquality().hash(visibility) ^
+      const DeepCollectionEquality().hash(targetIds);
 
   @JsonKey(ignore: true)
   @override
@@ -334,7 +361,8 @@ abstract class _WidgetDescription extends WidgetDescription {
       String name,
       required WidgetType widgetType,
       required WidgetPosition position,
-      bool visibility}) = _$_WidgetDescription;
+      bool visibility,
+      List<String> targetIds}) = _$_WidgetDescription;
   _WidgetDescription._() : super._();
 
   factory _WidgetDescription.fromJson(Map<String, dynamic> json) =
@@ -368,6 +396,10 @@ abstract class _WidgetDescription extends WidgetDescription {
 
   /// Whether the key will be visible to the driver or not
   bool get visibility => throw _privateConstructorUsedError;
+  @override
+
+  /// Target widgets ids that will be affected when this widget activated
+  List<String> get targetIds => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$WidgetDescriptionCopyWith<_WidgetDescription> get copyWith =>

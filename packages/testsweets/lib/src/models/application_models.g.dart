@@ -16,6 +16,10 @@ _$_WidgetDescription _$$_WidgetDescriptionFromJson(Map<String, dynamic> json) =>
       position:
           WidgetPosition.fromJson(json['position'] as Map<String, dynamic>),
       visibility: json['visibility'] as bool? ?? true,
+      targetIds: (json['targetIds'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          [],
     );
 
 Map<String, dynamic> _$$_WidgetDescriptionToJson(
@@ -28,6 +32,7 @@ Map<String, dynamic> _$$_WidgetDescriptionToJson(
       'widgetType': _$WidgetTypeEnumMap[instance.widgetType],
       'position': instance.position,
       'visibility': instance.visibility,
+      'targetIds': instance.targetIds,
     };
 
 K _$enumDecode<K, V>(

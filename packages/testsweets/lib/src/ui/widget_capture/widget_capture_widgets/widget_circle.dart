@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/extensions/widget_type_flutter_extension.dart';
-import 'package:testsweets/src/extensions/widget_type_string_extension.dart';
+import 'package:testsweets/src/extensions/widget_type_extension.dart';
+import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 
@@ -22,7 +22,6 @@ class WidgetCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 4),
         alignment: Alignment.center,
         width: minify
             ? WIDGET_DESCRIPTION_VISUAL_SIZE / 1.2

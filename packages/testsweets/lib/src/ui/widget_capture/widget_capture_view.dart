@@ -10,7 +10,7 @@ import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widgets_
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_form.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/capture_overlay.dart';
 import 'package:testsweets/testsweets.dart';
 
 import 'widget_capture_widgets/draggable_widget.dart';
@@ -52,7 +52,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
           alignment: Alignment.bottomCenter,
           children: [
             // Client app
-            child ?? const SizedBox.shrink(),
+            child!,
 
             Align(
               alignment: Alignment.topLeft,
@@ -61,9 +61,8 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
                 routeName: model.currentViewName,
               ),
             ),
-            DraggableWidget(),
 
-            WidgetForm(
+            CaptureOverlay(
               focusNode: widgetNameFocusNode,
               textEditingController: widgetNameController,
             ),

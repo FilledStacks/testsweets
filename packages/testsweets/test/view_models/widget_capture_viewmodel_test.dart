@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
+import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
@@ -78,10 +79,11 @@ void main() {
         final service = getAndRegisterWidgetCaptureService();
 
         final model = _getViewModel();
-        model.popupMenuShown(kWidgetDescription);
-
+        await model.popupMenuActionSelected(
+            kWidgetDescription, PopupMenuAction.edit);
         model.formValueMap[WidgetNameValueKey] = 'loginButton';
         model.setFormStatus();
+
         await model.updateWidgetDescription();
 
         verify(service.updateWidgetDescription(
@@ -109,8 +111,8 @@ void main() {
           () async {
         final widgetCaptureService = getAndRegisterWidgetCaptureService();
         final model = _getViewModel();
-        model.showWidgetForm();
-        model.popupMenuShown(kWidgetDescription);
+        model.popupMenuActionSelected(
+            kWidgetDescription, PopupMenuAction.remove);
 
         await model.removeWidgetDescription();
         verify(widgetCaptureService.deleteWidgetDescription(
@@ -124,6 +126,87 @@ void main() {
         model.showWidgetForm();
         await model.removeWidgetDescription();
         expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
+      });
+    });
+
+    group('popupMenuActionSelected -', () {
+      test(
+          'When popupMenuAction is edit, Should set the captureWidgetStatusEnum to editWidget',
+          () {
+        final model = _getViewModel();
+        model.popupMenuActionSelected(kWidgetDescription, PopupMenuAction.edit);
+        expect(
+            model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.editWidget);
+      });
+      test(
+          'When popupMenuAction is remove, Should call deleteWidgetDescription from captureService',
+          () {
+        final widgetCaptureService = getAndRegisterWidgetCaptureService();
+
+        final model = _getViewModel();
+
+        model.popupMenuActionSelected(
+            kWidgetDescription, PopupMenuAction.remove);
+        verify(widgetCaptureService.deleteWidgetDescription(
+            description: kWidgetDescription));
+      });
+      test(
+          'When popupMenuAction is attachToKey, Should call deleteWidgetDescription from captureService',
+          () {
+        final model = _getViewModel();
+
+        model.popupMenuActionSelected(
+            kWidgetDescription, PopupMenuAction.attachToKey);
+        expect(model.captureWidgetStatusEnum,
+            CaptureWidgetStatusEnum.attachWidget);
+      });
+      test('''When popupMenuAction is attachToKey, Should show
+           a toast to let the user know that he need to choose a target''', () {
+        final snackbarService = getAndRegisterSnackbarService();
+        final model = _getViewModel();
+
+        model.popupMenuActionSelected(
+            kWidgetDescription, PopupMenuAction.attachToKey);
+        verify(snackbarService.showCustomSnackBar(
+            message: 'Select Key to associate with Scroll View',
+            variant: ToastType.info));
+      });
+    });
+    group('addNewTargetId -', () {
+      test(
+          '''When selecting target widget but before calling updateWidgetDescription,
+           Should add it to current widgetDescription target ids list''',
+          () async {
+        final model = _getViewModel();
+
+        model.popupMenuActionSelected(
+            kWidgetDescription, PopupMenuAction.attachToKey);
+
+        /// I didn't add await inorder to expect the state before the updateWidgetDescription call
+        model.addNewTargetId('targetId');
+        expect(model.widgetDescription!.targetIds.first, 'targetId');
+        expect(model.captureWidgetStatusEnum,
+            CaptureWidgetStatusEnum.attachWidget);
+      });
+
+      test(
+          '''After adding a new target widget and update the widget on the backend,
+           Should set the widgetDescription to null and captureWidgetStatusEnum to idle''',
+          () async {
+        final model = _getViewModel();
+
+        model.popupMenuActionSelected(
+            kWidgetDescription, PopupMenuAction.attachToKey);
+
+        await model.addNewTargetId('targetId');
+        expect(model.widgetDescription, isNull);
+        expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
+      });
+    });
+    group('popUpMenuOptions -', () {
+      test('''When show menuOnChange,
+      Should set captureWidgetStatusEnum to popupMenuShown''', () {
+        final model = _getViewModel();
       });
     });
   });
