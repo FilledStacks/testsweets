@@ -27,20 +27,52 @@ class WidgetCaptureViewModel extends FormViewModel {
   /// We use this position as the starter point of any new widget
   late WidgetPosition screenCenterPosition;
 
-  Future<String?> addNewTargetId(String targetId) async {
+  Future<String?> addNewTarget(String targetId) async {
     log.v(
         'already added ids: ${widgetDescription?.targetIds} , new id: $targetId');
-    if (widgetDescription != null) {
-      final List<String> targetsList = [
-        ...widgetDescription!.targetIds,
-        targetId,
-      ];
-      widgetDescription = widgetDescription!.copyWith(targetIds: targetsList);
 
-      return await updateWidgetDescription();
+    final List<String> targetsList = [
+      ...widgetDescription!.targetIds,
+      targetId,
+    ];
+    widgetDescription = widgetDescription!.copyWith(targetIds: targetsList);
+
+    final response = await updateWidgetDescription();
+
+    if (response is String) {
+      log.e(response);
+      widgetDescription = null;
     }
 
-    notifyListeners();
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+  }
+
+  Future<String?> removeTarget(String targetId) async {
+    log.v(
+        'Existing ids: ${widgetDescription?.targetIds} , Will remove id: $targetId');
+
+    bool targetExists = widgetDescription!.targetIds.contains(targetId);
+    if (!targetExists) {
+      log.e('Target doesn\'t exist');
+      return 'Target doesn\'t exist';
+    }
+
+    // Remove the selected target from [widgetDescription]
+    final targetsWithoutTheRemovedOne = widgetDescription!.targetIds
+        .where((element) => element != targetId)
+        .toList();
+
+    widgetDescription =
+        widgetDescription!.copyWith(targetIds: targetsWithoutTheRemovedOne);
+
+    final response = await updateWidgetDescription();
+
+    if (response is String) {
+      log.e(response);
+      widgetDescription = null;
+    }
+
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
   }
 
   set setWidgetType(WidgetType widgetType) {
@@ -228,6 +260,19 @@ class WidgetCaptureViewModel extends FormViewModel {
         _snackbarService.showCustomSnackBar(
             message: 'Select Key to associate with Scroll View',
             variant: ToastType.info);
+        break;
+      case PopupMenuAction.attachToKey:
+        captureWidgetStatusEnum = CaptureWidgetStatusEnum.attachWidget;
+        _snackbarService.showCustomSnackBar(
+            message: 'Select Key to associate with Scroll View',
+            variant: ToastType.info);
+        break;
+      case PopupMenuAction.deattachFromKey:
+        captureWidgetStatusEnum = CaptureWidgetStatusEnum.deattachWidget;
+        _snackbarService.showCustomSnackBar(
+            message: 'Select the key you want to remove the connection with',
+            variant: ToastType.info);
+
         break;
     }
   }

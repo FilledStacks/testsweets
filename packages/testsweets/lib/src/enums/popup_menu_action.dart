@@ -1,1 +1,1 @@
-enum PopupMenuAction { edit, remove, attachToKey }
+enum PopupMenuAction { edit, remove, attachToKey, deattachFromKey }

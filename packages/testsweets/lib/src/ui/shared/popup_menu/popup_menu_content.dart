@@ -6,11 +6,11 @@ import '../shared_styles.dart';
 import 'custom_popup_menu_item.dart';
 
 class PopupMenuContent extends StatelessWidget {
-  final bool onlyOneItem;
+  final bool showAttachOption;
   final void Function(PopupMenuAction) onMenuAction;
   const PopupMenuContent({
     Key? key,
-    required this.onlyOneItem,
+    required this.showAttachOption,
     required this.onMenuAction,
   }) : super(key: key);
 
@@ -35,7 +35,7 @@ class PopupMenuContent extends StatelessWidget {
             title: 'Remove',
             svgPath: 'packages/testsweets/assets/svgs/bin.svg',
           ),
-          if (!onlyOneItem) ...[
+          if (!showAttachOption) ...[
             const SizedBox(
               width: 8,
             ),

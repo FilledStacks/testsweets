@@ -34,7 +34,7 @@ class WidgetsVisualizer extends StatelessWidget {
               .where((element) => element.targetIds.isNotEmpty)
               .map((description) => CustomPaint(
                     size: size,
-                    painter: ConnectionPainter(
+                    foregroundPainter: ConnectionPainter(
                         sourcePointType: description.widgetType,
                         sourcePoint: description.responsiveOffset(size),
                         targetPoints: model.descriptionsForView.where((point) {
@@ -56,8 +56,10 @@ class WidgetsVisualizer extends StatelessWidget {
                     onMoveStart: () =>
                         model.startQuickPositionEdit(description),
                     onTap: model.captureWidgetStatusEnum.attachMode
-                        ? () => model.addNewTargetId(description.id!)
-                        : null,
+                        ? () => model.addNewTarget(description.id!)
+                        : model.captureWidgetStatusEnum.deattachMode
+                            ? () => model.removeTarget(description.id!)
+                            : null,
                     onLongPressUp: model.onLongPressUp,
                     onLongPressMoveUpdate: (position) {
                       final x = position.globalPosition.dx;
@@ -68,13 +70,14 @@ class WidgetsVisualizer extends StatelessWidget {
                     barrierColor: kcBackground.withOpacity(0.3),
                     showArrow: false,
                     menuBuilder: () => PopupMenuContent(
-                      onlyOneItem: model.descriptionsForView.length ==
-                          2, // 2 is for one widget and its view
+                      showAttachOption: (description.targetIds.length +
+                              2) < // 2 is for one widget and its view
+                          model.descriptionsForView.length,
                       onMenuAction: (popupMenuAction) async {
                         await model.popupMenuActionSelected(
                             description, popupMenuAction);
                         if (popupMenuAction == PopupMenuAction.edit) {
-                          /// This will show the widgetform when fired
+                          /// When called will show the widgetform
                           editActionSelected();
                         }
                       },
