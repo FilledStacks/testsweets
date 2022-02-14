@@ -1,11 +1,14 @@
+import 'package:flutter/material.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
+import 'package:testsweets/src/services/sweetcore_command.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
+import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
 
 import 'test_helpers.mocks.dart';
 
@@ -14,6 +17,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<WidgetCaptureService>(returnNullOnMissingStub: true),
   MockSpec<TestSweetsRouteTracker>(returnNullOnMissingStub: true),
   MockSpec<CloudFunctionsService>(returnNullOnMissingStub: true),
+  MockSpec<WidgetVisibiltyChangerService>(returnNullOnMissingStub: true),
 ])
 MockWidgetCaptureService getAndRegisterWidgetCaptureService(
     {List<WidgetDescription> listOfWidgetDescription = const [],
@@ -112,11 +116,23 @@ SnackbarService getAndRegisterSnackbarService() {
   return service;
 }
 
+WidgetVisibiltyChangerService getAndRegisterWidgetVisibiltyChangerService(
+    {List<WidgetDescription>? widgetDescriptions,
+    SweetcoreCommand? latestSweetcoreCommand}) {
+  _removeRegistrationIfExists<WidgetVisibiltyChangerService>();
+  final service = MockWidgetVisibiltyChangerService();
+  when(service.toggleVisibilty(any)).thenReturn(widgetDescriptions);
+  when(service.automationKeyName).thenReturn(latestSweetcoreCommand);
+  locator.registerSingleton<WidgetVisibiltyChangerService>(service);
+  return service;
+}
+
 void registerServices() {
   getAndRegisterTestSweetsRouteTracker();
   getAndRegisterWidgetCaptureService();
   getAndRegisterCloudFunctionsService();
   getAndRegisterSnackbarService();
+  getAndRegisterWidgetVisibiltyChangerService();
 }
 
 void unregisterServices() {
@@ -124,6 +140,7 @@ void unregisterServices() {
   _removeRegistrationIfExists<WidgetCaptureService>();
   _removeRegistrationIfExists<CloudFunctionsService>();
   _removeRegistrationIfExists<SnackbarService>();
+  _removeRegistrationIfExists<WidgetVisibiltyChangerService>();
 }
 
 // Call this before any service registration helper. This is to ensure that if there
@@ -133,3 +150,7 @@ void _removeRegistrationIfExists<T extends Object>() {
     locator.unregister<T>();
   }
 }
+
+class TestNotification extends Notification {}
+
+class MockBuildContext extends Mock implements BuildContext {}

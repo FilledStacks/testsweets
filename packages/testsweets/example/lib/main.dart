@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TestSweetsOverlayView(
-      projectId: 'AKg6SMD3PB7bEohAY9FG',
+      projectId: 'fGuFgPNXDnu56FEoe8Rn',
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(

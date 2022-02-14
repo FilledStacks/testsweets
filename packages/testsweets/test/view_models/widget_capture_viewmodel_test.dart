@@ -7,7 +7,6 @@ import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
-import 'package:testsweets/utils/error_messages.dart';
 
 import '../helpers/test_consts.dart';
 import '../helpers/test_helpers.dart';
@@ -201,12 +200,6 @@ void main() {
         await model.addNewTargetId('targetId');
         expect(model.widgetDescription, isNull);
         expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
-      });
-    });
-    group('popUpMenuOptions -', () {
-      test('''When show menuOnChange,
-      Should set captureWidgetStatusEnum to popupMenuShown''', () {
-        final model = _getViewModel();
       });
     });
   });
