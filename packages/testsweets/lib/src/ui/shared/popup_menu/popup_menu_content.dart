@@ -7,10 +7,12 @@ import 'custom_popup_menu_item.dart';
 
 class PopupMenuContent extends StatelessWidget {
   final bool showAttachOption;
+  final bool showUnattachOption;
   final void Function(PopupMenuAction) onMenuAction;
   const PopupMenuContent({
     Key? key,
     required this.showAttachOption,
+    required this.showUnattachOption,
     required this.onMenuAction,
   }) : super(key: key);
 
@@ -35,7 +37,7 @@ class PopupMenuContent extends StatelessWidget {
             title: 'Remove',
             svgPath: 'packages/testsweets/assets/svgs/bin.svg',
           ),
-          if (!showAttachOption) ...[
+          if (showAttachOption) ...[
             const SizedBox(
               width: 8,
             ),
@@ -44,7 +46,17 @@ class PopupMenuContent extends StatelessWidget {
               title: 'Attach',
               svgPath: 'packages/testsweets/assets/svgs/attach.svg',
             ),
-          ]
+          ],
+          if (showUnattachOption) ...[
+            const SizedBox(
+              width: 8,
+            ),
+            CustomPopupMenuItem(
+              onTap: () => onMenuAction(PopupMenuAction.deattachFromKey),
+              title: 'Deattach',
+              svgPath: 'packages/testsweets/assets/svgs/deattach.svg',
+            ),
+          ],
         ],
       ),
     );

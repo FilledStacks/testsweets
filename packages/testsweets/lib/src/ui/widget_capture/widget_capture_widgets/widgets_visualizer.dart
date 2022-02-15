@@ -5,6 +5,7 @@ import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 
 import 'package:testsweets/src/extensions/widget_description_extension.dart';
+import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/popup_menu/popup_menu_content.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
@@ -37,11 +38,8 @@ class WidgetsVisualizer extends StatelessWidget {
                     foregroundPainter: ConnectionPainter(
                         sourcePointType: description.widgetType,
                         sourcePoint: description.responsiveOffset(size),
-                        targetPoints: model.descriptionsForView.where((point) {
-                          return description.targetIds.contains(point.id);
-                        }).map((e) {
-                          return e.responsiveOffset(size);
-                        }).toList()),
+                        targetPoints: getTargetPointsOffsetsForThisWidget(
+                            model, description, size)),
                   )),
         if (model.captureWidgetStatusEnum.showWidgets)
           ...model.descriptionsForView
@@ -70,6 +68,7 @@ class WidgetsVisualizer extends StatelessWidget {
                     barrierColor: kcBackground.withOpacity(0.3),
                     showArrow: false,
                     menuBuilder: () => PopupMenuContent(
+                      showUnattachOption: description.targetIds.isNotEmpty,
                       showAttachOption: (description.targetIds.length +
                               2) < // 2 is for one widget and its view
                           model.descriptionsForView.length,
@@ -100,5 +99,13 @@ class WidgetsVisualizer extends StatelessWidget {
           DraggableWidget(),
       ],
     );
+  }
+
+  List<Offset> getTargetPointsOffsetsForThisWidget(
+      WidgetCaptureViewModel model, WidgetDescription description, Size size) {
+    return model.descriptionsForView
+        .where((element) => description.targetIds.contains(element.id))
+        .map((e) => e.responsiveOffset(size))
+        .toList();
   }
 }
