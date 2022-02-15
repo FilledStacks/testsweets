@@ -1,3 +1,8 @@
+### 1.7.0
+
+- Redesigning the capturing layout
+- Add attach/deatach widgets feature
+- Add quick edit position feature
 ### 1.6.1
 
 - Fix `buildAndUpload` for windows and mac
