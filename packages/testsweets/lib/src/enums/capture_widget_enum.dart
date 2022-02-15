@@ -3,5 +3,6 @@ enum CaptureWidgetStatusEnum {
   createWidget,
   editWidget,
   attachWidget,
+  deattachWidget,
   quickPositionEdit,
 }

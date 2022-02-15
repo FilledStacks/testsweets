@@ -171,7 +171,7 @@ void main() {
             variant: ToastType.info));
       });
     });
-    group('addNewTargetId -', () {
+    group('addNewTarget -', () {
       test(
           '''When selecting target widget but before calling updateWidgetDescription,
            Should add it to current widgetDescription target ids list''',
@@ -182,7 +182,7 @@ void main() {
             kWidgetDescription, PopupMenuAction.attachToKey);
 
         /// I didn't add await inorder to expect the state before the updateWidgetDescription call
-        model.addNewTargetId('targetId');
+        model.addNewTarget('targetId');
         expect(model.widgetDescription!.targetIds.first, 'targetId');
         expect(model.captureWidgetStatusEnum,
             CaptureWidgetStatusEnum.attachWidget);
@@ -197,9 +197,33 @@ void main() {
         model.popupMenuActionSelected(
             kWidgetDescription, PopupMenuAction.attachToKey);
 
-        await model.addNewTargetId('targetId');
+        await model.addNewTarget('targetId');
         expect(model.widgetDescription, isNull);
         expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
+      });
+    });
+
+    group('removeTarget -', () {
+      test('''When called and target is exist in targetIds list,
+       Should remove the targetId from the list of the source/s widget''',
+          () async {
+        final model = _getViewModel();
+
+        await model.popupMenuActionSelected(
+            kWidgetDescription.copyWith(targetIds: ['targetId']),
+            PopupMenuAction.deattachFromKey);
+        model.removeTarget('targetId');
+        expect(model.widgetDescription!.targetIds, isEmpty);
+      });
+      test('''When called and target doesn't exist in targetIds list,
+       Should return 'Target doesn\'t exist' ''', () async {
+        final model = _getViewModel();
+
+        await model.popupMenuActionSelected(
+            kWidgetDescription.copyWith(targetIds: []),
+            PopupMenuAction.deattachFromKey);
+        model.removeTarget('targetId');
+        expect(await model.removeTarget('targetId'), 'Target doesn\'t exist');
       });
     });
   });

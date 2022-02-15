@@ -5,6 +5,7 @@ import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 
 import 'package:testsweets/src/extensions/widget_description_extension.dart';
+import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/popup_menu/popup_menu_content.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
@@ -34,14 +35,11 @@ class WidgetsVisualizer extends StatelessWidget {
               .where((element) => element.targetIds.isNotEmpty)
               .map((description) => CustomPaint(
                     size: size,
-                    painter: ConnectionPainter(
+                    foregroundPainter: ConnectionPainter(
                         sourcePointType: description.widgetType,
                         sourcePoint: description.responsiveOffset(size),
-                        targetPoints: model.descriptionsForView.where((point) {
-                          return description.targetIds.contains(point.id);
-                        }).map((e) {
-                          return e.responsiveOffset(size);
-                        }).toList()),
+                        targetPoints: getTargetPointsOffsetsForThisWidget(
+                            model, description, size)),
                   )),
         if (model.captureWidgetStatusEnum.showWidgets)
           ...model.descriptionsForView
@@ -56,8 +54,11 @@ class WidgetsVisualizer extends StatelessWidget {
                     onMoveStart: () =>
                         model.startQuickPositionEdit(description),
                     onTap: model.captureWidgetStatusEnum.attachMode
-                        ? () => model.addNewTargetId(description.id!)
-                        : null,
+                        ? () async => await model.addNewTarget(description.id!)
+                        : model.captureWidgetStatusEnum.deattachMode
+                            ? () async =>
+                                await model.removeTarget(description.id!)
+                            : null,
                     onLongPressUp: model.onLongPressUp,
                     onLongPressMoveUpdate: (position) {
                       final x = position.globalPosition.dx;
@@ -68,13 +69,15 @@ class WidgetsVisualizer extends StatelessWidget {
                     barrierColor: kcBackground.withOpacity(0.3),
                     showArrow: false,
                     menuBuilder: () => PopupMenuContent(
-                      onlyOneItem: model.descriptionsForView.length ==
-                          2, // 2 is for one widget and its view
+                      showUnattachOption: description.targetIds.isNotEmpty,
+                      showAttachOption: (description.targetIds.length +
+                              2) < // 2 is for one widget and its view
+                          model.descriptionsForView.length,
                       onMenuAction: (popupMenuAction) async {
                         await model.popupMenuActionSelected(
                             description, popupMenuAction);
                         if (popupMenuAction == PopupMenuAction.edit) {
-                          /// This will show the widgetform when fired
+                          /// When called will show the widgetform
                           editActionSelected();
                         }
                       },
@@ -97,5 +100,13 @@ class WidgetsVisualizer extends StatelessWidget {
           DraggableWidget(),
       ],
     );
+  }
+
+  List<Offset> getTargetPointsOffsetsForThisWidget(
+      WidgetCaptureViewModel model, WidgetDescription description, Size size) {
+    return model.descriptionsForView
+        .where((element) => description.targetIds.contains(element.id))
+        .map((e) => e.responsiveOffset(size))
+        .toList();
   }
 }
