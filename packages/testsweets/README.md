@@ -45,10 +45,9 @@ in your MaterialApp
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+     // 2. Wrap the MaterialApp with TestSweetsOverlayView 
+     //    and add the projectId you get when you created a new project in Testsweets app  
     return TestSweetsOverlayView(
-    
-       // 2. Inside MaterialApp add TestSweetsOverlayView to the builder
-       //    with the projectId you get when you created a new project in Testsweets app
       projectId: 'fGuFgPNXDnu56FEoe8Rn',
       child: MaterialApp(
         title: 'Flutter Demo',
@@ -57,8 +56,7 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: Routes.signUpView,
         navigatorKey: StackedService.navigatorKey,
-        onGenerateRoute: StackedRouter().onGenerateRoute,
-        
+        onGenerateRoute: StackedRouter().onGenerateRoute, 
         // 3. Finally add TestSweetsNavigatorObserver() 
         // to determine what view you are on right now
         navigatorObservers: [
@@ -66,24 +64,7 @@ class MyApp extends StatelessWidget {
         ],
       ),
     );
-    
-    
-    
-    
-    TestSweetsOverlayView(
-      projectId: 'fGuFgPNXDnu56FEoe8Rn',
-    MaterialApp(
 
-      builder: (context, child) => TestSweetsOverlayView(
-        projectId: '3OezzTovG9xxxxxxxxx',
-        child: child!,
-      ),
-      navigatorObservers: [
-        TestSweetsNavigatorObserver.instance,
-      ],
-    );
-  }
-}
 ```
 
 ### Using the capture functionality
