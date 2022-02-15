@@ -53,7 +53,7 @@ class PopupMenuContent extends StatelessWidget {
             ),
             CustomPopupMenuItem(
               onTap: () => onMenuAction(PopupMenuAction.deattachFromKey),
-              title: 'Deattach',
+              title: 'Detach',
               svgPath: 'packages/testsweets/assets/svgs/deattach.svg',
             ),
           ],
