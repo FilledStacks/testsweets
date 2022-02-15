@@ -8,9 +8,7 @@ extension CaptureWidgetEnumUnion on CaptureWidgetStatusEnum {
       this == CaptureWidgetStatusEnum.idle ||
       this == CaptureWidgetStatusEnum.editWidget ||
       this == CaptureWidgetStatusEnum.createWidget;
-  bool get showConnections =>
-      this == CaptureWidgetStatusEnum.idle ||
-      this == CaptureWidgetStatusEnum.deattachWidget;
+  bool get showConnections => this == CaptureWidgetStatusEnum.idle;
   bool get showWidgets =>
       this == CaptureWidgetStatusEnum.idle ||
       this == CaptureWidgetStatusEnum.attachWidget ||

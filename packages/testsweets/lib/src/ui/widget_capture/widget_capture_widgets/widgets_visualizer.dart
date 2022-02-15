@@ -54,9 +54,10 @@ class WidgetsVisualizer extends StatelessWidget {
                     onMoveStart: () =>
                         model.startQuickPositionEdit(description),
                     onTap: model.captureWidgetStatusEnum.attachMode
-                        ? () => model.addNewTarget(description.id!)
+                        ? () async => await model.addNewTarget(description.id!)
                         : model.captureWidgetStatusEnum.deattachMode
-                            ? () => model.removeTarget(description.id!)
+                            ? () async =>
+                                await model.removeTarget(description.id!)
                             : null,
                     onLongPressUp: model.onLongPressUp,
                     onLongPressMoveUpdate: (position) {
