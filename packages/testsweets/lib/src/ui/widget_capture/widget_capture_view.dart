@@ -48,6 +48,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
         listenToFormUpdated(model);
       },
       builder: (context, model, child) => Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Stack(
           alignment: Alignment.bottomCenter,
           children: [

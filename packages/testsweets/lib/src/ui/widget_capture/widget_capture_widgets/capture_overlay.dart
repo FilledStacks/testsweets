@@ -57,7 +57,9 @@ class _CaptureOverlayState extends State<CaptureOverlay> {
           solidController.show();
         }),
         if (model.captureWidgetStatusEnum.showWidgetForm)
-          SizedBox(
+          Container(
+            margin: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
             width: size.width > 500 ? 500 : size.width,
             child: CustomSolidBottomSheet(
               controller: solidController,
