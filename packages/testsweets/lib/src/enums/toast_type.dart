@@ -1,1 +1,1 @@
-enum ToastType { success, failed, info }
+enum SnackbarType { success, failed, info }

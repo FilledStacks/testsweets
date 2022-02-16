@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -11,7 +10,7 @@ void setupSnackbarUi() {
 
   // Failed case
   service.registerCustomSnackbarConfig(
-      variant: ToastType.failed,
+      variant: SnackbarType.failed,
       config: SnackbarConfig(
         backgroundColor: kcError,
         icon: SvgPicture.asset(
@@ -24,7 +23,7 @@ void setupSnackbarUi() {
 
   // Success case
   service.registerCustomSnackbarConfig(
-      variant: ToastType.success,
+      variant: SnackbarType.success,
       config: SnackbarConfig(
         backgroundColor: kcGreen,
         icon: SvgPicture.asset(
@@ -38,7 +37,7 @@ void setupSnackbarUi() {
 
   // Info case
   service.registerCustomSnackbarConfig(
-      variant: ToastType.info,
+      variant: SnackbarType.info,
       config: SnackbarConfig(
         backgroundColor: kcCard,
         icon: SvgPicture.asset(

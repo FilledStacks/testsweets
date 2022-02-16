@@ -7,6 +7,7 @@ import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
+import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
@@ -121,7 +122,7 @@ class WidgetCaptureViewModel extends FormViewModel {
       log.e('Could not get widgetDescriptions: $e');
       _snackbarService.showCustomSnackBar(
           message: 'Could not get widgetDescriptions: $e',
-          variant: ToastType.failed);
+          variant: SnackbarType.failed);
     }
   }
 
@@ -178,7 +179,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     if (result is String) {
       _snackbarService.showCustomSnackBar(
-          message: result, variant: ToastType.failed);
+          message: result, variant: SnackbarType.failed);
     } else {
       widgetDescription = null;
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
@@ -197,7 +198,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     if (result is String) {
       _snackbarService.showCustomSnackBar(
-          message: result, variant: ToastType.failed);
+          message: result, variant: SnackbarType.failed);
     } else {
       widgetDescription = null;
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
@@ -216,7 +217,7 @@ class WidgetCaptureViewModel extends FormViewModel {
         description: widgetDescription!);
     if (result is String) {
       _snackbarService.showCustomSnackBar(
-          message: result, variant: ToastType.failed);
+          message: result, variant: SnackbarType.failed);
     } else {
       widgetDescription = null;
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
@@ -259,19 +260,19 @@ class WidgetCaptureViewModel extends FormViewModel {
         captureWidgetStatusEnum = CaptureWidgetStatusEnum.attachWidget;
         _snackbarService.showCustomSnackBar(
             message: 'Select Key to associate with Scroll View',
-            variant: ToastType.info);
+            variant: SnackbarType.info);
         break;
       case PopupMenuAction.attachToKey:
         captureWidgetStatusEnum = CaptureWidgetStatusEnum.attachWidget;
         _snackbarService.showCustomSnackBar(
             message: 'Select Key to associate with Scroll View',
-            variant: ToastType.info);
+            variant: SnackbarType.info);
         break;
       case PopupMenuAction.deattachFromKey:
         captureWidgetStatusEnum = CaptureWidgetStatusEnum.deattachWidget;
         _snackbarService.showCustomSnackBar(
             message: 'Select the key you want to remove the connection with',
-            variant: ToastType.info);
+            variant: SnackbarType.info);
 
         break;
     }
@@ -293,5 +294,17 @@ class WidgetCaptureViewModel extends FormViewModel {
     log.v(description);
     widgetDescription = description;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.quickPositionEdit;
+  }
+
+  void onTapWidget(WidgetDescription widgetDescription) async {
+    if (captureWidgetStatusEnum.attachMode) {
+      await addNewTarget(widgetDescription.id!);
+    } else if (captureWidgetStatusEnum.deattachMode) {
+      await removeTarget(widgetDescription.id!);
+    } else {
+      notifyListeners();
+      await _snackbarService.showCustomSnackBar(
+          message: widgetDescription.name, variant: SnackbarType.info);
+    }
   }
 }
