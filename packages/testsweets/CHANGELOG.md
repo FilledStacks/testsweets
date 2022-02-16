@@ -1,3 +1,8 @@
+### 1.7.1
+- Fix keyboard draw twice due to have 2 MaterialApps
+- Fix quick edit is so sensitive
+- When tap a widget show a toast with its name
+
 ### 1.7.0
 
 - Redesigning the capturing layout
