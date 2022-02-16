@@ -229,12 +229,13 @@ class _CustomPopupMenuState extends State<CustomPopupMenu> {
       child: GestureDetector(
         onLongPressUp: widget.onLongPressUp,
         onLongPressMoveUpdate: (details) {
-          if (_controller!.menuIsShowing) {
+          final draggedEnoughToEnterQuickEditMode =
+              details.offsetFromOrigin.distanceSquared > 512;
+          if (!_controller!.menuIsShowing) {
+            widget.onLongPressMoveUpdate(details);
+          } else if (draggedEnoughToEnterQuickEditMode) {
             _controller!.hideMenu();
             widget.onMoveStart();
-          }
-          if (details.offsetFromOrigin.distance > 8) {
-            widget.onLongPressMoveUpdate(details);
           }
         },
         child: widget.child,

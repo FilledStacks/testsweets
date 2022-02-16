@@ -168,7 +168,7 @@ void main() {
             kWidgetDescription, PopupMenuAction.attachToKey);
         verify(snackbarService.showCustomSnackBar(
             message: 'Select Key to associate with Scroll View',
-            variant: ToastType.info));
+            variant: SnackbarType.info));
       });
     });
     group('addNewTarget -', () {
