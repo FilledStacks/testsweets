@@ -20,7 +20,7 @@ import 'widget_capture_widgets/draggable_widget.dart';
     name: 'widgetName',
   ),
 ])
-class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
+class WidgetCaptureView extends StatelessWidget {
   final String projectId;
   final String? apiKey;
   final Widget child;
@@ -45,7 +45,6 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
             capturedDeviceWidth: size.width,
             x: size.width / 2,
             y: size.height / 2);
-        listenToFormUpdated(model);
       },
       builder: (context, model, child) => Scaffold(
         resizeToAvoidBottomInset: false,
@@ -63,10 +62,7 @@ class WidgetCaptureView extends StatelessWidget with $WidgetCaptureView {
               ),
             ),
 
-            CaptureOverlay(
-              focusNode: widgetNameFocusNode,
-              textEditingController: widgetNameController,
-            ),
+            const CaptureOverlay(),
 
             BusyIndicator(
               enable: model.isBusy,

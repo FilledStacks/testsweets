@@ -26,12 +26,10 @@ class TestSweetsOverlayView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: enabled
-          ? (captureWidgets ?? !DRIVE_MODE)
-              ? WidgetCaptureView(child: child, projectId: projectId)
-              : DriverLayoutView(child: child, projectId: projectId)
-          : child,
-    );
+    return enabled
+        ? (captureWidgets ?? !DRIVE_MODE)
+            ? WidgetCaptureView(child: child, projectId: projectId)
+            : DriverLayoutView(child: child, projectId: projectId)
+        : child;
   }
 }
