@@ -1,3 +1,7 @@
+### 1.7.2
+- Reverse to use the builder instead of wrapping the MaterialApp
+- Fix conflict with client code
+  
 ### 1.7.1
 - Fix keyboard draw twice due to have 2 MaterialApps
 - Fix quick edit is so sensitive

@@ -9,9 +9,11 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
+import 'widget_capture_widgets/capture_overlay.dart';
+
 const String WidgetNameValueKey = 'widgetName';
 
-mixin $WidgetCaptureView on StatelessWidget {
+mixin $WidgetCaptureView on State<CaptureOverlay> {
   final TextEditingController widgetNameController = TextEditingController();
   final FocusNode widgetNameFocusNode = FocusNode();
 

@@ -10,29 +10,28 @@ import 'package:testsweets/src/ui/shared/icon_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widgets_visualizer.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
+import '../widget_capture_view.form.dart';
 import 'draggable_widget.dart';
 import 'form_header.dart';
 import 'type_selector.dart';
 
 class CaptureOverlay extends StatefulWidget {
-  final TextEditingController textEditingController;
-  final FocusNode focusNode;
   const CaptureOverlay({
     Key? key,
-    required this.textEditingController,
-    required this.focusNode,
   }) : super(key: key);
 
   @override
   State<CaptureOverlay> createState() => _CaptureOverlayState();
 }
 
-class _CaptureOverlayState extends State<CaptureOverlay> {
+class _CaptureOverlayState extends State<CaptureOverlay>
+    with $WidgetCaptureView {
   late SolidController solidController;
   @override
   void initState() {
     solidController = SolidController();
-
+    final model = context.read<WidgetCaptureViewModel>();
+    listenToFormUpdated(model);
     super.initState();
   }
 
@@ -53,7 +52,7 @@ class _CaptureOverlayState extends State<CaptureOverlay> {
         WidgetsVisualizer(editActionSelected: () {
           /// Set the value of the edited widget to the form textfield
           /// and show the bottomsheet
-          widget.textEditingController.text = model.widgetDescription!.name;
+          widgetNameController.text = model.widgetDescription!.name;
           solidController.show();
         }),
         if (model.captureWidgetStatusEnum.showWidgetForm)
@@ -64,7 +63,7 @@ class _CaptureOverlayState extends State<CaptureOverlay> {
             child: CustomSolidBottomSheet(
               controller: solidController,
               // Close the keyboard when you hide the bottomsheet
-              onHide: widget.focusNode.unfocus,
+              onHide: widgetNameFocusNode.unfocus,
               onShow: model.showWidgetForm,
               headerBar: FormHeader(
                 openStream: solidController.isOpenStream,
@@ -107,9 +106,8 @@ class _CaptureOverlayState extends State<CaptureOverlay> {
                                   children: [
                                     Expanded(
                                       child: TextFormField(
-                                        focusNode: widget.focusNode,
-                                        controller:
-                                            widget.textEditingController,
+                                        focusNode: widgetNameFocusNode,
+                                        controller: widgetNameController,
                                         style: tsNormal()
                                             .copyWith(color: kcPrimaryWhite),
                                         decoration: InputDecoration(
@@ -215,8 +213,8 @@ class _CaptureOverlayState extends State<CaptureOverlay> {
   }
 
   Future<void> _closeBottomSheet() async {
-    widget.textEditingController.clear();
-    widget.focusNode.unfocus();
+    widgetNameController.clear();
+    widgetNameFocusNode.unfocus();
     solidController.hide();
     await Future.delayed(const Duration(milliseconds: 350));
   }
