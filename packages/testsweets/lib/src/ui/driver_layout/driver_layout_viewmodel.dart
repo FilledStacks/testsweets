@@ -52,6 +52,12 @@ class DriverLayoutViewModel extends BaseViewModel {
         );
         final targetedWidgets = filterTargetedWidgets(triggerWidget);
 
+        // if the scroll widget has no targets abort
+        if (targetedWidgets.isEmpty) {
+          _widgetVisibiltyChangerService.completeCompleter();
+          return false;
+        }
+
         final toggledWidgets =
             _widgetVisibiltyChangerService.toggleVisibilty(targetedWidgets);
 

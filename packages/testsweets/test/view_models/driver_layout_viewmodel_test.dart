@@ -67,6 +67,22 @@ void main() {
         /// sence we have just one widget we can do this shortcut
         expect(model.descriptionsForView.first.visibility, true);
       });
+      test(
+          'When the triggerWidget has no targetIds, Should call completeCompleter',
+          () {
+        getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
+          kWidgetDescription,
+          kTestWidgetDescription
+        ]);
+        final service = getAndRegisterWidgetVisibiltyChangerService(
+            widgetDescriptions: [kWidgetDescription],
+            latestSweetcoreCommand:
+                ScrollableCommand(widgetName: 'viewName_general_widgetName'));
+        final model = _getModel();
+
+        model.onClientAppEvent(scrollEndNotificationTest);
+        verify(service.completeCompleter());
+      });
     });
     group('updateViewWidgetsList -', () {
       test('''When changing any proberty of some widget, Should be abe to
