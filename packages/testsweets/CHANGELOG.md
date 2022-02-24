@@ -1,3 +1,6 @@
+### 1.7.3
+- Fix bugs
+
 ### 1.7.2
 - Reverse to use the builder instead of wrapping the MaterialApp
 - Fix conflict with client code

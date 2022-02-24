@@ -11,7 +11,7 @@ void main() {
     setUp(registerServices);
     tearDown(unregisterServices);
 
-    group('execute -', () {
+    group('toggleVisibilty -', () {
       test('When the latestSweetcoreCommand is null, Should return null', () {
         expect(_service.toggleVisibilty([kTestWidgetDescription]), null);
       });
@@ -24,6 +24,13 @@ void main() {
         /// Sence default visibilty is true
         expect(_service.toggleVisibilty([kTestWidgetDescription]),
             [kTestWidgetDescription.copyWith(visibility: false)]);
+      });
+    });
+    group('completeCompleter -', () {
+      test('When completeCompleter is called, Should complete the completer',
+          () {
+        _service.completeCompleter();
+        expect(_service.completer.isCompleted, true);
       });
     });
   });
