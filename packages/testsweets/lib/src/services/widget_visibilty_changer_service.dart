@@ -7,7 +7,7 @@ import 'sweetcore_command.dart';
 class WidgetVisibiltyChangerService {
   final Completer completer = Completer();
 
-  SweetcoreCommand? automationKeyName;
+  SweetcoreCommand? sweetcoreCommand;
 
   void completeCompleter() {
     /// This message is not used right now but I'll leave it here
@@ -17,7 +17,7 @@ class WidgetVisibiltyChangerService {
 
   Iterable<WidgetDescription>? toggleVisibilty(
       Iterable<WidgetDescription> widgetDescriptions) {
-    if (automationKeyName == null) return null;
+    if (sweetcoreCommand == null) return null;
 
     completeCompleter();
 

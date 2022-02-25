@@ -44,7 +44,7 @@ class DriverLayoutViewModel extends BaseViewModel {
   /// populate a new event aka `notification`
   bool onClientAppEvent(Notification notification) {
     final automationKeyName =
-        _widgetVisibiltyChangerService.automationKeyName?.widgetName;
+        _widgetVisibiltyChangerService.sweetcoreCommand?.widgetName;
     try {
       if (notification is ScrollEndNotification && automationKeyName != null) {
         final triggerWidget = descriptionsForView.firstWhere(
@@ -68,7 +68,7 @@ class DriverLayoutViewModel extends BaseViewModel {
 
       /// Reset the sweetcore command to prevent duplicated calls
       /// incase there is another scroll event
-      _widgetVisibiltyChangerService.automationKeyName = null;
+      _widgetVisibiltyChangerService.sweetcoreCommand = null;
       notifyListeners();
     } on StateError catch (e) {
       log.e(

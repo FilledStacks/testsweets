@@ -123,7 +123,7 @@ WidgetVisibiltyChangerService getAndRegisterWidgetVisibiltyChangerService(
   final service = MockWidgetVisibiltyChangerService();
   when(service.toggleVisibilty(any)).thenReturn(widgetDescriptions);
   when(service.completeCompleter()).thenReturn(true);
-  when(service.automationKeyName).thenReturn(latestSweetcoreCommand);
+  when(service.sweetcoreCommand).thenReturn(latestSweetcoreCommand);
   locator.registerSingleton<WidgetVisibiltyChangerService>(service);
   return service;
 }
