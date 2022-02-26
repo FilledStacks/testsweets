@@ -7,19 +7,12 @@ import 'package:testsweets/src/ui/shared/busy_indecator.dart';
 import 'package:testsweets/src/ui/shared/route_banner.dart';
 import 'package:testsweets/src/ui/shared/utils.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widgets_visualizer.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_view_form.dart';
 
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/capture_overlay.dart';
 import 'package:testsweets/testsweets.dart';
 
-import 'widget_capture_widgets/draggable_widget.dart';
-
-@FormView(fields: [
-  FormTextField(
-    name: 'widgetName',
-  ),
-])
 class WidgetCaptureView extends StatelessWidget {
   final String projectId;
   final String? apiKey;

@@ -5,7 +5,6 @@ import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
 import '../helpers/test_consts.dart';
 import '../helpers/test_helpers.dart';
 
-final _service = WidgetVisibiltyChangerService();
 void main() {
   group('WidgetVisibiltyChangerServiceTest -', () {
     setUp(registerServices);
@@ -13,11 +12,15 @@ void main() {
 
     group('toggleVisibilty -', () {
       test('When the latestSweetcoreCommand is null, Should return null', () {
+        final _service = WidgetVisibiltyChangerService();
+
         expect(_service.toggleVisibilty([kTestWidgetDescription]), null);
       });
       test(
           'When the latestSweetcoreCommand is not null, Should toggle visiabilty of the widget',
           () {
+        final _service = WidgetVisibiltyChangerService();
+
         _service.sweetcoreCommand = ScrollableCommand(widgetName: 'widgetName');
 
         /// Sence default visibilty is true
@@ -28,7 +31,9 @@ void main() {
     group('completeCompleter -', () {
       test('When completeCompleter is called, Should complete the completer',
           () {
-        _service.completeCompleter();
+        final _service = WidgetVisibiltyChangerService();
+
+        _service.completeCompleter('');
         expect(_service.completer.isCompleted, true);
       });
     });

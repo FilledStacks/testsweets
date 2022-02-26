@@ -9,17 +9,17 @@ class WidgetVisibiltyChangerService {
 
   SweetcoreCommand? sweetcoreCommand;
 
-  void completeCompleter() {
+  void completeCompleter(String result) {
     /// This message is not used right now but I'll leave it here
     /// incase we want to debug the returned message in the [DriverManager]
-    completer.complete('success');
+    completer.complete(result);
   }
 
   Iterable<WidgetDescription>? toggleVisibilty(
       Iterable<WidgetDescription> widgetDescriptions) {
     if (sweetcoreCommand == null) return null;
 
-    completeCompleter();
+    completeCompleter('toggleVisibilty');
 
     return widgetDescriptions.map((e) => e.copyWith(visibility: !e.visibility));
   }

@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/services/sweetcore_command.dart';
+import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
 import 'package:testsweets/src/ui/driver_layout/driver_layout_viewmodel.dart';
 
 import '../helpers/test_consts.dart';
@@ -15,6 +18,29 @@ void main() {
     tearDown(unregisterServices);
 
     group('onClientAppEvent -', () {
+      test('''
+      When we get a ScrollableCommand message
+      from the flutter driver `handler` 
+      and an `ScrollEndNotification` is triggered
+      and the trigger widget has no targets, 
+      Should complete the completer with NoTargets
+      ''', () async {
+        getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
+          kTestWidgetDescription,
+          kWidgetDescription
+        ]);
+
+        /// Unregister the mocked service and register our instance
+        locator.unregister<WidgetVisibiltyChangerService>();
+        final service = WidgetVisibiltyChangerService();
+        locator.registerSingleton<WidgetVisibiltyChangerService>(service);
+
+        service.sweetcoreCommand =
+            ScrollableCommand(widgetName: kWidgetDescription.automationKey);
+        final model = _getModel();
+        model.onClientAppEvent(scrollEndNotificationTest);
+        expect(service.completer.future, completion(equals('NoTargets')));
+      });
       test(
           'When we recive new notification other than ScrollEndNotification, Do nothing ',
           () {
@@ -31,6 +57,8 @@ void main() {
         final service = getAndRegisterWidgetVisibiltyChangerService(
             latestSweetcoreCommand:
                 ScrollableCommand(widgetName: 'widgetName'));
+        final model = _getModel();
+        model.onClientAppEvent(scrollEndNotificationTest);
 
         verifyNever(service.toggleVisibilty([kTestWidgetDescription]));
       });
@@ -81,7 +109,7 @@ void main() {
         final model = _getModel();
 
         model.onClientAppEvent(scrollEndNotificationTest);
-        verify(service.completeCompleter());
+        verify(service.completeCompleter('NoTargets'));
       });
     });
     group('updateViewWidgetsList -', () {
@@ -110,6 +138,17 @@ void main() {
             kTestWidgetDescription
                 .copyWith(targetIds: [kWidgetDescription.id!]));
         expect(targetedWidgets.first, kWidgetDescription);
+      });
+      test('When targetIds is empty, Should extract the targeted widgets by id',
+          () {
+        getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
+          kTestWidgetDescription,
+          kWidgetDescription
+        ]);
+        final model = _getModel();
+        final targetedWidgets =
+            model.filterTargetedWidgets(kTestWidgetDescription);
+        expect(targetedWidgets, isEmpty);
       });
     });
   });

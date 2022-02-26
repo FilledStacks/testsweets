@@ -5,7 +5,7 @@ import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_view_form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
 import '../helpers/test_consts.dart';

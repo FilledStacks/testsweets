@@ -5,7 +5,7 @@
 import 'dart:async' as _i4;
 import 'dart:ui' as _i11;
 
-import 'package:flutter/material.dart' as _i7;
+import 'package:flutter/cupertino.dart' as _i7;
 import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked_services/src/snackbar/snackbar_config.dart' as _i6;
@@ -342,6 +342,10 @@ class MockWidgetVisibiltyChangerService extends _i1.Mock
   @override
   set sweetcoreCommand(_i14.SweetcoreCommand? _sweetcoreCommand) => super
       .noSuchMethod(Invocation.setter(#sweetcoreCommand, _sweetcoreCommand),
+          returnValueForMissingStub: null);
+  @override
+  void completeCompleter(String? result) =>
+      super.noSuchMethod(Invocation.method(#completeCompleter, [result]),
           returnValueForMissingStub: null);
   @override
   Iterable<_i9.WidgetDescription>? toggleVisibilty(

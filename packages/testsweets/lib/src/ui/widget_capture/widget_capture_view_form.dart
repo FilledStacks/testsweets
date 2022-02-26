@@ -1,11 +1,3 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
-
-// **************************************************************************
-// StackedFormGenerator
-// **************************************************************************
-
-// ignore_for_file: public_member_api_docs
-
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -13,7 +5,7 @@ import 'widget_capture_widgets/capture_overlay.dart';
 
 const String WidgetNameValueKey = 'widgetName';
 
-mixin $WidgetCaptureView on State<CaptureOverlay> {
+mixin WidgetCaptureViewForm on State<CaptureOverlay> {
   final TextEditingController widgetNameController = TextEditingController();
   final FocusNode widgetNameFocusNode = FocusNode();
 

@@ -54,7 +54,8 @@ class DriverLayoutViewModel extends BaseViewModel {
 
         // if the scroll widget has no targets abort
         if (targetedWidgets.isEmpty) {
-          _widgetVisibiltyChangerService.completeCompleter();
+          _widgetVisibiltyChangerService.sweetcoreCommand = null;
+          _widgetVisibiltyChangerService.completeCompleter('NoTargets');
           return false;
         }
 
