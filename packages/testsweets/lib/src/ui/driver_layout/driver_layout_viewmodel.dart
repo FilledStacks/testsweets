@@ -18,12 +18,9 @@ class DriverLayoutViewModel extends BaseViewModel {
 
   DriverLayoutViewModel({required projectId}) {
     _widgetCaptureService.projectId = projectId;
-    descriptionsForView = _widgetCaptureService.getDescriptionsForView(
-      currentRoute: _testSweetsRouteTracer.currentRoute,
-    );
   }
 
-  late List<WidgetDescription> descriptionsForView;
+  List<WidgetDescription> descriptionsForView = [];
 
   Future<void> initialise() async {
     setBusy(true);
@@ -32,14 +29,15 @@ class DriverLayoutViewModel extends BaseViewModel {
     } catch (e) {
       log.e('Could not get widgetDescriptions: $e');
     }
+    getWidgetsForRoute();
+    _testSweetsRouteTracer.addListener(getWidgetsForRoute);
     setBusy(false);
+  }
 
-    _testSweetsRouteTracer.addListener(() {
-      descriptionsForView = _widgetCaptureService.getDescriptionsForView(
-        currentRoute: _testSweetsRouteTracer.currentRoute,
-      );
-      notifyListeners();
-    });
+  void getWidgetsForRoute() {
+    descriptionsForView = _widgetCaptureService.getDescriptionsForView(
+        currentRoute: _testSweetsRouteTracer.currentRoute);
+    notifyListeners();
   }
 
   /// This will triggered whenever the client app
