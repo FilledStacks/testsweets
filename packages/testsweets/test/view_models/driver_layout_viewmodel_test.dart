@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:testsweets/src/enums/handler_message_response.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/services/sweetcore_command.dart';
 import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
@@ -18,6 +21,12 @@ void main() {
     tearDown(unregisterServices);
 
     group('onClientAppEvent -', () {
+      test('When the latestSweetcoreCommand is null, Should return null', () {
+        final service = getAndRegisterWidgetVisibiltyChangerService();
+        final model = _getModel();
+        service.sweetcoreCommand = null;
+        expect(model.onClientAppEvent(TestNotification()), false);
+      });
       test('''
       When we get a ScrollableCommand message
       from the flutter driver `handler` 
@@ -37,9 +46,13 @@ void main() {
 
         service.sweetcoreCommand =
             ScrollableCommand(widgetName: kWidgetDescription.automationKey);
+        service.completer = Completer();
+        expect(
+            service.completer!.future,
+            completion(equals(
+                HandlerMessageResponse.foundAutomationKeyWithNoTargets.name)));
         final model = _getModel();
         model.onClientAppEvent(scrollEndNotificationTest);
-        expect(service.completer.future, completion(equals('NoTargets')));
       });
       test(
           'When we recive new notification other than ScrollEndNotification, Do nothing ',
@@ -48,7 +61,8 @@ void main() {
         final model = _getModel();
 
         model.onClientAppEvent(TestNotification());
-        verifyNever(service.toggleVisibilty([kTestWidgetDescription]));
+        verifyNever(service.runToggleVisibiltyChecker(
+            TestNotification(), '', [kTestWidgetDescription]));
       });
       test(
           'When you don\'t find the widgetName in list of widgetDescriptions, Do nothing',
@@ -57,27 +71,35 @@ void main() {
         final service = getAndRegisterWidgetVisibiltyChangerService(
             latestSweetcoreCommand:
                 ScrollableCommand(widgetName: 'widgetName'));
+        service.completer = Completer();
+
         final model = _getModel();
         model.onClientAppEvent(scrollEndNotificationTest);
-
-        verifyNever(service.toggleVisibilty([kTestWidgetDescription]));
+        verify(service.completeCompleter(
+            HandlerMessageResponse.couldnotFindAutomationKey));
+        verifyNever(service.runToggleVisibiltyChecker(
+            TestNotification(), '', [kTestWidgetDescription]));
       });
       test('''When we recive new notification of type ScrollEndNotification 
-        and latestSweetcoreCommand isn\'t null, 
-        Should call toggleVisibilty on the WidgetVisibiltyChangerService''',
+        and latestSweetcoreCommand isn\'t null and automationKey is exist, 
+        Should call runToggleVisibiltyChecker on the WidgetVisibiltyChangerService''',
           () {
         getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
           kWidgetDescription,
-          kTestWidgetDescription.copyWith(targetIds: [kWidgetDescription.id!])
         ]);
         final service = getAndRegisterWidgetVisibiltyChangerService(
-            widgetDescriptions: [kTestWidgetDescription],
-            latestSweetcoreCommand:
-                ScrollableCommand(widgetName: 'viewName_general_widgetName'));
+            widgetDescriptions: [kWidgetDescription],
+            latestSweetcoreCommand: ScrollableCommand(
+                widgetName: kWidgetDescription.automationKey));
+        service.completer = Completer();
+
         final model = _getModel();
 
         model.onClientAppEvent(scrollEndNotificationTest);
-        verify(service.toggleVisibilty([kWidgetDescription]));
+        verify(service.runToggleVisibiltyChecker(
+            scrollEndNotificationTest, kWidgetDescription.automationKey, [
+          kWidgetDescription,
+        ]));
       });
       test(
           '''When we call toggleVisibilty on the WidgetVisibiltyChangerService, 
@@ -95,60 +117,21 @@ void main() {
         /// sence we have just one widget we can do this shortcut
         expect(model.descriptionsForView.first.visibility, true);
       });
-      test(
-          'When the triggerWidget has no targetIds, Should call completeCompleter',
+      test('''When the triggerWidget has no targetIds, Should do nothing''',
           () {
         getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
           kWidgetDescription,
           kTestWidgetDescription
         ]);
-        final service = getAndRegisterWidgetVisibiltyChangerService(
-            widgetDescriptions: [kWidgetDescription],
+        getAndRegisterWidgetVisibiltyChangerService(
             latestSweetcoreCommand:
                 ScrollableCommand(widgetName: 'viewName_general_widgetName'));
         final model = _getModel();
-
+        final before = model.descriptionsForView;
         model.onClientAppEvent(scrollEndNotificationTest);
-        verify(service.completeCompleter('NoTargets'));
-      });
-    });
-    group('updateViewWidgetsList -', () {
-      test('''When changing any proberty of some widget, Should be abe to
-       replace it in descriptionsForView list''', () {
-        getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
-          kTestWidgetDescription,
-          kWidgetDescription.copyWith(visibility: false)
-        ]);
-        final model = _getModel();
-        model.updateViewWidgetsList(
-            [kWidgetDescription.copyWith(visibility: true)]);
-        expect(model.descriptionsForView[1],
-            kWidgetDescription.copyWith(visibility: true));
-      });
-    });
+        final after = model.descriptionsForView;
 
-    group('filterTargetedWidgets -', () {
-      test('When call, Should extract the targeted widgets by id', () {
-        getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
-          kTestWidgetDescription.copyWith(targetIds: [kWidgetDescription.id!]),
-          kWidgetDescription
-        ]);
-        final model = _getModel();
-        final targetedWidgets = model.filterTargetedWidgets(
-            kTestWidgetDescription
-                .copyWith(targetIds: [kWidgetDescription.id!]));
-        expect(targetedWidgets.first, kWidgetDescription);
-      });
-      test('When targetIds is empty, Should extract the targeted widgets by id',
-          () {
-        getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
-          kTestWidgetDescription,
-          kWidgetDescription
-        ]);
-        final model = _getModel();
-        final targetedWidgets =
-            model.filterTargetedWidgets(kTestWidgetDescription);
-        expect(targetedWidgets, isEmpty);
+        expect(before, after);
       });
     });
   });
