@@ -10,7 +10,7 @@ import 'package:testsweets/src/ui/shared/icon_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widgets_visualizer.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
-import '../widget_capture_view.form.dart';
+import '../widget_capture_view_form.dart';
 import 'draggable_widget.dart';
 import 'form_header.dart';
 import 'type_selector.dart';
@@ -25,7 +25,7 @@ class CaptureOverlay extends StatefulWidget {
 }
 
 class _CaptureOverlayState extends State<CaptureOverlay>
-    with $WidgetCaptureView {
+    with WidgetCaptureViewForm {
   late SolidController solidController;
   @override
   void initState() {

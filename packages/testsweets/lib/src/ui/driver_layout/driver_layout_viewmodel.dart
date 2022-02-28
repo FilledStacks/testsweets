@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/app/logger.dart';
+import 'package:testsweets/src/enums/handler_message_response.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
@@ -19,10 +20,7 @@ class DriverLayoutViewModel extends BaseViewModel {
     _widgetCaptureService.projectId = projectId;
   }
 
-  List<WidgetDescription> get descriptionsForView =>
-      _widgetCaptureService.getDescriptionsForView(
-        currentRoute: _testSweetsRouteTracer.currentRoute,
-      );
+  List<WidgetDescription> descriptionsForView = [];
 
   Future<void> initialise() async {
     setBusy(true);
@@ -31,67 +29,48 @@ class DriverLayoutViewModel extends BaseViewModel {
     } catch (e) {
       log.e('Could not get widgetDescriptions: $e');
     }
+    getWidgetsForRoute();
+    _testSweetsRouteTracer.addListener(getWidgetsForRoute);
     setBusy(false);
+  }
 
+  void getWidgetsForRoute() {
+    descriptionsForView = _widgetCaptureService.getDescriptionsForView(
+        currentRoute: _testSweetsRouteTracer.currentRoute);
     notifyListeners();
-
-    _testSweetsRouteTracer.addListener(() {
-      notifyListeners();
-    });
   }
 
   /// This will triggered whenever the client app
   /// populate a new event aka `notification`
+  ///
+  /// By returning false we don't resolve the notification
+  /// so it keeps populating up through the widget tree
   bool onClientAppEvent(Notification notification) {
     final automationKeyName =
-        _widgetVisibiltyChangerService.automationKeyName?.widgetName;
-    try {
-      if (notification is ScrollEndNotification && automationKeyName != null) {
-        final triggerWidget = descriptionsForView.firstWhere(
-          (element) => element.automationKey == automationKeyName,
-        );
-        final targetedWidgets = filterTargetedWidgets(triggerWidget);
+        _widgetVisibiltyChangerService.sweetcoreCommand?.widgetName;
 
-        // if the scroll widget has no targets abort
-        if (targetedWidgets.isEmpty) {
-          _widgetVisibiltyChangerService.completeCompleter();
-          return false;
-        }
+    // When widget name is null abort
+    if (automationKeyName == null) return false;
 
-        final toggledWidgets =
-            _widgetVisibiltyChangerService.toggleVisibilty(targetedWidgets);
-
-        if (toggledWidgets != null && toggledWidgets.isNotEmpty) {
-          updateViewWidgetsList(toggledWidgets);
-        }
-      }
-
-      /// Reset the sweetcore command to prevent duplicated calls
-      /// incase there is another scroll event
-      _widgetVisibiltyChangerService.automationKeyName = null;
-      notifyListeners();
-    } on StateError catch (e) {
-      log.e(
-          'Coudn\'t find the widget name in the descriptionsForView list, $e');
+    if (notification is ScrollEndNotification &&
+        automationKeyOnScreen(automationKeyName)) {
+      final newDescriptionsForView = _widgetVisibiltyChangerService
+          .runToggleVisibiltyChecker(
+              notification, automationKeyName, descriptionsForView)
+          ?.toList();
+      if (newDescriptionsForView != null)
+        descriptionsForView = newDescriptionsForView;
+    } else {
+      _widgetVisibiltyChangerService
+          .completeCompleter(HandlerMessageResponse.couldnotFindAutomationKey);
     }
+    notifyListeners();
 
-    /// By returning false we don't resolve the notification
-    /// so it keeps populating up through the widget tree
     return false;
   }
 
-  void updateViewWidgetsList(
-      Iterable<WidgetDescription> widgetAfterToggleVisibilty) {
-    for (var widget in widgetAfterToggleVisibilty) {
-      final widgetIndex =
-          descriptionsForView.indexWhere((element) => element.id == widget.id);
-      descriptionsForView[widgetIndex] = widget;
-    }
-  }
-
-  Iterable<WidgetDescription> filterTargetedWidgets(
-      WidgetDescription triggerWidget) {
-    return descriptionsForView
-        .where((element) => triggerWidget.targetIds.contains(element.id));
-  }
+  bool automationKeyOnScreen(String automationKeyName) =>
+      descriptionsForView.any(
+        (element) => element.automationKey == automationKeyName,
+      );
 }

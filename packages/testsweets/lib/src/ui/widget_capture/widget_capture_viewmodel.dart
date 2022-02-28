@@ -13,7 +13,7 @@ import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_view.form.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_view_form.dart';
 
 class WidgetCaptureViewModel extends FormViewModel {
   final log = getLogger('WidgetCaptureViewModel');

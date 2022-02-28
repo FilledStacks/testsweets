@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
@@ -21,10 +23,10 @@ Future<void> setupTestSweets() async {
         if (message != null) {
           final widgetVisibiltyChangerService =
               locator<WidgetVisibiltyChangerService>();
-          widgetVisibiltyChangerService.automationKeyName =
+          widgetVisibiltyChangerService.sweetcoreCommand =
               SweetcoreCommand.fromString(message);
-
-          return await widgetVisibiltyChangerService.completer.future;
+          widgetVisibiltyChangerService.completer = Completer();
+          return await widgetVisibiltyChangerService.completer!.future;
         }
         return 'Message is null';
       },
