@@ -1,6 +1,8 @@
+### 1.7.4
+- Fix testsweets doesn't respond to clearStackAndShow
+- Fix scroll comand verification require a target to succeed
 ### 1.7.3
 - Fix bugs
-
 ### 1.7.2
 - Reverse to use the builder instead of wrapping the MaterialApp
 - Fix conflict with client code

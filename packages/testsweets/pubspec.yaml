@@ -1,6 +1,6 @@
 name: testsweets
 description: A package to help sync flutter automation data with TestSweets backend
-version: 1.7.3
+version: 1.7.4
 homepage: https://github.com/FilledStacks/testsweets
 
 environment:
