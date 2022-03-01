@@ -87,7 +87,7 @@ void main() {
       test('''When we recive new notification of type ScrollEndNotification
         and latestSweetcoreCommand isn\'t null and automationKey is exist,
         Should call runToggleVisibiltyChecker on the WidgetVisibiltyChangerService''',
-          () {
+          () async {
         getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
           kWidgetDescription2,
         ]);
@@ -98,7 +98,7 @@ void main() {
         service.completer = Completer();
 
         final model = _getModel();
-
+        await model.initialise();
         model.onClientAppEvent(kScrollEndNotification);
         verify(service.runToggleVisibiltyChecker(
             kScrollEndNotification, kWidgetDescription2.automationKey, [
@@ -106,7 +106,7 @@ void main() {
         ]));
       });
       test('''When we call toggleVisibilty on the WidgetVisibiltyChangerService,
-        Should toggle the visibilty of the triggered widgets''', () {
+        Should toggle the visibilty of the triggered widgets''', () async {
         /// [testWidgetDescription] visiblilty is true by default
         getAndRegisterWidgetCaptureService(
             listOfWidgetDescription: [kWidgetDescription1]);
@@ -114,7 +114,7 @@ void main() {
           kWidgetDescription1.copyWith(visibility: false)
         ], latestSweetcoreCommand: ScrollableCommand(widgetName: 'widgetName'));
         final model = _getModel();
-
+        await model.initialise();
         model.onClientAppEvent(kScrollEndNotification);
 
         /// sence we have just one widget we can do this shortcut
