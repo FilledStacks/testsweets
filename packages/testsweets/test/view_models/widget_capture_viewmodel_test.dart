@@ -79,14 +79,14 @@ void main() {
 
         final model = _getViewModel();
         await model.popupMenuActionSelected(
-            kWidgetDescription, PopupMenuAction.edit);
+            kWidgetDescription2, PopupMenuAction.edit);
         model.formValueMap[WidgetNameValueKey] = 'loginButton';
         model.setFormStatus();
 
         await model.updateWidgetDescription();
 
         verify(service.updateWidgetDescription(
-            description: kWidgetDescription.copyWith(name: 'loginButton')));
+            description: kWidgetDescription2.copyWith(name: 'loginButton')));
       });
 
       test(
@@ -111,11 +111,11 @@ void main() {
         final widgetCaptureService = getAndRegisterWidgetCaptureService();
         final model = _getViewModel();
         model.popupMenuActionSelected(
-            kWidgetDescription, PopupMenuAction.remove);
+            kWidgetDescription2, PopupMenuAction.remove);
 
         await model.removeWidgetDescription();
         verify(widgetCaptureService.deleteWidgetDescription(
-            description: kWidgetDescription));
+            description: kWidgetDescription2));
       });
 
       test(
@@ -133,7 +133,8 @@ void main() {
           'When popupMenuAction is edit, Should set the captureWidgetStatusEnum to editWidget',
           () {
         final model = _getViewModel();
-        model.popupMenuActionSelected(kWidgetDescription, PopupMenuAction.edit);
+        model.popupMenuActionSelected(
+            kWidgetDescription2, PopupMenuAction.edit);
         expect(
             model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.editWidget);
       });
@@ -145,9 +146,9 @@ void main() {
         final model = _getViewModel();
 
         model.popupMenuActionSelected(
-            kWidgetDescription, PopupMenuAction.remove);
+            kWidgetDescription2, PopupMenuAction.remove);
         verify(widgetCaptureService.deleteWidgetDescription(
-            description: kWidgetDescription));
+            description: kWidgetDescription2));
       });
       test(
           'When popupMenuAction is attachToKey, Should call deleteWidgetDescription from captureService',
@@ -155,7 +156,7 @@ void main() {
         final model = _getViewModel();
 
         model.popupMenuActionSelected(
-            kWidgetDescription, PopupMenuAction.attachToKey);
+            kWidgetDescription2, PopupMenuAction.attachToKey);
         expect(model.captureWidgetStatusEnum,
             CaptureWidgetStatusEnum.attachWidget);
       });
@@ -165,7 +166,7 @@ void main() {
         final model = _getViewModel();
 
         model.popupMenuActionSelected(
-            kWidgetDescription, PopupMenuAction.attachToKey);
+            kWidgetDescription2, PopupMenuAction.attachToKey);
         verify(snackbarService.showCustomSnackBar(
             message: 'Select Key to associate with Scroll View',
             variant: SnackbarType.info));
@@ -179,7 +180,7 @@ void main() {
         final model = _getViewModel();
 
         model.popupMenuActionSelected(
-            kWidgetDescription, PopupMenuAction.attachToKey);
+            kWidgetDescription2, PopupMenuAction.attachToKey);
 
         /// I didn't add await inorder to expect the state before the updateWidgetDescription call
         model.addNewTarget('targetId');
@@ -195,7 +196,7 @@ void main() {
         final model = _getViewModel();
 
         model.popupMenuActionSelected(
-            kWidgetDescription, PopupMenuAction.attachToKey);
+            kWidgetDescription2, PopupMenuAction.attachToKey);
 
         await model.addNewTarget('targetId');
         expect(model.widgetDescription, isNull);
@@ -210,7 +211,7 @@ void main() {
         final model = _getViewModel();
 
         await model.popupMenuActionSelected(
-            kWidgetDescription.copyWith(targetIds: ['targetId']),
+            kWidgetDescription2.copyWith(targetIds: ['targetId']),
             PopupMenuAction.deattachFromKey);
         model.removeTarget('targetId');
         expect(model.widgetDescription!.targetIds, isEmpty);
@@ -220,7 +221,7 @@ void main() {
         final model = _getViewModel();
 
         await model.popupMenuActionSelected(
-            kWidgetDescription.copyWith(targetIds: []),
+            kWidgetDescription2.copyWith(targetIds: []),
             PopupMenuAction.deattachFromKey);
         model.removeTarget('targetId');
         expect(await model.removeTarget('targetId'), 'Target doesn\'t exist');

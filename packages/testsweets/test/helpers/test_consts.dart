@@ -72,7 +72,15 @@ const List<String> testDynamicAutomationKeys = ['orders_touchable_ready'];
 const int testContentLength = 2;
 final testDataStream = Stream.value([1, 2, 3]);
 final testDateTime = DateTime.utc(1993, 12, 12, 12);
-final kWidgetDescription = WidgetDescription(
+
+final kWidgetDescription1 = WidgetDescription(
+    id: 'testWidgetDescriptionId',
+    viewName: 'viewName',
+    originalViewName: 'originalViewName',
+    name: 'widgetName',
+    widgetType: WidgetType.general,
+    position: WidgetPosition.empty());
+final kWidgetDescription2 = WidgetDescription(
   originalViewName: '/',
   viewName: 'login',
   id: 'id',
@@ -89,14 +97,8 @@ final kWidgetDescriptionView = WidgetDescription(
   position: WidgetPosition.empty(),
   widgetType: WidgetType.view,
 );
-final kTestWidgetDescription = WidgetDescription(
-    id: 'testWidgetDescriptionId',
-    viewName: 'viewName',
-    originalViewName: 'originalViewName',
-    name: 'widgetName',
-    widgetType: WidgetType.general,
-    position: WidgetPosition.empty());
-final scrollEndNotificationTest = ScrollEndNotification(
+
+final kScrollEndNotification = ScrollEndNotification(
     metrics: FixedScrollMetrics(
         minScrollExtent: 50,
         maxScrollExtent: 100,

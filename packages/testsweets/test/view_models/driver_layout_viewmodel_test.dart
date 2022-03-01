@@ -21,22 +21,25 @@ void main() {
     tearDown(unregisterServices);
 
     group('onClientAppEvent -', () {
-      test('When the latestSweetcoreCommand is null, Should return null', () {
+      test('''When the sweetcoreCommand is null, Should return without calling
+          WidgetVisibiltyChangerService''', () {
         final service = getAndRegisterWidgetVisibiltyChangerService();
         final model = _getModel();
-        service.sweetcoreCommand = null;
-        expect(model.onClientAppEvent(TestNotification()), false);
+        model.onClientAppEvent(kScrollEndNotification);
+        verifyNever(service.toggleVisibilty([], []));
+        verifyNever(service.completeCompleter(
+            HandlerMessageResponse.couldnotFindAutomationKey));
       });
       test('''
       When we get a ScrollableCommand message
       from the flutter driver `handler` 
       and an `ScrollEndNotification` is triggered
       and the trigger widget has no targets, 
-      Should complete the completer with NoTargets
+      Should complete the completer with foundAutomationKeyWithNoTargets
       ''', () async {
         getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
-          kTestWidgetDescription,
-          kWidgetDescription
+          kWidgetDescription1,
+          kWidgetDescription2
         ]);
 
         /// Unregister the mocked service and register our instance
@@ -45,14 +48,15 @@ void main() {
         locator.registerSingleton<WidgetVisibiltyChangerService>(service);
 
         service.sweetcoreCommand =
-            ScrollableCommand(widgetName: kWidgetDescription.automationKey);
+            ScrollableCommand(widgetName: kWidgetDescription2.automationKey);
         service.completer = Completer();
         expect(
             service.completer!.future,
             completion(equals(
                 HandlerMessageResponse.foundAutomationKeyWithNoTargets.name)));
         final model = _getModel();
-        model.onClientAppEvent(scrollEndNotificationTest);
+        await model.initialise();
+        model.onClientAppEvent(kScrollEndNotification);
       });
       test(
           'When we recive new notification other than ScrollEndNotification, Do nothing ',
@@ -62,7 +66,7 @@ void main() {
 
         model.onClientAppEvent(TestNotification());
         verifyNever(service.runToggleVisibiltyChecker(
-            TestNotification(), '', [kTestWidgetDescription]));
+            TestNotification(), '', [kWidgetDescription1]));
       });
       test(
           'When you don\'t find the widgetName in list of widgetDescriptions, Do nothing',
@@ -74,45 +78,44 @@ void main() {
         service.completer = Completer();
 
         final model = _getModel();
-        model.onClientAppEvent(scrollEndNotificationTest);
+        model.onClientAppEvent(kScrollEndNotification);
         verify(service.completeCompleter(
             HandlerMessageResponse.couldnotFindAutomationKey));
         verifyNever(service.runToggleVisibiltyChecker(
-            TestNotification(), '', [kTestWidgetDescription]));
+            TestNotification(), '', [kWidgetDescription1]));
       });
-      test('''When we recive new notification of type ScrollEndNotification 
-        and latestSweetcoreCommand isn\'t null and automationKey is exist, 
+      test('''When we recive new notification of type ScrollEndNotification
+        and latestSweetcoreCommand isn\'t null and automationKey is exist,
         Should call runToggleVisibiltyChecker on the WidgetVisibiltyChangerService''',
           () {
         getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
-          kWidgetDescription,
+          kWidgetDescription2,
         ]);
         final service = getAndRegisterWidgetVisibiltyChangerService(
-            widgetDescriptions: [kWidgetDescription],
+            widgetDescriptions: [kWidgetDescription2],
             latestSweetcoreCommand: ScrollableCommand(
-                widgetName: kWidgetDescription.automationKey));
+                widgetName: kWidgetDescription2.automationKey));
         service.completer = Completer();
 
         final model = _getModel();
 
-        model.onClientAppEvent(scrollEndNotificationTest);
+        model.onClientAppEvent(kScrollEndNotification);
         verify(service.runToggleVisibiltyChecker(
-            scrollEndNotificationTest, kWidgetDescription.automationKey, [
-          kWidgetDescription,
+            kScrollEndNotification, kWidgetDescription2.automationKey, [
+          kWidgetDescription2,
         ]));
       });
-      test(
-          '''When we call toggleVisibilty on the WidgetVisibiltyChangerService, 
+      test('''When we call toggleVisibilty on the WidgetVisibiltyChangerService,
         Should toggle the visibilty of the triggered widgets''', () {
         /// [testWidgetDescription] visiblilty is true by default
         getAndRegisterWidgetCaptureService(
-            listOfWidgetDescription: [kTestWidgetDescription]);
+            listOfWidgetDescription: [kWidgetDescription1]);
         getAndRegisterWidgetVisibiltyChangerService(widgetDescriptions: [
-          kTestWidgetDescription.copyWith(visibility: false)
+          kWidgetDescription1.copyWith(visibility: false)
         ], latestSweetcoreCommand: ScrollableCommand(widgetName: 'widgetName'));
         final model = _getModel();
 
-        model.onClientAppEvent(scrollEndNotificationTest);
+        model.onClientAppEvent(kScrollEndNotification);
 
         /// sence we have just one widget we can do this shortcut
         expect(model.descriptionsForView.first.visibility, true);
@@ -120,15 +123,15 @@ void main() {
       test('''When the triggerWidget has no targetIds, Should do nothing''',
           () {
         getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
-          kWidgetDescription,
-          kTestWidgetDescription
+          kWidgetDescription2,
+          kWidgetDescription1
         ]);
         getAndRegisterWidgetVisibiltyChangerService(
             latestSweetcoreCommand:
                 ScrollableCommand(widgetName: 'viewName_general_widgetName'));
         final model = _getModel();
         final before = model.descriptionsForView;
-        model.onClientAppEvent(scrollEndNotificationTest);
+        model.onClientAppEvent(kScrollEndNotification);
         final after = model.descriptionsForView;
 
         expect(before, after);

@@ -23,9 +23,9 @@ void main() {
 
         /// Sence default visibilty is true
         expect(
-            _service.toggleVisibilty(
-                [kTestWidgetDescription], [kTestWidgetDescription]),
-            [kTestWidgetDescription.copyWith(visibility: false)]);
+            _service
+                .toggleVisibilty([kWidgetDescription1], [kWidgetDescription1]),
+            [kWidgetDescription1.copyWith(visibility: false)]);
       });
     });
     group('completeCompleter -', () {
@@ -44,13 +44,13 @@ void main() {
         final _service = WidgetVisibiltyChangerService();
 
         final result = _service.updateViewWidgetsList([
-          kWidgetDescription.copyWith(visibility: true)
+          kWidgetDescription2.copyWith(visibility: true)
         ], [
-          kTestWidgetDescription,
-          kWidgetDescription.copyWith(visibility: false)
+          kWidgetDescription1,
+          kWidgetDescription2.copyWith(visibility: false)
         ]);
-        expect(
-            result.elementAt(1), kWidgetDescription.copyWith(visibility: true));
+        expect(result.elementAt(1),
+            kWidgetDescription2.copyWith(visibility: true));
       });
     });
   });
@@ -59,17 +59,17 @@ void main() {
     test('When call, Should extract the targeted widgets by id', () {
       final _service = WidgetVisibiltyChangerService();
       final targetedWidgets =
-          _service.filterTargetedWidgets(kTestWidgetDescription.automationKey, [
-        kTestWidgetDescription.copyWith(targetIds: [kWidgetDescription.id!]),
-        kWidgetDescription
+          _service.filterTargetedWidgets(kWidgetDescription1.automationKey, [
+        kWidgetDescription1.copyWith(targetIds: [kWidgetDescription2.id!]),
+        kWidgetDescription2
       ]);
-      expect(targetedWidgets.first, kWidgetDescription);
+      expect(targetedWidgets.first, kWidgetDescription2);
     });
     test('When targetIds is empty, Should return empty list', () {
       final _service = WidgetVisibiltyChangerService();
 
       final targetedWidgets = _service.filterTargetedWidgets(
-          kTestWidgetDescription.automationKey, [kTestWidgetDescription]);
+          kWidgetDescription1.automationKey, [kWidgetDescription1]);
       expect(targetedWidgets, isEmpty);
     });
   });
