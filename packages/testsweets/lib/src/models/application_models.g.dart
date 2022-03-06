@@ -20,6 +20,10 @@ _$_WidgetDescription _$$_WidgetDescriptionFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           [],
+      externalities: (json['externalities'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, (e as num).toDouble()),
+      ),
+      axis: _$enumDecodeNullable(_$AxisEnumMap, json['axis']),
     );
 
 Map<String, dynamic> _$$_WidgetDescriptionToJson(
@@ -33,6 +37,8 @@ Map<String, dynamic> _$$_WidgetDescriptionToJson(
       'position': instance.position,
       'visibility': instance.visibility,
       'targetIds': instance.targetIds,
+      'externalities': instance.externalities,
+      'axis': _$AxisEnumMap[instance.axis],
     };
 
 K _$enumDecode<K, V>(
@@ -68,6 +74,22 @@ const _$WidgetTypeEnumMap = {
   WidgetType.general: 'general',
   WidgetType.view: 'view',
   WidgetType.input: 'input',
+};
+
+K? _$enumDecodeNullable<K, V>(
+  Map<K, V> enumValues,
+  dynamic source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    return null;
+  }
+  return _$enumDecode<K, V>(enumValues, source, unknownValue: unknownValue);
+}
+
+const _$AxisEnumMap = {
+  Axis.horizontal: 'horizontal',
+  Axis.vertical: 'vertical',
 };
 
 _$_WidgetPosition _$$_WidgetPositionFromJson(Map<String, dynamic> json) =>

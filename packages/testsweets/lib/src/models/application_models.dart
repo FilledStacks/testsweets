@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/widget_type_extension.dart';
@@ -36,6 +37,13 @@ class WidgetDescription with _$WidgetDescription {
 
     /// Target widgets ids that will be affected when this widget activated
     @Default([]) List<String> targetIds,
+
+    /// External widgets that affect this widget normally "ListView"
+    /// where String is the list id and the double is scroll percentage
+    Map<String, double>? externalities,
+
+    /// When WidgetType is [view]
+    Axis? axis,
   }) = _WidgetDescription;
   factory WidgetDescription.view(
           {required String viewName, required String originalViewName}) =>
@@ -66,4 +74,14 @@ class WidgetPosition with _$WidgetPosition {
   factory WidgetPosition.empty() => WidgetPosition(x: 0, y: 0);
   factory WidgetPosition.fromJson(Map<String, dynamic> json) =>
       _$WidgetPositionFromJson(json);
+}
+
+@freezed
+class ScrollableDescription with _$ScrollableDescription {
+  factory ScrollableDescription({
+    required Axis axis,
+    required Rect rect,
+    required double scrollOffsetOnCapture,
+    required double maxScrollOffset,
+  }) = _ScrollableDescription;
 }
