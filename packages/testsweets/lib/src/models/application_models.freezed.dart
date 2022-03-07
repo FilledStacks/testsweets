@@ -30,8 +30,7 @@ class _$WidgetDescriptionTearOff {
       required WidgetPosition position,
       bool visibility = true,
       List<String> targetIds = const [],
-      Map<String, double>? externalities,
-      Axis? axis}) {
+      Set<String> externalities = const {}}) {
     return _WidgetDescription(
       id: id,
       viewName: viewName,
@@ -42,7 +41,6 @@ class _$WidgetDescriptionTearOff {
       visibility: visibility,
       targetIds: targetIds,
       externalities: externalities,
-      axis: axis,
     );
   }
 
@@ -82,10 +80,7 @@ mixin _$WidgetDescription {
 
   /// External widgets that affect this widget normally "ListView"
   /// where String is the list id and the double is scroll percentage
-  Map<String, double>? get externalities => throw _privateConstructorUsedError;
-
-  /// When WidgetType is [view]
-  Axis? get axis => throw _privateConstructorUsedError;
+  Set<String> get externalities => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -107,8 +102,7 @@ abstract class $WidgetDescriptionCopyWith<$Res> {
       WidgetPosition position,
       bool visibility,
       List<String> targetIds,
-      Map<String, double>? externalities,
-      Axis? axis});
+      Set<String> externalities});
 
   $WidgetPositionCopyWith<$Res> get position;
 }
@@ -133,7 +127,6 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
     Object? visibility = freezed,
     Object? targetIds = freezed,
     Object? externalities = freezed,
-    Object? axis = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -171,11 +164,7 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
       externalities: externalities == freezed
           ? _value.externalities
           : externalities // ignore: cast_nullable_to_non_nullable
-              as Map<String, double>?,
-      axis: axis == freezed
-          ? _value.axis
-          : axis // ignore: cast_nullable_to_non_nullable
-              as Axis?,
+              as Set<String>,
     ));
   }
 
@@ -203,8 +192,7 @@ abstract class _$WidgetDescriptionCopyWith<$Res>
       WidgetPosition position,
       bool visibility,
       List<String> targetIds,
-      Map<String, double>? externalities,
-      Axis? axis});
+      Set<String> externalities});
 
   @override
   $WidgetPositionCopyWith<$Res> get position;
@@ -232,7 +220,6 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
     Object? visibility = freezed,
     Object? targetIds = freezed,
     Object? externalities = freezed,
-    Object? axis = freezed,
   }) {
     return _then(_WidgetDescription(
       id: id == freezed
@@ -270,11 +257,7 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
       externalities: externalities == freezed
           ? _value.externalities
           : externalities // ignore: cast_nullable_to_non_nullable
-              as Map<String, double>?,
-      axis: axis == freezed
-          ? _value.axis
-          : axis // ignore: cast_nullable_to_non_nullable
-              as Axis?,
+              as Set<String>,
     ));
   }
 }
@@ -291,8 +274,7 @@ class _$_WidgetDescription extends _WidgetDescription {
       required this.position,
       this.visibility = true,
       this.targetIds = const [],
-      this.externalities,
-      this.axis})
+      this.externalities = const {}})
       : super._();
 
   factory _$_WidgetDescription.fromJson(Map<String, dynamic> json) =>
@@ -333,19 +315,16 @@ class _$_WidgetDescription extends _WidgetDescription {
 
   /// Target widgets ids that will be affected when this widget activated
   final List<String> targetIds;
+  @JsonKey(defaultValue: const {})
   @override
 
   /// External widgets that affect this widget normally "ListView"
   /// where String is the list id and the double is scroll percentage
-  final Map<String, double>? externalities;
-  @override
-
-  /// When WidgetType is [view]
-  final Axis? axis;
+  final Set<String> externalities;
 
   @override
   String toString() {
-    return 'WidgetDescription(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility, targetIds: $targetIds, externalities: $externalities, axis: $axis)';
+    return 'WidgetDescription(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility, targetIds: $targetIds, externalities: $externalities)';
   }
 
   @override
@@ -376,9 +355,7 @@ class _$_WidgetDescription extends _WidgetDescription {
                     .equals(other.targetIds, targetIds)) &&
             (identical(other.externalities, externalities) ||
                 const DeepCollectionEquality()
-                    .equals(other.externalities, externalities)) &&
-            (identical(other.axis, axis) ||
-                const DeepCollectionEquality().equals(other.axis, axis)));
+                    .equals(other.externalities, externalities)));
   }
 
   @override
@@ -392,8 +369,7 @@ class _$_WidgetDescription extends _WidgetDescription {
       const DeepCollectionEquality().hash(position) ^
       const DeepCollectionEquality().hash(visibility) ^
       const DeepCollectionEquality().hash(targetIds) ^
-      const DeepCollectionEquality().hash(externalities) ^
-      const DeepCollectionEquality().hash(axis);
+      const DeepCollectionEquality().hash(externalities);
 
   @JsonKey(ignore: true)
   @override
@@ -416,8 +392,7 @@ abstract class _WidgetDescription extends WidgetDescription {
       required WidgetPosition position,
       bool visibility,
       List<String> targetIds,
-      Map<String, double>? externalities,
-      Axis? axis}) = _$_WidgetDescription;
+      Set<String> externalities}) = _$_WidgetDescription;
   _WidgetDescription._() : super._();
 
   factory _WidgetDescription.fromJson(Map<String, dynamic> json) =
@@ -459,11 +434,7 @@ abstract class _WidgetDescription extends WidgetDescription {
 
   /// External widgets that affect this widget normally "ListView"
   /// where String is the list id and the double is scroll percentage
-  Map<String, double>? get externalities => throw _privateConstructorUsedError;
-  @override
-
-  /// When WidgetType is [view]
-  Axis? get axis => throw _privateConstructorUsedError;
+  Set<String> get externalities => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$WidgetDescriptionCopyWith<_WidgetDescription> get copyWith =>
@@ -706,12 +677,12 @@ class _$ScrollableDescriptionTearOff {
   _ScrollableDescription call(
       {required Axis axis,
       required Rect rect,
-      required double scrollOffsetOnCapture,
+      required double scrollingPixelsOnCapture,
       required double maxScrollOffset}) {
     return _ScrollableDescription(
       axis: axis,
       rect: rect,
-      scrollOffsetOnCapture: scrollOffsetOnCapture,
+      scrollingPixelsOnCapture: scrollingPixelsOnCapture,
       maxScrollOffset: maxScrollOffset,
     );
   }
@@ -724,7 +695,7 @@ const $ScrollableDescription = _$ScrollableDescriptionTearOff();
 mixin _$ScrollableDescription {
   Axis get axis => throw _privateConstructorUsedError;
   Rect get rect => throw _privateConstructorUsedError;
-  double get scrollOffsetOnCapture => throw _privateConstructorUsedError;
+  double get scrollingPixelsOnCapture => throw _privateConstructorUsedError;
   double get maxScrollOffset => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -740,7 +711,7 @@ abstract class $ScrollableDescriptionCopyWith<$Res> {
   $Res call(
       {Axis axis,
       Rect rect,
-      double scrollOffsetOnCapture,
+      double scrollingPixelsOnCapture,
       double maxScrollOffset});
 }
 
@@ -757,7 +728,7 @@ class _$ScrollableDescriptionCopyWithImpl<$Res>
   $Res call({
     Object? axis = freezed,
     Object? rect = freezed,
-    Object? scrollOffsetOnCapture = freezed,
+    Object? scrollingPixelsOnCapture = freezed,
     Object? maxScrollOffset = freezed,
   }) {
     return _then(_value.copyWith(
@@ -769,9 +740,9 @@ class _$ScrollableDescriptionCopyWithImpl<$Res>
           ? _value.rect
           : rect // ignore: cast_nullable_to_non_nullable
               as Rect,
-      scrollOffsetOnCapture: scrollOffsetOnCapture == freezed
-          ? _value.scrollOffsetOnCapture
-          : scrollOffsetOnCapture // ignore: cast_nullable_to_non_nullable
+      scrollingPixelsOnCapture: scrollingPixelsOnCapture == freezed
+          ? _value.scrollingPixelsOnCapture
+          : scrollingPixelsOnCapture // ignore: cast_nullable_to_non_nullable
               as double,
       maxScrollOffset: maxScrollOffset == freezed
           ? _value.maxScrollOffset
@@ -791,7 +762,7 @@ abstract class _$ScrollableDescriptionCopyWith<$Res>
   $Res call(
       {Axis axis,
       Rect rect,
-      double scrollOffsetOnCapture,
+      double scrollingPixelsOnCapture,
       double maxScrollOffset});
 }
 
@@ -810,7 +781,7 @@ class __$ScrollableDescriptionCopyWithImpl<$Res>
   $Res call({
     Object? axis = freezed,
     Object? rect = freezed,
-    Object? scrollOffsetOnCapture = freezed,
+    Object? scrollingPixelsOnCapture = freezed,
     Object? maxScrollOffset = freezed,
   }) {
     return _then(_ScrollableDescription(
@@ -822,9 +793,9 @@ class __$ScrollableDescriptionCopyWithImpl<$Res>
           ? _value.rect
           : rect // ignore: cast_nullable_to_non_nullable
               as Rect,
-      scrollOffsetOnCapture: scrollOffsetOnCapture == freezed
-          ? _value.scrollOffsetOnCapture
-          : scrollOffsetOnCapture // ignore: cast_nullable_to_non_nullable
+      scrollingPixelsOnCapture: scrollingPixelsOnCapture == freezed
+          ? _value.scrollingPixelsOnCapture
+          : scrollingPixelsOnCapture // ignore: cast_nullable_to_non_nullable
               as double,
       maxScrollOffset: maxScrollOffset == freezed
           ? _value.maxScrollOffset
@@ -840,7 +811,7 @@ class _$_ScrollableDescription implements _ScrollableDescription {
   _$_ScrollableDescription(
       {required this.axis,
       required this.rect,
-      required this.scrollOffsetOnCapture,
+      required this.scrollingPixelsOnCapture,
       required this.maxScrollOffset});
 
   @override
@@ -848,13 +819,13 @@ class _$_ScrollableDescription implements _ScrollableDescription {
   @override
   final Rect rect;
   @override
-  final double scrollOffsetOnCapture;
+  final double scrollingPixelsOnCapture;
   @override
   final double maxScrollOffset;
 
   @override
   String toString() {
-    return 'ScrollableDescription(axis: $axis, rect: $rect, scrollOffsetOnCapture: $scrollOffsetOnCapture, maxScrollOffset: $maxScrollOffset)';
+    return 'ScrollableDescription(axis: $axis, rect: $rect, scrollingPixelsOnCapture: $scrollingPixelsOnCapture, maxScrollOffset: $maxScrollOffset)';
   }
 
   @override
@@ -865,9 +836,11 @@ class _$_ScrollableDescription implements _ScrollableDescription {
                 const DeepCollectionEquality().equals(other.axis, axis)) &&
             (identical(other.rect, rect) ||
                 const DeepCollectionEquality().equals(other.rect, rect)) &&
-            (identical(other.scrollOffsetOnCapture, scrollOffsetOnCapture) ||
+            (identical(
+                    other.scrollingPixelsOnCapture, scrollingPixelsOnCapture) ||
                 const DeepCollectionEquality().equals(
-                    other.scrollOffsetOnCapture, scrollOffsetOnCapture)) &&
+                    other.scrollingPixelsOnCapture,
+                    scrollingPixelsOnCapture)) &&
             (identical(other.maxScrollOffset, maxScrollOffset) ||
                 const DeepCollectionEquality()
                     .equals(other.maxScrollOffset, maxScrollOffset)));
@@ -878,7 +851,7 @@ class _$_ScrollableDescription implements _ScrollableDescription {
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(axis) ^
       const DeepCollectionEquality().hash(rect) ^
-      const DeepCollectionEquality().hash(scrollOffsetOnCapture) ^
+      const DeepCollectionEquality().hash(scrollingPixelsOnCapture) ^
       const DeepCollectionEquality().hash(maxScrollOffset);
 
   @JsonKey(ignore: true)
@@ -892,7 +865,7 @@ abstract class _ScrollableDescription implements ScrollableDescription {
   factory _ScrollableDescription(
       {required Axis axis,
       required Rect rect,
-      required double scrollOffsetOnCapture,
+      required double scrollingPixelsOnCapture,
       required double maxScrollOffset}) = _$_ScrollableDescription;
 
   @override
@@ -900,7 +873,7 @@ abstract class _ScrollableDescription implements ScrollableDescription {
   @override
   Rect get rect => throw _privateConstructorUsedError;
   @override
-  double get scrollOffsetOnCapture => throw _privateConstructorUsedError;
+  double get scrollingPixelsOnCapture => throw _privateConstructorUsedError;
   @override
   double get maxScrollOffset => throw _privateConstructorUsedError;
   @override

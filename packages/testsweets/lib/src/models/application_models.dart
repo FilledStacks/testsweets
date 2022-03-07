@@ -40,10 +40,7 @@ class WidgetDescription with _$WidgetDescription {
 
     /// External widgets that affect this widget normally "ListView"
     /// where String is the list id and the double is scroll percentage
-    Map<String, double>? externalities,
-
-    /// When WidgetType is [view]
-    Axis? axis,
+    @Default({}) Set<String> externalities,
   }) = _WidgetDescription;
   factory WidgetDescription.view(
           {required String viewName, required String originalViewName}) =>
@@ -81,7 +78,7 @@ class ScrollableDescription with _$ScrollableDescription {
   factory ScrollableDescription({
     required Axis axis,
     required Rect rect,
-    required double scrollOffsetOnCapture,
+    required double scrollingPixelsOnCapture,
     required double maxScrollOffset,
   }) = _ScrollableDescription;
 }

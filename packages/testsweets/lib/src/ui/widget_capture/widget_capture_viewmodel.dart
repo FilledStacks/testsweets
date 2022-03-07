@@ -19,12 +19,15 @@ import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view_form.dart';
 
+import '../../services/reactive_interaction.dart';
+
 class WidgetCaptureViewModel extends FormViewModel {
   final log = getLogger('WidgetCaptureViewModel');
 
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
   final _snackbarService = locator<SnackbarService>();
+  final _reactiveInteraction = locator<ReactiveInteraction>();
 
   CaptureWidgetStatusEnum _captureWidgetStatusEnum =
       CaptureWidgetStatusEnum.idle;
@@ -327,19 +330,9 @@ class WidgetCaptureViewModel extends FormViewModel {
   //   }
   // }
 
-  void checkForExternalities(Iterable<ScrollableDescription> listsRect) {}
+  void checkForExternalities(
+      Iterable<ScrollableDescription> scrollableDescription) {
+    widgetDescription = _reactiveInteraction.applyScrollableOnInteraction(
+        scrollableDescription, widgetDescription!);
+  }
 }
-
-// class FilterFinder extends ChainedFinder {
-//   FilterFinder(Finder parent) : super(parent);
-
-//   @override
-//   String get description => 'Filter unwanted widgets';
-
-//   @override
-//   Iterable<Element> filter(Iterable<Element> parentCandidates) {
-//     return parentCandidates;
-//   }
-// }
-
-

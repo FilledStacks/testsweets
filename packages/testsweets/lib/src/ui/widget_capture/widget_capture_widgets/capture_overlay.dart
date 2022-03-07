@@ -232,7 +232,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
         axis: axis,
         rect: Rect.fromPoints(position,
             position.translate(renderBox.size.width, renderBox.size.height)),
-        scrollOffsetOnCapture: scrollOffsetOnCapture,
+        scrollingPixelsOnCapture: scrollOffsetOnCapture,
         maxScrollOffset: maxScrollOffset);
   }
 
