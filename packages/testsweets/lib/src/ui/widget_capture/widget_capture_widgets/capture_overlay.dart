@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/src/provider.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
+import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/custom_solid_controller.dart';
@@ -14,6 +15,7 @@ import '../widget_capture_view_form.dart';
 import 'draggable_widget.dart';
 import 'form_header.dart';
 import 'type_selector.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class CaptureOverlay extends StatefulWidget {
   const CaptureOverlay({
@@ -170,17 +172,21 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                 Expanded(
                                   flex: 5,
                                   child: CtaButton(
-                                      isDisabled: widgetDescription
-                                              .name.isEmpty ||
-                                          widgetDescription.widgetType == null,
+                                      // isDisabled:
+                                      //     widgetDescription.name.isEmpty,
                                       onTap: () async {
-                                        final result = await model.submitForm();
-
                                         /// When widget is saved successfully hide
                                         /// the bottom sheet and clear the text
-                                        if (result == null) {
-                                          await _closeBottomSheet();
-                                        }
+                                        await _closeBottomSheet();
+
+                                        final listsRect = find
+                                            .byType(Scrollable)
+                                            .hitTestable()
+                                            .evaluate()
+                                            .map(
+                                                extractScrollableDescriptionFromElement);
+                                        model.checkForExternalities(listsRect);
+                                        await model.submitForm();
                                       },
                                       fillColor: kcPrimaryPurple,
                                       title: widgetDescription.id != null
@@ -210,6 +216,24 @@ class _CaptureOverlayState extends State<CaptureOverlay>
           ),
       ],
     );
+  }
+
+  ScrollableDescription extractScrollableDescriptionFromElement(Element item) {
+    RenderBox renderBox = item.findRenderObject() as RenderBox;
+
+    Offset position = renderBox.localToGlobal(Offset.zero);
+    final scrollable = item.widget as Scrollable;
+
+    final scrollOffsetOnCapture = scrollable.controller!.position.pixels;
+    final maxScrollOffset = scrollable.controller!.position.maxScrollExtent;
+    final axis = scrollable.controller!.position.axis;
+
+    return ScrollableDescription(
+        axis: axis,
+        rect: Rect.fromPoints(position,
+            position.translate(renderBox.size.width, renderBox.size.height)),
+        scrollOffsetOnCapture: scrollOffsetOnCapture,
+        maxScrollOffset: maxScrollOffset);
   }
 
   Future<void> _closeBottomSheet() async {

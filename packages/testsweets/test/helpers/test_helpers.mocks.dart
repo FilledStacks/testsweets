@@ -5,7 +5,7 @@
 import 'dart:async' as _i7;
 import 'dart:ui' as _i11;
 
-import 'package:flutter/cupertino.dart' as _i6;
+import 'package:flutter/material.dart' as _i6;
 import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked_services/src/snackbar/snackbar_config.dart' as _i5;
@@ -343,8 +343,8 @@ class MockWidgetVisibiltyChangerService extends _i1.Mock
       super.noSuchMethod(Invocation.setter(#completer, _completer),
           returnValueForMissingStub: null);
   @override
-  set sweetcoreCommand(_i14.SweetcoreCommand? sweetcoreCommand) =>
-      super.noSuchMethod(Invocation.setter(#sweetcoreCommand, sweetcoreCommand),
+  set sweetcoreCommand(_i14.SweetcoreCommand? _sweetcoreCommand) => super
+      .noSuchMethod(Invocation.setter(#sweetcoreCommand, _sweetcoreCommand),
           returnValueForMissingStub: null);
   @override
   void completeCompleter(_i15.HandlerMessageResponse? message) =>

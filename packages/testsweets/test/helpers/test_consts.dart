@@ -2,6 +2,7 @@ import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/models/build_info.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/testsweets.dart';
 
 import 'test_helpers.dart';
@@ -89,6 +90,24 @@ final kWidgetDescription2 = WidgetDescription(
       x: 100, y: 199, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
   widgetType: WidgetType.general,
 );
+final kWidgetDescriptionTypeScroll1 = WidgetDescription(
+  originalViewName: '/',
+  viewName: 'initial',
+  id: 'kWidgetDescriptionTypeScrollId1',
+  name: 'ScrollId1',
+  position: WidgetPosition(
+      x: 20, y: 20, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
+  widgetType: WidgetType.scrollable,
+);
+final kWidgetDescriptionTypeScroll2 = WidgetDescription(
+  originalViewName: '/',
+  viewName: 'initial',
+  id: 'kWidgetDescriptionTypeScroll2',
+  name: 'ScrollId2',
+  position: WidgetPosition(
+      x: 25, y: 25, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
+  widgetType: WidgetType.scrollable,
+);
 final kWidgetDescriptionView = WidgetDescription(
   originalViewName: '/',
   viewName: 'login',
@@ -106,3 +125,23 @@ final kScrollEndNotification = ScrollEndNotification(
         viewportDimension: 33,
         axisDirection: AxisDirection.right),
     context: MockBuildContext());
+final kTopLeftScrollableDescription = ScrollableDescription(
+    axis: Axis.vertical,
+    maxScrollOffset: 0,
+    scrollOffsetOnCapture: 0,
+    rect: Rect.fromPoints(Offset(0, 0), Offset(22, 22)));
+final kAnotherTopLeftScrollableDescription = ScrollableDescription(
+    axis: Axis.vertical,
+    maxScrollOffset: 0,
+    scrollOffsetOnCapture: 0,
+    rect: Rect.fromPoints(Offset(0, 0), Offset(40, 40)));
+final kTopRightScrollableDescription = ScrollableDescription(
+    axis: Axis.vertical,
+    maxScrollOffset: 0,
+    scrollOffsetOnCapture: 0,
+    rect: Rect.fromPoints(Offset(200, 0), Offset(230, 30)));
+final kBottomLeftScrollableDescription = ScrollableDescription(
+    axis: Axis.vertical,
+    maxScrollOffset: 0,
+    scrollOffsetOnCapture: 0,
+    rect: Rect.fromPoints(Offset(0, 230), Offset(30, 200)));

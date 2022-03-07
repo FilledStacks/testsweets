@@ -1,7 +1,11 @@
 import 'dart:async';
 
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
+
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
@@ -28,7 +32,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   /// We use this position as the starter point of any new widget
   late WidgetPosition screenCenterPosition;
 
-  Future<String?> addNewTarget(String targetId) async {
+  Future<void> addNewTarget(String targetId) async {
     log.v(
         'already added ids: ${widgetDescription?.targetIds} , new id: $targetId');
 
@@ -237,11 +241,11 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<String?> submitForm() async {
-    if (widgetDescription?.id != null) {
-      return await updateWidgetDescription();
-    } else {
-      return await saveWidget();
-    }
+    // if (widgetDescription?.id != null) {
+    //   return await updateWidgetDescription();
+    // } else {
+    //   return await saveWidget();
+    // }
   }
 
   Future<void> popupMenuActionSelected(
@@ -307,4 +311,35 @@ class WidgetCaptureViewModel extends FormViewModel {
           message: widgetDescription.name, variant: SnackbarType.info);
     }
   }
+
+  // bool onClientEvent(Notification notification) {
+  //   if (notification is ScrollStartNotification) {
+  //     globalPostion = notification.dragDetails!.globalPosition;
+  //     localPostion = notification.dragDetails!.localPosition;
+  //   }
+  //   if (notification is ScrollUpdateNotification) {
+  //     final change = notification.metrics.pixels;
+  //     print('infooo ' + notification.metrics.pixels.toString());
+
+  //     final topLeftPointOfList = globalPostion - localPostion;
+  //     target1 = topLeftPointOfList + Offset(-change, 0);
+  //     print('infooo2 ' + target1.toString());
+  //   }
+  // }
+
+  void checkForExternalities(Iterable<ScrollableDescription> listsRect) {}
 }
+
+// class FilterFinder extends ChainedFinder {
+//   FilterFinder(Finder parent) : super(parent);
+
+//   @override
+//   String get description => 'Filter unwanted widgets';
+
+//   @override
+//   Iterable<Element> filter(Iterable<Element> parentCandidates) {
+//     return parentCandidates;
+//   }
+// }
+
+
