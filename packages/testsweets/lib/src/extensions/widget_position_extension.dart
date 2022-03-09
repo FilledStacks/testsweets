@@ -12,4 +12,19 @@ extension WidgetPositionExtension on WidgetPosition {
       return WidgetPosition(x: x + scrollingPixels, y: y);
     }
   }
+
+  WidgetPosition applyScroll(AxisDirection axisDirection, double offset) {
+    print(
+        'applyScroll: y:' + this.y.toString() + "offset:" + offset.toString());
+    switch (axisDirection) {
+      case AxisDirection.up:
+        return this.copyWith(yTranlate: offset);
+      case AxisDirection.down:
+        return this.copyWith(yTranlate: offset);
+      case AxisDirection.right:
+        return this.copyWith(xTranlate: this.x + offset);
+      case AxisDirection.left:
+        return this.copyWith(xTranlate: this.x - offset);
+    }
+  }
 }

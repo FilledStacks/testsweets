@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
@@ -13,6 +14,7 @@ import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
+import 'package:testsweets/src/extensions/widget_position_extension.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
@@ -35,53 +37,53 @@ class WidgetCaptureViewModel extends FormViewModel {
   /// We use this position as the starter point of any new widget
   late WidgetPosition screenCenterPosition;
 
-  Future<void> addNewTarget(String targetId) async {
-    log.v(
-        'already added ids: ${widgetDescription?.targetIds} , new id: $targetId');
+  // Future<void> addNewTarget(String targetId) async {
+  //   log.v(
+  //       'already added ids: ${widgetDescription?.targetIds} , new id: $targetId');
 
-    final List<String> targetsList = [
-      ...widgetDescription!.targetIds,
-      targetId,
-    ];
-    widgetDescription = widgetDescription!.copyWith(targetIds: targetsList);
+  //   final List<String> targetsList = [
+  //     ...widgetDescription!.targetIds,
+  //     targetId,
+  //   ];
+  //   widgetDescription = widgetDescription!.copyWith(targetIds: targetsList);
 
-    final response = await updateWidgetDescription();
+  //   final response = await updateWidgetDescription();
 
-    if (response is String) {
-      log.e(response);
-      widgetDescription = null;
-    }
+  //   if (response is String) {
+  //     log.e(response);
+  //     widgetDescription = null;
+  //   }
 
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
-  }
+  //   captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+  // }
 
-  Future<String?> removeTarget(String targetId) async {
-    log.v(
-        'Existing ids: ${widgetDescription?.targetIds} , Will remove id: $targetId');
+  // Future<String?> removeTarget(String targetId) async {
+  //   log.v(
+  //       'Existing ids: ${widgetDescription?.targetIds} , Will remove id: $targetId');
 
-    bool targetExists = widgetDescription!.targetIds.contains(targetId);
-    if (!targetExists) {
-      log.e('Target doesn\'t exist');
-      return 'Target doesn\'t exist';
-    }
+  //   bool targetExists = widgetDescription!.targetIds.contains(targetId);
+  //   if (!targetExists) {
+  //     log.e('Target doesn\'t exist');
+  //     return 'Target doesn\'t exist';
+  //   }
 
-    // Remove the selected target from [widgetDescription]
-    final targetsWithoutTheRemovedOne = widgetDescription!.targetIds
-        .where((element) => element != targetId)
-        .toList();
+  //   // Remove the selected target from [widgetDescription]
+  //   final targetsWithoutTheRemovedOne = widgetDescription!.targetIds
+  //       .where((element) => element != targetId)
+  //       .toList();
 
-    widgetDescription =
-        widgetDescription!.copyWith(targetIds: targetsWithoutTheRemovedOne);
+  //   widgetDescription =
+  //       widgetDescription!.copyWith(targetIds: targetsWithoutTheRemovedOne);
 
-    final response = await updateWidgetDescription();
+  //   final response = await updateWidgetDescription();
 
-    if (response is String) {
-      log.e(response);
-      widgetDescription = null;
-    }
+  //   if (response is String) {
+  //     log.e(response);
+  //     widgetDescription = null;
+  //   }
 
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
-  }
+  //   captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+  // }
 
   set setWidgetType(WidgetType widgetType) {
     log.v(widgetType);
@@ -105,16 +107,30 @@ class WidgetCaptureViewModel extends FormViewModel {
       _captureWidgetStatusEnum;
 
   WidgetCaptureViewModel({required String projectId}) {
+    listenToNotifications();
+
     _widgetCaptureService.projectId = projectId;
-    _testSweetsRouteTracker.addListener(notifyListeners);
+    _testSweetsRouteTracker.addListener(() {
+      newWidgetForRoute = _testSweetsRouteTracker.currentRoute;
+    });
   }
 
   WidgetDescription? widgetDescription;
 
-  List<WidgetDescription> get descriptionsForView =>
-      _widgetCaptureService.getDescriptionsForView(
-        currentRoute: _testSweetsRouteTracker.currentRoute,
-      );
+  List<WidgetDescription> _descriptionsForView = [];
+  List<WidgetDescription> get descriptionsForView => _descriptionsForView;
+  set descriptionsForView(List<WidgetDescription> descriptions) {
+    _descriptionsForView = descriptions;
+    notifyListeners();
+  }
+
+  set newWidgetForRoute(String route) {
+    _descriptionsForView = _widgetCaptureService.getDescriptionsForView(
+      currentRoute: route,
+    );
+    notifyListeners();
+  }
+
   bool get currentViewIsCaptured => descriptionsForView.any(
         (element) => element.widgetType == WidgetType.view,
       );
@@ -124,6 +140,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusy(true);
     try {
       await _widgetCaptureService.loadWidgetDescriptionsForProject();
+      newWidgetForRoute = _testSweetsRouteTracker.currentRoute;
       setBusy(false);
     } catch (e) {
       log.e('Could not get widgetDescriptions: $e');
@@ -226,6 +243,9 @@ class WidgetCaptureViewModel extends FormViewModel {
       _snackbarService.showCustomSnackBar(
           message: result, variant: SnackbarType.failed);
     } else {
+      descriptionsForView = descriptionsForView
+          .whereNot((widget) => widgetDescription == widget)
+          .toList();
       widgetDescription = null;
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
@@ -244,11 +264,11 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<String?> submitForm() async {
-    // if (widgetDescription?.id != null) {
-    //   return await updateWidgetDescription();
-    // } else {
-    //   return await saveWidget();
-    // }
+    if (widgetDescription?.id != null) {
+      return await updateWidgetDescription();
+    } else {
+      return await saveWidget();
+    }
   }
 
   Future<void> popupMenuActionSelected(
@@ -305,9 +325,9 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void onTapWidget(WidgetDescription widgetDescription) async {
     if (captureWidgetStatusEnum.attachMode) {
-      await addNewTarget(widgetDescription.id!);
+      // await addNewTarget(widgetDescription.id!);
     } else if (captureWidgetStatusEnum.deattachMode) {
-      await removeTarget(widgetDescription.id!);
+      // await removeTarget(widgetDescription.id!);
     } else {
       notifyListeners();
       await _snackbarService.showCustomSnackBar(
@@ -315,20 +335,58 @@ class WidgetCaptureViewModel extends FormViewModel {
     }
   }
 
-  // bool onClientEvent(Notification notification) {
-  //   if (notification is ScrollStartNotification) {
-  //     globalPostion = notification.dragDetails!.globalPosition;
-  //     localPostion = notification.dragDetails!.localPosition;
-  //   }
-  //   if (notification is ScrollUpdateNotification) {
-  //     final change = notification.metrics.pixels;
-  //     print('infooo ' + notification.metrics.pixels.toString());
+  final notificationController = StreamController<Notification>.broadcast();
+  bool onClientEvent(Notification notification) {
+    notificationController.add(notification);
+    return false;
+  }
 
-  //     final topLeftPointOfList = globalPostion - localPostion;
-  //     target1 = topLeftPointOfList + Offset(-change, 0);
-  //     print('infooo2 ' + target1.toString());
-  //   }
-  // }
+  void listenToNotifications() {
+    ScrollDirection? direction;
+    Offset? globalPosition;
+    Offset? localPosition;
+    notificationController.stream.listen((notification) {
+      if (notification is UserScrollNotification) {
+        direction = notification.direction;
+      } else if (notification is ScrollStartNotification) {
+        globalPosition = notification.dragDetails!.globalPosition;
+        localPosition = notification.dragDetails!.localPosition;
+      } else if (notification is ScrollUpdateNotification &&
+          globalPosition != null) {
+        final change = direction == ScrollDirection.reverse
+            ? -notification.metrics.extentBefore
+            : direction == ScrollDirection.forward
+                ? -notification.metrics.extentBefore
+                : 0.0;
+        final topLeftPointOfList = globalPosition! - localPosition!;
+        print(
+          "extentAfter: ${notification.metrics.extentAfter}, extentBefore: ${notification.metrics.extentBefore}, scrollDirection: ${direction}",
+        );
+        searchForWidgetsToMoveAlong(
+            scrollAxis: direction == ScrollDirection.forward
+                ? AxisDirection.down
+                : AxisDirection.up,
+            top: topLeftPointOfList.dy,
+            left: topLeftPointOfList.dx,
+            scrollOffset: change);
+      }
+    });
+  }
+
+  void searchForWidgetsToMoveAlong(
+      {required double top,
+      required double left,
+      required AxisDirection scrollAxis,
+      required double scrollOffset}) {
+    final hashForList = top.toStringAsFixed(0) + '#' + left.toStringAsFixed(0);
+    log.i('scrollOffset' + scrollOffset.toString());
+    descriptionsForView = descriptionsForView
+        .where((widget) => widget.externalities.contains(hashForList))
+        .map((widget) {
+      return widget.copyWith(
+          position: widget.position.applyScroll(scrollAxis, scrollOffset));
+    }).toList();
+  }
 
   void checkForExternalities(
       Iterable<ScrollableDescription> scrollableDescription) {

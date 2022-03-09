@@ -11,6 +11,8 @@ class SignUpView extends StatelessWidget {
       Colors.purple,
       Colors.orange,
       Colors.black,
+      Colors.red,
+      Colors.blue,
     ];
     return ViewModelBuilder<SignUpViewModel>.reactive(
       builder: (context, model, child) => Scaffold(

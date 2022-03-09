@@ -108,8 +108,7 @@ class WidgetCaptureService {
               projectId: _projectId,
               newwidgetDescription: description,
               oldwidgetDescription: widgetToUpdate!);
-      // Request all keys from firestore
-      await loadWidgetDescriptionsForProject();
+
       log.i('descriptionId from Cloud: $descriptionId');
     } catch (e) {
       log.e(e);
@@ -124,8 +123,6 @@ class WidgetCaptureService {
       final descriptionId =
           await _cloudFunctionsService.deleteWidgetDescription(
               projectId: _projectId, description: description);
-      // Request all keys from firestore
-      await loadWidgetDescriptionsForProject();
 
       log.i('descriptionId from Cloud: $descriptionId');
     } catch (e) {

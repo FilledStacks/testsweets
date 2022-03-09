@@ -176,7 +176,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                       //     widgetDescription.name.isEmpty,
                                       onTap: () async {
                                         /// When widget is saved successfully hide
-                                        /// the bottom sheet and clear the text
+                                        /// the bottom sheet
                                         await _closeBottomSheet();
 
                                         final listsRect = find
@@ -187,6 +187,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                                 extractScrollableDescriptionFromElement);
                                         model.checkForExternalities(listsRect);
                                         await model.submitForm();
+                                        _clearAndUnfocusTextField();
                                       },
                                       fillColor: kcPrimaryPurple,
                                       title: widgetDescription.id != null
@@ -201,6 +202,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                   child: CtaButton(
                                       onTap: () async {
                                         await _closeBottomSheet();
+                                        _clearAndUnfocusTextField();
                                         model.clearWidgetDescriptionForm();
                                       },
                                       fillColor: kcError,
@@ -237,9 +239,12 @@ class _CaptureOverlayState extends State<CaptureOverlay>
   }
 
   Future<void> _closeBottomSheet() async {
-    widgetNameController.clear();
-    widgetNameFocusNode.unfocus();
     solidController.hide();
     await Future.delayed(const Duration(milliseconds: 350));
+  }
+
+  void _clearAndUnfocusTextField() {
+    widgetNameController.clear();
+    widgetNameFocusNode.unfocus();
   }
 }

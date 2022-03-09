@@ -47,8 +47,10 @@ class WidgetsVisualizer extends StatelessWidget {
               .where((element) => element.widgetType != WidgetType.view)
               .map(
                 (description) => Positioned(
-                  top: description.responsiveYPosition(size.height),
-                  left: description.responsiveXPosition(size.width),
+                  top: description.position.y +
+                      (description.position.yTranlate ?? 0),
+                  left: description.position.x +
+                      (description.position.xTranlate ?? 0),
                   child: CustomPopupMenu(
                     disable: model.captureWidgetStatusEnum.attachMode,
                     onMoveStart: () =>

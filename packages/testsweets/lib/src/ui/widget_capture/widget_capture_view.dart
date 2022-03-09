@@ -46,7 +46,7 @@ class WidgetCaptureView extends StatelessWidget {
             NotificationListener(
                 onNotification: (notification) {
                   if (notification is Notification) {
-                    // model.onClientEvent(notification, context);
+                    model.onClientEvent(notification);
                   }
                   return false;
                 },
