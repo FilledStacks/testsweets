@@ -378,10 +378,12 @@ class WidgetCaptureViewModel extends FormViewModel {
       required double left,
       required AxisDirection scrollAxis,
       required double scrollOffset}) {
-    final hashForList = top.toStringAsFixed(0) + '#' + left.toStringAsFixed(0);
+    final hashForList = top.toStringAsFixed(0) + ',' + left.toStringAsFixed(0);
     log.i('scrollOffset' + scrollOffset.toString());
     descriptionsForView = descriptionsForView
-        .where((widget) => widget.externalities.contains(hashForList))
+        .where((widget) => widget.externalities
+            .map((e) => e.split('#').first)
+            .contains(hashForList))
         .map((widget) {
       return widget.copyWith(
           position: widget.position.applyScroll(scrollAxis, scrollOffset));
