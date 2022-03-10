@@ -359,13 +359,15 @@ class WidgetCaptureViewModel extends FormViewModel {
                 ? -notification.metrics.extentBefore
                 : 0.0;
         final topLeftPointOfList = globalPosition! - localPosition!;
-        print(
-          "extentAfter: ${notification.metrics.extentAfter}, extentBefore: ${notification.metrics.extentBefore}, scrollDirection: ${direction}",
-        );
+
         searchForWidgetsToMoveAlong(
-            scrollAxis: direction == ScrollDirection.forward
-                ? AxisDirection.down
-                : AxisDirection.up,
+            scrollAxis: notification.metrics.axis == Axis.vertical
+                ? direction == ScrollDirection.forward
+                    ? AxisDirection.down
+                    : AxisDirection.up
+                : direction == ScrollDirection.forward
+                    ? AxisDirection.right
+                    : AxisDirection.left,
             top: topLeftPointOfList.dy,
             left: topLeftPointOfList.dx,
             scrollOffset: change);
@@ -378,16 +380,17 @@ class WidgetCaptureViewModel extends FormViewModel {
       required double left,
       required AxisDirection scrollAxis,
       required double scrollOffset}) {
-    final hashForList = top.toStringAsFixed(0) + ',' + left.toStringAsFixed(0);
+    final hashForList = left.toStringAsFixed(0) + ',' + top.toStringAsFixed(0);
     log.i('scrollOffset' + scrollOffset.toString());
     descriptionsForView = descriptionsForView
         .where((widget) => widget.externalities
             .map((e) => e.split('#').first)
             .contains(hashForList))
-        .map((widget) {
-      return widget.copyWith(
-          position: widget.position.applyScroll(scrollAxis, scrollOffset));
-    }).toList();
+        .map((widget) => widget.copyWith(
+            position: widget.position.applyScroll(scrollAxis, scrollOffset)))
+        .followedBy(descriptionsForView
+            .where((element) => element.externalities.isEmpty))
+        .toList();
   }
 
   void checkForExternalities(

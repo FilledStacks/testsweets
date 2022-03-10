@@ -223,17 +223,19 @@ class _CaptureOverlayState extends State<CaptureOverlay>
   ScrollableDescription extractScrollableDescriptionFromElement(Element item) {
     RenderBox renderBox = item.findRenderObject() as RenderBox;
 
-    Offset position = renderBox.localToGlobal(Offset.zero);
-    final scrollable = item.widget as Scrollable;
+    Offset globalPostion = renderBox.localToGlobal(Offset.zero);
+    final position = (item.widget as Scrollable).controller!.positions.first;
 
-    final scrollOffsetOnCapture = scrollable.controller!.position.pixels;
-    final maxScrollOffset = scrollable.controller!.position.maxScrollExtent;
-    final axis = scrollable.controller!.position.axis;
+    final scrollOffsetOnCapture = position.pixels;
+    final maxScrollOffset = position.maxScrollExtent;
+    final axis = position.axis;
 
     return ScrollableDescription(
         axis: axis,
-        rect: Rect.fromPoints(position,
-            position.translate(renderBox.size.width, renderBox.size.height)),
+        rect: Rect.fromPoints(
+            globalPostion,
+            globalPostion.translate(
+                renderBox.size.width, renderBox.size.height)),
         scrollingPixelsOnCapture: scrollOffsetOnCapture,
         maxScrollOffset: maxScrollOffset);
   }

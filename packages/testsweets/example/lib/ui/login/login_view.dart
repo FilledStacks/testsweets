@@ -28,6 +28,7 @@ class LoginView extends StatelessWidget {
               child: Scrollbar(
                 isAlwaysShown: true,
                 child: ListView.builder(
+                  controller: ScrollController(),
                   itemCount: colorItems.length,
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.all(10),
