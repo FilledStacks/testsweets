@@ -37,26 +37,6 @@ class PopupMenuContent extends StatelessWidget {
             title: 'Remove',
             svgPath: 'packages/testsweets/assets/svgs/bin.svg',
           ),
-          if (showAttachOption) ...[
-            const SizedBox(
-              width: 8,
-            ),
-            CustomPopupMenuItem(
-              onTap: () => onMenuAction(PopupMenuAction.attachToKey),
-              title: 'Attach',
-              svgPath: 'packages/testsweets/assets/svgs/attach.svg',
-            ),
-          ],
-          if (showUnattachOption) ...[
-            const SizedBox(
-              width: 8,
-            ),
-            CustomPopupMenuItem(
-              onTap: () => onMenuAction(PopupMenuAction.deattachFromKey),
-              title: 'Detach',
-              svgPath: 'packages/testsweets/assets/svgs/deattach.svg',
-            ),
-          ],
         ],
       ),
     );
