@@ -270,8 +270,10 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void checkForExternalities(
       Iterable<ScrollableDescription> scrollableDescription) {
+    log.wtf('before:' + widgetDescription.toString());
     widgetDescription = _reactiveScrollable.applyScrollableOnInteraction(
         scrollableDescription, widgetDescription!);
+    log.wtf('after:' + widgetDescription.toString());
   }
 
   void listenToNotifications() {
@@ -292,7 +294,9 @@ class WidgetCaptureViewModel extends FormViewModel {
                 localPosition: localPosition!,
                 metrics: notification.metrics,
                 scrollDirection: scrollDirection!);
-        calculateScroll(scrollableDescription!);
+        if (scrollableDescription != null) {
+          calculateScroll(scrollableDescription);
+        }
       }
     });
   }

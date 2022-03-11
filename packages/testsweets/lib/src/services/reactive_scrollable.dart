@@ -9,9 +9,11 @@ class ReactiveScrollable {
     WidgetDescription widgetDescription,
   ) {
     final overlapScrollableWithInteraction = scrollables.where(
-      (element) => element.rect.contains(
-        widgetDescription.position.toOffset,
-      ),
+      (element) {
+        return element.rect.contains(
+          widgetDescription.position.toOffset,
+        );
+      },
     );
 
     /// If there is no overlapping with any scrollable
@@ -31,11 +33,12 @@ class ReactiveScrollable {
     return widgetDescription;
   }
 
-  ScrollableDescription? calculateScrollDescriptionFromNotification(
-      {required Offset globalPosition,
-      required Offset localPosition,
-      required ScrollDirection scrollDirection,
-      required ScrollMetrics metrics}) {
+  ScrollableDescription? calculateScrollDescriptionFromNotification({
+    required Offset globalPosition,
+    required Offset localPosition,
+    required ScrollDirection scrollDirection,
+    required ScrollMetrics metrics,
+  }) {
     if (scrollDirection == ScrollDirection.idle) return null;
 
     final position = -metrics.extentBefore;

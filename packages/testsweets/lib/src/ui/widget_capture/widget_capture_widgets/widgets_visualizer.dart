@@ -31,18 +31,6 @@ class WidgetsVisualizer extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        if (model.captureWidgetStatusEnum.showConnections)
-          ...model.descriptionsForView
-              // All the widgets that have a connections
-              .where((element) => element.targetIds.isNotEmpty)
-              .map((description) => CustomPaint(
-                    size: size,
-                    foregroundPainter: ConnectionPainter(
-                        sourcePointType: description.widgetType,
-                        sourcePoint: description.responsiveOffset(size),
-                        targetPoints: getTargetPointsOffsetsForThisWidget(
-                            model, description, size)),
-                  )),
         if (model.captureWidgetStatusEnum.showWidgets)
           ...model.descriptionsForView
               // Show all the widgetTypes except views
