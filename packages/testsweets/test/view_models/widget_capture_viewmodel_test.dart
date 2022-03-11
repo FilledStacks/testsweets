@@ -114,7 +114,7 @@ void main() {
             kWidgetDescription2, PopupMenuAction.remove);
 
         await model.removeWidgetDescription();
-        verify(widgetCaptureService.deleteWidgetDescription(
+        verify(widgetCaptureService.removeWidgetDescription(
             description: kWidgetDescription2));
       });
 
@@ -147,7 +147,7 @@ void main() {
 
         model.popupMenuActionSelected(
             kWidgetDescription2, PopupMenuAction.remove);
-        verify(widgetCaptureService.deleteWidgetDescription(
+        verify(widgetCaptureService.removeWidgetDescription(
             description: kWidgetDescription2));
       });
     });

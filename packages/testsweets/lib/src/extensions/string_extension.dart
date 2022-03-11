@@ -39,14 +39,4 @@ extension WidgetDescriptionStringValidation on String {
       return trimmerText.replaceAll('/', '').replaceAllMapped(
           RegExp(r'[/\-_\s]+([.\S])'), (match) => match.group(1)!.inCaps);
   }
-
-  Rect get extractRectFromString {
-    try {
-      final ltwh =
-          this.split(RegExp(r'#|,')).map((e) => double.parse(e)).toList();
-      return Rect.fromLTWH(ltwh[0], ltwh[1], ltwh[2], ltwh[3]);
-    } catch (e) {
-      return Rect.zero;
-    }
-  }
 }

@@ -21,9 +21,10 @@ _$_WidgetDescription _$$_WidgetDescriptionFromJson(Map<String, dynamic> json) =>
               .toList() ??
           [],
       externalities: (json['externalities'] as List<dynamic>?)
-              ?.map((e) => e as String)
-              .toSet() ??
-          {},
+          ?.map((e) => ModularRect.fromJson((e as Map<String, dynamic>).map(
+                (k, e) => MapEntry(k, (e as num).toDouble()),
+              )))
+          .toSet(),
     );
 
 Map<String, dynamic> _$$_WidgetDescriptionToJson(
@@ -37,7 +38,7 @@ Map<String, dynamic> _$$_WidgetDescriptionToJson(
       'position': instance.position,
       'visibility': instance.visibility,
       'targetIds': instance.targetIds,
-      'externalities': instance.externalities.toList(),
+      'externalities': instance.externalities?.toList(),
     };
 
 K _$enumDecode<K, V>(

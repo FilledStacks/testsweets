@@ -2,7 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
 import 'package:testsweets/src/services/http_service.dart';
-import 'package:testsweets/src/services/reactive_interaction.dart';
+import 'package:testsweets/src/services/reactive_scrollable.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/setup_snackbar_ui.dart';
@@ -18,8 +18,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => SnackbarService());
   locator.registerLazySingleton(() => WidgetCaptureService(verbose: true));
   locator.registerLazySingleton(() => WidgetVisibiltyChangerService());
-  locator
-      .registerLazySingleton<ReactiveInteraction>(() => ReactiveScrollable());
+  locator.registerLazySingleton(() => ReactiveScrollable());
   setupSnackbarUi();
 
   locatorSetup = true;

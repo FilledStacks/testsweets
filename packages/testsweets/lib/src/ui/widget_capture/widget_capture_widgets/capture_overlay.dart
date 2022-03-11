@@ -232,7 +232,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
 
     return ScrollableDescription(
         axis: axis,
-        rect: Rect.fromPoints(
+        rect: ModularRect.fromPoints(
             globalPostion,
             globalPostion.translate(
                 renderBox.size.width, renderBox.size.height)),

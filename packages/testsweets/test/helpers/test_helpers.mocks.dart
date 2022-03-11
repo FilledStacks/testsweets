@@ -167,11 +167,11 @@ class MockWidgetCaptureService extends _i1.Mock
               #updateWidgetDescription, [], {#description: description}),
           returnValue: Future<String?>.value()) as _i7.Future<String?>);
   @override
-  _i7.Future<String?> deleteWidgetDescription(
+  _i7.Future<String?> removeWidgetDescription(
           {_i9.WidgetDescription? description}) =>
       (super.noSuchMethod(
           Invocation.method(
-              #deleteWidgetDescription, [], {#description: description}),
+              #removeWidgetDescription, [], {#description: description}),
           returnValue: Future<String?>.value()) as _i7.Future<String?>);
 }
 

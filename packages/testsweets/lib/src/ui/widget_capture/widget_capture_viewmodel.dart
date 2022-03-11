@@ -12,7 +12,6 @@ import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
 import 'package:testsweets/src/locator.dart';
@@ -21,7 +20,7 @@ import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view_form.dart';
 
-import '../../services/reactive_interaction.dart';
+import '../../services/reactive_scrollable.dart';
 
 class WidgetCaptureViewModel extends FormViewModel {
   final log = getLogger('WidgetCaptureViewModel');
@@ -29,7 +28,9 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
   final _snackbarService = locator<SnackbarService>();
-  final _reactiveInteraction = locator<ReactiveInteraction>();
+  final _reactiveScrollable = locator<ReactiveScrollable>();
+
+  final notificationController = StreamController<Notification>.broadcast();
 
   CaptureWidgetStatusEnum _captureWidgetStatusEnum =
       CaptureWidgetStatusEnum.idle;
@@ -189,7 +190,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     setBusy(true);
 
-    final result = await _widgetCaptureService.deleteWidgetDescription(
+    final result = await _widgetCaptureService.removeWidgetDescription(
         description: widgetDescription!);
     if (result is String) {
       _snackbarService.showCustomSnackBar(
@@ -262,67 +263,51 @@ class WidgetCaptureViewModel extends FormViewModel {
         message: widgetDescription.name, variant: SnackbarType.info);
   }
 
-  final notificationController = StreamController<Notification>.broadcast();
-  bool onClientEvent(Notification notification) {
+  bool onClientNotifiaction(Notification notification) {
     notificationController.add(notification);
     return false;
   }
 
+  void checkForExternalities(
+      Iterable<ScrollableDescription> scrollableDescription) {
+    widgetDescription = _reactiveScrollable.applyScrollableOnInteraction(
+        scrollableDescription, widgetDescription!);
+  }
+
   void listenToNotifications() {
-    ScrollDirection? direction;
+    ScrollDirection? scrollDirection;
     Offset? globalPosition;
     Offset? localPosition;
     notificationController.stream.listen((notification) {
       if (notification is UserScrollNotification) {
-        direction = notification.direction;
+        scrollDirection = notification.direction;
       } else if (notification is ScrollStartNotification) {
         globalPosition = notification.dragDetails!.globalPosition;
         localPosition = notification.dragDetails!.localPosition;
       } else if (notification is ScrollUpdateNotification &&
           globalPosition != null) {
-        final change = direction == ScrollDirection.reverse
-            ? -notification.metrics.extentBefore
-            : direction == ScrollDirection.forward
-                ? -notification.metrics.extentBefore
-                : 0.0;
-        final topLeftPointOfList = globalPosition! - localPosition!;
-
-        searchForWidgetsToMoveAlong(
-            scrollAxis: notification.metrics.axis == Axis.vertical
-                ? direction == ScrollDirection.forward
-                    ? AxisDirection.down
-                    : AxisDirection.up
-                : direction == ScrollDirection.forward
-                    ? AxisDirection.right
-                    : AxisDirection.left,
-            top: topLeftPointOfList.dy,
-            left: topLeftPointOfList.dx,
-            scrollOffset: change);
+        final scrollableDescription =
+            _reactiveScrollable.calculateScrollDescriptionFromNotification(
+                globalPosition: globalPosition!,
+                localPosition: localPosition!,
+                metrics: notification.metrics,
+                scrollDirection: scrollDirection!);
+        calculateScroll(scrollableDescription!);
       }
     });
   }
 
-  void searchForWidgetsToMoveAlong(
-      {required double top,
-      required double left,
-      required AxisDirection scrollAxis,
-      required double scrollOffset}) {
-    final hashForList = left.toStringAsFixed(0) + ',' + top.toStringAsFixed(0);
-    log.i('scrollOffset' + scrollOffset.toString());
+  void calculateScroll(ScrollableDescription scrollableDescription) {
     descriptionsForView = descriptionsForView
-        .where((widget) => widget.externalities
-            .map((e) => e.split('#').first)
-            .contains(hashForList))
+        .where((widget) =>
+            widget.externalities != null &&
+            widget.externalities!
+                .any((e) => e.topLeft == scrollableDescription.rect.topLeft))
         .map((widget) => widget.copyWith(
-            position: widget.position.applyScroll(scrollAxis, scrollOffset)))
+            position: widget.position.applyScroll(scrollableDescription.axis,
+                scrollableDescription.scrollingPixelsOnCapture)))
         .followedBy(descriptionsForView
-            .where((element) => element.externalities.isEmpty))
+            .where((element) => element.externalities == null))
         .toList();
-  }
-
-  void checkForExternalities(
-      Iterable<ScrollableDescription> scrollableDescription) {
-    widgetDescription = _reactiveInteraction.applyScrollableOnInteraction(
-        scrollableDescription, widgetDescription!);
   }
 }

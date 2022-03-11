@@ -87,6 +87,7 @@ class WidgetCaptureService {
       addWidgetDescriptionToMap = description.copyWith(id: descriptionId);
 
       log.i('descriptionId from Cloud: $descriptionId');
+      return null;
     } catch (e) {
       log.e(e);
       return e.toString();
@@ -110,6 +111,7 @@ class WidgetCaptureService {
               oldwidgetDescription: widgetToUpdate!);
 
       log.i('descriptionId from Cloud: $descriptionId');
+      return null;
     } catch (e) {
       log.e(e);
       return e.toString();
@@ -117,7 +119,7 @@ class WidgetCaptureService {
   }
 
   /// Delete a widget descriptions from the project as well as locally
-  Future<String?> deleteWidgetDescription(
+  Future<String?> removeWidgetDescription(
       {required WidgetDescription description}) async {
     try {
       final descriptionId =
@@ -125,6 +127,7 @@ class WidgetCaptureService {
               projectId: _projectId, description: description);
 
       log.i('descriptionId from Cloud: $descriptionId');
+      return null;
     } catch (e) {
       log.e(e);
       return e.toString();

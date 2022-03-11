@@ -38,9 +38,9 @@ class WidgetDescription with _$WidgetDescription {
     /// Target widgets ids that will be affected when this widget activated
     @Default([]) List<String> targetIds,
 
-    /// External widgets that affect this widget normally "ListView"
-    /// where String is the list id and the double is scroll percentage
-    @Default({}) Set<String> externalities,
+    /// Left-top offset for external widgets that affects this widget
+    /// (normally ListViews)
+    Set<ModularRect>? externalities,
   }) = _WidgetDescription;
   factory WidgetDescription.view(
           {required String viewName, required String originalViewName}) =>
@@ -79,8 +79,21 @@ class WidgetPosition with _$WidgetPosition {
 class ScrollableDescription with _$ScrollableDescription {
   factory ScrollableDescription({
     required Axis axis,
-    required Rect rect,
+    required ModularRect rect,
     required double scrollingPixelsOnCapture,
     required double maxScrollOffset,
   }) = _ScrollableDescription;
+}
+
+class ModularRect extends Rect {
+  const ModularRect(double left, double top, double width, double height)
+      : super.fromLTWH(left, top, width, height);
+  ModularRect.fromPoints(Offset a, Offset b) : super.fromPoints(a, b);
+  factory ModularRect.fromJson(Map<String, double> json) {
+    return ModularRect(
+        json['left']!, json['top']!, json['width']!, json['height']!);
+  }
+  Map<String, double> toJson() {
+    return {'left': left, 'top': top, 'width': width, 'height': height};
+  }
 }

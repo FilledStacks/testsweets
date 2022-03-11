@@ -30,7 +30,7 @@ class _$WidgetDescriptionTearOff {
       required WidgetPosition position,
       bool visibility = true,
       List<String> targetIds = const [],
-      Set<String> externalities = const {}}) {
+      Set<ModularRect>? externalities}) {
     return _WidgetDescription(
       id: id,
       viewName: viewName,
@@ -78,9 +78,9 @@ mixin _$WidgetDescription {
   /// Target widgets ids that will be affected when this widget activated
   List<String> get targetIds => throw _privateConstructorUsedError;
 
-  /// External widgets that affect this widget normally "ListView"
-  /// where String is the list id and the double is scroll percentage
-  Set<String> get externalities => throw _privateConstructorUsedError;
+  /// Left-top offset for external widgets that affects this widget
+  /// (normally ListViews)
+  Set<ModularRect>? get externalities => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -102,7 +102,7 @@ abstract class $WidgetDescriptionCopyWith<$Res> {
       WidgetPosition position,
       bool visibility,
       List<String> targetIds,
-      Set<String> externalities});
+      Set<ModularRect>? externalities});
 
   $WidgetPositionCopyWith<$Res> get position;
 }
@@ -164,7 +164,7 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
       externalities: externalities == freezed
           ? _value.externalities
           : externalities // ignore: cast_nullable_to_non_nullable
-              as Set<String>,
+              as Set<ModularRect>?,
     ));
   }
 
@@ -192,7 +192,7 @@ abstract class _$WidgetDescriptionCopyWith<$Res>
       WidgetPosition position,
       bool visibility,
       List<String> targetIds,
-      Set<String> externalities});
+      Set<ModularRect>? externalities});
 
   @override
   $WidgetPositionCopyWith<$Res> get position;
@@ -257,7 +257,7 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
       externalities: externalities == freezed
           ? _value.externalities
           : externalities // ignore: cast_nullable_to_non_nullable
-              as Set<String>,
+              as Set<ModularRect>?,
     ));
   }
 }
@@ -274,7 +274,7 @@ class _$_WidgetDescription extends _WidgetDescription {
       required this.position,
       this.visibility = true,
       this.targetIds = const [],
-      this.externalities = const {}})
+      this.externalities})
       : super._();
 
   factory _$_WidgetDescription.fromJson(Map<String, dynamic> json) =>
@@ -315,12 +315,11 @@ class _$_WidgetDescription extends _WidgetDescription {
 
   /// Target widgets ids that will be affected when this widget activated
   final List<String> targetIds;
-  @JsonKey(defaultValue: const {})
   @override
 
-  /// External widgets that affect this widget normally "ListView"
-  /// where String is the list id and the double is scroll percentage
-  final Set<String> externalities;
+  /// Left-top offset for external widgets that affects this widget
+  /// (normally ListViews)
+  final Set<ModularRect>? externalities;
 
   @override
   String toString() {
@@ -392,7 +391,7 @@ abstract class _WidgetDescription extends WidgetDescription {
       required WidgetPosition position,
       bool visibility,
       List<String> targetIds,
-      Set<String> externalities}) = _$_WidgetDescription;
+      Set<ModularRect>? externalities}) = _$_WidgetDescription;
   _WidgetDescription._() : super._();
 
   factory _WidgetDescription.fromJson(Map<String, dynamic> json) =
@@ -432,9 +431,9 @@ abstract class _WidgetDescription extends WidgetDescription {
   List<String> get targetIds => throw _privateConstructorUsedError;
   @override
 
-  /// External widgets that affect this widget normally "ListView"
-  /// where String is the list id and the double is scroll percentage
-  Set<String> get externalities => throw _privateConstructorUsedError;
+  /// Left-top offset for external widgets that affects this widget
+  /// (normally ListViews)
+  Set<ModularRect>? get externalities => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$WidgetDescriptionCopyWith<_WidgetDescription> get copyWith =>
@@ -726,7 +725,7 @@ class _$ScrollableDescriptionTearOff {
 
   _ScrollableDescription call(
       {required Axis axis,
-      required Rect rect,
+      required ModularRect rect,
       required double scrollingPixelsOnCapture,
       required double maxScrollOffset}) {
     return _ScrollableDescription(
@@ -744,7 +743,7 @@ const $ScrollableDescription = _$ScrollableDescriptionTearOff();
 /// @nodoc
 mixin _$ScrollableDescription {
   Axis get axis => throw _privateConstructorUsedError;
-  Rect get rect => throw _privateConstructorUsedError;
+  ModularRect get rect => throw _privateConstructorUsedError;
   double get scrollingPixelsOnCapture => throw _privateConstructorUsedError;
   double get maxScrollOffset => throw _privateConstructorUsedError;
 
@@ -760,7 +759,7 @@ abstract class $ScrollableDescriptionCopyWith<$Res> {
       _$ScrollableDescriptionCopyWithImpl<$Res>;
   $Res call(
       {Axis axis,
-      Rect rect,
+      ModularRect rect,
       double scrollingPixelsOnCapture,
       double maxScrollOffset});
 }
@@ -789,7 +788,7 @@ class _$ScrollableDescriptionCopyWithImpl<$Res>
       rect: rect == freezed
           ? _value.rect
           : rect // ignore: cast_nullable_to_non_nullable
-              as Rect,
+              as ModularRect,
       scrollingPixelsOnCapture: scrollingPixelsOnCapture == freezed
           ? _value.scrollingPixelsOnCapture
           : scrollingPixelsOnCapture // ignore: cast_nullable_to_non_nullable
@@ -811,7 +810,7 @@ abstract class _$ScrollableDescriptionCopyWith<$Res>
   @override
   $Res call(
       {Axis axis,
-      Rect rect,
+      ModularRect rect,
       double scrollingPixelsOnCapture,
       double maxScrollOffset});
 }
@@ -842,7 +841,7 @@ class __$ScrollableDescriptionCopyWithImpl<$Res>
       rect: rect == freezed
           ? _value.rect
           : rect // ignore: cast_nullable_to_non_nullable
-              as Rect,
+              as ModularRect,
       scrollingPixelsOnCapture: scrollingPixelsOnCapture == freezed
           ? _value.scrollingPixelsOnCapture
           : scrollingPixelsOnCapture // ignore: cast_nullable_to_non_nullable
@@ -867,7 +866,7 @@ class _$_ScrollableDescription implements _ScrollableDescription {
   @override
   final Axis axis;
   @override
-  final Rect rect;
+  final ModularRect rect;
   @override
   final double scrollingPixelsOnCapture;
   @override
@@ -914,14 +913,14 @@ class _$_ScrollableDescription implements _ScrollableDescription {
 abstract class _ScrollableDescription implements ScrollableDescription {
   factory _ScrollableDescription(
       {required Axis axis,
-      required Rect rect,
+      required ModularRect rect,
       required double scrollingPixelsOnCapture,
       required double maxScrollOffset}) = _$_ScrollableDescription;
 
   @override
   Axis get axis => throw _privateConstructorUsedError;
   @override
-  Rect get rect => throw _privateConstructorUsedError;
+  ModularRect get rect => throw _privateConstructorUsedError;
   @override
   double get scrollingPixelsOnCapture => throw _privateConstructorUsedError;
   @override

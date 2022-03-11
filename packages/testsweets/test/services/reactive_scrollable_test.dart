@@ -1,7 +1,6 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:testsweets/src/extensions/scrollable_description_extension.dart';
-import 'package:testsweets/src/services/reactive_interaction.dart';
+import 'package:testsweets/src/services/reactive_scrollable.dart';
 
 import '../helpers/test_consts.dart';
 import '../helpers/test_helpers.dart';

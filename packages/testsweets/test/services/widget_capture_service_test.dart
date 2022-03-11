@@ -281,7 +281,7 @@ void main() {
         final cloudFunctionsService = getAndRegisterCloudFunctionsService();
         final _service = _getService;
 
-        await _service.deleteWidgetDescription(
+        await _service.removeWidgetDescription(
           description: description,
         );
 
@@ -319,7 +319,7 @@ void main() {
             ]);
         final _service = _getService;
 
-        await _service.deleteWidgetDescription(
+        await _service.removeWidgetDescription(
           description: WidgetDescription(
             viewName: 'signUp',
             originalViewName: '/signUp_view',

@@ -1,23 +1,9 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/extensions/scrollable_description_extension.dart';
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
 import 'package:testsweets/testsweets.dart';
-import 'package:collection/collection.dart';
 
-import '../models/capture_exception.dart';
-
-abstract class ReactiveInteraction {
-  /// After you confirm a list is overlapping with the newly created widget
-  /// You should check if the list is accually captured previously by comparing all the
-  /// scrollable interactions in this view if they overlap with our list
-  WidgetDescription applyScrollableOnInteraction(
-      Iterable<ScrollableDescription> scrollableDescription,
-      WidgetDescription widgetDescription);
-}
-
-class ReactiveScrollable extends ReactiveInteraction {
-  @override
+class ReactiveScrollable {
   WidgetDescription applyScrollableOnInteraction(
     Iterable<ScrollableDescription> scrollables,
     WidgetDescription widgetDescription,
@@ -35,13 +21,30 @@ class ReactiveScrollable extends ReactiveInteraction {
     for (var scrollable in overlapScrollableWithInteraction.toList()) {
       widgetDescription = widgetDescription.copyWith(
         externalities: {
-          ...widgetDescription.externalities,
-          scrollable.generateHash
+          ...widgetDescription.externalities ?? {},
+          scrollable.rect
         },
         position: widgetDescription.position.withScrollable(scrollable),
       );
     }
 
     return widgetDescription;
+  }
+
+  ScrollableDescription? calculateScrollDescriptionFromNotification(
+      {required Offset globalPosition,
+      required Offset localPosition,
+      required ScrollDirection scrollDirection,
+      required ScrollMetrics metrics}) {
+    if (scrollDirection == ScrollDirection.idle) return null;
+
+    final position = -metrics.extentBefore;
+    final topLeftPointOfList = globalPosition - localPosition;
+
+    return ScrollableDescription(
+        axis: metrics.axis,
+        rect: ModularRect(topLeftPointOfList.dx, topLeftPointOfList.dy, 0, 0),
+        scrollingPixelsOnCapture: position,
+        maxScrollOffset: metrics.maxScrollExtent);
   }
 }
