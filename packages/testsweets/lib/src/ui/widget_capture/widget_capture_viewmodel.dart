@@ -14,6 +14,7 @@ import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
+import 'package:testsweets/src/extensions/widgets_description_list_extensions.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
@@ -270,10 +271,10 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void checkForExternalities(
       Iterable<ScrollableDescription> scrollableDescription) {
-    log.wtf('before:' + widgetDescription.toString());
+    log.i('before:' + widgetDescription.toString());
     widgetDescription = _reactiveScrollable.applyScrollableOnInteraction(
         scrollableDescription, widgetDescription!);
-    log.wtf('after:' + widgetDescription.toString());
+    log.i('after:' + widgetDescription.toString());
   }
 
   void listenToNotifications() {
@@ -287,31 +288,29 @@ class WidgetCaptureViewModel extends FormViewModel {
         globalPosition = notification.dragDetails!.globalPosition;
         localPosition = notification.dragDetails!.localPosition;
       } else if (notification is ScrollUpdateNotification &&
-          globalPosition != null) {
-        final scrollableDescription =
-            _reactiveScrollable.calculateScrollDescriptionFromNotification(
-                globalPosition: globalPosition!,
-                localPosition: localPosition!,
-                metrics: notification.metrics,
-                scrollDirection: scrollDirection!);
-        if (scrollableDescription != null) {
-          calculateScroll(scrollableDescription);
-        }
+          globalPosition != null &&
+          scrollDirection != ScrollDirection.idle) {
+        final scrollableDescription = ScrollableDescription.fromNotification(
+            globalPosition: globalPosition!,
+            localPosition: localPosition!,
+            metrics: notification.metrics,
+            scrollDirection: scrollDirection!);
+
+        reactToScroll(scrollableDescription);
       }
     });
   }
 
-  void calculateScroll(ScrollableDescription scrollableDescription) {
-    descriptionsForView = descriptionsForView
-        .where((widget) =>
-            widget.externalities != null &&
-            widget.externalities!
-                .any((e) => e.topLeft == scrollableDescription.rect.topLeft))
-        .map((widget) => widget.copyWith(
-            position: widget.position.applyScroll(scrollableDescription.axis,
-                scrollableDescription.scrollingPixelsOnCapture)))
-        .followedBy(descriptionsForView
-            .where((element) => element.externalities == null))
-        .toList();
+  void reactToScroll(ScrollableDescription scrollableDescription) {
+    final affectedInteractions =
+        _reactiveScrollable.filterAffectedInteractionsByScrollable(
+            scrollableDescription, descriptionsForView);
+    final scrolledInteractions =
+        _reactiveScrollable.moveInteractionsWithScrollable(
+            scrollableDescription, affectedInteractions);
+    _descriptionsForView =
+        _descriptionsForView.replaceInteractions(scrolledInteractions);
+
+    notifyListeners();
   }
 }

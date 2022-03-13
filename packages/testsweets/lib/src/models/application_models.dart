@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
@@ -83,6 +84,22 @@ class ScrollableDescription with _$ScrollableDescription {
     required double scrollingPixelsOnCapture,
     required double maxScrollOffset,
   }) = _ScrollableDescription;
+
+  factory ScrollableDescription.fromNotification({
+    required Offset globalPosition,
+    required Offset localPosition,
+    required ScrollDirection scrollDirection,
+    required ScrollMetrics metrics,
+  }) {
+    final position = -metrics.extentBefore;
+    final topLeftPointOfList = globalPosition - localPosition;
+
+    return ScrollableDescription(
+        axis: metrics.axis,
+        rect: ModularRect(topLeftPointOfList.dx, topLeftPointOfList.dy, 0, 0),
+        scrollingPixelsOnCapture: position,
+        maxScrollOffset: metrics.maxScrollExtent);
+  }
 }
 
 class ModularRect extends Rect {

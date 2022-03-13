@@ -1,19 +1,19 @@
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
 import 'package:testsweets/testsweets.dart';
 
+import '../app/logger.dart';
+
 class ReactiveScrollable {
+  final log = getLogger('ReactiveScrollable');
   WidgetDescription applyScrollableOnInteraction(
     Iterable<ScrollableDescription> scrollables,
     WidgetDescription widgetDescription,
   ) {
+    log.v(widgetDescription);
     final overlapScrollableWithInteraction = scrollables.where(
-      (element) {
-        return element.rect.contains(
-          widgetDescription.position.toOffset,
-        );
-      },
+      (element) => element.rect.contains(
+        widgetDescription.position.toOffset,
+      ),
     );
 
     /// If there is no overlapping with any scrollable
@@ -33,21 +33,28 @@ class ReactiveScrollable {
     return widgetDescription;
   }
 
-  ScrollableDescription? calculateScrollDescriptionFromNotification({
-    required Offset globalPosition,
-    required Offset localPosition,
-    required ScrollDirection scrollDirection,
-    required ScrollMetrics metrics,
-  }) {
-    if (scrollDirection == ScrollDirection.idle) return null;
+  Iterable<WidgetDescription> filterAffectedInteractionsByScrollable(
+      ScrollableDescription scrollableDescription,
+      Iterable<WidgetDescription> viewDescription) {
+    log.v(scrollableDescription);
+    return viewDescription.where(
+      (interaction) =>
+          interaction.externalities?.any(
+            (rect) => rect.topLeft == scrollableDescription.rect.topLeft,
+          ) ??
+          false,
+    );
+  }
 
-    final position = -metrics.extentBefore;
-    final topLeftPointOfList = globalPosition - localPosition;
+  List<WidgetDescription> moveInteractionsWithScrollable(
+    ScrollableDescription scrollableDescription,
+    Iterable<WidgetDescription> affectedInteractions,
+  ) {
+    log.v(scrollableDescription);
 
-    return ScrollableDescription(
-        axis: metrics.axis,
-        rect: ModularRect(topLeftPointOfList.dx, topLeftPointOfList.dy, 0, 0),
-        scrollingPixelsOnCapture: position,
-        maxScrollOffset: metrics.maxScrollExtent);
+    return affectedInteractions
+        .map((interaction) => interaction.copyWith(
+            position: interaction.position.applyScroll(scrollableDescription)))
+        .toList();
   }
 }

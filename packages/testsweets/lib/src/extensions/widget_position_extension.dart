@@ -16,14 +16,14 @@ extension WidgetPositionExtension on WidgetPosition {
 
   Offset get offsetAfterScroll =>
       Offset(this.x + (this.xTranlate ?? 0), this.y + (this.yTranlate ?? 0));
-  WidgetPosition applyScroll(Axis axis, double extent) {
-    print(
-        'applyScroll: y:' + this.y.toString() + "offset:" + extent.toString());
-    switch (axis) {
+  WidgetPosition applyScroll(ScrollableDescription scrollableDescription) {
+    switch (scrollableDescription.axis) {
       case Axis.vertical:
-        return this.copyWith(yTranlate: extent);
+        return this.copyWith(
+            yTranlate: scrollableDescription.scrollingPixelsOnCapture);
       case Axis.horizontal:
-        return this.copyWith(xTranlate: extent);
+        return this.copyWith(
+            xTranlate: scrollableDescription.scrollingPixelsOnCapture);
     }
   }
 }

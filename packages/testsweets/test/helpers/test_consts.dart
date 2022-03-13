@@ -129,19 +129,19 @@ final kTopLeftScrollableDescription = ScrollableDescription(
     axis: Axis.vertical,
     maxScrollOffset: 0,
     scrollingPixelsOnCapture: 100,
-    rect: Rect.fromPoints(Offset(0, 0), Offset(22, 22)));
+    rect: ModularRect.fromPoints(Offset(0, 0), Offset(22, 22)));
 final kAnotherTopLeftScrollableDescription = ScrollableDescription(
     axis: Axis.horizontal,
     maxScrollOffset: 0,
     scrollingPixelsOnCapture: 50,
-    rect: Rect.fromPoints(Offset(0, 0), Offset(40, 40)));
+    rect: ModularRect.fromPoints(Offset(0, 0), Offset(40, 40)));
 final kTopRightScrollableDescription = ScrollableDescription(
     axis: Axis.vertical,
     maxScrollOffset: 0,
     scrollingPixelsOnCapture: 0,
-    rect: Rect.fromPoints(Offset(200, 0), Offset(230, 30)));
+    rect: ModularRect.fromPoints(Offset(200, 0), Offset(230, 30)));
 final kBottomLeftScrollableDescription = ScrollableDescription(
     axis: Axis.vertical,
     maxScrollOffset: 0,
     scrollingPixelsOnCapture: 0,
-    rect: Rect.fromPoints(Offset(0, 230), Offset(30, 200)));
+    rect: ModularRect.fromPoints(Offset(0, 230), Offset(30, 200)));

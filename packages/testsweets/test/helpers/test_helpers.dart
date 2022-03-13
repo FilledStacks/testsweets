@@ -5,6 +5,7 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
+import 'package:testsweets/src/services/reactive_scrollable.dart';
 import 'package:testsweets/src/services/sweetcore_command.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
@@ -18,6 +19,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<TestSweetsRouteTracker>(returnNullOnMissingStub: true),
   MockSpec<CloudFunctionsService>(returnNullOnMissingStub: true),
   MockSpec<WidgetVisibiltyChangerService>(returnNullOnMissingStub: true),
+  MockSpec<ReactiveScrollable>(returnNullOnMissingStub: true),
 ])
 MockWidgetCaptureService getAndRegisterWidgetCaptureService(
     {List<WidgetDescription> listOfWidgetDescription = const [],
@@ -116,6 +118,13 @@ SnackbarService getAndRegisterSnackbarService() {
   return service;
 }
 
+ReactiveScrollable getAndRegisterReactiveScrollable() {
+  _removeRegistrationIfExists<ReactiveScrollable>();
+  final service = MockReactiveScrollable();
+  locator.registerSingleton<ReactiveScrollable>(service);
+  return service;
+}
+
 WidgetVisibiltyChangerService getAndRegisterWidgetVisibiltyChangerService(
     {List<WidgetDescription>? widgetDescriptions,
     SweetcoreCommand? latestSweetcoreCommand}) {
@@ -136,6 +145,7 @@ void registerServices() {
   getAndRegisterCloudFunctionsService();
   getAndRegisterSnackbarService();
   getAndRegisterWidgetVisibiltyChangerService();
+  getAndRegisterReactiveScrollable();
 }
 
 void unregisterServices() {
@@ -144,6 +154,7 @@ void unregisterServices() {
   _removeRegistrationIfExists<CloudFunctionsService>();
   _removeRegistrationIfExists<SnackbarService>();
   _removeRegistrationIfExists<WidgetVisibiltyChangerService>();
+  _removeRegistrationIfExists<ReactiveScrollable>();
 }
 
 // Call this before any service registration helper. This is to ensure that if there
