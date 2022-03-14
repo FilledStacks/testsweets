@@ -39,7 +39,7 @@ void main() {
           () async {
         getAndRegisterCloudFunctionsService(
             getWidgetDescriptionForProjectResult: [
-              WidgetDescription(
+              Interaction(
                 originalViewName: 'login_view',
                 viewName: 'loginView',
                 name: 'loginButton',
@@ -50,7 +50,7 @@ void main() {
                     capturedDeviceHeight: 0,
                     capturedDeviceWidth: 0),
               ),
-              WidgetDescription(
+              Interaction(
                 originalViewName: 'signup_view',
                 viewName: 'signUpView',
                 name: 'loginButton',
@@ -75,7 +75,7 @@ void main() {
           () async {
         getAndRegisterCloudFunctionsService(
             getWidgetDescriptionForProjectResult: [
-              WidgetDescription(
+              Interaction(
                 originalViewName: 'login_view',
                 viewName: 'loginView',
                 name: 'loginButton',
@@ -86,7 +86,7 @@ void main() {
                     capturedDeviceHeight: 0,
                     capturedDeviceWidth: 0),
               ),
-              WidgetDescription(
+              Interaction(
                 originalViewName: 'login_view',
                 viewName: 'loginView',
                 name: 'loginButton2',
@@ -110,7 +110,7 @@ void main() {
       test(
           'When called, should capture the widget description passed in to the backed',
           () async {
-        final description = WidgetDescription(
+        final description = Interaction(
           originalViewName: 'OriginalLoginView',
           viewName: 'loginView',
           name: 'email',
@@ -121,7 +121,7 @@ void main() {
 
         final cloudFunctionsService = getAndRegisterCloudFunctionsService();
         final _service = _getService;
-        _service.addWidgetDescriptionToMap = WidgetDescription.view(
+        _service.addWidgetDescriptionToMap = Interaction.view(
             viewName: 'OriginalLoginView',
             originalViewName: 'OriginalLoginView');
         await _service.captureWidgetDescription(
@@ -137,7 +137,7 @@ void main() {
       test(
           'When widget has been added to backend, add description to descriptionMap with id from the backend',
           () async {
-        final description = WidgetDescription(
+        final description = Interaction(
           originalViewName: 'login_view',
           viewName: 'loginView',
           name: 'email',
@@ -166,7 +166,7 @@ void main() {
       test('When call and the view is captured, Should return true', () async {
         getAndRegisterCloudFunctionsService(
             getWidgetDescriptionForProjectResult: [
-              WidgetDescription(
+              Interaction(
                 originalViewName: 'login_view',
                 viewName: 'loginView',
                 name: 'loginButton',
@@ -177,7 +177,7 @@ void main() {
                     capturedDeviceHeight: 0,
                     capturedDeviceWidth: 0),
               ),
-              WidgetDescription(
+              Interaction(
                 originalViewName: 'signUp_view',
                 viewName: 'signUpView',
                 name: 'loginButton',
@@ -188,7 +188,7 @@ void main() {
                     capturedDeviceHeight: 0,
                     capturedDeviceWidth: 0),
               ),
-              WidgetDescription(
+              Interaction(
                 originalViewName: '/',
                 viewName: 'initialView',
                 name: '',
@@ -215,7 +215,7 @@ void main() {
           () {
         final _service = _getService;
 
-        _service.addWidgetDescriptionToMap = WidgetDescription(
+        _service.addWidgetDescriptionToMap = Interaction(
           originalViewName: '/new_view',
           viewName: 'newView',
           name: 'button',
@@ -230,7 +230,7 @@ void main() {
           () {
         final _service = _getService;
 
-        _service.addWidgetDescriptionToMap = WidgetDescription(
+        _service.addWidgetDescriptionToMap = Interaction(
           originalViewName: '/new_view',
           viewName: 'newView',
           name: 'button',
@@ -245,7 +245,7 @@ void main() {
           () {
         final _service = _getService;
 
-        _service.addWidgetDescriptionToMap = WidgetDescription(
+        _service.addWidgetDescriptionToMap = Interaction(
           originalViewName: '/new_view',
           viewName: 'newView',
           name: 'button',
@@ -253,7 +253,7 @@ void main() {
           position: WidgetPosition(
               x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
         );
-        _service.addWidgetDescriptionToMap = WidgetDescription(
+        _service.addWidgetDescriptionToMap = Interaction(
           originalViewName: '/new_view',
           viewName: 'newView',
           name: 'inputField',
@@ -269,7 +269,7 @@ void main() {
       test(
           'When called, should call delete widget description from the CloudFunctionsService',
           () async {
-        final description = WidgetDescription(
+        final description = Interaction(
           originalViewName: '/new_view',
           viewName: 'newView',
           name: 'email',
@@ -294,7 +294,7 @@ void main() {
           () async {
         getAndRegisterCloudFunctionsService(
             getWidgetDescriptionForProjectResult: [
-              WidgetDescription(
+              Interaction(
                 viewName: 'login',
                 originalViewName: '/login_view',
                 name: 'loginButton',
@@ -305,7 +305,7 @@ void main() {
                     capturedDeviceHeight: 0,
                     capturedDeviceWidth: 0),
               ),
-              WidgetDescription(
+              Interaction(
                 viewName: 'signUp',
                 originalViewName: '/login_view',
                 name: 'loginButton',
@@ -320,7 +320,7 @@ void main() {
         final _service = _getService;
 
         await _service.removeWidgetDescription(
-          description: WidgetDescription(
+          description: Interaction(
             viewName: 'signUp',
             originalViewName: '/signUp_view',
             name: 'loginButton',
@@ -340,7 +340,7 @@ void main() {
           () async {
         getAndRegisterCloudFunctionsService(
             getWidgetDescriptionForProjectResult: [
-              WidgetDescription(
+              Interaction(
                 viewName: 'homeView',
                 originalViewName: '/home_view',
                 name: 'bottomTab1',
@@ -351,7 +351,7 @@ void main() {
                     capturedDeviceHeight: 0,
                     capturedDeviceWidth: 0),
               ),
-              WidgetDescription(
+              Interaction(
                 viewName: 'homeView',
                 originalViewName: '/home_view',
                 name: 'bottomTab2',
@@ -377,7 +377,7 @@ void main() {
           () async {
         getAndRegisterCloudFunctionsService(
             getWidgetDescriptionForProjectResult: [
-              WidgetDescription(
+              Interaction(
                 viewName: 'homeView',
                 originalViewName: '/home_view',
                 name: 'bottomTab1',
@@ -388,7 +388,7 @@ void main() {
                     capturedDeviceHeight: 0,
                     capturedDeviceWidth: 0),
               ),
-              WidgetDescription(
+              Interaction(
                 viewName: 'homeView',
                 originalViewName: '/home_view',
                 name: 'bottomTab2',
@@ -399,7 +399,7 @@ void main() {
                     capturedDeviceHeight: 0,
                     capturedDeviceWidth: 0),
               ),
-              WidgetDescription(
+              Interaction(
                 viewName: 'homeView0',
                 originalViewName: '/home_view0',
                 name: 'bottomTab2',
@@ -410,7 +410,7 @@ void main() {
                     capturedDeviceHeight: 0,
                     capturedDeviceWidth: 0),
               ),
-              WidgetDescription(
+              Interaction(
                 viewName: 'homeView1',
                 originalViewName: '/home_view1',
                 name: 'bottomTab2',
@@ -436,7 +436,7 @@ void main() {
           () async {
         getAndRegisterCloudFunctionsService(
             getWidgetDescriptionForProjectResult: [
-              WidgetDescription(
+              Interaction(
                 viewName: 'homeView',
                 originalViewName: '/home_view',
                 name: 'bottomTab1',
@@ -447,7 +447,7 @@ void main() {
                     capturedDeviceHeight: 0,
                     capturedDeviceWidth: 0),
               ),
-              WidgetDescription(
+              Interaction(
                 viewName: 'homeView',
                 originalViewName: '/home_view',
                 name: 'bottomTab2',
@@ -458,7 +458,7 @@ void main() {
                     capturedDeviceHeight: 0,
                     capturedDeviceWidth: 0),
               ),
-              WidgetDescription(
+              Interaction(
                 viewName: 'homeView0',
                 originalViewName: '/home_view0',
                 name: 'bottomTab2',
@@ -469,7 +469,7 @@ void main() {
                     capturedDeviceHeight: 0,
                     capturedDeviceWidth: 0),
               ),
-              WidgetDescription(
+              Interaction(
                 viewName: 'homeView1',
                 originalViewName: '/home_view1',
                 name: 'bottomTab2',
@@ -480,7 +480,7 @@ void main() {
                     capturedDeviceHeight: 0,
                     capturedDeviceWidth: 0),
               ),
-              WidgetDescription(
+              Interaction(
                 viewName: 'homeView1',
                 originalViewName: '/home_view1',
                 name: 'bottomTab3',
@@ -506,7 +506,7 @@ void main() {
       test(
           'When called, should call update widget description from the CloudFunctionsService',
           () async {
-        final description = WidgetDescription(
+        final description = Interaction(
           viewName: 'login',
           originalViewName: '/login_view',
           name: 'email',

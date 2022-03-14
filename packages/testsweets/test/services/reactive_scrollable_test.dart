@@ -50,9 +50,8 @@ void main() {
           'When called, Should return any interaction that may affect by the scroll',
           () {
         final service = ReactiveScrollable();
-        WidgetDescription interactionWithExternalites =
-            kWidgetDescriptionTypeScroll1
-                .copyWith(externalities: {kTopLeftScrollableDescription.rect});
+        Interaction interactionWithExternalites = kWidgetDescriptionTypeScroll1
+            .copyWith(externalities: {kTopLeftScrollableDescription.rect});
         final result = service.filterAffectedInteractionsByScrollable(
             kTopLeftScrollableDescription, [
           interactionWithExternalites,

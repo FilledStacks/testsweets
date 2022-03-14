@@ -43,8 +43,8 @@ class WidgetsVisualizer extends StatelessWidget {
                             (element) => element.widgetType != WidgetType.view)
                         .where((element) {
                       final result = element.externalities
-                              ?.reduce((value, element) =>
-                                  value.expandToInclude(element) as ModularRect)
+                              ?.reduce((value, element) => value
+                                  .expandToInclude(element) as SerializableRect)
                               .contains(element.position.offsetAfterScroll +
                                   Offset(WIDGET_DESCRIPTION_VISUAL_SIZE / 2,
                                       WIDGET_DESCRIPTION_VISUAL_SIZE / 2)) ??
@@ -75,7 +75,7 @@ class PopupMenu extends StatelessWidget {
       : super(key: key);
 
   final Function editActionSelected;
-  final WidgetDescription description;
+  final Interaction description;
   @override
   Widget build(BuildContext context) {
     print('PopupMenu: ' + description.toString());

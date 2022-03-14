@@ -10,8 +10,8 @@ class WidgetCaptureService {
 
   final _cloudFunctionsService = locator<CloudFunctionsService>();
 
-  final Map<String, List<WidgetDescription>> widgetDescriptionMap =
-      Map<String, List<WidgetDescription>>();
+  final Map<String, List<Interaction>> widgetDescriptionMap =
+      Map<String, List<Interaction>>();
   late String _projectId;
 
   set projectId(String projectId) {
@@ -35,7 +35,7 @@ class WidgetCaptureService {
     }
   }
 
-  set addWidgetDescriptionToMap(WidgetDescription description) {
+  set addWidgetDescriptionToMap(Interaction description) {
     log.v(description);
     if (widgetDescriptionMap.containsKey(description.originalViewName)) {
       widgetDescriptionMap[description.originalViewName]?.add(description);
@@ -44,7 +44,7 @@ class WidgetCaptureService {
     }
   }
 
-  List<WidgetDescription> getDescriptionsForView({
+  List<Interaction> getDescriptionsForView({
     required String currentRoute,
   }) {
     var viewDescriptions = widgetDescriptionMap[currentRoute];
@@ -72,7 +72,7 @@ class WidgetCaptureService {
 
   /// Captures a widgets description to the backend as well as locally in the [widgetDescriptionMap]
   Future<String?> captureWidgetDescription({
-    required WidgetDescription description,
+    required Interaction description,
   }) async {
     log.i('description:$description projectId:$_projectId');
     try {
@@ -96,7 +96,7 @@ class WidgetCaptureService {
 
   /// Updates a widget description to the backend as well as locally in the [widgetDescriptionMap]
   Future<String?> updateWidgetDescription({
-    required WidgetDescription description,
+    required Interaction description,
   }) async {
     try {
       log.i('description:$description projectId:$_projectId');
@@ -120,7 +120,7 @@ class WidgetCaptureService {
 
   /// Delete a widget descriptions from the project as well as locally
   Future<String?> removeWidgetDescription(
-      {required WidgetDescription description}) async {
+      {required Interaction description}) async {
     try {
       final descriptionId =
           await _cloudFunctionsService.deleteWidgetDescription(
@@ -138,7 +138,7 @@ class WidgetCaptureService {
     if (!checkCurrentViewIfAlreadyCaptured(originalViewName)) {
       log.i('originalViewName:$originalViewName projectId:$_projectId');
 
-      final viewDescription = WidgetDescription.view(
+      final viewDescription = Interaction.view(
           viewName: originalViewName.convertViewNameToValidFormat,
           originalViewName: originalViewName);
 

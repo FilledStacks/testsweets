@@ -6,8 +6,8 @@ part of 'application_models.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_WidgetDescription _$$_WidgetDescriptionFromJson(Map<String, dynamic> json) =>
-    _$_WidgetDescription(
+_$_Interaction _$$_InteractionFromJson(Map<String, dynamic> json) =>
+    _$_Interaction(
       id: json['id'] as String?,
       viewName: json['viewName'] as String,
       originalViewName: json['originalViewName'] as String,
@@ -21,14 +21,14 @@ _$_WidgetDescription _$$_WidgetDescriptionFromJson(Map<String, dynamic> json) =>
               .toList() ??
           [],
       externalities: (json['externalities'] as List<dynamic>?)
-          ?.map((e) => ModularRect.fromJson((e as Map<String, dynamic>).map(
-                (k, e) => MapEntry(k, (e as num).toDouble()),
-              )))
+          ?.map(
+              (e) => SerializableRect.fromJson((e as Map<String, dynamic>).map(
+                    (k, e) => MapEntry(k, (e as num).toDouble()),
+                  )))
           .toSet(),
     );
 
-Map<String, dynamic> _$$_WidgetDescriptionToJson(
-        _$_WidgetDescription instance) =>
+Map<String, dynamic> _$$_InteractionToJson(_$_Interaction instance) =>
     <String, dynamic>{
       'id': instance.id,
       'viewName': instance.viewName,

@@ -151,7 +151,7 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
   String addWidgetDescriptionToProjectResult = 'default_id',
   String updateWidgetDescription = 'default_id',
   String deleteWidgetDescription = 'default_id',
-  List<WidgetDescription> getWidgetDescriptionForProjectResult = const [],
+  List<Interaction> getWidgetDescriptionForProjectResult = const [],
 }) {
   _removeRegistrationIfExists<CloudFunctionsService>();
   final service = MockCloudFunctionsService();

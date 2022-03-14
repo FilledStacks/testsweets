@@ -5,9 +5,9 @@ import '../app/logger.dart';
 
 class ReactiveScrollable {
   final log = getLogger('ReactiveScrollable');
-  WidgetDescription applyScrollableOnInteraction(
+  Interaction applyScrollableOnInteraction(
     Iterable<ScrollableDescription> scrollables,
-    WidgetDescription widgetDescription,
+    Interaction widgetDescription,
   ) {
     log.v(widgetDescription);
     final overlapScrollableWithInteraction = scrollables.where(
@@ -33,9 +33,9 @@ class ReactiveScrollable {
     return widgetDescription;
   }
 
-  Iterable<WidgetDescription> filterAffectedInteractionsByScrollable(
+  Iterable<Interaction> filterAffectedInteractionsByScrollable(
       ScrollableDescription scrollableDescription,
-      List<WidgetDescription> viewDescription) {
+      List<Interaction> viewDescription) {
     log.v(scrollableDescription);
 
     return viewDescription.where(
@@ -47,9 +47,9 @@ class ReactiveScrollable {
     );
   }
 
-  Iterable<WidgetDescription> moveInteractionsWithScrollable(
+  Iterable<Interaction> moveInteractionsWithScrollable(
     ScrollableDescription scrollableDescription,
-    Iterable<WidgetDescription> affectedInteractions,
+    Iterable<Interaction> affectedInteractions,
   ) {
     log.v(scrollableDescription);
 

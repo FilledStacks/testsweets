@@ -74,14 +74,14 @@ const int testContentLength = 2;
 final testDataStream = Stream.value([1, 2, 3]);
 final testDateTime = DateTime.utc(1993, 12, 12, 12);
 
-final kWidgetDescription1 = WidgetDescription(
+final kWidgetDescription1 = Interaction(
     id: 'testWidgetDescriptionId',
     viewName: 'viewName',
     originalViewName: 'originalViewName',
     name: 'widgetName',
     widgetType: WidgetType.general,
     position: WidgetPosition.empty());
-final kWidgetDescription2 = WidgetDescription(
+final kWidgetDescription2 = Interaction(
   originalViewName: '/',
   viewName: 'login',
   id: 'id',
@@ -90,7 +90,7 @@ final kWidgetDescription2 = WidgetDescription(
       x: 100, y: 199, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
   widgetType: WidgetType.general,
 );
-final kWidgetDescriptionTypeScroll1 = WidgetDescription(
+final kWidgetDescriptionTypeScroll1 = Interaction(
   originalViewName: '/',
   viewName: 'initial',
   id: 'kWidgetDescriptionTypeScrollId1',
@@ -99,7 +99,7 @@ final kWidgetDescriptionTypeScroll1 = WidgetDescription(
       x: 20, y: 20, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
   widgetType: WidgetType.scrollable,
 );
-final kWidgetDescriptionTypeScroll2 = WidgetDescription(
+final kWidgetDescriptionTypeScroll2 = Interaction(
   originalViewName: '/',
   viewName: 'initial',
   id: 'kWidgetDescriptionTypeScroll2',
@@ -108,7 +108,7 @@ final kWidgetDescriptionTypeScroll2 = WidgetDescription(
       x: 25, y: 25, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
   widgetType: WidgetType.scrollable,
 );
-final kWidgetDescriptionView = WidgetDescription(
+final kWidgetDescriptionView = Interaction(
   originalViewName: '/',
   viewName: 'login',
   id: 'viewId',
@@ -129,19 +129,19 @@ final kTopLeftScrollableDescription = ScrollableDescription(
     axis: Axis.vertical,
     maxScrollOffset: 0,
     scrollingPixelsOnCapture: 100,
-    rect: ModularRect.fromPoints(Offset(0, 0), Offset(22, 22)));
+    rect: SerializableRect.fromPoints(Offset(0, 0), Offset(22, 22)));
 final kAnotherTopLeftScrollableDescription = ScrollableDescription(
     axis: Axis.horizontal,
     maxScrollOffset: 0,
     scrollingPixelsOnCapture: 50,
-    rect: ModularRect.fromPoints(Offset(0, 0), Offset(40, 40)));
+    rect: SerializableRect.fromPoints(Offset(0, 0), Offset(40, 40)));
 final kTopRightScrollableDescription = ScrollableDescription(
     axis: Axis.vertical,
     maxScrollOffset: 0,
     scrollingPixelsOnCapture: 0,
-    rect: ModularRect.fromPoints(Offset(200, 0), Offset(230, 30)));
+    rect: SerializableRect.fromPoints(Offset(200, 0), Offset(230, 30)));
 final kBottomLeftScrollableDescription = ScrollableDescription(
     axis: Axis.vertical,
     maxScrollOffset: 0,
     scrollingPixelsOnCapture: 0,
-    rect: ModularRect.fromPoints(Offset(0, 230), Offset(30, 200)));
+    rect: SerializableRect.fromPoints(Offset(0, 230), Offset(30, 200)));

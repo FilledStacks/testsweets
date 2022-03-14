@@ -22,8 +22,8 @@ import 'test_helpers.mocks.dart';
   MockSpec<ReactiveScrollable>(returnNullOnMissingStub: true),
 ])
 MockWidgetCaptureService getAndRegisterWidgetCaptureService(
-    {List<WidgetDescription> listOfWidgetDescription = const [],
-    WidgetDescription? description,
+    {List<Interaction> listOfWidgetDescription = const [],
+    Interaction? description,
     String? projectId,
     bool currentViewIsAlreadyCaptured = false}) {
   _removeRegistrationIfExists<WidgetCaptureService>();
@@ -68,7 +68,7 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
   String addWidgetDescriptionToProjectResult = 'default_id',
   String updateWidgetDescription = 'default_id',
   String deleteWidgetDescription = 'default_id',
-  List<WidgetDescription> getWidgetDescriptionForProjectResult = const [],
+  List<Interaction> getWidgetDescriptionForProjectResult = const [],
 }) {
   _removeRegistrationIfExists<CloudFunctionsService>();
   final service = MockCloudFunctionsService();
@@ -126,7 +126,7 @@ ReactiveScrollable getAndRegisterReactiveScrollable() {
 }
 
 WidgetVisibiltyChangerService getAndRegisterWidgetVisibiltyChangerService(
-    {List<WidgetDescription>? widgetDescriptions,
+    {List<Interaction>? widgetDescriptions,
     SweetcoreCommand? latestSweetcoreCommand}) {
   _removeRegistrationIfExists<WidgetVisibiltyChangerService>();
   final service = MockWidgetVisibiltyChangerService();

@@ -204,25 +204,25 @@ class MockCloudFunctionsService extends _i1.Mock
           returnValue: Future<bool>.value(false)) as _i9.Future<bool>);
   @override
   _i9.Future<String> uploadWidgetDescriptionToProject(
-          {String? projectId, _i13.WidgetDescription? description}) =>
+          {String? projectId, _i13.Interaction? description}) =>
       (super.noSuchMethod(
           Invocation.method(#uploadWidgetDescriptionToProject, [],
               {#projectId: projectId, #description: description}),
           returnValue: Future<String>.value('')) as _i9.Future<String>);
   @override
-  _i9.Future<List<_i13.WidgetDescription>> getWidgetDescriptionForProject(
+  _i9.Future<List<_i13.Interaction>> getWidgetDescriptionForProject(
           {String? projectId}) =>
       (super.noSuchMethod(
               Invocation.method(
                   #getWidgetDescriptionForProject, [], {#projectId: projectId}),
-              returnValue: Future<List<_i13.WidgetDescription>>.value(
-                  <_i13.WidgetDescription>[]))
-          as _i9.Future<List<_i13.WidgetDescription>>);
+              returnValue:
+                  Future<List<_i13.Interaction>>.value(<_i13.Interaction>[]))
+          as _i9.Future<List<_i13.Interaction>>);
   @override
   _i9.Future<String> updateWidgetDescription(
           {String? projectId,
-          _i13.WidgetDescription? oldwidgetDescription,
-          _i13.WidgetDescription? newwidgetDescription}) =>
+          _i13.Interaction? oldwidgetDescription,
+          _i13.Interaction? newwidgetDescription}) =>
       (super.noSuchMethod(
           Invocation.method(#updateWidgetDescription, [], {
             #projectId: projectId,
@@ -232,7 +232,7 @@ class MockCloudFunctionsService extends _i1.Mock
           returnValue: Future<String>.value('')) as _i9.Future<String>);
   @override
   _i9.Future<String> deleteWidgetDescription(
-          {String? projectId, _i13.WidgetDescription? description}) =>
+          {String? projectId, _i13.Interaction? description}) =>
       (super.noSuchMethod(
           Invocation.method(#deleteWidgetDescription, [],
               {#projectId: projectId, #description: description}),

@@ -13,15 +13,15 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-WidgetDescription _$WidgetDescriptionFromJson(Map<String, dynamic> json) {
-  return _WidgetDescription.fromJson(json);
+Interaction _$InteractionFromJson(Map<String, dynamic> json) {
+  return _Interaction.fromJson(json);
 }
 
 /// @nodoc
-class _$WidgetDescriptionTearOff {
-  const _$WidgetDescriptionTearOff();
+class _$InteractionTearOff {
+  const _$InteractionTearOff();
 
-  _WidgetDescription call(
+  _Interaction call(
       {String? id,
       required String viewName,
       required String originalViewName,
@@ -30,8 +30,8 @@ class _$WidgetDescriptionTearOff {
       required WidgetPosition position,
       bool visibility = true,
       List<String> targetIds = const [],
-      Set<ModularRect>? externalities}) {
-    return _WidgetDescription(
+      Set<SerializableRect>? externalities}) {
+    return _Interaction(
       id: id,
       viewName: viewName,
       originalViewName: originalViewName,
@@ -44,16 +44,16 @@ class _$WidgetDescriptionTearOff {
     );
   }
 
-  WidgetDescription fromJson(Map<String, Object> json) {
-    return WidgetDescription.fromJson(json);
+  Interaction fromJson(Map<String, Object> json) {
+    return Interaction.fromJson(json);
   }
 }
 
 /// @nodoc
-const $WidgetDescription = _$WidgetDescriptionTearOff();
+const $Interaction = _$InteractionTearOff();
 
 /// @nodoc
-mixin _$WidgetDescription {
+mixin _$Interaction {
   /// The Id from the firebase backend
   String? get id => throw _privateConstructorUsedError;
 
@@ -80,19 +80,20 @@ mixin _$WidgetDescription {
 
   /// Left-top offset for external widgets that affects this widget
   /// (normally ListViews)
-  Set<ModularRect>? get externalities => throw _privateConstructorUsedError;
+  Set<SerializableRect>? get externalities =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $WidgetDescriptionCopyWith<WidgetDescription> get copyWith =>
+  $InteractionCopyWith<Interaction> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $WidgetDescriptionCopyWith<$Res> {
-  factory $WidgetDescriptionCopyWith(
-          WidgetDescription value, $Res Function(WidgetDescription) then) =
-      _$WidgetDescriptionCopyWithImpl<$Res>;
+abstract class $InteractionCopyWith<$Res> {
+  factory $InteractionCopyWith(
+          Interaction value, $Res Function(Interaction) then) =
+      _$InteractionCopyWithImpl<$Res>;
   $Res call(
       {String? id,
       String viewName,
@@ -102,19 +103,18 @@ abstract class $WidgetDescriptionCopyWith<$Res> {
       WidgetPosition position,
       bool visibility,
       List<String> targetIds,
-      Set<ModularRect>? externalities});
+      Set<SerializableRect>? externalities});
 
   $WidgetPositionCopyWith<$Res> get position;
 }
 
 /// @nodoc
-class _$WidgetDescriptionCopyWithImpl<$Res>
-    implements $WidgetDescriptionCopyWith<$Res> {
-  _$WidgetDescriptionCopyWithImpl(this._value, this._then);
+class _$InteractionCopyWithImpl<$Res> implements $InteractionCopyWith<$Res> {
+  _$InteractionCopyWithImpl(this._value, this._then);
 
-  final WidgetDescription _value;
+  final Interaction _value;
   // ignore: unused_field
-  final $Res Function(WidgetDescription) _then;
+  final $Res Function(Interaction) _then;
 
   @override
   $Res call({
@@ -164,7 +164,7 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
       externalities: externalities == freezed
           ? _value.externalities
           : externalities // ignore: cast_nullable_to_non_nullable
-              as Set<ModularRect>?,
+              as Set<SerializableRect>?,
     ));
   }
 
@@ -177,11 +177,11 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$WidgetDescriptionCopyWith<$Res>
-    implements $WidgetDescriptionCopyWith<$Res> {
-  factory _$WidgetDescriptionCopyWith(
-          _WidgetDescription value, $Res Function(_WidgetDescription) then) =
-      __$WidgetDescriptionCopyWithImpl<$Res>;
+abstract class _$InteractionCopyWith<$Res>
+    implements $InteractionCopyWith<$Res> {
+  factory _$InteractionCopyWith(
+          _Interaction value, $Res Function(_Interaction) then) =
+      __$InteractionCopyWithImpl<$Res>;
   @override
   $Res call(
       {String? id,
@@ -192,22 +192,21 @@ abstract class _$WidgetDescriptionCopyWith<$Res>
       WidgetPosition position,
       bool visibility,
       List<String> targetIds,
-      Set<ModularRect>? externalities});
+      Set<SerializableRect>? externalities});
 
   @override
   $WidgetPositionCopyWith<$Res> get position;
 }
 
 /// @nodoc
-class __$WidgetDescriptionCopyWithImpl<$Res>
-    extends _$WidgetDescriptionCopyWithImpl<$Res>
-    implements _$WidgetDescriptionCopyWith<$Res> {
-  __$WidgetDescriptionCopyWithImpl(
-      _WidgetDescription _value, $Res Function(_WidgetDescription) _then)
-      : super(_value, (v) => _then(v as _WidgetDescription));
+class __$InteractionCopyWithImpl<$Res> extends _$InteractionCopyWithImpl<$Res>
+    implements _$InteractionCopyWith<$Res> {
+  __$InteractionCopyWithImpl(
+      _Interaction _value, $Res Function(_Interaction) _then)
+      : super(_value, (v) => _then(v as _Interaction));
 
   @override
-  _WidgetDescription get _value => super._value as _WidgetDescription;
+  _Interaction get _value => super._value as _Interaction;
 
   @override
   $Res call({
@@ -221,7 +220,7 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
     Object? targetIds = freezed,
     Object? externalities = freezed,
   }) {
-    return _then(_WidgetDescription(
+    return _then(_Interaction(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -257,15 +256,15 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
       externalities: externalities == freezed
           ? _value.externalities
           : externalities // ignore: cast_nullable_to_non_nullable
-              as Set<ModularRect>?,
+              as Set<SerializableRect>?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_WidgetDescription extends _WidgetDescription {
-  _$_WidgetDescription(
+class _$_Interaction extends _Interaction {
+  _$_Interaction(
       {this.id,
       required this.viewName,
       required this.originalViewName,
@@ -277,8 +276,8 @@ class _$_WidgetDescription extends _WidgetDescription {
       this.externalities})
       : super._();
 
-  factory _$_WidgetDescription.fromJson(Map<String, dynamic> json) =>
-      _$$_WidgetDescriptionFromJson(json);
+  factory _$_Interaction.fromJson(Map<String, dynamic> json) =>
+      _$$_InteractionFromJson(json);
 
   @override
 
@@ -319,17 +318,17 @@ class _$_WidgetDescription extends _WidgetDescription {
 
   /// Left-top offset for external widgets that affects this widget
   /// (normally ListViews)
-  final Set<ModularRect>? externalities;
+  final Set<SerializableRect>? externalities;
 
   @override
   String toString() {
-    return 'WidgetDescription(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility, targetIds: $targetIds, externalities: $externalities)';
+    return 'Interaction(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility, targetIds: $targetIds, externalities: $externalities)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _WidgetDescription &&
+        (other is _Interaction &&
             (identical(other.id, id) ||
                 const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.viewName, viewName) ||
@@ -372,17 +371,17 @@ class _$_WidgetDescription extends _WidgetDescription {
 
   @JsonKey(ignore: true)
   @override
-  _$WidgetDescriptionCopyWith<_WidgetDescription> get copyWith =>
-      __$WidgetDescriptionCopyWithImpl<_WidgetDescription>(this, _$identity);
+  _$InteractionCopyWith<_Interaction> get copyWith =>
+      __$InteractionCopyWithImpl<_Interaction>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_WidgetDescriptionToJson(this);
+    return _$$_InteractionToJson(this);
   }
 }
 
-abstract class _WidgetDescription extends WidgetDescription {
-  factory _WidgetDescription(
+abstract class _Interaction extends Interaction {
+  factory _Interaction(
       {String? id,
       required String viewName,
       required String originalViewName,
@@ -391,11 +390,11 @@ abstract class _WidgetDescription extends WidgetDescription {
       required WidgetPosition position,
       bool visibility,
       List<String> targetIds,
-      Set<ModularRect>? externalities}) = _$_WidgetDescription;
-  _WidgetDescription._() : super._();
+      Set<SerializableRect>? externalities}) = _$_Interaction;
+  _Interaction._() : super._();
 
-  factory _WidgetDescription.fromJson(Map<String, dynamic> json) =
-      _$_WidgetDescription.fromJson;
+  factory _Interaction.fromJson(Map<String, dynamic> json) =
+      _$_Interaction.fromJson;
 
   @override
 
@@ -433,10 +432,11 @@ abstract class _WidgetDescription extends WidgetDescription {
 
   /// Left-top offset for external widgets that affects this widget
   /// (normally ListViews)
-  Set<ModularRect>? get externalities => throw _privateConstructorUsedError;
+  Set<SerializableRect>? get externalities =>
+      throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
-  _$WidgetDescriptionCopyWith<_WidgetDescription> get copyWith =>
+  _$InteractionCopyWith<_Interaction> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -725,7 +725,7 @@ class _$ScrollableDescriptionTearOff {
 
   _ScrollableDescription call(
       {required Axis axis,
-      required ModularRect rect,
+      required SerializableRect rect,
       required double scrollingPixelsOnCapture,
       required double maxScrollOffset}) {
     return _ScrollableDescription(
@@ -743,7 +743,7 @@ const $ScrollableDescription = _$ScrollableDescriptionTearOff();
 /// @nodoc
 mixin _$ScrollableDescription {
   Axis get axis => throw _privateConstructorUsedError;
-  ModularRect get rect => throw _privateConstructorUsedError;
+  SerializableRect get rect => throw _privateConstructorUsedError;
   double get scrollingPixelsOnCapture => throw _privateConstructorUsedError;
   double get maxScrollOffset => throw _privateConstructorUsedError;
 
@@ -759,7 +759,7 @@ abstract class $ScrollableDescriptionCopyWith<$Res> {
       _$ScrollableDescriptionCopyWithImpl<$Res>;
   $Res call(
       {Axis axis,
-      ModularRect rect,
+      SerializableRect rect,
       double scrollingPixelsOnCapture,
       double maxScrollOffset});
 }
@@ -788,7 +788,7 @@ class _$ScrollableDescriptionCopyWithImpl<$Res>
       rect: rect == freezed
           ? _value.rect
           : rect // ignore: cast_nullable_to_non_nullable
-              as ModularRect,
+              as SerializableRect,
       scrollingPixelsOnCapture: scrollingPixelsOnCapture == freezed
           ? _value.scrollingPixelsOnCapture
           : scrollingPixelsOnCapture // ignore: cast_nullable_to_non_nullable
@@ -810,7 +810,7 @@ abstract class _$ScrollableDescriptionCopyWith<$Res>
   @override
   $Res call(
       {Axis axis,
-      ModularRect rect,
+      SerializableRect rect,
       double scrollingPixelsOnCapture,
       double maxScrollOffset});
 }
@@ -841,7 +841,7 @@ class __$ScrollableDescriptionCopyWithImpl<$Res>
       rect: rect == freezed
           ? _value.rect
           : rect // ignore: cast_nullable_to_non_nullable
-              as ModularRect,
+              as SerializableRect,
       scrollingPixelsOnCapture: scrollingPixelsOnCapture == freezed
           ? _value.scrollingPixelsOnCapture
           : scrollingPixelsOnCapture // ignore: cast_nullable_to_non_nullable
@@ -866,7 +866,7 @@ class _$_ScrollableDescription implements _ScrollableDescription {
   @override
   final Axis axis;
   @override
-  final ModularRect rect;
+  final SerializableRect rect;
   @override
   final double scrollingPixelsOnCapture;
   @override
@@ -913,14 +913,14 @@ class _$_ScrollableDescription implements _ScrollableDescription {
 abstract class _ScrollableDescription implements ScrollableDescription {
   factory _ScrollableDescription(
       {required Axis axis,
-      required ModularRect rect,
+      required SerializableRect rect,
       required double scrollingPixelsOnCapture,
       required double maxScrollOffset}) = _$_ScrollableDescription;
 
   @override
   Axis get axis => throw _privateConstructorUsedError;
   @override
-  ModularRect get rect => throw _privateConstructorUsedError;
+  SerializableRect get rect => throw _privateConstructorUsedError;
   @override
   double get scrollingPixelsOnCapture => throw _privateConstructorUsedError;
   @override

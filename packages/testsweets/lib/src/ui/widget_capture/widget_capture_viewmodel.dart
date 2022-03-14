@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,7 +13,6 @@ import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
-import 'package:testsweets/src/extensions/widget_position_extension.dart';
 import 'package:testsweets/src/extensions/widgets_description_list_extensions.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
@@ -138,7 +136,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<void> popupMenuActionSelected(
-      WidgetDescription description, PopupMenuAction popupMenuAction) async {
+      Interaction description, PopupMenuAction popupMenuAction) async {
     log.v(popupMenuAction, description);
     widgetDescription = description;
 
@@ -163,14 +161,14 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void startQuickPositionEdit(
-    WidgetDescription description,
+    Interaction description,
   ) {
     log.v(description);
     widgetDescription = description;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.quickPositionEdit;
   }
 
-  void onTapWidget(WidgetDescription widgetDescription) async {
+  void onTapWidget(Interaction widgetDescription) async {
     notifyListeners();
     await _snackbarService.showCustomSnackBar(
         message: widgetDescription.name, variant: SnackbarType.info);
@@ -241,13 +239,13 @@ class WidgetCaptureViewModel extends FormViewModel {
     _widgetCaptureService.projectId = projectId;
   }
 
-  WidgetDescription? widgetDescription;
+  Interaction? widgetDescription;
 
-  ValueNotifier<List<WidgetDescription>> descriptionsForViewNotifier =
+  ValueNotifier<List<Interaction>> descriptionsForViewNotifier =
       ValueNotifier([]);
-  List<WidgetDescription> get descriptionsForView =>
+  List<Interaction> get descriptionsForView =>
       descriptionsForViewNotifier.value;
-  set descriptionsForView(List<WidgetDescription> widgetDescriptions) {
+  set descriptionsForView(List<Interaction> widgetDescriptions) {
     descriptionsForViewNotifier.value = widgetDescriptions;
   }
 
@@ -315,7 +313,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   /// if it's null and set [CaptureWidgetStatusEnum.createWidget]
   void showWidgetForm() {
     widgetDescription = widgetDescription ??
-        WidgetDescription(
+        Interaction(
             position: screenCenterPosition,
             viewName: '',
             originalViewName: '',

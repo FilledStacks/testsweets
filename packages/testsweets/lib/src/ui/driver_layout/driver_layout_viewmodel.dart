@@ -20,7 +20,7 @@ class DriverLayoutViewModel extends BaseViewModel {
     _widgetCaptureService.projectId = projectId;
   }
 
-  List<WidgetDescription> descriptionsForView = [];
+  List<Interaction> descriptionsForView = [];
 
   Future<void> initialise() async {
     setBusy(true);

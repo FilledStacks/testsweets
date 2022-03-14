@@ -25,10 +25,8 @@ class WidgetVisibiltyChangerService {
     completer!.complete(message.name);
   }
 
-  Iterable<WidgetDescription>? runToggleVisibiltyChecker(
-      Notification notification,
-      String automationKeyName,
-      List<WidgetDescription> viewWidgets) {
+  Iterable<Interaction>? runToggleVisibiltyChecker(Notification notification,
+      String automationKeyName, List<Interaction> viewWidgets) {
     final targetedWidgets =
         filterTargetedWidgets(automationKeyName, viewWidgets);
 
@@ -41,9 +39,8 @@ class WidgetVisibiltyChangerService {
     }
   }
 
-  Iterable<WidgetDescription> toggleVisibilty(
-      Iterable<WidgetDescription> targetedWidgets,
-      List<WidgetDescription> originalWidgets) {
+  Iterable<Interaction> toggleVisibilty(Iterable<Interaction> targetedWidgets,
+      List<Interaction> originalWidgets) {
     log.i(targetedWidgets);
 
     final toggledWidgets =
@@ -52,9 +49,9 @@ class WidgetVisibiltyChangerService {
     return updateViewWidgetsList(toggledWidgets, originalWidgets);
   }
 
-  Iterable<WidgetDescription> updateViewWidgetsList(
-      Iterable<WidgetDescription> widgetAfterToggleVisibilty,
-      List<WidgetDescription> originalWidgets) {
+  Iterable<Interaction> updateViewWidgetsList(
+      Iterable<Interaction> widgetAfterToggleVisibilty,
+      List<Interaction> originalWidgets) {
     for (var widget in widgetAfterToggleVisibilty) {
       final widgetIndex =
           originalWidgets.indexWhere((element) => element.id == widget.id);
@@ -63,8 +60,8 @@ class WidgetVisibiltyChangerService {
     return originalWidgets;
   }
 
-  Iterable<WidgetDescription> filterTargetedWidgets(String automationKeyName,
-      Iterable<WidgetDescription> descriptionsForView) {
+  Iterable<Interaction> filterTargetedWidgets(
+      String automationKeyName, Iterable<Interaction> descriptionsForView) {
     final triggerWidget = descriptionsForView.firstWhere(
       (element) => element.automationKey == automationKeyName,
     );

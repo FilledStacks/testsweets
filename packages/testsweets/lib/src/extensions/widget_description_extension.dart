@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/testsweets.dart';
 
-extension WidgetDescriptionUtils on WidgetDescription {
+extension WidgetDescriptionUtils on Interaction {
   Offset responsiveOffset(Size screenSize) {
     final responsiveWidth = responsiveXPosition(screenSize.width);
     final responsiveHeight = responsiveYPosition(screenSize.height);

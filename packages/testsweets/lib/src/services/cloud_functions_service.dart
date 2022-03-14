@@ -54,7 +54,7 @@ class CloudFunctionsService {
 
   Future<String> uploadWidgetDescriptionToProject({
     required String projectId,
-    required WidgetDescription description,
+    required Interaction description,
   }) async {
     log.i('WidgetDescription:$description , projectId:$projectId');
 
@@ -77,7 +77,7 @@ class CloudFunctionsService {
     throw Exception(response.body);
   }
 
-  Future<List<WidgetDescription>> getWidgetDescriptionForProject({
+  Future<List<Interaction>> getWidgetDescriptionForProject({
     required String projectId,
   }) async {
     log.i('projectId:$projectId');
@@ -91,9 +91,7 @@ class CloudFunctionsService {
       log.i('getWidgetDescriptionForProject | fetch success! Lets serialise');
       final jsonContent = response.body;
       final descriptionsJson = json.decode(jsonContent) as Iterable;
-      return descriptionsJson
-          .map((e) => WidgetDescription.fromJson(e))
-          .toList();
+      return descriptionsJson.map((e) => Interaction.fromJson(e)).toList();
     }
 
     throw Exception(response.body);
@@ -101,8 +99,8 @@ class CloudFunctionsService {
 
   Future<String> updateWidgetDescription({
     required String projectId,
-    required WidgetDescription oldwidgetDescription,
-    required WidgetDescription newwidgetDescription,
+    required Interaction oldwidgetDescription,
+    required Interaction newwidgetDescription,
   }) async {
     log.i(
         'oldwidgetDescription:$oldwidgetDescription, newwidgetDescription:$newwidgetDescription, projectId:$projectId');
@@ -129,7 +127,7 @@ class CloudFunctionsService {
 
   Future<String> deleteWidgetDescription({
     required String projectId,
-    required WidgetDescription description,
+    required Interaction description,
   }) async {
     log.i('WidgetDescription:$description , projectId:$projectId');
 

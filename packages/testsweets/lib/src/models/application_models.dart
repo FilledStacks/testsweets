@@ -11,10 +11,10 @@ part 'application_models.g.dart';
 
 /// Describes a widget that we will use to driver the app with
 @freezed
-class WidgetDescription with _$WidgetDescription {
-  const WidgetDescription._();
+class Interaction with _$Interaction {
+  const Interaction._();
 
-  factory WidgetDescription({
+  factory Interaction({
     /// The Id from the firebase backend
     String? id,
 
@@ -41,19 +41,19 @@ class WidgetDescription with _$WidgetDescription {
 
     /// Left-top offset for external widgets that affects this widget
     /// (normally ListViews)
-    Set<ModularRect>? externalities,
-  }) = _WidgetDescription;
-  factory WidgetDescription.view(
+    Set<SerializableRect>? externalities,
+  }) = _Interaction;
+  factory Interaction.view(
           {required String viewName, required String originalViewName}) =>
-      WidgetDescription(
+      Interaction(
         viewName: viewName,
         originalViewName: originalViewName,
         widgetType: WidgetType.view,
         position: WidgetPosition.empty(),
       );
 
-  factory WidgetDescription.fromJson(Map<String, dynamic> json) =>
-      _$WidgetDescriptionFromJson(json);
+  factory Interaction.fromJson(Map<String, dynamic> json) =>
+      _$InteractionFromJson(json);
 
   String get automationKey => widgetType == WidgetType.view
       ? '$viewName\_${widgetType.shortName}'
@@ -80,7 +80,7 @@ class WidgetPosition with _$WidgetPosition {
 class ScrollableDescription with _$ScrollableDescription {
   factory ScrollableDescription({
     required Axis axis,
-    required ModularRect rect,
+    required SerializableRect rect,
     required double scrollingPixelsOnCapture,
     required double maxScrollOffset,
   }) = _ScrollableDescription;
@@ -96,18 +96,19 @@ class ScrollableDescription with _$ScrollableDescription {
 
     return ScrollableDescription(
         axis: metrics.axis,
-        rect: ModularRect(topLeftPointOfList.dx, topLeftPointOfList.dy, 0, 0),
+        rect: SerializableRect(
+            topLeftPointOfList.dx, topLeftPointOfList.dy, 0, 0),
         scrollingPixelsOnCapture: position,
         maxScrollOffset: metrics.maxScrollExtent);
   }
 }
 
-class ModularRect extends Rect {
-  const ModularRect(double left, double top, double width, double height)
+class SerializableRect extends Rect {
+  const SerializableRect(double left, double top, double width, double height)
       : super.fromLTWH(left, top, width, height);
-  ModularRect.fromPoints(Offset a, Offset b) : super.fromPoints(a, b);
-  factory ModularRect.fromJson(Map<String, double> json) {
-    return ModularRect(
+  SerializableRect.fromPoints(Offset a, Offset b) : super.fromPoints(a, b);
+  factory SerializableRect.fromJson(Map<String, double> json) {
+    return SerializableRect(
         json['left']!, json['top']!, json['width']!, json['height']!);
   }
   Map<String, double> toJson() {

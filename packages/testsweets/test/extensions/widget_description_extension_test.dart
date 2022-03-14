@@ -15,7 +15,7 @@ void main() {
       test('''When capture a key with position x=100 on screenWidth = 200
    and new screenWidth is 500, Should adjust the position to x=225
    ''', () {
-        final description = WidgetDescription(
+        final description = Interaction(
             name: 'name',
             originalViewName: '',
             viewName: '',
@@ -34,7 +34,7 @@ void main() {
       test('''When capture a key with position y=100 on screenWidth = 200
    and new screenWidth is 500, Should adjust the position to y=225
    ''', () {
-        final description = WidgetDescription(
+        final description = Interaction(
             name: 'name',
             originalViewName: '',
             viewName: '',
