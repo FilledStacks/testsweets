@@ -217,6 +217,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     final affectedInteractions =
         _reactiveScrollable.filterAffectedInteractionsByScrollable(
             scrollableDescription, descriptionsForView);
+
     final scrolledInteractions =
         _reactiveScrollable.moveInteractionsWithScrollable(
             scrollableDescription, affectedInteractions);
@@ -280,6 +281,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   void refreshInteractions() {
     descriptionsForView = _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracker.currentRoute);
+    notifyListeners();
   }
 
   set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {

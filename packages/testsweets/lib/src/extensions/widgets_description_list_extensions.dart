@@ -1,10 +1,12 @@
 import 'package:testsweets/testsweets.dart';
+import 'package:collection/collection.dart';
 
 extension WidgetDescriptionListExtension on List<WidgetDescription> {
   List<WidgetDescription> replaceInteractions(
-      List<WidgetDescription> updatedInteractions) {
+      Iterable<WidgetDescription> updatedInteractions) {
+    final updatedInteractionsIds = updatedInteractions.map((e) => e.id);
     final nonAffectedItems =
-        this.where((interaction) => interaction.externalities == null);
+        this.whereNot((element) => updatedInteractionsIds.contains(element.id));
 
     return nonAffectedItems.followedBy(updatedInteractions).toList();
   }
