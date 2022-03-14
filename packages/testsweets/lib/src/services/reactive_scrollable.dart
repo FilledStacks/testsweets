@@ -33,22 +33,24 @@ class ReactiveScrollable {
     return widgetDescription;
   }
 
-  Iterable<WidgetDescription> filterAffectedInteractionsByScrollable(
+  List<WidgetDescription> filterAffectedInteractionsByScrollable(
       ScrollableDescription scrollableDescription,
-      Iterable<WidgetDescription> viewDescription) {
+      List<WidgetDescription> viewDescription) {
     log.v(scrollableDescription);
-    return viewDescription.where(
-      (interaction) =>
-          interaction.externalities?.any(
-            (rect) => rect.topLeft == scrollableDescription.rect.topLeft,
-          ) ??
-          false,
-    );
+    return viewDescription
+        .where(
+          (interaction) =>
+              interaction.externalities?.any(
+                (rect) => rect.topLeft == scrollableDescription.rect.topLeft,
+              ) ??
+              false,
+        )
+        .toList();
   }
 
   List<WidgetDescription> moveInteractionsWithScrollable(
     ScrollableDescription scrollableDescription,
-    Iterable<WidgetDescription> affectedInteractions,
+    List<WidgetDescription> affectedInteractions,
   ) {
     log.v(scrollableDescription);
 

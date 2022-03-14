@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -30,97 +31,6 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _widgetCaptureService = locator<WidgetCaptureService>();
   final _snackbarService = locator<SnackbarService>();
   final _reactiveScrollable = locator<ReactiveScrollable>();
-
-  final notificationController = StreamController<Notification>.broadcast();
-
-  CaptureWidgetStatusEnum _captureWidgetStatusEnum =
-      CaptureWidgetStatusEnum.idle;
-
-  /// We use this position as the starter point of any new widget
-  late WidgetPosition screenCenterPosition;
-
-  set setWidgetType(WidgetType widgetType) {
-    log.v(widgetType);
-    widgetDescription = widgetDescription!.copyWith(widgetType: widgetType);
-    notifyListeners();
-  }
-
-  set setVisibilty(bool visible) {
-    log.v(visible);
-    widgetDescription = widgetDescription!.copyWith(visibility: visible);
-    notifyListeners();
-  }
-
-  set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
-    log.i(captureWidgetStatusEnum);
-    _captureWidgetStatusEnum = captureWidgetStatusEnum;
-    notifyListeners();
-  }
-
-  CaptureWidgetStatusEnum get captureWidgetStatusEnum =>
-      _captureWidgetStatusEnum;
-
-  WidgetCaptureViewModel({required String projectId}) {
-    listenToNotifications();
-
-    _widgetCaptureService.projectId = projectId;
-    _testSweetsRouteTracker.addListener(() {
-      newWidgetForRoute = _testSweetsRouteTracker.currentRoute;
-    });
-  }
-
-  WidgetDescription? widgetDescription;
-
-  List<WidgetDescription> _descriptionsForView = [];
-  List<WidgetDescription> get descriptionsForView => _descriptionsForView;
-  set descriptionsForView(List<WidgetDescription> descriptions) {
-    _descriptionsForView = descriptions;
-    notifyListeners();
-  }
-
-  set newWidgetForRoute(String route) {
-    _descriptionsForView = _widgetCaptureService.getDescriptionsForView(
-      currentRoute: route,
-    );
-    notifyListeners();
-  }
-
-  bool get currentViewIsCaptured => descriptionsForView.any(
-        (element) => element.widgetType == WidgetType.view,
-      );
-  String get currentViewName => _testSweetsRouteTracker.formatedCurrentRoute;
-  Future<void> loadWidgetDescriptions() async {
-    log.v('');
-    setBusy(true);
-    try {
-      await _widgetCaptureService.loadWidgetDescriptionsForProject();
-      newWidgetForRoute = _testSweetsRouteTracker.currentRoute;
-      setBusy(false);
-    } catch (e) {
-      log.e('Could not get widgetDescriptions: $e');
-      _snackbarService.showCustomSnackBar(
-          message: 'Could not get widgetDescriptions: $e',
-          variant: SnackbarType.failed);
-    }
-  }
-
-  void clearWidgetDescriptionForm() {
-    log.v('');
-    widgetDescription = null;
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
-  }
-
-  /// When open the form create new instance of widgetDescription
-  /// if it's null and set [CaptureWidgetStatusEnum.createWidget]
-  void showWidgetForm() {
-    widgetDescription = widgetDescription ??
-        WidgetDescription(
-            position: screenCenterPosition,
-            viewName: '',
-            originalViewName: '',
-            widgetType: WidgetType.touchable);
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.createWidget;
-  }
 
   void updateDescriptionPosition(
     double x,
@@ -161,6 +71,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     } else {
       widgetDescription = null;
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+      refreshInteractions();
     }
     setBusy(false);
     return result;
@@ -180,6 +91,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     } else {
       widgetDescription = null;
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+      refreshInteractions();
     }
 
     setBusy(false);
@@ -265,7 +177,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   bool onClientNotifiaction(Notification notification) {
-    notificationController.add(notification);
+    _notificationController.add(notification);
     return false;
   }
 
@@ -281,7 +193,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     ScrollDirection? scrollDirection;
     Offset? globalPosition;
     Offset? localPosition;
-    notificationController.stream.listen((notification) {
+    _notificationController.stream.listen((notification) {
       if (notification is UserScrollNotification) {
         scrollDirection = notification.direction;
       } else if (notification is ScrollStartNotification) {
@@ -308,9 +220,104 @@ class WidgetCaptureViewModel extends FormViewModel {
     final scrolledInteractions =
         _reactiveScrollable.moveInteractionsWithScrollable(
             scrollableDescription, affectedInteractions);
-    _descriptionsForView =
-        _descriptionsForView.replaceInteractions(scrolledInteractions);
 
+    descriptionsForView =
+        descriptionsForView.replaceInteractions(scrolledInteractions);
+  }
+
+  @override
+  void dispose() {
+    _notificationController.close();
+    super.dispose();
+  }
+
+  final _notificationController = StreamController<Notification>.broadcast();
+
+  var _captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+
+  WidgetCaptureViewModel({required String projectId}) {
+    listenToNotifications();
+    _widgetCaptureService.projectId = projectId;
+  }
+
+  WidgetDescription? widgetDescription;
+
+  ValueNotifier<List<WidgetDescription>> descriptionsForViewNotifier =
+      ValueNotifier([]);
+  List<WidgetDescription> get descriptionsForView =>
+      descriptionsForViewNotifier.value;
+  set descriptionsForView(List<WidgetDescription> widgetDescriptions) {
+    descriptionsForViewNotifier.value = widgetDescriptions;
+  }
+
+  bool get currentViewIsCaptured => descriptionsForView.any(
+        (element) => element.widgetType == WidgetType.view,
+      );
+  String get currentViewName => _testSweetsRouteTracker.formatedCurrentRoute;
+
+  /// We use this position as the starter point of any new widget
+  late WidgetPosition screenCenterPosition;
+
+  Future<void> loadWidgetDescriptions() async {
+    log.v('');
+    try {
+      setBusy(true);
+      await _widgetCaptureService.loadWidgetDescriptionsForProject().then((_) {
+        refreshInteractions();
+        _testSweetsRouteTracker.addListener(() {
+          refreshInteractions();
+        });
+      });
+      setBusy(false);
+    } catch (e) {
+      log.e('Could not get widgetDescriptions: $e');
+      _snackbarService.showCustomSnackBar(
+          message: 'Could not get widgetDescriptions: $e',
+          variant: SnackbarType.failed);
+    }
+  }
+
+  void refreshInteractions() {
+    descriptionsForView = _widgetCaptureService.getDescriptionsForView(
+        currentRoute: _testSweetsRouteTracker.currentRoute);
+  }
+
+  set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
+    log.i(captureWidgetStatusEnum);
+    _captureWidgetStatusEnum = captureWidgetStatusEnum;
     notifyListeners();
+  }
+
+  set setWidgetType(WidgetType widgetType) {
+    log.v(widgetType);
+    widgetDescription = widgetDescription!.copyWith(widgetType: widgetType);
+    notifyListeners();
+  }
+
+  set setVisibilty(bool visible) {
+    log.v(visible);
+    widgetDescription = widgetDescription!.copyWith(visibility: visible);
+    notifyListeners();
+  }
+
+  CaptureWidgetStatusEnum get captureWidgetStatusEnum =>
+      _captureWidgetStatusEnum;
+
+  void clearWidgetDescriptionForm() {
+    log.v('');
+    widgetDescription = null;
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+  }
+
+  /// When open the form create new instance of widgetDescription
+  /// if it's null and set [CaptureWidgetStatusEnum.createWidget]
+  void showWidgetForm() {
+    widgetDescription = widgetDescription ??
+        WidgetDescription(
+            position: screenCenterPosition,
+            viewName: '',
+            originalViewName: '',
+            widgetType: WidgetType.touchable);
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.createWidget;
   }
 }
