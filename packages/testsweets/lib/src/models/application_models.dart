@@ -96,7 +96,7 @@ class ScrollableDescription with _$ScrollableDescription {
 
     return ScrollableDescription(
         axis: metrics.axis,
-        rect: SerializableRect(
+        rect: SerializableRect.fromLTWH(
             topLeftPointOfList.dx, topLeftPointOfList.dy, 0, 0),
         scrollingPixelsOnCapture: position,
         maxScrollOffset: metrics.maxScrollExtent);
@@ -104,11 +104,15 @@ class ScrollableDescription with _$ScrollableDescription {
 }
 
 class SerializableRect extends Rect {
-  const SerializableRect(double left, double top, double width, double height)
+  const SerializableRect.fromLTWH(
+      double left, double top, double width, double height)
       : super.fromLTWH(left, top, width, height);
+  const SerializableRect.fromLTRB(
+      double left, double top, double right, double bottom)
+      : super.fromLTRB(left, top, right, bottom);
   SerializableRect.fromPoints(Offset a, Offset b) : super.fromPoints(a, b);
   factory SerializableRect.fromJson(Map<String, double> json) {
-    return SerializableRect(
+    return SerializableRect.fromLTWH(
         json['left']!, json['top']!, json['width']!, json['height']!);
   }
   Map<String, double> toJson() {

@@ -47,6 +47,8 @@ class ReactiveScrollable {
     );
   }
 
+// .translate(interaction.position.xTranlate ?? 0,
+//                     interaction.position.yTranlate ?? 0)
   Iterable<Interaction> moveInteractionsWithScrollable(
     ScrollableDescription scrollableDescription,
     Iterable<Interaction> affectedInteractions,

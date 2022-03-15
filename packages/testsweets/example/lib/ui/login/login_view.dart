@@ -18,68 +18,52 @@ class LoginView extends StatelessWidget {
     ];
 
     return ViewModelBuilder<LoginViewModel>.reactive(
-      builder: (context, model, child) => Scaffold(
-        backgroundColor: Colors.black,
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Container(
-              height: 150,
-              child: Scrollbar(
-                isAlwaysShown: true,
-                child: ListView.builder(
-                  controller: ScrollController(),
-                  itemCount: colorItems.length,
-                  scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.all(10),
-                  itemBuilder: (context, index) => Container(
-                    width: 150,
-                    color: colorItems[index],
-                  ),
+      builder: (context, model, child) {
+        final size = MediaQuery.of(context).size;
+
+        return Scaffold(
+          backgroundColor: Colors.black,
+          body: Stack(
+            children: [
+              Container(
+                height: size.height,
+                child: ListView(
+                  children: [
+                    ...List.generate(
+                      3,
+                      (index) => Container(
+                        height: 500,
+                        color: colorItems[index],
+                      ),
+                    ),
+                    Container(
+                      height: 150,
+                      color: Colors.white,
+                      child: ListView.builder(
+                        controller: ScrollController(),
+                        itemCount: colorItems.length,
+                        scrollDirection: Axis.horizontal,
+                        padding: EdgeInsets.all(10),
+                        itemBuilder: (context, index) => Container(
+                          width: 150,
+                          color: colorItems[index],
+                        ),
+                      ),
+                    ),
+                    ...List.generate(
+                      3,
+                      (index) => Container(
+                        height: 500,
+                        color: colorItems[index],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            Center(
-              child: Column(
-                children: [
-                  TextField(
-                      decoration: InputDecoration(
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(color: Colors.red, width: 3.0),
-                    ),
-                    enabledBorder: const OutlineInputBorder(
-                      borderSide:
-                          const BorderSide(color: Colors.red, width: 3.0),
-                    ),
-                  )),
-                  MaterialButton(
-                    color: Colors.blue,
-                    child: Text(
-                      'Go to Home',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    onPressed: model.navigateToOtherView,
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              height: 200,
-              child: Scrollbar(
-                child: ListView.builder(
-                  itemCount: colorItems.length,
-                  padding: EdgeInsets.all(10),
-                  itemBuilder: (context, index) => Container(
-                    height: 50,
-                    color: colorItems[index],
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
       viewModelBuilder: () => LoginViewModel(),
     );
   }

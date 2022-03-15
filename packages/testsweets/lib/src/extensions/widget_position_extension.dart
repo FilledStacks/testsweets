@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/testsweets.dart';
 
 extension WidgetPositionExtension on WidgetPosition {
