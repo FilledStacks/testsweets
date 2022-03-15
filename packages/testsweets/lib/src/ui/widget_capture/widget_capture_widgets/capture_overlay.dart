@@ -232,6 +232,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
 
     return ScrollableDescription(
         axis: axis,
+        localOffset: renderBox.globalToLocal(Offset.zero),
         scrollableWidgetRect: SerializableRect.fromPoints(
             globalPostion,
             globalPostion.translate(

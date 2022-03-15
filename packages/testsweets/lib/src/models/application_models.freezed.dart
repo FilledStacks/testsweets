@@ -453,15 +453,15 @@ class _$WidgetPositionTearOff {
       required double y,
       double? capturedDeviceWidth,
       double? capturedDeviceHeight,
-      double? xTranlate,
-      double? yTranlate}) {
+      double? xDeviation,
+      double? yDeviation}) {
     return _WidgetPosition(
       x: x,
       y: y,
       capturedDeviceWidth: capturedDeviceWidth,
       capturedDeviceHeight: capturedDeviceHeight,
-      xTranlate: xTranlate,
-      yTranlate: yTranlate,
+      xDeviation: xDeviation,
+      yDeviation: yDeviation,
     );
   }
 
@@ -479,8 +479,8 @@ mixin _$WidgetPosition {
   double get y => throw _privateConstructorUsedError;
   double? get capturedDeviceWidth => throw _privateConstructorUsedError;
   double? get capturedDeviceHeight => throw _privateConstructorUsedError;
-  double? get xTranlate => throw _privateConstructorUsedError;
-  double? get yTranlate => throw _privateConstructorUsedError;
+  double? get xDeviation => throw _privateConstructorUsedError;
+  double? get yDeviation => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -498,8 +498,8 @@ abstract class $WidgetPositionCopyWith<$Res> {
       double y,
       double? capturedDeviceWidth,
       double? capturedDeviceHeight,
-      double? xTranlate,
-      double? yTranlate});
+      double? xDeviation,
+      double? yDeviation});
 }
 
 /// @nodoc
@@ -517,8 +517,8 @@ class _$WidgetPositionCopyWithImpl<$Res>
     Object? y = freezed,
     Object? capturedDeviceWidth = freezed,
     Object? capturedDeviceHeight = freezed,
-    Object? xTranlate = freezed,
-    Object? yTranlate = freezed,
+    Object? xDeviation = freezed,
+    Object? yDeviation = freezed,
   }) {
     return _then(_value.copyWith(
       x: x == freezed
@@ -537,13 +537,13 @@ class _$WidgetPositionCopyWithImpl<$Res>
           ? _value.capturedDeviceHeight
           : capturedDeviceHeight // ignore: cast_nullable_to_non_nullable
               as double?,
-      xTranlate: xTranlate == freezed
-          ? _value.xTranlate
-          : xTranlate // ignore: cast_nullable_to_non_nullable
+      xDeviation: xDeviation == freezed
+          ? _value.xDeviation
+          : xDeviation // ignore: cast_nullable_to_non_nullable
               as double?,
-      yTranlate: yTranlate == freezed
-          ? _value.yTranlate
-          : yTranlate // ignore: cast_nullable_to_non_nullable
+      yDeviation: yDeviation == freezed
+          ? _value.yDeviation
+          : yDeviation // ignore: cast_nullable_to_non_nullable
               as double?,
     ));
   }
@@ -561,8 +561,8 @@ abstract class _$WidgetPositionCopyWith<$Res>
       double y,
       double? capturedDeviceWidth,
       double? capturedDeviceHeight,
-      double? xTranlate,
-      double? yTranlate});
+      double? xDeviation,
+      double? yDeviation});
 }
 
 /// @nodoc
@@ -582,8 +582,8 @@ class __$WidgetPositionCopyWithImpl<$Res>
     Object? y = freezed,
     Object? capturedDeviceWidth = freezed,
     Object? capturedDeviceHeight = freezed,
-    Object? xTranlate = freezed,
-    Object? yTranlate = freezed,
+    Object? xDeviation = freezed,
+    Object? yDeviation = freezed,
   }) {
     return _then(_WidgetPosition(
       x: x == freezed
@@ -602,13 +602,13 @@ class __$WidgetPositionCopyWithImpl<$Res>
           ? _value.capturedDeviceHeight
           : capturedDeviceHeight // ignore: cast_nullable_to_non_nullable
               as double?,
-      xTranlate: xTranlate == freezed
-          ? _value.xTranlate
-          : xTranlate // ignore: cast_nullable_to_non_nullable
+      xDeviation: xDeviation == freezed
+          ? _value.xDeviation
+          : xDeviation // ignore: cast_nullable_to_non_nullable
               as double?,
-      yTranlate: yTranlate == freezed
-          ? _value.yTranlate
-          : yTranlate // ignore: cast_nullable_to_non_nullable
+      yDeviation: yDeviation == freezed
+          ? _value.yDeviation
+          : yDeviation // ignore: cast_nullable_to_non_nullable
               as double?,
     ));
   }
@@ -622,8 +622,8 @@ class _$_WidgetPosition implements _WidgetPosition {
       required this.y,
       this.capturedDeviceWidth,
       this.capturedDeviceHeight,
-      this.xTranlate,
-      this.yTranlate});
+      this.xDeviation,
+      this.yDeviation});
 
   factory _$_WidgetPosition.fromJson(Map<String, dynamic> json) =>
       _$$_WidgetPositionFromJson(json);
@@ -637,13 +637,13 @@ class _$_WidgetPosition implements _WidgetPosition {
   @override
   final double? capturedDeviceHeight;
   @override
-  final double? xTranlate;
+  final double? xDeviation;
   @override
-  final double? yTranlate;
+  final double? yDeviation;
 
   @override
   String toString() {
-    return 'WidgetPosition(x: $x, y: $y, capturedDeviceWidth: $capturedDeviceWidth, capturedDeviceHeight: $capturedDeviceHeight, xTranlate: $xTranlate, yTranlate: $yTranlate)';
+    return 'WidgetPosition(x: $x, y: $y, capturedDeviceWidth: $capturedDeviceWidth, capturedDeviceHeight: $capturedDeviceHeight, xDeviation: $xDeviation, yDeviation: $yDeviation)';
   }
 
   @override
@@ -660,12 +660,12 @@ class _$_WidgetPosition implements _WidgetPosition {
             (identical(other.capturedDeviceHeight, capturedDeviceHeight) ||
                 const DeepCollectionEquality().equals(
                     other.capturedDeviceHeight, capturedDeviceHeight)) &&
-            (identical(other.xTranlate, xTranlate) ||
+            (identical(other.xDeviation, xDeviation) ||
                 const DeepCollectionEquality()
-                    .equals(other.xTranlate, xTranlate)) &&
-            (identical(other.yTranlate, yTranlate) ||
+                    .equals(other.xDeviation, xDeviation)) &&
+            (identical(other.yDeviation, yDeviation) ||
                 const DeepCollectionEquality()
-                    .equals(other.yTranlate, yTranlate)));
+                    .equals(other.yDeviation, yDeviation)));
   }
 
   @override
@@ -675,8 +675,8 @@ class _$_WidgetPosition implements _WidgetPosition {
       const DeepCollectionEquality().hash(y) ^
       const DeepCollectionEquality().hash(capturedDeviceWidth) ^
       const DeepCollectionEquality().hash(capturedDeviceHeight) ^
-      const DeepCollectionEquality().hash(xTranlate) ^
-      const DeepCollectionEquality().hash(yTranlate);
+      const DeepCollectionEquality().hash(xDeviation) ^
+      const DeepCollectionEquality().hash(yDeviation);
 
   @JsonKey(ignore: true)
   @override
@@ -695,8 +695,8 @@ abstract class _WidgetPosition implements WidgetPosition {
       required double y,
       double? capturedDeviceWidth,
       double? capturedDeviceHeight,
-      double? xTranlate,
-      double? yTranlate}) = _$_WidgetPosition;
+      double? xDeviation,
+      double? yDeviation}) = _$_WidgetPosition;
 
   factory _WidgetPosition.fromJson(Map<String, dynamic> json) =
       _$_WidgetPosition.fromJson;
@@ -710,9 +710,9 @@ abstract class _WidgetPosition implements WidgetPosition {
   @override
   double? get capturedDeviceHeight => throw _privateConstructorUsedError;
   @override
-  double? get xTranlate => throw _privateConstructorUsedError;
+  double? get xDeviation => throw _privateConstructorUsedError;
   @override
-  double? get yTranlate => throw _privateConstructorUsedError;
+  double? get yDeviation => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$WidgetPositionCopyWith<_WidgetPosition> get copyWith =>
@@ -725,11 +725,13 @@ class _$ScrollableDescriptionTearOff {
 
   _ScrollableDescription call(
       {required Axis axis,
+      required Offset localOffset,
       required SerializableRect scrollableWidgetRect,
       required double scrollExtentByPixels,
       required double maxScrollExtent}) {
     return _ScrollableDescription(
       axis: axis,
+      localOffset: localOffset,
       scrollableWidgetRect: scrollableWidgetRect,
       scrollExtentByPixels: scrollExtentByPixels,
       maxScrollExtent: maxScrollExtent,
@@ -743,6 +745,7 @@ const $ScrollableDescription = _$ScrollableDescriptionTearOff();
 /// @nodoc
 mixin _$ScrollableDescription {
   Axis get axis => throw _privateConstructorUsedError;
+  Offset get localOffset => throw _privateConstructorUsedError;
   SerializableRect get scrollableWidgetRect =>
       throw _privateConstructorUsedError;
   double get scrollExtentByPixels => throw _privateConstructorUsedError;
@@ -760,6 +763,7 @@ abstract class $ScrollableDescriptionCopyWith<$Res> {
       _$ScrollableDescriptionCopyWithImpl<$Res>;
   $Res call(
       {Axis axis,
+      Offset localOffset,
       SerializableRect scrollableWidgetRect,
       double scrollExtentByPixels,
       double maxScrollExtent});
@@ -777,6 +781,7 @@ class _$ScrollableDescriptionCopyWithImpl<$Res>
   @override
   $Res call({
     Object? axis = freezed,
+    Object? localOffset = freezed,
     Object? scrollableWidgetRect = freezed,
     Object? scrollExtentByPixels = freezed,
     Object? maxScrollExtent = freezed,
@@ -786,6 +791,10 @@ class _$ScrollableDescriptionCopyWithImpl<$Res>
           ? _value.axis
           : axis // ignore: cast_nullable_to_non_nullable
               as Axis,
+      localOffset: localOffset == freezed
+          ? _value.localOffset
+          : localOffset // ignore: cast_nullable_to_non_nullable
+              as Offset,
       scrollableWidgetRect: scrollableWidgetRect == freezed
           ? _value.scrollableWidgetRect
           : scrollableWidgetRect // ignore: cast_nullable_to_non_nullable
@@ -811,6 +820,7 @@ abstract class _$ScrollableDescriptionCopyWith<$Res>
   @override
   $Res call(
       {Axis axis,
+      Offset localOffset,
       SerializableRect scrollableWidgetRect,
       double scrollExtentByPixels,
       double maxScrollExtent});
@@ -830,6 +840,7 @@ class __$ScrollableDescriptionCopyWithImpl<$Res>
   @override
   $Res call({
     Object? axis = freezed,
+    Object? localOffset = freezed,
     Object? scrollableWidgetRect = freezed,
     Object? scrollExtentByPixels = freezed,
     Object? maxScrollExtent = freezed,
@@ -839,6 +850,10 @@ class __$ScrollableDescriptionCopyWithImpl<$Res>
           ? _value.axis
           : axis // ignore: cast_nullable_to_non_nullable
               as Axis,
+      localOffset: localOffset == freezed
+          ? _value.localOffset
+          : localOffset // ignore: cast_nullable_to_non_nullable
+              as Offset,
       scrollableWidgetRect: scrollableWidgetRect == freezed
           ? _value.scrollableWidgetRect
           : scrollableWidgetRect // ignore: cast_nullable_to_non_nullable
@@ -860,12 +875,15 @@ class __$ScrollableDescriptionCopyWithImpl<$Res>
 class _$_ScrollableDescription implements _ScrollableDescription {
   _$_ScrollableDescription(
       {required this.axis,
+      required this.localOffset,
       required this.scrollableWidgetRect,
       required this.scrollExtentByPixels,
       required this.maxScrollExtent});
 
   @override
   final Axis axis;
+  @override
+  final Offset localOffset;
   @override
   final SerializableRect scrollableWidgetRect;
   @override
@@ -875,7 +893,7 @@ class _$_ScrollableDescription implements _ScrollableDescription {
 
   @override
   String toString() {
-    return 'ScrollableDescription(axis: $axis, scrollableWidgetRect: $scrollableWidgetRect, scrollExtentByPixels: $scrollExtentByPixels, maxScrollExtent: $maxScrollExtent)';
+    return 'ScrollableDescription(axis: $axis, localOffset: $localOffset, scrollableWidgetRect: $scrollableWidgetRect, scrollExtentByPixels: $scrollExtentByPixels, maxScrollExtent: $maxScrollExtent)';
   }
 
   @override
@@ -884,6 +902,9 @@ class _$_ScrollableDescription implements _ScrollableDescription {
         (other is _ScrollableDescription &&
             (identical(other.axis, axis) ||
                 const DeepCollectionEquality().equals(other.axis, axis)) &&
+            (identical(other.localOffset, localOffset) ||
+                const DeepCollectionEquality()
+                    .equals(other.localOffset, localOffset)) &&
             (identical(other.scrollableWidgetRect, scrollableWidgetRect) ||
                 const DeepCollectionEquality().equals(
                     other.scrollableWidgetRect, scrollableWidgetRect)) &&
@@ -899,6 +920,7 @@ class _$_ScrollableDescription implements _ScrollableDescription {
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(axis) ^
+      const DeepCollectionEquality().hash(localOffset) ^
       const DeepCollectionEquality().hash(scrollableWidgetRect) ^
       const DeepCollectionEquality().hash(scrollExtentByPixels) ^
       const DeepCollectionEquality().hash(maxScrollExtent);
@@ -913,12 +935,15 @@ class _$_ScrollableDescription implements _ScrollableDescription {
 abstract class _ScrollableDescription implements ScrollableDescription {
   factory _ScrollableDescription(
       {required Axis axis,
+      required Offset localOffset,
       required SerializableRect scrollableWidgetRect,
       required double scrollExtentByPixels,
       required double maxScrollExtent}) = _$_ScrollableDescription;
 
   @override
   Axis get axis => throw _privateConstructorUsedError;
+  @override
+  Offset get localOffset => throw _privateConstructorUsedError;
   @override
   SerializableRect get scrollableWidgetRect =>
       throw _privateConstructorUsedError;

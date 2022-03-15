@@ -82,8 +82,8 @@ _$_WidgetPosition _$$_WidgetPositionFromJson(Map<String, dynamic> json) =>
       y: (json['y'] as num).toDouble(),
       capturedDeviceWidth: (json['capturedDeviceWidth'] as num?)?.toDouble(),
       capturedDeviceHeight: (json['capturedDeviceHeight'] as num?)?.toDouble(),
-      xTranlate: (json['xTranlate'] as num?)?.toDouble(),
-      yTranlate: (json['yTranlate'] as num?)?.toDouble(),
+      xDeviation: (json['xDeviation'] as num?)?.toDouble(),
+      yDeviation: (json['yDeviation'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$_WidgetPositionToJson(_$_WidgetPosition instance) =>
@@ -92,6 +92,6 @@ Map<String, dynamic> _$$_WidgetPositionToJson(_$_WidgetPosition instance) =>
       'y': instance.y,
       'capturedDeviceWidth': instance.capturedDeviceWidth,
       'capturedDeviceHeight': instance.capturedDeviceHeight,
-      'xTranlate': instance.xTranlate,
-      'yTranlate': instance.yTranlate,
+      'xDeviation': instance.xDeviation,
+      'yDeviation': instance.yDeviation,
     };

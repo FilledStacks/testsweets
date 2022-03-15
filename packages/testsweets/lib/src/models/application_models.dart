@@ -68,8 +68,8 @@ class WidgetPosition with _$WidgetPosition {
     required double y,
     double? capturedDeviceWidth,
     double? capturedDeviceHeight,
-    double? xTranlate,
-    double? yTranlate,
+    double? xDeviation,
+    double? yDeviation,
   }) = _WidgetPosition;
   factory WidgetPosition.empty() => WidgetPosition(x: 0, y: 0);
   factory WidgetPosition.fromJson(Map<String, dynamic> json) =>
@@ -80,6 +80,7 @@ class WidgetPosition with _$WidgetPosition {
 class ScrollableDescription with _$ScrollableDescription {
   factory ScrollableDescription({
     required Axis axis,
+    required Offset localOffset,
     required SerializableRect scrollableWidgetRect,
     required double scrollExtentByPixels,
     required double maxScrollExtent,
@@ -95,6 +96,7 @@ class ScrollableDescription with _$ScrollableDescription {
     final topLeftPointOfList = globalPosition - localPosition;
 
     return ScrollableDescription(
+        localOffset: localPosition,
         axis: metrics.axis,
         scrollableWidgetRect: SerializableRect.fromLTWH(
             topLeftPointOfList.dx, topLeftPointOfList.dy, 0, 0),

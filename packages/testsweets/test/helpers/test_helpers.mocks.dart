@@ -5,7 +5,7 @@
 import 'dart:async' as _i8;
 import 'dart:ui' as _i11;
 
-import 'package:flutter/material.dart' as _i7;
+import 'package:flutter/cupertino.dart' as _i7;
 import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked_services/src/snackbar/snackbar_config.dart' as _i6;
@@ -397,10 +397,10 @@ class MockReactiveScrollable extends _i1.Mock
   @override
   _i4.Interaction applyScrollableOnInteraction(
           Iterable<_i4.ScrollableDescription>? scrollables,
-          _i4.Interaction? widgetDescription) =>
+          _i4.Interaction? interaction) =>
       (super.noSuchMethod(
           Invocation.method(
-              #applyScrollableOnInteraction, [scrollables, widgetDescription]),
+              #applyScrollableOnInteraction, [scrollables, interaction]),
           returnValue: _FakeInteraction_2()) as _i4.Interaction);
   @override
   Iterable<_i4.Interaction> filterAffectedInteractionsByScrollable(

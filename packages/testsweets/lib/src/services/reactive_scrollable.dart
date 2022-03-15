@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
 import 'package:testsweets/testsweets.dart';
 
@@ -7,30 +8,30 @@ class ReactiveScrollable {
   final log = getLogger('ReactiveScrollable');
   Interaction applyScrollableOnInteraction(
     Iterable<ScrollableDescription> scrollables,
-    Interaction widgetDescription,
+    Interaction interaction,
   ) {
-    log.v(widgetDescription);
+    log.v(interaction);
     final overlapScrollableWithInteraction = scrollables.where(
       (element) => element.scrollableWidgetRect.contains(
-        widgetDescription.position.toOffset,
+        interaction.position.toOffset,
       ),
     );
 
     /// If there is no overlapping with any scrollable
     /// Return WidgetDescription without changing anything
-    if (overlapScrollableWithInteraction.isEmpty) return widgetDescription;
+    if (overlapScrollableWithInteraction.isEmpty) return interaction;
 
     for (var scrollable in overlapScrollableWithInteraction.toList()) {
-      widgetDescription = widgetDescription.copyWith(
+      interaction = interaction.copyWith(
         externalities: {
-          ...widgetDescription.externalities ?? {},
+          ...interaction.externalities ?? {},
           scrollable.scrollableWidgetRect
         },
-        position: widgetDescription.position.withScrollable(scrollable),
+        position: interaction.position.withScrollable(scrollable),
       );
     }
 
-    return widgetDescription;
+    return interaction;
   }
 
   Iterable<Interaction> filterAffectedInteractionsByScrollable(
@@ -39,13 +40,23 @@ class ReactiveScrollable {
     log.v(scrollableDescription);
 
     return viewDescription.where(
-      (interaction) =>
-          interaction.externalities?.any(
-            (rect) =>
-                rect.topLeft ==
-                scrollableDescription.scrollableWidgetRect.topLeft,
-          ) ??
-          false,
+      (interaction) {
+        /// This fixes the nested scrollables issue where the first scrollable
+        /// deviate the second one's offset
+        final offsetDeviation = Offset(
+            scrollableDescription.axis == Axis.vertical
+                ? interaction.position.xDeviation ?? 0
+                : 0,
+            scrollableDescription.axis == Axis.horizontal
+                ? -(interaction.position.yDeviation ?? 0)
+                : 0);
+        return interaction.externalities?.any(
+              (externalRect) =>
+                  externalRect.topLeft + offsetDeviation ==
+                  scrollableDescription.scrollableWidgetRect.topLeft,
+            ) ??
+            false;
+      },
     );
   }
 

@@ -178,7 +178,32 @@ void main() {
 
         /// It should be the first item not the second but replaceing
         /// widget adds the widget at the end of the list
-        expect(model.descriptionsForView[1].position.yTranlate, 100);
+        expect(model.descriptionsForView[1].position.yDeviation, 100);
+      });
+      test('''
+          When repeating the same scroll but now the interaction is already scrolled vertically
+          So YTranslate not null
+        ''', () async {
+        getAndRegisterWidgetCaptureService(
+          listOfWidgetDescription: [
+            kGeneralInteractionWithZeroOffset.copyWith(
+                position: WidgetPosition(x: 0, y: 0, yDeviation: 100),
+                externalities: {SerializableRect.fromLTWH(0, 0, 0, 0)}),
+            kGeneralInteraction
+          ],
+        );
+
+        // I want to use the real service not the mocked one
+        registerServiceInstead(ReactiveScrollable());
+
+        final model = _getViewModel();
+        await model.loadWidgetDescriptions();
+
+        model.reactToScroll(kTopLeftVerticalScrollableDescription);
+
+        /// It should be the first item not the second but replaceing
+        /// widget adds the widget at the end of the list
+        expect(model.descriptionsForView[1].position.yDeviation, 100);
       });
       test('''
         When called two times(one vertical list and one horizontal) on one interaction,
@@ -227,8 +252,8 @@ void main() {
 
         /// It should be the first item not the second but replaceing
         /// widget adds the widget at the end of the list
-        expect(model.descriptionsForView[1].position.yTranlate, 100);
-        expect(model.descriptionsForView[1].position.xTranlate, 50);
+        expect(model.descriptionsForView[1].position.yDeviation, 100);
+        expect(model.descriptionsForView[1].position.xDeviation, 50);
       });
     });
   });

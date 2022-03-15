@@ -87,7 +87,7 @@ void main() {
             kTopLeftVerticalScrollableDescription, [
           kScrollableInteraction,
         ]);
-        expect(result.first.position.yTranlate, 100);
+        expect(result.first.position.yDeviation, 100);
       });
     });
   });
