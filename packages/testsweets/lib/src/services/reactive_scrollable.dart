@@ -11,7 +11,7 @@ class ReactiveScrollable {
   ) {
     log.v(widgetDescription);
     final overlapScrollableWithInteraction = scrollables.where(
-      (element) => element.rect.contains(
+      (element) => element.scrollableWidgetRect.contains(
         widgetDescription.position.toOffset,
       ),
     );
@@ -24,7 +24,7 @@ class ReactiveScrollable {
       widgetDescription = widgetDescription.copyWith(
         externalities: {
           ...widgetDescription.externalities ?? {},
-          scrollable.rect
+          scrollable.scrollableWidgetRect
         },
         position: widgetDescription.position.withScrollable(scrollable),
       );
@@ -41,14 +41,14 @@ class ReactiveScrollable {
     return viewDescription.where(
       (interaction) =>
           interaction.externalities?.any(
-            (rect) => rect.topLeft == scrollableDescription.rect.topLeft,
+            (rect) =>
+                rect.topLeft ==
+                scrollableDescription.scrollableWidgetRect.topLeft,
           ) ??
           false,
     );
   }
 
-// .translate(interaction.position.xTranlate ?? 0,
-//                     interaction.position.yTranlate ?? 0)
   Iterable<Interaction> moveInteractionsWithScrollable(
     ScrollableDescription scrollableDescription,
     Iterable<Interaction> affectedInteractions,

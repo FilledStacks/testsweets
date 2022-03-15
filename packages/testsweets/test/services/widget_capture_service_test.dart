@@ -534,8 +534,8 @@ void main() {
           () async {
         getAndRegisterCloudFunctionsService(
             getWidgetDescriptionForProjectResult: [
-              kWidgetDescription2,
-              kWidgetDescriptionView
+              kGeneralInteraction,
+              kViewInteraction
             ]);
         final _service = _getService;
 
@@ -544,11 +544,11 @@ void main() {
 
         // update [kWidgetDescription] key
         await _service.updateWidgetDescription(
-          description: kWidgetDescription2.copyWith(name: 'login22'),
+          description: kGeneralInteraction.copyWith(name: 'login22'),
         );
 
         expect(_service.widgetDescriptionMap['/']!.first.name,
-            kWidgetDescription2.name);
+            kGeneralInteraction.name);
       });
     });
   });

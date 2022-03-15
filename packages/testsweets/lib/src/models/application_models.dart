@@ -80,9 +80,9 @@ class WidgetPosition with _$WidgetPosition {
 class ScrollableDescription with _$ScrollableDescription {
   factory ScrollableDescription({
     required Axis axis,
-    required SerializableRect rect,
-    required double scrollingPixelsOnCapture,
-    required double maxScrollOffset,
+    required SerializableRect scrollableWidgetRect,
+    required double scrollExtentByPixels,
+    required double maxScrollExtent,
   }) = _ScrollableDescription;
 
   factory ScrollableDescription.fromNotification({
@@ -96,10 +96,10 @@ class ScrollableDescription with _$ScrollableDescription {
 
     return ScrollableDescription(
         axis: metrics.axis,
-        rect: SerializableRect.fromLTWH(
+        scrollableWidgetRect: SerializableRect.fromLTWH(
             topLeftPointOfList.dx, topLeftPointOfList.dy, 0, 0),
-        scrollingPixelsOnCapture: position,
-        maxScrollOffset: metrics.maxScrollExtent);
+        scrollExtentByPixels: position,
+        maxScrollExtent: metrics.maxScrollExtent);
   }
 }
 

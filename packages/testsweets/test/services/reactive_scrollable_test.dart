@@ -15,34 +15,35 @@ void main() {
     Should add the scroll to the y of widgetPosition of our interaction''', () {
         final service = ReactiveScrollable();
         final result = service.applyScrollableOnInteraction(
-          [kTopLeftScrollableDescription],
-          kWidgetDescriptionTypeScroll1,
+          [kTopLeftVerticalScrollableDescription],
+          kScrollableInteraction,
         );
-        expect(
-            result.position.y, kWidgetDescriptionTypeScroll1.position.y + 100);
+        expect(result.position.y, kScrollableInteraction.position.y + 100);
       });
       test(
           'When we have one scrollable, Should add the hash to externalities Set',
           () {
         final service = ReactiveScrollable();
         final result = service.applyScrollableOnInteraction(
-          [kTopLeftScrollableDescription],
-          kWidgetDescriptionTypeScroll1,
+          [kTopLeftVerticalScrollableDescription],
+          kScrollableInteraction,
         );
-        expect(result.externalities!.first, kTopLeftScrollableDescription.rect);
+        expect(result.externalities!.first,
+            kTopLeftVerticalScrollableDescription.scrollableWidgetRect);
       });
       test('''When we have two scrollables that been scrolled 100px vertically
     and 50px horizontally, Should add the scroll to the y of
     widgetPosition of our interaction''', () {
         final service = ReactiveScrollable();
         final result = service.applyScrollableOnInteraction(
-          [kTopLeftScrollableDescription, kAnotherTopLeftScrollableDescription],
-          kWidgetDescriptionTypeScroll1,
+          [
+            kTopLeftVerticalScrollableDescription,
+            kTopLeftHorizontalScrollableDescription
+          ],
+          kScrollableInteraction,
         );
-        expect(
-            result.position.y, kWidgetDescriptionTypeScroll1.position.y + 100);
-        expect(
-            result.position.x, kWidgetDescriptionTypeScroll1.position.x + 50);
+        expect(result.position.y, kScrollableInteraction.position.y + 100);
+        expect(result.position.x, kScrollableInteraction.position.x + 50);
       });
     });
     group('filterAffectedInteractionsByScrollable -', () {
@@ -50,12 +51,14 @@ void main() {
           'When called, Should return any interaction that may affect by the scroll',
           () {
         final service = ReactiveScrollable();
-        Interaction interactionWithExternalites = kWidgetDescriptionTypeScroll1
-            .copyWith(externalities: {kTopLeftScrollableDescription.rect});
+        Interaction interactionWithExternalites = kScrollableInteraction
+            .copyWith(externalities: {
+          kTopLeftVerticalScrollableDescription.scrollableWidgetRect
+        });
         final result = service.filterAffectedInteractionsByScrollable(
-            kTopLeftScrollableDescription, [
+            kTopLeftVerticalScrollableDescription, [
           interactionWithExternalites,
-          kWidgetDescriptionTypeScroll2,
+          kScrollableInteraction2,
         ]).toList();
 
         /// NOTE: the offset doesn't have any effect on this function cause that
@@ -68,9 +71,9 @@ void main() {
         final service = ReactiveScrollable();
 
         final result = service.filterAffectedInteractionsByScrollable(
-            kTopLeftScrollableDescription, [
-          kWidgetDescriptionTypeScroll1,
-          kWidgetDescriptionTypeScroll2,
+            kTopLeftVerticalScrollableDescription, [
+          kScrollableInteraction,
+          kScrollableInteraction2,
         ]).toList();
 
         expect(result, isEmpty);
@@ -80,9 +83,9 @@ void main() {
       test('''When add scrollDescription of 100px on vertical,
        Should add 100 to yTranslate of the interaction''', () {
         final service = ReactiveScrollable();
-        final result = service
-            .moveInteractionsWithScrollable(kTopLeftScrollableDescription, [
-          kWidgetDescriptionTypeScroll1,
+        final result = service.moveInteractionsWithScrollable(
+            kTopLeftVerticalScrollableDescription, [
+          kScrollableInteraction,
         ]);
         expect(result.first.position.yTranlate, 100);
       });

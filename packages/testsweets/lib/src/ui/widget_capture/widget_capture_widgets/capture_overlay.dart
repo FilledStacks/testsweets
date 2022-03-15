@@ -232,12 +232,12 @@ class _CaptureOverlayState extends State<CaptureOverlay>
 
     return ScrollableDescription(
         axis: axis,
-        rect: SerializableRect.fromPoints(
+        scrollableWidgetRect: SerializableRect.fromPoints(
             globalPostion,
             globalPostion.translate(
                 renderBox.size.width, renderBox.size.height)),
-        scrollingPixelsOnCapture: scrollOffsetOnCapture,
-        maxScrollOffset: maxScrollOffset);
+        scrollExtentByPixels: scrollOffsetOnCapture,
+        maxScrollExtent: maxScrollOffset);
   }
 
   Future<void> _closeBottomSheet() async {

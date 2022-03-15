@@ -23,9 +23,9 @@ void main() {
 
         /// Sence default visibilty is true
         expect(
-            _service
-                .toggleVisibilty([kWidgetDescription1], [kWidgetDescription1]),
-            [kWidgetDescription1.copyWith(visibility: false)]);
+            _service.toggleVisibilty([kGeneralInteractionWithZeroOffset],
+                [kGeneralInteractionWithZeroOffset]),
+            [kGeneralInteractionWithZeroOffset.copyWith(visibility: false)]);
       });
     });
     group('completeCompleter -', () {
@@ -44,13 +44,13 @@ void main() {
         final _service = WidgetVisibiltyChangerService();
 
         final result = _service.updateViewWidgetsList([
-          kWidgetDescription2.copyWith(visibility: true)
+          kGeneralInteraction.copyWith(visibility: true)
         ], [
-          kWidgetDescription1,
-          kWidgetDescription2.copyWith(visibility: false)
+          kGeneralInteractionWithZeroOffset,
+          kGeneralInteraction.copyWith(visibility: false)
         ]);
         expect(result.elementAt(1),
-            kWidgetDescription2.copyWith(visibility: true));
+            kGeneralInteraction.copyWith(visibility: true));
       });
     });
   });
@@ -58,18 +58,20 @@ void main() {
   group('filterTargetedWidgets -', () {
     test('When call, Should extract the targeted widgets by id', () {
       final _service = WidgetVisibiltyChangerService();
-      final targetedWidgets =
-          _service.filterTargetedWidgets(kWidgetDescription1.automationKey, [
-        kWidgetDescription1.copyWith(targetIds: [kWidgetDescription2.id!]),
-        kWidgetDescription2
+      final targetedWidgets = _service.filterTargetedWidgets(
+          kGeneralInteractionWithZeroOffset.automationKey, [
+        kGeneralInteractionWithZeroOffset
+            .copyWith(targetIds: [kGeneralInteraction.id!]),
+        kGeneralInteraction
       ]);
-      expect(targetedWidgets.first, kWidgetDescription2);
+      expect(targetedWidgets.first, kGeneralInteraction);
     });
     test('When targetIds is empty, Should return empty list', () {
       final _service = WidgetVisibiltyChangerService();
 
       final targetedWidgets = _service.filterTargetedWidgets(
-          kWidgetDescription1.automationKey, [kWidgetDescription1]);
+          kGeneralInteractionWithZeroOffset.automationKey,
+          [kGeneralInteractionWithZeroOffset]);
       expect(targetedWidgets, isEmpty);
     });
   });

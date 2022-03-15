@@ -725,14 +725,14 @@ class _$ScrollableDescriptionTearOff {
 
   _ScrollableDescription call(
       {required Axis axis,
-      required SerializableRect rect,
-      required double scrollingPixelsOnCapture,
-      required double maxScrollOffset}) {
+      required SerializableRect scrollableWidgetRect,
+      required double scrollExtentByPixels,
+      required double maxScrollExtent}) {
     return _ScrollableDescription(
       axis: axis,
-      rect: rect,
-      scrollingPixelsOnCapture: scrollingPixelsOnCapture,
-      maxScrollOffset: maxScrollOffset,
+      scrollableWidgetRect: scrollableWidgetRect,
+      scrollExtentByPixels: scrollExtentByPixels,
+      maxScrollExtent: maxScrollExtent,
     );
   }
 }
@@ -743,9 +743,10 @@ const $ScrollableDescription = _$ScrollableDescriptionTearOff();
 /// @nodoc
 mixin _$ScrollableDescription {
   Axis get axis => throw _privateConstructorUsedError;
-  SerializableRect get rect => throw _privateConstructorUsedError;
-  double get scrollingPixelsOnCapture => throw _privateConstructorUsedError;
-  double get maxScrollOffset => throw _privateConstructorUsedError;
+  SerializableRect get scrollableWidgetRect =>
+      throw _privateConstructorUsedError;
+  double get scrollExtentByPixels => throw _privateConstructorUsedError;
+  double get maxScrollExtent => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ScrollableDescriptionCopyWith<ScrollableDescription> get copyWith =>
@@ -759,9 +760,9 @@ abstract class $ScrollableDescriptionCopyWith<$Res> {
       _$ScrollableDescriptionCopyWithImpl<$Res>;
   $Res call(
       {Axis axis,
-      SerializableRect rect,
-      double scrollingPixelsOnCapture,
-      double maxScrollOffset});
+      SerializableRect scrollableWidgetRect,
+      double scrollExtentByPixels,
+      double maxScrollExtent});
 }
 
 /// @nodoc
@@ -776,26 +777,26 @@ class _$ScrollableDescriptionCopyWithImpl<$Res>
   @override
   $Res call({
     Object? axis = freezed,
-    Object? rect = freezed,
-    Object? scrollingPixelsOnCapture = freezed,
-    Object? maxScrollOffset = freezed,
+    Object? scrollableWidgetRect = freezed,
+    Object? scrollExtentByPixels = freezed,
+    Object? maxScrollExtent = freezed,
   }) {
     return _then(_value.copyWith(
       axis: axis == freezed
           ? _value.axis
           : axis // ignore: cast_nullable_to_non_nullable
               as Axis,
-      rect: rect == freezed
-          ? _value.rect
-          : rect // ignore: cast_nullable_to_non_nullable
+      scrollableWidgetRect: scrollableWidgetRect == freezed
+          ? _value.scrollableWidgetRect
+          : scrollableWidgetRect // ignore: cast_nullable_to_non_nullable
               as SerializableRect,
-      scrollingPixelsOnCapture: scrollingPixelsOnCapture == freezed
-          ? _value.scrollingPixelsOnCapture
-          : scrollingPixelsOnCapture // ignore: cast_nullable_to_non_nullable
+      scrollExtentByPixels: scrollExtentByPixels == freezed
+          ? _value.scrollExtentByPixels
+          : scrollExtentByPixels // ignore: cast_nullable_to_non_nullable
               as double,
-      maxScrollOffset: maxScrollOffset == freezed
-          ? _value.maxScrollOffset
-          : maxScrollOffset // ignore: cast_nullable_to_non_nullable
+      maxScrollExtent: maxScrollExtent == freezed
+          ? _value.maxScrollExtent
+          : maxScrollExtent // ignore: cast_nullable_to_non_nullable
               as double,
     ));
   }
@@ -810,9 +811,9 @@ abstract class _$ScrollableDescriptionCopyWith<$Res>
   @override
   $Res call(
       {Axis axis,
-      SerializableRect rect,
-      double scrollingPixelsOnCapture,
-      double maxScrollOffset});
+      SerializableRect scrollableWidgetRect,
+      double scrollExtentByPixels,
+      double maxScrollExtent});
 }
 
 /// @nodoc
@@ -829,26 +830,26 @@ class __$ScrollableDescriptionCopyWithImpl<$Res>
   @override
   $Res call({
     Object? axis = freezed,
-    Object? rect = freezed,
-    Object? scrollingPixelsOnCapture = freezed,
-    Object? maxScrollOffset = freezed,
+    Object? scrollableWidgetRect = freezed,
+    Object? scrollExtentByPixels = freezed,
+    Object? maxScrollExtent = freezed,
   }) {
     return _then(_ScrollableDescription(
       axis: axis == freezed
           ? _value.axis
           : axis // ignore: cast_nullable_to_non_nullable
               as Axis,
-      rect: rect == freezed
-          ? _value.rect
-          : rect // ignore: cast_nullable_to_non_nullable
+      scrollableWidgetRect: scrollableWidgetRect == freezed
+          ? _value.scrollableWidgetRect
+          : scrollableWidgetRect // ignore: cast_nullable_to_non_nullable
               as SerializableRect,
-      scrollingPixelsOnCapture: scrollingPixelsOnCapture == freezed
-          ? _value.scrollingPixelsOnCapture
-          : scrollingPixelsOnCapture // ignore: cast_nullable_to_non_nullable
+      scrollExtentByPixels: scrollExtentByPixels == freezed
+          ? _value.scrollExtentByPixels
+          : scrollExtentByPixels // ignore: cast_nullable_to_non_nullable
               as double,
-      maxScrollOffset: maxScrollOffset == freezed
-          ? _value.maxScrollOffset
-          : maxScrollOffset // ignore: cast_nullable_to_non_nullable
+      maxScrollExtent: maxScrollExtent == freezed
+          ? _value.maxScrollExtent
+          : maxScrollExtent // ignore: cast_nullable_to_non_nullable
               as double,
     ));
   }
@@ -859,22 +860,22 @@ class __$ScrollableDescriptionCopyWithImpl<$Res>
 class _$_ScrollableDescription implements _ScrollableDescription {
   _$_ScrollableDescription(
       {required this.axis,
-      required this.rect,
-      required this.scrollingPixelsOnCapture,
-      required this.maxScrollOffset});
+      required this.scrollableWidgetRect,
+      required this.scrollExtentByPixels,
+      required this.maxScrollExtent});
 
   @override
   final Axis axis;
   @override
-  final SerializableRect rect;
+  final SerializableRect scrollableWidgetRect;
   @override
-  final double scrollingPixelsOnCapture;
+  final double scrollExtentByPixels;
   @override
-  final double maxScrollOffset;
+  final double maxScrollExtent;
 
   @override
   String toString() {
-    return 'ScrollableDescription(axis: $axis, rect: $rect, scrollingPixelsOnCapture: $scrollingPixelsOnCapture, maxScrollOffset: $maxScrollOffset)';
+    return 'ScrollableDescription(axis: $axis, scrollableWidgetRect: $scrollableWidgetRect, scrollExtentByPixels: $scrollExtentByPixels, maxScrollExtent: $maxScrollExtent)';
   }
 
   @override
@@ -883,25 +884,24 @@ class _$_ScrollableDescription implements _ScrollableDescription {
         (other is _ScrollableDescription &&
             (identical(other.axis, axis) ||
                 const DeepCollectionEquality().equals(other.axis, axis)) &&
-            (identical(other.rect, rect) ||
-                const DeepCollectionEquality().equals(other.rect, rect)) &&
-            (identical(
-                    other.scrollingPixelsOnCapture, scrollingPixelsOnCapture) ||
+            (identical(other.scrollableWidgetRect, scrollableWidgetRect) ||
                 const DeepCollectionEquality().equals(
-                    other.scrollingPixelsOnCapture,
-                    scrollingPixelsOnCapture)) &&
-            (identical(other.maxScrollOffset, maxScrollOffset) ||
+                    other.scrollableWidgetRect, scrollableWidgetRect)) &&
+            (identical(other.scrollExtentByPixels, scrollExtentByPixels) ||
+                const DeepCollectionEquality().equals(
+                    other.scrollExtentByPixels, scrollExtentByPixels)) &&
+            (identical(other.maxScrollExtent, maxScrollExtent) ||
                 const DeepCollectionEquality()
-                    .equals(other.maxScrollOffset, maxScrollOffset)));
+                    .equals(other.maxScrollExtent, maxScrollExtent)));
   }
 
   @override
   int get hashCode =>
       runtimeType.hashCode ^
       const DeepCollectionEquality().hash(axis) ^
-      const DeepCollectionEquality().hash(rect) ^
-      const DeepCollectionEquality().hash(scrollingPixelsOnCapture) ^
-      const DeepCollectionEquality().hash(maxScrollOffset);
+      const DeepCollectionEquality().hash(scrollableWidgetRect) ^
+      const DeepCollectionEquality().hash(scrollExtentByPixels) ^
+      const DeepCollectionEquality().hash(maxScrollExtent);
 
   @JsonKey(ignore: true)
   @override
@@ -913,18 +913,19 @@ class _$_ScrollableDescription implements _ScrollableDescription {
 abstract class _ScrollableDescription implements ScrollableDescription {
   factory _ScrollableDescription(
       {required Axis axis,
-      required SerializableRect rect,
-      required double scrollingPixelsOnCapture,
-      required double maxScrollOffset}) = _$_ScrollableDescription;
+      required SerializableRect scrollableWidgetRect,
+      required double scrollExtentByPixels,
+      required double maxScrollExtent}) = _$_ScrollableDescription;
 
   @override
   Axis get axis => throw _privateConstructorUsedError;
   @override
-  SerializableRect get rect => throw _privateConstructorUsedError;
+  SerializableRect get scrollableWidgetRect =>
+      throw _privateConstructorUsedError;
   @override
-  double get scrollingPixelsOnCapture => throw _privateConstructorUsedError;
+  double get scrollExtentByPixels => throw _privateConstructorUsedError;
   @override
-  double get maxScrollOffset => throw _privateConstructorUsedError;
+  double get maxScrollExtent => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$ScrollableDescriptionCopyWith<_ScrollableDescription> get copyWith =>

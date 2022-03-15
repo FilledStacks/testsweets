@@ -1,10 +1,13 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
+import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/services/reactive_scrollable.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view_form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
@@ -79,14 +82,14 @@ void main() {
 
         final model = _getViewModel();
         await model.popupMenuActionSelected(
-            kWidgetDescription2, PopupMenuAction.edit);
+            kGeneralInteraction, PopupMenuAction.edit);
         model.formValueMap[WidgetNameValueKey] = 'loginButton';
         model.setFormStatus();
 
         await model.updateWidgetDescription();
 
         verify(service.updateWidgetDescription(
-            description: kWidgetDescription2.copyWith(name: 'loginButton')));
+            description: kGeneralInteraction.copyWith(name: 'loginButton')));
       });
 
       test(
@@ -111,11 +114,11 @@ void main() {
         final widgetCaptureService = getAndRegisterWidgetCaptureService();
         final model = _getViewModel();
         model.popupMenuActionSelected(
-            kWidgetDescription2, PopupMenuAction.remove);
+            kGeneralInteraction, PopupMenuAction.remove);
 
         await model.removeWidgetDescription();
         verify(widgetCaptureService.removeWidgetDescription(
-            description: kWidgetDescription2));
+            description: kGeneralInteraction));
       });
 
       test(
@@ -134,7 +137,7 @@ void main() {
           () {
         final model = _getViewModel();
         model.popupMenuActionSelected(
-            kWidgetDescription2, PopupMenuAction.edit);
+            kGeneralInteraction, PopupMenuAction.edit);
         expect(
             model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.editWidget);
       });
@@ -146,9 +149,86 @@ void main() {
         final model = _getViewModel();
 
         model.popupMenuActionSelected(
-            kWidgetDescription2, PopupMenuAction.remove);
+            kGeneralInteraction, PopupMenuAction.remove);
         verify(widgetCaptureService.removeWidgetDescription(
-            description: kWidgetDescription2));
+            description: kGeneralInteraction));
+      });
+    });
+    group('reactToScroll -', () {
+      test('''
+        When called on multiple interactions,
+        Should pick the overlapping one add the scrollExtent
+        to the YTranslit if the scrollable is vertical
+        ''', () async {
+        getAndRegisterWidgetCaptureService(
+          listOfWidgetDescription: [
+            kGeneralInteractionWithZeroOffset.copyWith(
+                externalities: {SerializableRect.fromLTWH(0, 0, 0, 0)}),
+            kGeneralInteraction
+          ],
+        );
+
+        // I want to use the real service not the mocked one
+        registerServiceInstead(ReactiveScrollable());
+
+        final model = _getViewModel();
+        await model.loadWidgetDescriptions();
+
+        model.reactToScroll(kTopLeftVerticalScrollableDescription);
+
+        /// It should be the first item not the second but replaceing
+        /// widget adds the widget at the end of the list
+        expect(model.descriptionsForView[1].position.yTranlate, 100);
+      });
+      test('''
+        When called two times(one vertical list and one horizontal) on one interaction,
+        Should add the scrollExtent once for YTranslate and once for XTranslate
+        ''', () async {
+        getAndRegisterWidgetCaptureService(
+          listOfWidgetDescription: [
+            kGeneralInteractionWithZeroOffset.copyWith(
+                position: WidgetPosition(x: 21, y: 22),
+                externalities: {
+                  SerializableRect.fromLTWH(
+                      0, 0, 0, 0), // captured vertical list rect
+                  SerializableRect.fromLTWH(
+                      0, 20, 0, 0), // captured horizontal list rect
+                }),
+            kGeneralInteraction
+          ],
+        );
+
+        // I want to use the real service not the mocked one
+        registerServiceInstead(ReactiveScrollable());
+
+        final model = _getViewModel();
+        await model.loadWidgetDescriptions();
+
+        model.reactToScroll(kTopLeftVerticalScrollableDescription);
+
+        /// Assumming that the horizontal list inside the vertical one
+        /// it should move after the we scroll the vertical and that will change its rect
+        /// so we will change it now manually to emulate the flutter scroll change
+        final horizontalScrollableDescription =
+            kTopLeftHorizontalScrollableDescription.copyWith(
+          scrollableWidgetRect: SerializableRect.fromPoints(
+            Offset(
+              0,
+              20 + 100, // where 100 is the scroll result from the vertical list
+            ),
+            Offset(
+              40,
+              40 + 100,
+            ),
+          ),
+        );
+
+        model.reactToScroll(horizontalScrollableDescription);
+
+        /// It should be the first item not the second but replaceing
+        /// widget adds the widget at the end of the list
+        expect(model.descriptionsForView[1].position.yTranlate, 100);
+        expect(model.descriptionsForView[1].position.xTranlate, 50);
       });
     });
   });

@@ -2,7 +2,6 @@ import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/models/build_info.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/testsweets.dart';
 
 import 'test_helpers.dart';
@@ -74,14 +73,14 @@ const int testContentLength = 2;
 final testDataStream = Stream.value([1, 2, 3]);
 final testDateTime = DateTime.utc(1993, 12, 12, 12);
 
-final kWidgetDescription1 = Interaction(
+final kGeneralInteractionWithZeroOffset = Interaction(
     id: 'testWidgetDescriptionId',
     viewName: 'viewName',
     originalViewName: 'originalViewName',
     name: 'widgetName',
     widgetType: WidgetType.general,
     position: WidgetPosition.empty());
-final kWidgetDescription2 = Interaction(
+final kGeneralInteraction = Interaction(
   originalViewName: '/',
   viewName: 'login',
   id: 'id',
@@ -90,7 +89,7 @@ final kWidgetDescription2 = Interaction(
       x: 100, y: 199, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
   widgetType: WidgetType.general,
 );
-final kWidgetDescriptionTypeScroll1 = Interaction(
+final kScrollableInteraction = Interaction(
   originalViewName: '/',
   viewName: 'initial',
   id: 'kWidgetDescriptionTypeScrollId1',
@@ -99,7 +98,7 @@ final kWidgetDescriptionTypeScroll1 = Interaction(
       x: 20, y: 20, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
   widgetType: WidgetType.scrollable,
 );
-final kWidgetDescriptionTypeScroll2 = Interaction(
+final kScrollableInteraction2 = Interaction(
   originalViewName: '/',
   viewName: 'initial',
   id: 'kWidgetDescriptionTypeScroll2',
@@ -108,7 +107,7 @@ final kWidgetDescriptionTypeScroll2 = Interaction(
       x: 25, y: 25, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
   widgetType: WidgetType.scrollable,
 );
-final kWidgetDescriptionView = Interaction(
+final kViewInteraction = Interaction(
   originalViewName: '/',
   viewName: 'login',
   id: 'viewId',
@@ -125,23 +124,16 @@ final kScrollEndNotification = ScrollEndNotification(
         viewportDimension: 33,
         axisDirection: AxisDirection.right),
     context: MockBuildContext());
-final kTopLeftScrollableDescription = ScrollableDescription(
+
+final kTopLeftVerticalScrollableDescription = ScrollableDescription(
     axis: Axis.vertical,
-    maxScrollOffset: 0,
-    scrollingPixelsOnCapture: 100,
-    rect: SerializableRect.fromPoints(Offset(0, 0), Offset(22, 22)));
-final kAnotherTopLeftScrollableDescription = ScrollableDescription(
+    maxScrollExtent: 0,
+    scrollExtentByPixels: 100,
+    scrollableWidgetRect:
+        SerializableRect.fromPoints(Offset(0, 0), Offset(22, 22)));
+final kTopLeftHorizontalScrollableDescription = ScrollableDescription(
     axis: Axis.horizontal,
-    maxScrollOffset: 0,
-    scrollingPixelsOnCapture: 50,
-    rect: SerializableRect.fromPoints(Offset(0, 0), Offset(40, 40)));
-final kTopRightScrollableDescription = ScrollableDescription(
-    axis: Axis.vertical,
-    maxScrollOffset: 0,
-    scrollingPixelsOnCapture: 0,
-    rect: SerializableRect.fromPoints(Offset(200, 0), Offset(230, 30)));
-final kBottomLeftScrollableDescription = ScrollableDescription(
-    axis: Axis.vertical,
-    maxScrollOffset: 0,
-    scrollingPixelsOnCapture: 0,
-    rect: SerializableRect.fromPoints(Offset(0, 230), Offset(30, 200)));
+    maxScrollExtent: 0,
+    scrollExtentByPixels: 50,
+    scrollableWidgetRect:
+        SerializableRect.fromPoints(Offset(0, 20), Offset(40, 40)));

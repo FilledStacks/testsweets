@@ -9,9 +9,12 @@ void main() {
     group('replaceInteractions -', () {
       test('When called, Should replace passed interactions with the new ones',
           () {
-        final interactions = [kWidgetDescription1, kWidgetDescription2];
+        final interactions = [
+          kGeneralInteractionWithZeroOffset,
+          kGeneralInteraction
+        ];
         final result = interactions.replaceInteractions([
-          kWidgetDescription2.copyWith(position: WidgetPosition(x: 2, y: 2))
+          kGeneralInteraction.copyWith(position: WidgetPosition(x: 2, y: 2))
         ]);
         // expect(result[1].position, WidgetPosition(x: 2, y: 2));
       });

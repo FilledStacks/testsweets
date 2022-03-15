@@ -157,6 +157,11 @@ void unregisterServices() {
   _removeRegistrationIfExists<ReactiveScrollable>();
 }
 
+void registerServiceInstead<T extends Object>(T instance) {
+  _removeRegistrationIfExists<T>();
+  locator.registerSingleton<T>(instance);
+}
+
 // Call this before any service registration helper. This is to ensure that if there
 // is a service registered we remove it first. We register all services to remove boiler plate from tests
 void _removeRegistrationIfExists<T extends Object>() {
