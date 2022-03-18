@@ -1,5 +1,6 @@
 targets:
   $default:
-    sources:
-      exclude:
-        - example/
+    builders:
+      build_runner:
+        generate_for:
+          - lib/

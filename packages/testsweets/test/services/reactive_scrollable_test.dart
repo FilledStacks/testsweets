@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:testsweets/src/services/reactive_scrollable.dart';
 import 'package:testsweets/testsweets.dart';
@@ -20,8 +21,9 @@ void main() {
         );
         expect(result.position.y, kScrollableInteraction.position.y + 100);
       });
+
       test(
-          'When we have one scrollable, Should add the hash to externalities Set',
+          'When we have one scrollable, Should add the rect to externalities Set',
           () {
         final service = ReactiveScrollable();
         final result = service.applyScrollableOnInteraction(
@@ -29,7 +31,7 @@ void main() {
           kScrollableInteraction,
         );
         expect(result.externalities!.first,
-            kTopLeftVerticalScrollableDescription.scrollableWidgetRect);
+            kTopLeftVerticalScrollableDescription.rect);
       });
       test('''When we have two scrollables that been scrolled 100px vertically
     and 50px horizontally, Should add the scroll to the y of
@@ -45,6 +47,36 @@ void main() {
         expect(result.position.y, kScrollableInteraction.position.y + 100);
         expect(result.position.x, kScrollableInteraction.position.x + 50);
       });
+      test('''When we capture an interaction located inside a horizontal  
+      list which also located inside a bigger vertical list,
+      Should add the scroll extent of the bigger list(vertical) 
+      to the rect of the smaller list(horizontal)
+
+      |           |
+      |           |
+      |-----------|
+      |   (T)     | <---- The Interaction 
+      |-----------|
+      |           |
+
+       ''', () {
+        final service = ReactiveScrollable();
+        final result = service.applyScrollableOnInteraction(
+          [
+            kFullScreenVerticalScrollableDescription,
+            kTopLeftHorizontalScrollableDescription
+          ],
+          kScrollableInteraction,
+        );
+        final largestRect = result.externalities!
+            .reduce((curr, next) => curr.size > next.size ? curr : next);
+        final smallestRect = result.externalities!
+            .reduce((curr, next) => curr.size < next.size ? curr : next);
+
+        expect(largestRect.topLeft,
+            kTopLeftVerticalScrollableDescription.rect.topLeft);
+        expect(smallestRect.top, 170);
+      });
     });
     group('filterAffectedInteractionsByScrollable -', () {
       test(
@@ -52,18 +84,102 @@ void main() {
           () {
         final service = ReactiveScrollable();
         Interaction interactionWithExternalites = kScrollableInteraction
-            .copyWith(externalities: {
-          kTopLeftVerticalScrollableDescription.scrollableWidgetRect
-        });
+            .copyWith(
+                externalities: {kTopLeftVerticalScrollableDescription.rect});
         final result = service.filterAffectedInteractionsByScrollable(
             kTopLeftVerticalScrollableDescription, [
           interactionWithExternalites,
           kScrollableInteraction2,
         ]).toList();
 
-        /// NOTE: the offset doesn't have any effect on this function cause that
-        /// Should be sorted out when creating the widget
         expect(result, [interactionWithExternalites]);
+      });
+
+      test(
+          '''An interaction located inside two scrollables one vertical(wraps the horizontal) and one horizontal,
+           we scroll the vertical one that will lead the horizontal to be scrolled too,
+           Should return the horizontal rect after adding the vertical scroll deviation to it''',
+          () {
+        final service = ReactiveScrollable();
+
+        ///
+        /// Capturing Interaction is happining in another
+        /// function[applyScrollableOnInteraction]
+        ///
+        /// Here we are just mocking it manually by adding to [externalities]
+        ///
+        Interaction interactionWithExternalites =
+            kScrollableInteraction.copyWith(externalities: {
+          kFullScreenVerticalScrollableDescription.rect,
+          kTopLeftHorizontalScrollableDescription.rect
+        });
+
+        final interactionsForView = service.moveInteractionsWithScrollable(
+            kTopLeftVerticalScrollableDescription,
+            [interactionWithExternalites]);
+
+        final interactionWithExternalitesAfterScrollingVerticalList =
+            interactionsForView.firstWhere(
+                (element) => element.id == interactionWithExternalites.id);
+        expect(
+            interactionWithExternalitesAfterScrollingVerticalList
+                .externalities!.last,
+            kTopLeftHorizontalScrollableDescription.rect);
+      });
+
+      test(
+          '''An interaction located inside two scrollables one vertical(wraps the horizontal) and one horizontal,
+           We scroll the horizontal list, Should not affect the vertical list rect''',
+          () {
+        final service = ReactiveScrollable();
+
+        /// Interaction that reacts to 2 scrollables this should happpen when capturing
+        /// the interaction but here we tring to mock it
+        Interaction interactionWithExternalites =
+            kScrollableInteraction.copyWith(externalities: {
+          kFullScreenVerticalScrollableDescription.rect,
+          kTopLeftHorizontalScrollableDescription.rect
+        });
+        var interactionsForView = service.moveInteractionsWithScrollable(
+            kTopLeftVerticalScrollableDescription,
+            [interactionWithExternalites]);
+        interactionsForView = service.moveInteractionsWithScrollable(
+            kTopLeftHorizontalScrollableDescription,
+            [interactionWithExternalites]);
+
+        final affectedInteractions =
+            service.filterAffectedInteractionsByScrollable(
+                kTopLeftVerticalScrollableDescription,
+                interactionsForView.toList());
+        expect(affectedInteractions, isNotEmpty);
+      });
+      test(
+          '''An interaction located inside two scrollables one horizontal(wraps the vertical) and one vertical,
+           We scroll the vertical list, Should not affect the horizontal list rect''',
+          () {
+        final service = ReactiveScrollable();
+
+        // Just switched the axis of each list to be the opposite
+        final horizontalList = kFullScreenVerticalScrollableDescription
+            .copyWith(axis: Axis.horizontal);
+        final verticalList = kTopLeftHorizontalScrollableDescription.copyWith(
+            axis: Axis.vertical);
+
+        Interaction interactionWithExternalites =
+            kScrollableInteraction.copyWith(externalities: {
+          horizontalList.rect,
+          verticalList.rect,
+        });
+
+        var interactionsForView = service.moveInteractionsWithScrollable(
+            horizontalList, [interactionWithExternalites]);
+        interactionsForView = service.moveInteractionsWithScrollable(
+            verticalList, [interactionWithExternalites]);
+
+        final affectedInteractions =
+            service.filterAffectedInteractionsByScrollable(
+                horizontalList, interactionsForView.toList());
+        expect(affectedInteractions, isNotEmpty);
       });
       test(
           'When called and no interaction has externalities, Should return empty list',
@@ -88,6 +204,29 @@ void main() {
           kScrollableInteraction,
         ]);
         expect(result.first.position.yDeviation, 100);
+      });
+    });
+    group('findBiggestScrollable -', () {
+      test('When provide two list, should return the biggest one', () {
+        final service = ReactiveScrollable();
+        final biggestScroll = service.findBiggestScrollable([
+          kFullScreenVerticalScrollableDescription,
+          kTopLeftHorizontalScrollableDescription,
+        ]);
+
+        expect(biggestScroll, kFullScreenVerticalScrollableDescription);
+      });
+      test('''When provide two scrollables that shares the same horizontal long,
+       should return the tallest one''', () {
+        final service = ReactiveScrollable();
+        final biggestScroll = service.findBiggestScrollable([
+          kFullScreenVerticalScrollableDescription,
+          kTopLeftHorizontalScrollableDescription.copyWith(
+              rect:
+                  SerializableRect.fromPoints(Offset(0, 0), Offset(400, 200))),
+        ]);
+
+        expect(biggestScroll, kFullScreenVerticalScrollableDescription);
       });
     });
   });

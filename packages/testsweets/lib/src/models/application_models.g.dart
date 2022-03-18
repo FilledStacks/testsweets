@@ -21,10 +21,7 @@ _$_Interaction _$$_InteractionFromJson(Map<String, dynamic> json) =>
               .toList() ??
           [],
       externalities: (json['externalities'] as List<dynamic>?)
-          ?.map(
-              (e) => SerializableRect.fromJson((e as Map<String, dynamic>).map(
-                    (k, e) => MapEntry(k, (e as num).toDouble()),
-                  )))
+          ?.map((e) => SerializableRect.fromJson(e as Map<String, dynamic>))
           .toSet(),
     );
 

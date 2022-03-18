@@ -216,8 +216,8 @@ void main() {
                 externalities: {
                   SerializableRect.fromLTWH(
                       0, 0, 0, 0), // captured vertical list rect
-                  SerializableRect.fromLTWH(
-                      0, 20, 0, 0), // captured horizontal list rect
+                  SerializableRect.fromLTWH(0, 20, 0, 0,
+                      nested: true), // captured horizontal list rect
                 }),
             kGeneralInteraction
           ],
@@ -236,7 +236,7 @@ void main() {
         /// so we will change it now manually to emulate the flutter scroll change
         final horizontalScrollableDescription =
             kTopLeftHorizontalScrollableDescription.copyWith(
-          scrollableWidgetRect: SerializableRect.fromPoints(
+          rect: SerializableRect.fromPoints(
             Offset(
               0,
               20 + 100, // where 100 is the scroll result from the vertical list

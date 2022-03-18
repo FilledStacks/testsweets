@@ -15,6 +15,7 @@ extension WidgetPositionExtension on WidgetPosition {
 
   Offset get offsetAfterScroll =>
       Offset(this.x + (this.xDeviation ?? 0), this.y + (this.yDeviation ?? 0));
+
   WidgetPosition applyScroll(ScrollableDescription scrollableDescription) {
     switch (scrollableDescription.axis) {
       case Axis.vertical:

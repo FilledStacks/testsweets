@@ -126,16 +126,17 @@ final kScrollEndNotification = ScrollEndNotification(
     context: MockBuildContext());
 
 final kTopLeftVerticalScrollableDescription = ScrollableDescription(
-    localOffset: Offset.zero,
     axis: Axis.vertical,
-    maxScrollExtent: 0,
+    maxScrollExtentByPixels: 0,
     scrollExtentByPixels: 100,
-    scrollableWidgetRect:
-        SerializableRect.fromPoints(Offset(0, 0), Offset(22, 22)));
+    rect: SerializableRect.fromPoints(Offset(0, 0), Offset(22, 22)));
+final kFullScreenVerticalScrollableDescription = ScrollableDescription(
+    axis: Axis.vertical,
+    maxScrollExtentByPixels: 2000,
+    scrollExtentByPixels: 150,
+    rect: SerializableRect.fromPoints(Offset(0, 0), Offset(400, 900)));
 final kTopLeftHorizontalScrollableDescription = ScrollableDescription(
-    localOffset: Offset.zero,
     axis: Axis.horizontal,
-    maxScrollExtent: 0,
+    maxScrollExtentByPixels: 0,
     scrollExtentByPixels: 50,
-    scrollableWidgetRect:
-        SerializableRect.fromPoints(Offset(0, 20), Offset(40, 40)));
+    rect: SerializableRect.fromPoints(Offset(0, 20), Offset(40, 40)));

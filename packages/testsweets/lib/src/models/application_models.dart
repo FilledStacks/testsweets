@@ -80,10 +80,9 @@ class WidgetPosition with _$WidgetPosition {
 class ScrollableDescription with _$ScrollableDescription {
   factory ScrollableDescription({
     required Axis axis,
-    required Offset localOffset,
-    required SerializableRect scrollableWidgetRect,
+    required SerializableRect rect,
     required double scrollExtentByPixels,
-    required double maxScrollExtent,
+    required double maxScrollExtentByPixels,
   }) = _ScrollableDescription;
 
   factory ScrollableDescription.fromNotification({
@@ -96,28 +95,45 @@ class ScrollableDescription with _$ScrollableDescription {
     final topLeftPointOfList = globalPosition - localPosition;
 
     return ScrollableDescription(
-        localOffset: localPosition,
         axis: metrics.axis,
-        scrollableWidgetRect: SerializableRect.fromLTWH(
-            topLeftPointOfList.dx, topLeftPointOfList.dy, 0, 0),
+        rect: SerializableRect.fromLTWH(
+            topLeftPointOfList.dx, topLeftPointOfList.dy, 0.0, 0.0),
         scrollExtentByPixels: position,
-        maxScrollExtent: metrics.maxScrollExtent);
+        maxScrollExtentByPixels: metrics.maxScrollExtent);
   }
 }
 
 class SerializableRect extends Rect {
+  final bool nested;
+
   const SerializableRect.fromLTWH(
-      double left, double top, double width, double height)
+      double left, double top, double width, double height,
+      {this.nested = false})
       : super.fromLTWH(left, top, width, height);
+
   const SerializableRect.fromLTRB(
-      double left, double top, double right, double bottom)
+      double left, double top, double right, double bottom,
+      {this.nested = false})
       : super.fromLTRB(left, top, right, bottom);
-  SerializableRect.fromPoints(Offset a, Offset b) : super.fromPoints(a, b);
-  factory SerializableRect.fromJson(Map<String, double> json) {
+
+  SerializableRect.fromPoints(Offset a, Offset b, {this.nested = false})
+      : super.fromPoints(a, b);
+
+  factory SerializableRect.fromJson(Map<String, dynamic> json) {
     return SerializableRect.fromLTWH(
-        json['left']!, json['top']!, json['width']!, json['height']!);
+        (json['left']! as int).toDouble(),
+        (json['top']! as int).toDouble(),
+        (json['width']! as int).toDouble(),
+        (json['height']! as int).toDouble(),
+        nested: json['nested']!);
   }
-  Map<String, double> toJson() {
-    return {'left': left, 'top': top, 'width': width, 'height': height};
+  Map<String, dynamic> toJson() {
+    return {
+      'left': left,
+      'top': top,
+      'width': width,
+      'height': height,
+      'nested': nested
+    };
   }
 }

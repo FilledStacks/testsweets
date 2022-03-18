@@ -5,6 +5,7 @@ import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
+import 'package:testsweets/src/extensions/widget_description_extension.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/shared/popup_menu/popup_menu.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
@@ -30,7 +31,7 @@ class WidgetsVisualizer extends StatelessWidget {
                 return Stack(
                   children: [
                     ...model.descriptionsForView
-                        .where(notView)
+                        .where((interaciton) => interaciton.notView)
                         .where(isVisibleOnScreen)
                         .map(
                           (description) => Positioned(
@@ -49,8 +50,6 @@ class WidgetsVisualizer extends StatelessWidget {
       ],
     );
   }
-
-  bool notView(element) => element.widgetType != WidgetType.view;
 
   bool isVisibleOnScreen(Interaction element) {
     final unionRect = element.externalities?.reduce((rect, nextRect) {

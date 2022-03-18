@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
+import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/testsweets.dart';
 
 extension WidgetDescriptionUtils on Interaction {
@@ -44,4 +45,6 @@ extension WidgetDescriptionUtils on Interaction {
       return currentScreenWidth / this.position.capturedDeviceWidth!;
     }
   }
+
+  bool get notView => this.widgetType != WidgetType.view;
 }
