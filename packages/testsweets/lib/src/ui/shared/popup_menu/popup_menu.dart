@@ -36,10 +36,6 @@ class PopupMenu extends StatelessWidget {
       barrierColor: kcBackground.withOpacity(0.3),
       showArrow: false,
       menuBuilder: () => PopupMenuContent(
-        showUnattachOption: description.targetIds.isNotEmpty,
-        showAttachOption: (description.targetIds.length +
-                2) < // 2 is for one widget and its view
-            model.viewInteractions.length,
         onMenuAction: (popupMenuAction) async {
           await model.popupMenuActionSelected(description, popupMenuAction);
           if (popupMenuAction == PopupMenuAction.edit) {

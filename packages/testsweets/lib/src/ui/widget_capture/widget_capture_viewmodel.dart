@@ -127,6 +127,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     double capturedDeviceWidth,
     double capturedDeviceHeight,
   ) {
+    log.v('x: $x , y: $y');
     inProgressInteraction = inProgressInteraction!.copyWith(
       position: WidgetPosition(
         capturedDeviceHeight: capturedDeviceHeight,
@@ -158,12 +159,16 @@ class WidgetCaptureViewModel extends FormViewModel {
       _snackbarService.showCustomSnackBar(
           message: result, variant: SnackbarType.failed);
     } else {
-      inProgressInteraction = null;
-      refreshInteractions();
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+      _addSavedInteractionToViewWhenSuccess();
     }
     setBusy(false);
     return result;
+  }
+
+  void _addSavedInteractionToViewWhenSuccess() {
+    viewInteractions.add(inProgressInteraction!);
+    inProgressInteraction = null;
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
   }
 
   Future<String?> updateWidgetDescription() async {
@@ -178,13 +183,19 @@ class WidgetCaptureViewModel extends FormViewModel {
       _snackbarService.showCustomSnackBar(
           message: result, variant: SnackbarType.failed);
     } else {
-      inProgressInteraction = null;
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
-      refreshInteractions();
+      _updateInteractionInViewWhenSuccess();
     }
 
     setBusy(false);
     return result;
+  }
+
+  void _updateInteractionInViewWhenSuccess() {
+    final updatedIndex = viewInteractions.indexWhere(
+        (interaction) => inProgressInteraction!.id == interaction.id);
+    viewInteractions[updatedIndex] = inProgressInteraction!;
+    inProgressInteraction = null;
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
   }
 
   Future<String?> removeWidgetDescription() async {
@@ -198,15 +209,19 @@ class WidgetCaptureViewModel extends FormViewModel {
       _snackbarService.showCustomSnackBar(
           message: result, variant: SnackbarType.failed);
     } else {
-      viewInteractions = viewInteractions
-          .whereNot((widget) => inProgressInteraction == widget)
-          .toList();
-      inProgressInteraction = null;
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+      _removeInteractionFromViewWhenSuccess();
     }
 
     setBusy(false);
     return result;
+  }
+
+  void _removeInteractionFromViewWhenSuccess() {
+    viewInteractions = viewInteractions
+        .whereNot((widget) => inProgressInteraction == widget)
+        .toList();
+    inProgressInteraction = null;
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
   }
 
   @override

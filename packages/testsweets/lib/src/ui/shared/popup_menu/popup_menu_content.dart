@@ -6,13 +6,9 @@ import '../shared_styles.dart';
 import 'custom_popup_menu_item.dart';
 
 class PopupMenuContent extends StatelessWidget {
-  final bool showAttachOption;
-  final bool showUnattachOption;
   final void Function(PopupMenuAction) onMenuAction;
   const PopupMenuContent({
     Key? key,
-    required this.showAttachOption,
-    required this.showUnattachOption,
     required this.onMenuAction,
   }) : super(key: key);
 

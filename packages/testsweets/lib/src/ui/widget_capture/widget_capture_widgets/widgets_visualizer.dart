@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
-import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
@@ -32,7 +31,7 @@ class WidgetsVisualizer extends StatelessWidget {
                   children: [
                     ...model.viewInteractions
                         .where((interaciton) => interaciton.notView)
-                        .where(isVisibleOnScreen)
+                        .where(visibleOnScreen)
                         .map(
                           (description) => Positioned(
                             top: description.position.offsetAfterScroll.dy,
@@ -51,14 +50,14 @@ class WidgetsVisualizer extends StatelessWidget {
     );
   }
 
-  bool isVisibleOnScreen(Interaction element) {
-    final unionRect = element.externalities?.reduce((rect, nextRect) {
+  bool visibleOnScreen(Interaction interaction) {
+    final unionRect = interaction.externalities?.reduce((rect, nextRect) {
       final result = rect.expandToInclude(nextRect);
       return SerializableRect.fromLTWH(
           result.left, result.top, result.width, result.height);
     });
 
-    final visible = unionRect?.contains(element.position.offsetAfterScroll +
+    final visible = unionRect?.contains(interaction.position.offsetAfterScroll +
         Offset(WIDGET_DESCRIPTION_VISUAL_SIZE / 2,
             WIDGET_DESCRIPTION_VISUAL_SIZE / 2));
 
