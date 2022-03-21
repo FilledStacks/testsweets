@@ -37,7 +37,7 @@ void main() {
       and the trigger widget has no targets, 
       Should complete the completer with foundAutomationKeyWithNoTargets
       ''', () async {
-        getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
+        getAndRegisterWidgetCaptureService(viewInteractions: [
           kGeneralInteractionWithZeroOffset,
           kGeneralInteraction
         ]);
@@ -88,7 +88,7 @@ void main() {
         and latestSweetcoreCommand isn\'t null and automationKey is exist,
         Should call runToggleVisibiltyChecker on the WidgetVisibiltyChangerService''',
           () async {
-        getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
+        getAndRegisterWidgetCaptureService(viewInteractions: [
           kGeneralInteraction,
         ]);
         final service = getAndRegisterWidgetVisibiltyChangerService(
@@ -109,7 +109,7 @@ void main() {
         Should toggle the visibilty of the triggered widgets''', () async {
         /// [testWidgetDescription] visiblilty is true by default
         getAndRegisterWidgetCaptureService(
-            listOfWidgetDescription: [kGeneralInteractionWithZeroOffset]);
+            viewInteractions: [kGeneralInteractionWithZeroOffset]);
         getAndRegisterWidgetVisibiltyChangerService(widgetDescriptions: [
           kGeneralInteractionWithZeroOffset.copyWith(visibility: false)
         ], latestSweetcoreCommand: ScrollableCommand(widgetName: 'widgetName'));
@@ -122,7 +122,7 @@ void main() {
       });
       test('''When the triggerWidget has no targetIds, Should do nothing''',
           () {
-        getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
+        getAndRegisterWidgetCaptureService(viewInteractions: [
           kGeneralInteraction,
           kGeneralInteractionWithZeroOffset
         ]);

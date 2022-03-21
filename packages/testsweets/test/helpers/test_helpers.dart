@@ -22,7 +22,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<ReactiveScrollable>(returnNullOnMissingStub: true),
 ])
 MockWidgetCaptureService getAndRegisterWidgetCaptureService(
-    {List<Interaction> listOfWidgetDescription = const [],
+    {List<Interaction> viewInteractions = const [],
     Interaction? description,
     String? projectId,
     bool currentViewIsAlreadyCaptured = false}) {
@@ -34,7 +34,7 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
   when(service.captureWidgetDescription(description: anyNamed('description')))
       .thenAnswer((_) => Future.value());
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
-      .thenReturn(listOfWidgetDescription);
+      .thenReturn(viewInteractions);
   when(service.updateWidgetDescription(description: anyNamed('description')))
       .thenAnswer((_) => Future.value());
   when(service.removeWidgetDescription(description: anyNamed('description')))

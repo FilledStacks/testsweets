@@ -1,11 +1,8 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
-import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/reactive_scrollable.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view_form.dart';
@@ -77,9 +74,8 @@ void main() {
     });
 
     group('updateWidgetDescription -', () {
-      test(
-          'When change the name, should call updateWidgetDescription() in WidgetCaptureService with the new name"',
-          () async {
+      test('''When change the name, should call updateWidgetDescription()
+              in WidgetCaptureService with the new name"''', () async {
         final service = getAndRegisterWidgetCaptureService();
 
         final model = _getViewModel();
@@ -94,9 +90,8 @@ void main() {
             description: kGeneralInteraction.copyWith(name: 'loginButton')));
       });
 
-      test(
-          'When called and update was successful, Should set the current CaptureWidgetStatusEnum to inspectMode',
-          () async {
+      test('''When called and update was successful,
+          Should set the current CaptureWidgetStatusEnum to idle''', () async {
         final model = _getViewModel();
 
         model.showWidgetForm();
@@ -106,6 +101,44 @@ void main() {
         await model.updateWidgetDescription();
 
         expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
+      });
+      test('''When in quickPositionEdit mode and user trigger onLongPressUp
+       without changing the interaction position,
+       Should call updateWidgetDescription from WidgetCaptureService 
+       with the same interaction without changing its position''', () async {
+        final service = getAndRegisterWidgetCaptureService();
+
+        final model = _getViewModel();
+        model.startQuickPositionEdit(kGeneralInteraction);
+
+        await model.onLongPressUp();
+
+        verify(
+            service.updateWidgetDescription(description: kGeneralInteraction));
+      });
+
+      test('''When in quickPositionEdit mode and user trigger onLongPressUp
+       while changeing the widget position to new place,
+       Should call updateWidgetDescription from WidgetCaptureService 
+       with the interaction new position''', () async {
+        final service = getAndRegisterWidgetCaptureService();
+
+        final model = _getViewModel();
+        model.startQuickPositionEdit(kGeneralInteraction);
+        model.updateDescriptionPosition(
+            33,
+            33,
+            kGeneralInteraction.position.capturedDeviceWidth!,
+            kGeneralInteraction.position.capturedDeviceHeight!);
+
+        await model.onLongPressUp();
+
+        verify(service.updateWidgetDescription(
+            description: kGeneralInteraction.copyWith(
+                position: kGeneralInteraction.position.copyWith(
+          x: 33,
+          y: 33,
+        ))));
       });
     });
 
@@ -163,7 +196,7 @@ void main() {
         to the YTranslit if the scrollable is vertical
         ''', () async {
         getAndRegisterWidgetCaptureService(
-          listOfWidgetDescription: [
+          viewInteractions: [
             kGeneralInteractionWithZeroOffset.copyWith(
                 externalities: {SerializableRect.fromLTWH(0, 0, 0, 0)}),
             kGeneralInteraction
@@ -187,7 +220,7 @@ void main() {
           So YTranslate not null
         ''', () async {
         getAndRegisterWidgetCaptureService(
-          listOfWidgetDescription: [
+          viewInteractions: [
             kGeneralInteractionWithZeroOffset.copyWith(
                 position: WidgetPosition(x: 0, y: 0, yDeviation: 100),
                 externalities: {SerializableRect.fromLTWH(0, 0, 0, 0)}),
@@ -212,7 +245,7 @@ void main() {
         Should add the scrollExtent once for YTranslate and once for XTranslate
         ''', () async {
         getAndRegisterWidgetCaptureService(
-          listOfWidgetDescription: [
+          viewInteractions: [
             kGeneralInteractionWithZeroOffset.copyWith(
                 position: WidgetPosition(x: 21, y: 22),
                 externalities: {
