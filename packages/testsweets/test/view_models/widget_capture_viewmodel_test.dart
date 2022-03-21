@@ -42,9 +42,10 @@ void main() {
         final model = _getViewModel();
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
         model.showWidgetForm();
-        model.widgetDescription!.copyWith(widgetType: WidgetType.scrollable);
+        model.inProgressInteraction!
+            .copyWith(widgetType: WidgetType.scrollable);
         model.saveWidget();
-        expect(model.widgetDescription!.originalViewName, 'current route');
+        expect(model.inProgressInteraction!.originalViewName, 'current route');
       });
       test('''When called and the current route is `/current route`,
            Should convert it to `currentRoute` in viewName proberty before send it to backend''',
@@ -53,10 +54,11 @@ void main() {
         final model = _getViewModel();
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
         model.showWidgetForm();
-        model.widgetDescription!.copyWith(widgetType: WidgetType.scrollable);
+        model.inProgressInteraction!
+            .copyWith(widgetType: WidgetType.scrollable);
         model.saveWidget();
-        expect(model.widgetDescription!.viewName, 'currentRoute');
-        expect(model.widgetDescription!.originalViewName, '/current route');
+        expect(model.inProgressInteraction!.viewName, 'currentRoute');
+        expect(model.inProgressInteraction!.originalViewName, '/current route');
       });
       test('''When called and the current widget name is `login-button`,
            Should convert it to `loginButton` in name proberty before send it to backend''',
@@ -67,10 +69,10 @@ void main() {
 
         model.formValueMap[WidgetNameValueKey] = 'login-button';
 
-        model.widgetDescription =
-            model.widgetDescription!.copyWith(widgetType: WidgetType.touchable);
+        model.inProgressInteraction = model.inProgressInteraction!
+            .copyWith(widgetType: WidgetType.touchable);
         model.saveWidget();
-        expect(model.widgetDescription!.name, 'loginButton');
+        expect(model.inProgressInteraction!.name, 'loginButton');
       });
     });
 
@@ -169,7 +171,7 @@ void main() {
         );
 
         // I want to use the real service not the mocked one
-        registerServiceInstead(ReactiveScrollable());
+        registerServiceInsteadOfMockedOne(ReactiveScrollable());
 
         final model = _getViewModel();
         await model.loadWidgetDescriptions();
@@ -178,7 +180,7 @@ void main() {
 
         /// It should be the first item not the second but replaceing
         /// widget adds the widget at the end of the list
-        expect(model.descriptionsForView[1].position.yDeviation, 100);
+        expect(model.viewInteractions[1].position.yDeviation, 100);
       });
       test('''
           When repeating the same scroll but now the interaction is already scrolled vertically
@@ -194,7 +196,7 @@ void main() {
         );
 
         // I want to use the real service not the mocked one
-        registerServiceInstead(ReactiveScrollable());
+        registerServiceInsteadOfMockedOne(ReactiveScrollable());
 
         final model = _getViewModel();
         await model.loadWidgetDescriptions();
@@ -203,7 +205,7 @@ void main() {
 
         /// It should be the first item not the second but replaceing
         /// widget adds the widget at the end of the list
-        expect(model.descriptionsForView[1].position.yDeviation, 100);
+        expect(model.viewInteractions[1].position.yDeviation, 100);
       });
       test('''
         When called two times(one vertical list and one horizontal) on one interaction,
@@ -217,14 +219,15 @@ void main() {
                   SerializableRect.fromLTWH(
                       0, 0, 0, 0), // captured vertical list rect
                   SerializableRect.fromLTWH(0, 20, 0, 0,
-                      nested: true), // captured horizontal list rect
+                      nested:
+                          true), // captured horizontal list rect which is nested inside
+                  // the virtical one
                 }),
             kGeneralInteraction
           ],
         );
 
-        // I want to use the real service not the mocked one
-        registerServiceInstead(ReactiveScrollable());
+        registerServiceInsteadOfMockedOne(ReactiveScrollable());
 
         final model = _getViewModel();
         await model.loadWidgetDescriptions();
@@ -250,10 +253,10 @@ void main() {
 
         model.reactToScroll(horizontalScrollableDescription);
 
-        /// It should be the first item not the second but replaceing
-        /// widget adds the widget at the end of the list
-        expect(model.descriptionsForView[1].position.yDeviation, 100);
-        expect(model.descriptionsForView[1].position.xDeviation, 50);
+        /// It should be the first index(0) not the second(1) but when
+        /// replacing an interaciton it adds it at the end of the list
+        expect(model.viewInteractions[1].position.yDeviation, 100);
+        expect(model.viewInteractions[1].position.xDeviation, 50);
       });
     });
   });

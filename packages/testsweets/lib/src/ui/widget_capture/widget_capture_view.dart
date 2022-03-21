@@ -54,7 +54,7 @@ class WidgetCaptureView extends StatelessWidget {
             Align(
               alignment: Alignment.topLeft,
               child: RouteBanner(
-                isCaptured: model.currentViewIsCaptured,
+                isCaptured: model.currentViewCaptured,
                 routeName: model.currentViewName,
               ),
             ),

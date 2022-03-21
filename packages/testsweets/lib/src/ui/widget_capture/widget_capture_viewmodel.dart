@@ -38,23 +38,34 @@ class WidgetCaptureViewModel extends FormViewModel {
     _widgetCaptureService.projectId = projectId;
   }
 
-  Interaction? widgetDescription;
+  Interaction? inProgressInteraction;
 
   ValueNotifier<List<Interaction>> descriptionsForViewNotifier =
       ValueNotifier([]);
-  List<Interaction> get descriptionsForView =>
-      descriptionsForViewNotifier.value;
-  set descriptionsForView(List<Interaction> widgetDescriptions) {
+  List<Interaction> get viewInteractions => descriptionsForViewNotifier.value;
+  set viewInteractions(List<Interaction> widgetDescriptions) {
     descriptionsForViewNotifier.value = widgetDescriptions;
   }
 
-  bool get currentViewIsCaptured => descriptionsForView.any(
+  bool get currentViewCaptured => viewInteractions.any(
         (element) => element.widgetType == WidgetType.view,
       );
   String get currentViewName => _testSweetsRouteTracker.formatedCurrentRoute;
 
   /// We use this position as the starter point of any new widget
   late WidgetPosition screenCenterPosition;
+
+  /// When open the form create new instance of widgetDescription
+  /// if it's null and set [CaptureWidgetStatusEnum.createWidget]
+  void showWidgetForm() {
+    inProgressInteraction = inProgressInteraction ??
+        Interaction(
+            position: screenCenterPosition,
+            viewName: '',
+            originalViewName: '',
+            widgetType: WidgetType.touchable);
+    captureWidgetStatusEnum = CaptureWidgetStatusEnum.createWidget;
+  }
 
   Future<void> loadWidgetDescriptions() async {
     log.v('');
@@ -76,7 +87,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void refreshInteractions() {
-    descriptionsForView = _widgetCaptureService.getDescriptionsForView(
+    viewInteractions = _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracker.currentRoute);
     notifyListeners();
   }
@@ -89,13 +100,15 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   set setWidgetType(WidgetType widgetType) {
     log.v(widgetType);
-    widgetDescription = widgetDescription!.copyWith(widgetType: widgetType);
+    inProgressInteraction =
+        inProgressInteraction!.copyWith(widgetType: widgetType);
     notifyListeners();
   }
 
   set setVisibilty(bool visible) {
     log.v(visible);
-    widgetDescription = widgetDescription!.copyWith(visibility: visible);
+    inProgressInteraction =
+        inProgressInteraction!.copyWith(visibility: visible);
     notifyListeners();
   }
 
@@ -104,20 +117,8 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void clearWidgetDescriptionForm() {
     log.v('');
-    widgetDescription = null;
+    inProgressInteraction = null;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
-  }
-
-  /// When open the form create new instance of widgetDescription
-  /// if it's null and set [CaptureWidgetStatusEnum.createWidget]
-  void showWidgetForm() {
-    widgetDescription = widgetDescription ??
-        Interaction(
-            position: screenCenterPosition,
-            viewName: '',
-            originalViewName: '',
-            widgetType: WidgetType.touchable);
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.createWidget;
   }
 
   void updateDescriptionPosition(
@@ -126,7 +127,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     double capturedDeviceWidth,
     double capturedDeviceHeight,
   ) {
-    widgetDescription = widgetDescription!.copyWith(
+    inProgressInteraction = inProgressInteraction!.copyWith(
       position: WidgetPosition(
         capturedDeviceHeight: capturedDeviceHeight,
         capturedDeviceWidth: capturedDeviceWidth,
@@ -138,46 +139,46 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<String?> saveWidget() async {
-    log.i(widgetDescription);
+    log.i(inProgressInteraction);
 
     setBusy(true);
-    widgetDescription = widgetDescription?.copyWith(
+    inProgressInteraction = inProgressInteraction?.copyWith(
       name: widgetNameValue!.convertWidgetNameToValidFormat,
       viewName:
           _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
       originalViewName: _testSweetsRouteTracker.currentRoute,
     );
 
-    log.i('descriptionToSave:$widgetDescription');
+    log.i('descriptionToSave:$inProgressInteraction');
 
     final result = await _widgetCaptureService.captureWidgetDescription(
-        description: widgetDescription!);
+        description: inProgressInteraction!);
 
     if (result is String) {
       _snackbarService.showCustomSnackBar(
           message: result, variant: SnackbarType.failed);
     } else {
-      widgetDescription = null;
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+      inProgressInteraction = null;
       refreshInteractions();
+      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
     setBusy(false);
     return result;
   }
 
   Future<String?> updateWidgetDescription() async {
-    log.i(widgetDescription);
+    log.i(inProgressInteraction);
 
     setBusy(true);
 
     final result = await _widgetCaptureService.updateWidgetDescription(
-        description: widgetDescription!);
+        description: inProgressInteraction!);
 
     if (result is String) {
       _snackbarService.showCustomSnackBar(
           message: result, variant: SnackbarType.failed);
     } else {
-      widgetDescription = null;
+      inProgressInteraction = null;
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
       refreshInteractions();
     }
@@ -187,20 +188,20 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<String?> removeWidgetDescription() async {
-    log.i(widgetDescription);
+    log.i(inProgressInteraction);
 
     setBusy(true);
 
     final result = await _widgetCaptureService.removeWidgetDescription(
-        description: widgetDescription!);
+        description: inProgressInteraction!);
     if (result is String) {
       _snackbarService.showCustomSnackBar(
           message: result, variant: SnackbarType.failed);
     } else {
-      descriptionsForView = descriptionsForView
-          .whereNot((widget) => widgetDescription == widget)
+      viewInteractions = viewInteractions
+          .whereNot((widget) => inProgressInteraction == widget)
           .toList();
-      widgetDescription = null;
+      inProgressInteraction = null;
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
 
@@ -212,13 +213,13 @@ class WidgetCaptureViewModel extends FormViewModel {
   void setFormStatus() {
     log.v('widgetNameValue: $widgetNameValue');
 
-    widgetDescription =
-        widgetDescription?.copyWith(name: widgetNameValue ?? '');
+    inProgressInteraction =
+        inProgressInteraction?.copyWith(name: widgetNameValue ?? '');
     notifyListeners();
   }
 
   Future<String?> submitForm() async {
-    if (widgetDescription?.id != null) {
+    if (inProgressInteraction?.id != null) {
       return await updateWidgetDescription();
     } else {
       return await saveWidget();
@@ -228,7 +229,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   Future<void> popupMenuActionSelected(
       Interaction description, PopupMenuAction popupMenuAction) async {
     log.v(popupMenuAction, description);
-    widgetDescription = description;
+    inProgressInteraction = description;
 
     switch (popupMenuAction) {
       case PopupMenuAction.edit:
@@ -247,14 +248,14 @@ class WidgetCaptureViewModel extends FormViewModel {
       await updateWidgetDescription();
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
-    widgetDescription = null;
+    inProgressInteraction = null;
   }
 
   void startQuickPositionEdit(
     Interaction description,
   ) {
     log.v(description);
-    widgetDescription = description;
+    inProgressInteraction = description;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.quickPositionEdit;
   }
 
@@ -271,10 +272,10 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void checkForExternalities(
       Iterable<ScrollableDescription> scrollableDescription) {
-    log.i('before:' + widgetDescription.toString());
-    widgetDescription = _reactiveScrollable.applyScrollableOnInteraction(
-        scrollableDescription, widgetDescription!);
-    log.i('after:' + widgetDescription.toString());
+    log.i('before:' + inProgressInteraction.toString());
+    inProgressInteraction = _reactiveScrollable.applyScrollableOnInteraction(
+        scrollableDescription, inProgressInteraction!);
+    log.i('after:' + inProgressInteraction.toString());
   }
 
   void listenToNotifications() {
@@ -304,14 +305,14 @@ class WidgetCaptureViewModel extends FormViewModel {
   void reactToScroll(ScrollableDescription scrollableDescription) {
     final affectedInteractions =
         _reactiveScrollable.filterAffectedInteractionsByScrollable(
-            scrollableDescription, descriptionsForView);
+            scrollableDescription, viewInteractions);
 
     final scrolledInteractions =
         _reactiveScrollable.moveInteractionsWithScrollable(
             scrollableDescription, affectedInteractions);
 
-    descriptionsForView =
-        descriptionsForView.replaceInteractions(scrolledInteractions);
+    viewInteractions =
+        viewInteractions.replaceInteractions(scrolledInteractions);
   }
 
   @override

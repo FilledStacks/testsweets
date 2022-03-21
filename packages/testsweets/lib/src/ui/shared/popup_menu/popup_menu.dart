@@ -39,7 +39,7 @@ class PopupMenu extends StatelessWidget {
         showUnattachOption: description.targetIds.isNotEmpty,
         showAttachOption: (description.targetIds.length +
                 2) < // 2 is for one widget and its view
-            model.descriptionsForView.length,
+            model.viewInteractions.length,
         onMenuAction: (popupMenuAction) async {
           await model.popupMenuActionSelected(description, popupMenuAction);
           if (popupMenuAction == PopupMenuAction.edit) {
@@ -52,7 +52,7 @@ class PopupMenu extends StatelessWidget {
 
       /// When you long press and drag replace this widget with sizedbox
       /// to avoid dublicates, cause it's using DraggableWidget while you move it
-      child: description.id == model.widgetDescription?.id
+      child: description.id == model.inProgressInteraction?.id
           ? const SizedBox.shrink()
           : WidgetCircle(
               transparency: description.visibility ? 1 : 0.5,

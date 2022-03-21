@@ -46,7 +46,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
   @override
   Widget build(BuildContext context) {
     final model = context.watch<WidgetCaptureViewModel>();
-    final widgetDescription = model.widgetDescription;
+    final widgetDescription = model.inProgressInteraction;
     final size = MediaQuery.of(context).size;
     return Stack(
       alignment: Alignment.bottomCenter,
@@ -54,7 +54,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
         WidgetsVisualizer(editActionSelected: () {
           /// Set the value of the edited widget to the form textfield
           /// and show the bottomsheet
-          widgetNameController.text = model.widgetDescription!.name;
+          widgetNameController.text = model.inProgressInteraction!.name;
           solidController.show();
         }),
         if (model.captureWidgetStatusEnum.showWidgetForm)

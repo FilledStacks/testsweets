@@ -30,7 +30,7 @@ class WidgetsVisualizer extends StatelessWidget {
               builder: (context, descriptionsForView, _) {
                 return Stack(
                   children: [
-                    ...model.descriptionsForView
+                    ...model.viewInteractions
                         .where((interaciton) => interaciton.notView)
                         .where(isVisibleOnScreen)
                         .map(

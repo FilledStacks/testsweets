@@ -157,7 +157,7 @@ void unregisterServices() {
   _removeRegistrationIfExists<ReactiveScrollable>();
 }
 
-void registerServiceInstead<T extends Object>(T instance) {
+void registerServiceInsteadOfMockedOne<T extends Object>(T instance) {
   _removeRegistrationIfExists<T>();
   locator.registerSingleton<T>(instance);
 }

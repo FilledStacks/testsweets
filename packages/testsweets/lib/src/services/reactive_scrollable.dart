@@ -73,9 +73,9 @@ class ReactiveScrollable {
         Offset offsetDeviation =
             calculateOffsetDeviation(scrollableDescription, interaction);
         return interaction.externalities?.any(
-              (externalRect) =>
-                  externalRect.topLeft -
-                      (externalRect.nested ? offsetDeviation : Offset.zero) ==
+              (rect) =>
+                  rect.topLeft -
+                      (rect.nested ? offsetDeviation : Offset.zero) ==
                   scrollableDescription.rect.topLeft,
             ) ??
             false;
