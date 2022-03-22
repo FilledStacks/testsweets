@@ -263,8 +263,12 @@ class WidgetCaptureViewModel extends FormViewModel {
     log.v(captureWidgetStatusEnum);
 
     if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.quickPositionEdit) {
+      final findScrollablesService = locator<FindScrollables>();
+
+      findScrollablesService.searchForScrollableElements();
+
       final extractedScrollables =
-          FindScrollablesImp().convertElementsToScrollDescriptions();
+          findScrollablesService.convertElementsToScrollDescriptions();
 
       checkForExternalities(extractedScrollables);
 

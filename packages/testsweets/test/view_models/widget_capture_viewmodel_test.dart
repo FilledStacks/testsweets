@@ -111,6 +111,7 @@ void main() {
 
         final model = _getViewModel();
         model.startQuickPositionEdit(kGeneralInteraction);
+        model.viewInteractions = [kGeneralInteraction];
 
         await model.onLongPressUp();
 
@@ -126,6 +127,7 @@ void main() {
 
         final model = _getViewModel();
         model.startQuickPositionEdit(kGeneralInteraction);
+        model.viewInteractions = [kGeneralInteraction];
         model.updateDescriptionPosition(
             33,
             33,
@@ -274,6 +276,7 @@ void main() {
                   // captured horizontal list rect which is nested inside
                   // the virtical one
                   ScrollableDescription(
+                    nested: true,
                     rect: SerializableRect.fromLTWH(0, 20, 0, 0),
                     axis: Axis.horizontal,
                     maxScrollExtentByPixels: 0,

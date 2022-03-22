@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/src/provider.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
+import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/custom_solid_controller.dart';
@@ -178,8 +179,14 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                         /// When widget is saved successfully hide
                                         /// the bottom sheet
                                         await _closeBottomSheet();
+                                        final findScrollablesService =
+                                            locator<FindScrollables>();
+
+                                        findScrollablesService
+                                            .searchForScrollableElements();
+
                                         final extractedScrollables =
-                                            FindScrollablesImp()
+                                            findScrollablesService
                                                 .convertElementsToScrollDescriptions();
 
                                         model.checkForExternalities(

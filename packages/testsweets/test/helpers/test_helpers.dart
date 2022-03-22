@@ -10,6 +10,7 @@ import 'package:testsweets/src/services/sweetcore_command.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
+import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 
 import 'test_helpers.mocks.dart';
 
@@ -20,6 +21,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<CloudFunctionsService>(returnNullOnMissingStub: true),
   MockSpec<WidgetVisibiltyChangerService>(returnNullOnMissingStub: true),
   MockSpec<ReactiveScrollable>(returnNullOnMissingStub: true),
+  MockSpec<FindScrollables>(returnNullOnMissingStub: true),
 ])
 MockWidgetCaptureService getAndRegisterWidgetCaptureService(
     {List<Interaction> viewInteractions = const [],
@@ -44,6 +46,16 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
       .thenReturn(currentViewIsAlreadyCaptured);
 
   locator.registerSingleton<WidgetCaptureService>(service);
+  return service;
+}
+
+FindScrollables getAndRegisterFindScrollables(
+    {Iterable<ScrollableDescription>? sds}) {
+  _removeRegistrationIfExists<FindScrollables>();
+  final service = MockFindScrollables();
+  when(service.convertElementsToScrollDescriptions()).thenReturn(sds ?? []);
+  when(service.searchForScrollableElements()).thenReturn(null);
+  locator.registerSingleton<FindScrollables>(service);
   return service;
 }
 
@@ -146,6 +158,7 @@ void registerServices() {
   getAndRegisterSnackbarService();
   getAndRegisterWidgetVisibiltyChangerService();
   getAndRegisterReactiveScrollable();
+  getAndRegisterFindScrollables();
 }
 
 void unregisterServices() {
@@ -155,6 +168,7 @@ void unregisterServices() {
   _removeRegistrationIfExists<SnackbarService>();
   _removeRegistrationIfExists<WidgetVisibiltyChangerService>();
   _removeRegistrationIfExists<ReactiveScrollable>();
+  _removeRegistrationIfExists<FindScrollables>();
 }
 
 void registerServiceInsteadOfMockedOne<T extends Object>(T instance) {

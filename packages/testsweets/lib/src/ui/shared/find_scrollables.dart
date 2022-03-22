@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 abstract class FindScrollables {
   Iterable<Element>? foundedElements;
-
+  void searchForScrollableElements();
   Iterable<ScrollableDescription> convertElementsToScrollDescriptions();
 }
 
@@ -14,10 +14,12 @@ class FindScrollablesImp implements FindScrollables {
 
   Iterable<Element>? foundedElements;
 
-  FindScrollablesImp() {
+  @override
+  void searchForScrollableElements() {
     foundedElements = find.byType(Scrollable).hitTestable().evaluate();
   }
 
+  @override
   Iterable<ScrollableDescription> convertElementsToScrollDescriptions() {
     if (foundedElements == null) {
       log.e('foundedElements is null');

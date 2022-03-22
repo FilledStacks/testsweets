@@ -5,7 +5,7 @@
 import 'dart:async' as _i9;
 import 'dart:ui' as _i5;
 
-import 'package:flutter/cupertino.dart' as _i8;
+import 'package:flutter/material.dart' as _i8;
 import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked_services/src/snackbar/snackbar_config.dart' as _i7;
@@ -20,6 +20,7 @@ import 'package:testsweets/src/services/testsweets_route_tracker.dart' as _i11;
 import 'package:testsweets/src/services/widget_capture_service.dart' as _i10;
 import 'package:testsweets/src/services/widget_visibilty_changer_service.dart'
     as _i13;
+import 'package:testsweets/src/ui/shared/find_scrollables.dart' as _i17;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -449,4 +450,20 @@ class MockReactiveScrollable extends _i1.Mock
           Invocation.method(#moveInteractionsWithScrollable,
               [scrollableDescription, affectedInteractions]),
           returnValue: <_i4.Interaction>[]) as Iterable<_i4.Interaction>);
+}
+
+/// A class which mocks [FindScrollables].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFindScrollables extends _i1.Mock implements _i17.FindScrollables {
+  @override
+  set foundedElements(Iterable<_i8.Element>? _foundedElements) =>
+      super.noSuchMethod(Invocation.setter(#foundedElements, _foundedElements),
+          returnValueForMissingStub: null);
+  @override
+  Iterable<_i4.ScrollableDescription> convertElementsToScrollDescriptions() =>
+      (super.noSuchMethod(
+              Invocation.method(#convertElementsToScrollDescriptions, []),
+              returnValue: <_i4.ScrollableDescription>[])
+          as Iterable<_i4.ScrollableDescription>);
 }
