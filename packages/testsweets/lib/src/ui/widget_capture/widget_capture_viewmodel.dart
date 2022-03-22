@@ -18,6 +18,7 @@ import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
+import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view_form.dart';
 
 import '../../services/reactive_scrollable.dart';
@@ -139,34 +140,36 @@ class WidgetCaptureViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  Future<String?> saveWidget() async {
+  Future<void> saveWidget() async {
     log.i(inProgressInteraction);
 
+    _gatherInteracitonInfo();
+
     setBusy(true);
+
+    try {
+      final ineractionId = await _widgetCaptureService.captureWidgetDescription(
+          description: inProgressInteraction!);
+      _addSavedInteractionToViewWhenSuccess(ineractionId);
+    } catch (e) {
+      _snackbarService.showCustomSnackBar(
+          message: e.toString(), variant: SnackbarType.failed);
+    }
+
+    setBusy(false);
+  }
+
+  void _gatherInteracitonInfo() {
     inProgressInteraction = inProgressInteraction?.copyWith(
       name: widgetNameValue!.convertWidgetNameToValidFormat,
       viewName:
           _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
       originalViewName: _testSweetsRouteTracker.currentRoute,
     );
-
-    log.i('descriptionToSave:$inProgressInteraction');
-
-    final result = await _widgetCaptureService.captureWidgetDescription(
-        description: inProgressInteraction!);
-
-    if (result is String) {
-      _snackbarService.showCustomSnackBar(
-          message: result, variant: SnackbarType.failed);
-    } else {
-      _addSavedInteractionToViewWhenSuccess();
-    }
-    setBusy(false);
-    return result;
   }
 
-  void _addSavedInteractionToViewWhenSuccess() {
-    viewInteractions.add(inProgressInteraction!);
+  void _addSavedInteractionToViewWhenSuccess(String id) {
+    viewInteractions.add(inProgressInteraction!.copyWith(id: id));
     inProgressInteraction = null;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
   }
@@ -233,11 +236,11 @@ class WidgetCaptureViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  Future<String?> submitForm() async {
+  Future<void> submitForm() async {
     if (inProgressInteraction?.id != null) {
-      return await updateWidgetDescription();
+      await updateWidgetDescription();
     } else {
-      return await saveWidget();
+      await saveWidget();
     }
   }
 
@@ -260,6 +263,11 @@ class WidgetCaptureViewModel extends FormViewModel {
     log.v(captureWidgetStatusEnum);
 
     if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.quickPositionEdit) {
+      final extractedScrollables =
+          FindScrollablesImp().convertElementsToScrollDescriptions();
+
+      checkForExternalities(extractedScrollables);
+
       await updateWidgetDescription();
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
@@ -288,8 +296,12 @@ class WidgetCaptureViewModel extends FormViewModel {
   void checkForExternalities(
       Iterable<ScrollableDescription> scrollableDescription) {
     log.i('before:' + inProgressInteraction.toString());
+
+    if (scrollableDescription.isEmpty) return;
+
     inProgressInteraction = _reactiveScrollable.applyScrollableOnInteraction(
         scrollableDescription, inProgressInteraction!);
+
     log.i('after:' + inProgressInteraction.toString());
   }
 

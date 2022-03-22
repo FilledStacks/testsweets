@@ -71,27 +71,23 @@ class WidgetCaptureService {
           : false;
 
   /// Captures a widgets description to the backend as well as locally in the [widgetDescriptionMap]
-  Future<String?> captureWidgetDescription({
+  Future<String> captureWidgetDescription({
     required Interaction description,
   }) async {
     log.i('description:$description projectId:$_projectId');
-    try {
-      await _checkViewIfExistOrCaptureIt(description.originalViewName);
 
-      final descriptionId =
-          await _cloudFunctionsService.uploadWidgetDescriptionToProject(
-        projectId: _projectId,
-        description: description,
-      );
-      // Add description to descriptionMap with id from the backend
-      addWidgetDescriptionToMap = description.copyWith(id: descriptionId);
+    await _checkViewIfExistOrCaptureIt(description.originalViewName);
 
-      log.i('descriptionId from Cloud: $descriptionId');
-      return null;
-    } catch (e) {
-      log.e(e);
-      return e.toString();
-    }
+    final descriptionId =
+        await _cloudFunctionsService.uploadWidgetDescriptionToProject(
+      projectId: _projectId,
+      description: description,
+    );
+    // Add description to descriptionMap with id from the backend
+    addWidgetDescriptionToMap = description.copyWith(id: descriptionId);
+
+    log.i('descriptionId from Cloud: $descriptionId');
+    return descriptionId;
   }
 
   /// Updates a widget description to the backend as well as locally in the [widgetDescriptionMap]

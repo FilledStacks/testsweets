@@ -30,7 +30,7 @@ class _$InteractionTearOff {
       required WidgetPosition position,
       bool visibility = true,
       List<String> targetIds = const [],
-      Set<SerializableRect>? externalities}) {
+      Set<ScrollableDescription>? externalities}) {
     return _Interaction(
       id: id,
       viewName: viewName,
@@ -80,7 +80,7 @@ mixin _$Interaction {
 
   /// Left-top offset for external widgets that affects this widget
   /// (normally ListViews)
-  Set<SerializableRect>? get externalities =>
+  Set<ScrollableDescription>? get externalities =>
       throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -103,7 +103,7 @@ abstract class $InteractionCopyWith<$Res> {
       WidgetPosition position,
       bool visibility,
       List<String> targetIds,
-      Set<SerializableRect>? externalities});
+      Set<ScrollableDescription>? externalities});
 
   $WidgetPositionCopyWith<$Res> get position;
 }
@@ -164,7 +164,7 @@ class _$InteractionCopyWithImpl<$Res> implements $InteractionCopyWith<$Res> {
       externalities: externalities == freezed
           ? _value.externalities
           : externalities // ignore: cast_nullable_to_non_nullable
-              as Set<SerializableRect>?,
+              as Set<ScrollableDescription>?,
     ));
   }
 
@@ -192,7 +192,7 @@ abstract class _$InteractionCopyWith<$Res>
       WidgetPosition position,
       bool visibility,
       List<String> targetIds,
-      Set<SerializableRect>? externalities});
+      Set<ScrollableDescription>? externalities});
 
   @override
   $WidgetPositionCopyWith<$Res> get position;
@@ -256,7 +256,7 @@ class __$InteractionCopyWithImpl<$Res> extends _$InteractionCopyWithImpl<$Res>
       externalities: externalities == freezed
           ? _value.externalities
           : externalities // ignore: cast_nullable_to_non_nullable
-              as Set<SerializableRect>?,
+              as Set<ScrollableDescription>?,
     ));
   }
 }
@@ -318,7 +318,7 @@ class _$_Interaction extends _Interaction {
 
   /// Left-top offset for external widgets that affects this widget
   /// (normally ListViews)
-  final Set<SerializableRect>? externalities;
+  final Set<ScrollableDescription>? externalities;
 
   @override
   String toString() {
@@ -390,7 +390,7 @@ abstract class _Interaction extends Interaction {
       required WidgetPosition position,
       bool visibility,
       List<String> targetIds,
-      Set<SerializableRect>? externalities}) = _$_Interaction;
+      Set<ScrollableDescription>? externalities}) = _$_Interaction;
   _Interaction._() : super._();
 
   factory _Interaction.fromJson(Map<String, dynamic> json) =
@@ -432,7 +432,7 @@ abstract class _Interaction extends Interaction {
 
   /// Left-top offset for external widgets that affects this widget
   /// (normally ListViews)
-  Set<SerializableRect>? get externalities =>
+  Set<ScrollableDescription>? get externalities =>
       throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
@@ -719,6 +719,11 @@ abstract class _WidgetPosition implements WidgetPosition {
       throw _privateConstructorUsedError;
 }
 
+ScrollableDescription _$ScrollableDescriptionFromJson(
+    Map<String, dynamic> json) {
+  return _ScrollableDescription.fromJson(json);
+}
+
 /// @nodoc
 class _$ScrollableDescriptionTearOff {
   const _$ScrollableDescriptionTearOff();
@@ -727,13 +732,19 @@ class _$ScrollableDescriptionTearOff {
       {required Axis axis,
       required SerializableRect rect,
       required double scrollExtentByPixels,
-      required double maxScrollExtentByPixels}) {
+      required double maxScrollExtentByPixels,
+      bool nested = false}) {
     return _ScrollableDescription(
       axis: axis,
       rect: rect,
       scrollExtentByPixels: scrollExtentByPixels,
       maxScrollExtentByPixels: maxScrollExtentByPixels,
+      nested: nested,
     );
+  }
+
+  ScrollableDescription fromJson(Map<String, Object> json) {
+    return ScrollableDescription.fromJson(json);
   }
 }
 
@@ -746,7 +757,9 @@ mixin _$ScrollableDescription {
   SerializableRect get rect => throw _privateConstructorUsedError;
   double get scrollExtentByPixels => throw _privateConstructorUsedError;
   double get maxScrollExtentByPixels => throw _privateConstructorUsedError;
+  bool get nested => throw _privateConstructorUsedError;
 
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $ScrollableDescriptionCopyWith<ScrollableDescription> get copyWith =>
       throw _privateConstructorUsedError;
@@ -761,7 +774,8 @@ abstract class $ScrollableDescriptionCopyWith<$Res> {
       {Axis axis,
       SerializableRect rect,
       double scrollExtentByPixels,
-      double maxScrollExtentByPixels});
+      double maxScrollExtentByPixels,
+      bool nested});
 }
 
 /// @nodoc
@@ -779,6 +793,7 @@ class _$ScrollableDescriptionCopyWithImpl<$Res>
     Object? rect = freezed,
     Object? scrollExtentByPixels = freezed,
     Object? maxScrollExtentByPixels = freezed,
+    Object? nested = freezed,
   }) {
     return _then(_value.copyWith(
       axis: axis == freezed
@@ -797,6 +812,10 @@ class _$ScrollableDescriptionCopyWithImpl<$Res>
           ? _value.maxScrollExtentByPixels
           : maxScrollExtentByPixels // ignore: cast_nullable_to_non_nullable
               as double,
+      nested: nested == freezed
+          ? _value.nested
+          : nested // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -812,7 +831,8 @@ abstract class _$ScrollableDescriptionCopyWith<$Res>
       {Axis axis,
       SerializableRect rect,
       double scrollExtentByPixels,
-      double maxScrollExtentByPixels});
+      double maxScrollExtentByPixels,
+      bool nested});
 }
 
 /// @nodoc
@@ -832,6 +852,7 @@ class __$ScrollableDescriptionCopyWithImpl<$Res>
     Object? rect = freezed,
     Object? scrollExtentByPixels = freezed,
     Object? maxScrollExtentByPixels = freezed,
+    Object? nested = freezed,
   }) {
     return _then(_ScrollableDescription(
       axis: axis == freezed
@@ -850,18 +871,26 @@ class __$ScrollableDescriptionCopyWithImpl<$Res>
           ? _value.maxScrollExtentByPixels
           : maxScrollExtentByPixels // ignore: cast_nullable_to_non_nullable
               as double,
+      nested: nested == freezed
+          ? _value.nested
+          : nested // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$_ScrollableDescription implements _ScrollableDescription {
   _$_ScrollableDescription(
       {required this.axis,
       required this.rect,
       required this.scrollExtentByPixels,
-      required this.maxScrollExtentByPixels});
+      required this.maxScrollExtentByPixels,
+      this.nested = false});
+
+  factory _$_ScrollableDescription.fromJson(Map<String, dynamic> json) =>
+      _$$_ScrollableDescriptionFromJson(json);
 
   @override
   final Axis axis;
@@ -871,10 +900,13 @@ class _$_ScrollableDescription implements _ScrollableDescription {
   final double scrollExtentByPixels;
   @override
   final double maxScrollExtentByPixels;
+  @JsonKey(defaultValue: false)
+  @override
+  final bool nested;
 
   @override
   String toString() {
-    return 'ScrollableDescription(axis: $axis, rect: $rect, scrollExtentByPixels: $scrollExtentByPixels, maxScrollExtentByPixels: $maxScrollExtentByPixels)';
+    return 'ScrollableDescription(axis: $axis, rect: $rect, scrollExtentByPixels: $scrollExtentByPixels, maxScrollExtentByPixels: $maxScrollExtentByPixels, nested: $nested)';
   }
 
   @override
@@ -891,7 +923,9 @@ class _$_ScrollableDescription implements _ScrollableDescription {
             (identical(
                     other.maxScrollExtentByPixels, maxScrollExtentByPixels) ||
                 const DeepCollectionEquality().equals(
-                    other.maxScrollExtentByPixels, maxScrollExtentByPixels)));
+                    other.maxScrollExtentByPixels, maxScrollExtentByPixels)) &&
+            (identical(other.nested, nested) ||
+                const DeepCollectionEquality().equals(other.nested, nested)));
   }
 
   @override
@@ -900,13 +934,19 @@ class _$_ScrollableDescription implements _ScrollableDescription {
       const DeepCollectionEquality().hash(axis) ^
       const DeepCollectionEquality().hash(rect) ^
       const DeepCollectionEquality().hash(scrollExtentByPixels) ^
-      const DeepCollectionEquality().hash(maxScrollExtentByPixels);
+      const DeepCollectionEquality().hash(maxScrollExtentByPixels) ^
+      const DeepCollectionEquality().hash(nested);
 
   @JsonKey(ignore: true)
   @override
   _$ScrollableDescriptionCopyWith<_ScrollableDescription> get copyWith =>
       __$ScrollableDescriptionCopyWithImpl<_ScrollableDescription>(
           this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_ScrollableDescriptionToJson(this);
+  }
 }
 
 abstract class _ScrollableDescription implements ScrollableDescription {
@@ -914,7 +954,11 @@ abstract class _ScrollableDescription implements ScrollableDescription {
       {required Axis axis,
       required SerializableRect rect,
       required double scrollExtentByPixels,
-      required double maxScrollExtentByPixels}) = _$_ScrollableDescription;
+      required double maxScrollExtentByPixels,
+      bool nested}) = _$_ScrollableDescription;
+
+  factory _ScrollableDescription.fromJson(Map<String, dynamic> json) =
+      _$_ScrollableDescription.fromJson;
 
   @override
   Axis get axis => throw _privateConstructorUsedError;
@@ -924,6 +968,8 @@ abstract class _ScrollableDescription implements ScrollableDescription {
   double get scrollExtentByPixels => throw _privateConstructorUsedError;
   @override
   double get maxScrollExtentByPixels => throw _privateConstructorUsedError;
+  @override
+  bool get nested => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$ScrollableDescriptionCopyWith<_ScrollableDescription> get copyWith =>

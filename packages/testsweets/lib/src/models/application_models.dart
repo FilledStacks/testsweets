@@ -41,7 +41,7 @@ class Interaction with _$Interaction {
 
     /// Left-top offset for external widgets that affects this widget
     /// (normally ListViews)
-    Set<SerializableRect>? externalities,
+    Set<ScrollableDescription>? externalities,
   }) = _Interaction;
   factory Interaction.view(
           {required String viewName, required String originalViewName}) =>
@@ -78,12 +78,12 @@ class WidgetPosition with _$WidgetPosition {
 
 @freezed
 class ScrollableDescription with _$ScrollableDescription {
-  factory ScrollableDescription({
-    required Axis axis,
-    required SerializableRect rect,
-    required double scrollExtentByPixels,
-    required double maxScrollExtentByPixels,
-  }) = _ScrollableDescription;
+  factory ScrollableDescription(
+      {required Axis axis,
+      required SerializableRect rect,
+      required double scrollExtentByPixels,
+      required double maxScrollExtentByPixels,
+      @Default(false) bool nested}) = _ScrollableDescription;
 
   factory ScrollableDescription.fromNotification({
     required Offset globalPosition,
@@ -94,38 +94,41 @@ class ScrollableDescription with _$ScrollableDescription {
     final position = -metrics.extentBefore;
     final topLeftPointOfList = globalPosition - localPosition;
 
+    final rect = SerializableRect.fromLTWH(
+      topLeftPointOfList.dx,
+      topLeftPointOfList.dy,
+      // viewportDimension The extent of the viewport along the axisDirection.
+      metrics.axis == Axis.horizontal ? metrics.viewportDimension : 0,
+      metrics.axis == Axis.vertical ? metrics.viewportDimension : 0,
+    );
+
     return ScrollableDescription(
         axis: metrics.axis,
-        rect: SerializableRect.fromLTWH(
-            topLeftPointOfList.dx, topLeftPointOfList.dy, 0.0, 0.0),
+        rect: rect,
         scrollExtentByPixels: position,
         maxScrollExtentByPixels: metrics.maxScrollExtent);
   }
+  factory ScrollableDescription.fromJson(Map<String, dynamic> json) =>
+      _$ScrollableDescriptionFromJson(json);
 }
 
 class SerializableRect extends Rect {
-  final bool nested;
-
   const SerializableRect.fromLTWH(
-      double left, double top, double width, double height,
-      {this.nested = false})
-      : super.fromLTWH(left, top, width, height);
+    double left,
+    double top,
+    double width,
+    double height,
+  ) : super.fromLTWH(left, top, width, height);
 
-  const SerializableRect.fromLTRB(
-      double left, double top, double right, double bottom,
-      {this.nested = false})
-      : super.fromLTRB(left, top, right, bottom);
-
-  SerializableRect.fromPoints(Offset a, Offset b, {this.nested = false})
-      : super.fromPoints(a, b);
+  SerializableRect.fromPoints(Offset a, Offset b) : super.fromPoints(a, b);
 
   factory SerializableRect.fromJson(Map<String, dynamic> json) {
     return SerializableRect.fromLTWH(
-        (json['left']! as int).toDouble(),
-        (json['top']! as int).toDouble(),
-        (json['width']! as int).toDouble(),
-        (json['height']! as int).toDouble(),
-        nested: json['nested']!);
+      (json['left']! as num).toDouble(),
+      (json['top']! as num).toDouble(),
+      (json['width']! as num).toDouble(),
+      (json['height']! as num).toDouble(),
+    );
   }
   Map<String, dynamic> toJson() {
     return {
@@ -133,7 +136,6 @@ class SerializableRect extends Rect {
       'top': top,
       'width': width,
       'height': height,
-      'nested': nested
     };
   }
 }

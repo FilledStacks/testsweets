@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
@@ -79,6 +80,8 @@ void main() {
         final service = getAndRegisterWidgetCaptureService();
 
         final model = _getViewModel();
+        model.viewInteractions = [kGeneralInteraction];
+
         await model.popupMenuActionSelected(
             kGeneralInteraction, PopupMenuAction.edit);
         model.formValueMap[WidgetNameValueKey] = 'loginButton';
@@ -93,10 +96,8 @@ void main() {
       test('''When called and update was successful,
           Should set the current CaptureWidgetStatusEnum to idle''', () async {
         final model = _getViewModel();
-
-        model.showWidgetForm();
-
-        model.formValueMap[WidgetNameValueKey] = 'loginButton';
+        model.viewInteractions = [kGeneralInteraction];
+        model.inProgressInteraction = kGeneralInteraction;
 
         await model.updateWidgetDescription();
 
@@ -197,8 +198,14 @@ void main() {
         ''', () async {
         getAndRegisterWidgetCaptureService(
           viewInteractions: [
-            kGeneralInteractionWithZeroOffset.copyWith(
-                externalities: {SerializableRect.fromLTWH(0, 0, 0, 0)}),
+            kGeneralInteractionWithZeroOffset.copyWith(externalities: {
+              ScrollableDescription(
+                rect: SerializableRect.fromLTWH(0, 0, 0, 0),
+                axis: Axis.vertical,
+                maxScrollExtentByPixels: 0,
+                scrollExtentByPixels: 0,
+              ),
+            }),
             kGeneralInteraction
           ],
         );
@@ -223,7 +230,14 @@ void main() {
           viewInteractions: [
             kGeneralInteractionWithZeroOffset.copyWith(
                 position: WidgetPosition(x: 0, y: 0, yDeviation: 100),
-                externalities: {SerializableRect.fromLTWH(0, 0, 0, 0)}),
+                externalities: {
+                  ScrollableDescription(
+                    rect: SerializableRect.fromLTWH(0, 0, 0, 0),
+                    axis: Axis.vertical,
+                    maxScrollExtentByPixels: 0,
+                    scrollExtentByPixels: 0,
+                  ),
+                }),
             kGeneralInteraction
           ],
         );
@@ -249,12 +263,22 @@ void main() {
             kGeneralInteractionWithZeroOffset.copyWith(
                 position: WidgetPosition(x: 21, y: 22),
                 externalities: {
-                  SerializableRect.fromLTWH(
-                      0, 0, 0, 0), // captured vertical list rect
-                  SerializableRect.fromLTWH(0, 20, 0, 0,
-                      nested:
-                          true), // captured horizontal list rect which is nested inside
+                  // captured vertical list rect
+                  ScrollableDescription(
+                    rect: SerializableRect.fromLTWH(0, 0, 0, 0),
+                    axis: Axis.vertical,
+                    maxScrollExtentByPixels: 0,
+                    scrollExtentByPixels: 0,
+                  ),
+
+                  // captured horizontal list rect which is nested inside
                   // the virtical one
+                  ScrollableDescription(
+                    rect: SerializableRect.fromLTWH(0, 20, 0, 0),
+                    axis: Axis.horizontal,
+                    maxScrollExtentByPixels: 0,
+                    scrollExtentByPixels: 0,
+                  ),
                 }),
             kGeneralInteraction
           ],

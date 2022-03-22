@@ -21,7 +21,8 @@ _$_Interaction _$$_InteractionFromJson(Map<String, dynamic> json) =>
               .toList() ??
           [],
       externalities: (json['externalities'] as List<dynamic>?)
-          ?.map((e) => SerializableRect.fromJson(e as Map<String, dynamic>))
+          ?.map(
+              (e) => ScrollableDescription.fromJson(e as Map<String, dynamic>))
           .toSet(),
     );
 
@@ -92,3 +93,29 @@ Map<String, dynamic> _$$_WidgetPositionToJson(_$_WidgetPosition instance) =>
       'xDeviation': instance.xDeviation,
       'yDeviation': instance.yDeviation,
     };
+
+_$_ScrollableDescription _$$_ScrollableDescriptionFromJson(
+        Map<String, dynamic> json) =>
+    _$_ScrollableDescription(
+      axis: _$enumDecode(_$AxisEnumMap, json['axis']),
+      rect: SerializableRect.fromJson(json['rect'] as Map<String, dynamic>),
+      scrollExtentByPixels: (json['scrollExtentByPixels'] as num).toDouble(),
+      maxScrollExtentByPixels:
+          (json['maxScrollExtentByPixels'] as num).toDouble(),
+      nested: json['nested'] as bool? ?? false,
+    );
+
+Map<String, dynamic> _$$_ScrollableDescriptionToJson(
+        _$_ScrollableDescription instance) =>
+    <String, dynamic>{
+      'axis': _$AxisEnumMap[instance.axis],
+      'rect': instance.rect,
+      'scrollExtentByPixels': instance.scrollExtentByPixels,
+      'maxScrollExtentByPixels': instance.maxScrollExtentByPixels,
+      'nested': instance.nested,
+    };
+
+const _$AxisEnumMap = {
+  Axis.horizontal: 'horizontal',
+  Axis.vertical: 'vertical',
+};

@@ -5,7 +5,7 @@
 import 'dart:async' as _i9;
 import 'dart:ui' as _i5;
 
-import 'package:flutter/material.dart' as _i8;
+import 'package:flutter/cupertino.dart' as _i8;
 import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked_services/src/snackbar/snackbar_config.dart' as _i7;
@@ -161,12 +161,11 @@ class MockWidgetCaptureService extends _i1.Mock
               #checkCurrentViewIfAlreadyCaptured, [originalViewName]),
           returnValue: false) as bool);
   @override
-  _i9.Future<String?> captureWidgetDescription(
-          {_i4.Interaction? description}) =>
+  _i9.Future<String> captureWidgetDescription({_i4.Interaction? description}) =>
       (super.noSuchMethod(
           Invocation.method(
               #captureWidgetDescription, [], {#description: description}),
-          returnValue: Future<String?>.value()) as _i9.Future<String?>);
+          returnValue: Future<String>.value('')) as _i9.Future<String>);
   @override
   _i9.Future<String?> updateWidgetDescription({_i4.Interaction? description}) =>
       (super.noSuchMethod(
@@ -425,6 +424,15 @@ class MockReactiveScrollable extends _i1.Mock
           Invocation.method(#filterAffectedInteractionsByScrollable,
               [scrollableDescription, viewDescription]),
           returnValue: <_i4.Interaction>[]) as Iterable<_i4.Interaction>);
+  @override
+  double distanceSquaredBetweenScrollableAndExternal(
+          _i4.ScrollableDescription? sd,
+          _i5.Offset? offsetDeviation,
+          _i4.ScrollableDescription? scrollableDescription) =>
+      (super.noSuchMethod(
+          Invocation.method(#distanceSquaredBetweenScrollableAndExternal,
+              [sd, offsetDeviation, scrollableDescription]),
+          returnValue: 0.0) as double);
   @override
   _i5.Offset calculateOffsetDeviation(
           _i4.ScrollableDescription? scrollableDescription,

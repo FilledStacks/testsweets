@@ -3,16 +3,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/src/provider.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
-import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/custom_solid_controller.dart';
+import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 import 'package:testsweets/src/ui/shared/icon_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
+import 'package:testsweets/src/ui/shared/utils.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widgets_visualizer.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import '../widget_capture_view_form.dart';
-import 'draggable_widget.dart';
 import 'form_header.dart';
 import 'type_selector.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -178,14 +178,12 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                         /// When widget is saved successfully hide
                                         /// the bottom sheet
                                         await _closeBottomSheet();
+                                        final extractedScrollables =
+                                            FindScrollablesImp()
+                                                .convertElementsToScrollDescriptions();
 
-                                        final listsRect = find
-                                            .byType(Scrollable)
-                                            .hitTestable()
-                                            .evaluate()
-                                            .map(
-                                                extractScrollableDescriptionFromElement);
-                                        model.checkForExternalities(listsRect);
+                                        model.checkForExternalities(
+                                            extractedScrollables);
                                         await model.submitForm();
                                         _clearAndUnfocusTextField();
                                       },
@@ -218,26 +216,6 @@ class _CaptureOverlayState extends State<CaptureOverlay>
           ),
       ],
     );
-  }
-
-  ScrollableDescription extractScrollableDescriptionFromElement(Element item) {
-    RenderBox renderBox = item.findRenderObject() as RenderBox;
-
-    Offset globalPostion = renderBox.localToGlobal(Offset.zero);
-    final position = (item.widget as Scrollable).controller!.positions.first;
-
-    final scrollOffsetOnCapture = position.pixels;
-    final maxScrollOffset = position.maxScrollExtent;
-    final axis = position.axis;
-
-    return ScrollableDescription(
-        axis: axis,
-        rect: SerializableRect.fromPoints(
-            globalPostion,
-            globalPostion.translate(
-                renderBox.size.width, renderBox.size.height)),
-        scrollExtentByPixels: scrollOffsetOnCapture,
-        maxScrollExtentByPixels: maxScrollOffset);
   }
 
   Future<void> _closeBottomSheet() async {

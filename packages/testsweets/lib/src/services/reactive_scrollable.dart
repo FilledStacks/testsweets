@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testsweets/src/extensions/scrollable_description_extension.dart';
 import 'package:testsweets/src/extensions/serializable_rect_extension.dart';
 import 'package:testsweets/src/extensions/widget_description_extension.dart';
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
@@ -44,7 +45,7 @@ class ReactiveScrollable {
       interaction = interaction.copyWith(
         externalities: {
           ...interaction.externalities ?? {},
-          scrollable.rect.offsetByScrollable(biggestScrollable),
+          scrollable.transferBy(biggestScrollable),
         },
         position: interaction.position.withScrollable(scrollable),
       );
@@ -68,19 +69,31 @@ class ReactiveScrollable {
 
     return viewDescription.where((interaciton) => interaciton.notView).where(
       (interaction) {
+        if (interaction.externalities == null) return false;
+
         /// This fixes the nested scrollables issue where the first scrollable
         /// deviate the second one's offset
         Offset offsetDeviation =
             calculateOffsetDeviation(scrollableDescription, interaction);
-        return interaction.externalities?.any(
-              (rect) =>
-                  rect.topLeft -
-                      (rect.nested ? offsetDeviation : Offset.zero) ==
-                  scrollableDescription.rect.topLeft,
-            ) ??
-            false;
+        return interaction.externalities!.any(
+          (sd) {
+            final distance = distanceSquaredBetweenScrollableAndExternal(
+                sd, offsetDeviation, scrollableDescription);
+
+            final included = distance < 10;
+            return included;
+          },
+        );
       },
     );
+  }
+
+  double distanceSquaredBetweenScrollableAndExternal(ScrollableDescription sd,
+      Offset offsetDeviation, ScrollableDescription scrollableDescription) {
+    return (sd.rect.topLeft -
+            (sd.nested ? offsetDeviation : Offset.zero) -
+            scrollableDescription.rect.topLeft)
+        .distanceSquared;
   }
 
   Offset calculateOffsetDeviation(
