@@ -1,4 +1,4 @@
-### 1.7.5
+### 1.8.5
 - Add scrollable interaction feature
 
 ### 1.7.5
