@@ -116,6 +116,7 @@ void main() {
         final model = _getModel();
         await model.initialise();
         model.onClientAppEvent(kScrollEndNotification);
+        await model.initialise();
 
         /// sence we have just one widget we can do this shortcut
         expect(model.descriptionsForView.first.visibility, true);

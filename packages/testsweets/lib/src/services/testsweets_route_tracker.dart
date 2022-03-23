@@ -7,6 +7,8 @@ class TestSweetsRouteTracker extends ChangeNotifier {
   @visibleForTesting
   bool testMode = false;
   static TestSweetsRouteTracker? _instance;
+  @visibleForTesting
+  Map<String, int> indexedRouteStateMap = {};
   static TestSweetsRouteTracker get instance {
     if (_instance == null) {
       _instance = TestSweetsRouteTracker();
@@ -47,6 +49,7 @@ class TestSweetsRouteTracker extends ChangeNotifier {
     _parentRoute = '';
     _tempRoute = '';
     _currentRoute = route;
+    loadRouteIndexIfExist(route);
     refreshUi();
   }
 
@@ -74,5 +77,22 @@ class TestSweetsRouteTracker extends ChangeNotifier {
   void refreshUi() {
     if (!testMode)
       WidgetsBinding.instance!.addPostFrameCallback((_) => notifyListeners());
+  }
+
+  void changeRouteIndex(String viewName, int index) {
+    setCurrentRoute(viewName + index.toString());
+    setparentRoute(viewName);
+    saveRouteIndex(viewName, index);
+  }
+
+  void saveRouteIndex(String viewName, int index) {
+    indexedRouteStateMap[viewName] = index;
+  }
+
+  void loadRouteIndexIfExist(String viewName) {
+    if (indexedRouteStateMap.containsKey(viewName)) {
+      _currentRoute = viewName + indexedRouteStateMap[viewName].toString();
+      _parentRoute = viewName;
+    }
   }
 }

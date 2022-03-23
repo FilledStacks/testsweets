@@ -20,7 +20,6 @@ class TestSweetsNavigatorObserver extends NavigatorObserver {
 
   @override
   void didRemove(Route route, Route? previousRoute) {
-    routeTracker.setCurrentRoute(_getRouteName(route));
     super.didRemove(route, previousRoute);
   }
 
@@ -42,8 +41,7 @@ class TestSweetsNavigatorObserver extends NavigatorObserver {
     required int index,
     required String viewName,
   }) {
-    routeTracker.setCurrentRoute(viewName + index.toString());
-    routeTracker.setparentRoute(viewName);
+    routeTracker.changeRouteIndex(viewName, index);
   }
 
   String _getRouteName(Route? route) {
