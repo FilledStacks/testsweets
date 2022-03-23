@@ -4,7 +4,7 @@ import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
-import 'package:testsweets/src/extensions/widget_description_extension.dart';
+import 'package:testsweets/src/extensions/interaction_extension.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/shared/popup_menu/popup_menu.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:testsweets/src/extensions/widget_description_extension.dart';
+import 'package:testsweets/src/extensions/interaction_extension.dart';
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
 
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';

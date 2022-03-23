@@ -54,6 +54,9 @@ class Interaction with _$Interaction {
 
   factory Interaction.fromJson(Map<String, dynamic> json) =>
       _$InteractionFromJson(json);
+  void clearExternalities() {
+    this.externalities?.clear();
+  }
 
   String get automationKey => widgetType == WidgetType.view
       ? '$viewName\_${widgetType.shortName}'

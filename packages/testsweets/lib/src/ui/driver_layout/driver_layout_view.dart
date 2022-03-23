@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
-import 'package:testsweets/src/extensions/widget_description_extension.dart';
+import 'package:testsweets/src/extensions/interaction_extension.dart';
 import 'package:testsweets/src/ui/driver_layout/hittable_stack.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/busy_indecator.dart';

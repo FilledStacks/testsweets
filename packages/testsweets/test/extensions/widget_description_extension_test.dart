@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/extensions/widget_description_extension.dart';
+import 'package:testsweets/src/extensions/interaction_extension.dart';
 import 'package:testsweets/testsweets.dart';
 
 import '../helpers/test_helpers.dart';

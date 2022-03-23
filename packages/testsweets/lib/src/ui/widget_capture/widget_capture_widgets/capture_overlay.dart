@@ -47,7 +47,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
   @override
   Widget build(BuildContext context) {
     final model = context.watch<WidgetCaptureViewModel>();
-    final widgetDescription = model.inProgressInteraction;
+    final interaction = model.inProgressInteraction;
     final size = MediaQuery.of(context).size;
     return Stack(
       alignment: Alignment.bottomCenter,
@@ -76,7 +76,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
               canUserSwipe: false,
               minHeight: 0,
               maxHeight: 300,
-              body: widgetDescription == null
+              body: interaction == null
                   ? const SizedBox.shrink()
                   : Container(
                       decoration: kdBlackRoundedEdgeDecoration,
@@ -89,7 +89,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                 textAlign: TextAlign.left, style: tsMedium()),
                           ),
                           TypeSelector(
-                            selectedWidgetType: widgetDescription.widgetType,
+                            selectedWidgetType: interaction.widgetType,
                             onTap: (widgetType) =>
                                 model.setWidgetType = widgetType,
                           ),
@@ -152,9 +152,9 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                         backgroundColor: kcCard,
                                         onTap: () {
                                           model.setVisibilty =
-                                              !widgetDescription.visibility;
+                                              !interaction.visibility;
                                         },
-                                        svgIcon: widgetDescription.visibility
+                                        svgIcon: interaction.visibility
                                             ? 'packages/testsweets/assets/svgs/eye.svg'
                                             : 'packages/testsweets/assets/svgs/eye_closed.svg',
                                         svgWidth: 30),
@@ -173,8 +173,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                 Expanded(
                                   flex: 5,
                                   child: CtaButton(
-                                      // isDisabled:
-                                      //     widgetDescription.name.isEmpty,
+                                      isDisabled: interaction.name.isEmpty,
                                       onTap: () async {
                                         /// When widget is saved successfully hide
                                         /// the bottom sheet
@@ -195,7 +194,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                         _clearAndUnfocusTextField();
                                       },
                                       fillColor: kcPrimaryPurple,
-                                      title: widgetDescription.id != null
+                                      title: interaction.id != null
                                           ? 'Update'
                                           : 'Create'),
                                 ),
@@ -227,7 +226,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
 
   Future<void> _closeBottomSheet() async {
     solidController.hide();
-    await Future.delayed(const Duration(milliseconds: 350));
+    await Future.delayed(const Duration(milliseconds: 1000));
   }
 
   void _clearAndUnfocusTextField() {

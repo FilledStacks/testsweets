@@ -3,7 +3,7 @@ import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/testsweets.dart';
 
-extension WidgetDescriptionUtils on Interaction {
+extension InteractionExtension on Interaction {
   Offset responsiveOffset(Size screenSize) {
     final responsiveWidth = responsiveXPosition(screenSize.width);
     final responsiveHeight = responsiveYPosition(screenSize.height);
