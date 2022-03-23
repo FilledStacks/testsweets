@@ -1,4 +1,7 @@
 ### 1.7.5
+- Add scrollable interaction feature
+
+### 1.7.5
 - Fix route bug
 ### 1.7.4
 - Fix testsweets doesn't respond to clearStackAndShow
