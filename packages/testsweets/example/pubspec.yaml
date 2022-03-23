@@ -39,8 +39,8 @@ dev_dependencies:
     sdk: flutter
 
   build_runner:
-  testsweets_generator:
-    path: ../../testsweets_generator
+  # testsweets_generator:
+  #   path: ../../testsweets_generator
 
   stacked_generator:
 
