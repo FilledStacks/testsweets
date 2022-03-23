@@ -75,7 +75,9 @@ class ReactiveScrollable {
         /// deviate the second one's offset
         Offset offsetDeviation =
             calculateOffsetDeviation(scrollableDescription, interaction);
-        return interaction.externalities!.any(
+        return interaction.externalities!
+            .where((sd) => sd.axis == scrollableDescription.axis)
+            .any(
           (sd) {
             final distance = distanceSquaredBetweenScrollableAndExternal(
                 sd, offsetDeviation, scrollableDescription);

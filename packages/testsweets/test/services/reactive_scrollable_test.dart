@@ -193,6 +193,30 @@ void main() {
 
         expect(result, isEmpty);
       });
+
+      test(
+          '''An interaction located inside two scrollables one vertical(wraps the horizontal) and one horizontal
+          and both of them starts at the same point(top-left point is (0,0)),
+           when scroll the horizontal list which doesn't overlap with our interaction
+           , Should not affect scrollableDescription on the vertical list 
+           (in fewer words chech for axis to roll out the case where two scrollables
+           share the top-left point)
+           ''', () {
+        final service = ReactiveScrollable();
+
+        final horizontalScrollable = kTopLeftHorizontalScrollableDescription
+            .copyWith(rect: SerializableRect.fromLTWH(0, 0, 10, 10));
+        Interaction interactionWithExternalites =
+            kScrollableInteraction.copyWith(externalities: {
+          kFullScreenVerticalScrollableDescription,
+        });
+
+        final affectedInteractions = service
+            .filterAffectedInteractionsByScrollable(
+                horizontalScrollable, [interactionWithExternalites]);
+
+        expect(affectedInteractions, isEmpty);
+      });
     });
     group('reactToScrollEvent -', () {
       test('''When add scrollDescription of 100px on vertical,
