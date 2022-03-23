@@ -37,9 +37,9 @@ void main() {
       and the trigger widget has no targets, 
       Should complete the completer with foundAutomationKeyWithNoTargets
       ''', () async {
-        getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
-          kWidgetDescription1,
-          kWidgetDescription2
+        getAndRegisterWidgetCaptureService(viewInteractions: [
+          kGeneralInteractionWithZeroOffset,
+          kGeneralInteraction
         ]);
 
         /// Unregister the mocked service and register our instance
@@ -48,7 +48,7 @@ void main() {
         locator.registerSingleton<WidgetVisibiltyChangerService>(service);
 
         service.sweetcoreCommand =
-            ScrollableCommand(widgetName: kWidgetDescription2.automationKey);
+            ScrollableCommand(widgetName: kGeneralInteraction.automationKey);
         service.completer = Completer();
         expect(
             service.completer!.future,
@@ -66,7 +66,7 @@ void main() {
 
         model.onClientAppEvent(TestNotification());
         verifyNever(service.runToggleVisibiltyChecker(
-            TestNotification(), '', [kWidgetDescription1]));
+            TestNotification(), '', [kGeneralInteractionWithZeroOffset]));
       });
       test(
           'When you don\'t find the widgetName in list of widgetDescriptions, Do nothing',
@@ -82,40 +82,39 @@ void main() {
         verify(service.completeCompleter(
             HandlerMessageResponse.couldnotFindAutomationKey));
         verifyNever(service.runToggleVisibiltyChecker(
-            TestNotification(), '', [kWidgetDescription1]));
+            TestNotification(), '', [kGeneralInteractionWithZeroOffset]));
       });
       test('''When we recive new notification of type ScrollEndNotification
         and latestSweetcoreCommand isn\'t null and automationKey is exist,
         Should call runToggleVisibiltyChecker on the WidgetVisibiltyChangerService''',
           () async {
-        getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
-          kWidgetDescription2,
+        getAndRegisterWidgetCaptureService(viewInteractions: [
+          kGeneralInteraction,
         ]);
         final service = getAndRegisterWidgetVisibiltyChangerService(
-            widgetDescriptions: [kWidgetDescription2],
+            widgetDescriptions: [kGeneralInteraction],
             latestSweetcoreCommand: ScrollableCommand(
-                widgetName: kWidgetDescription2.automationKey));
+                widgetName: kGeneralInteraction.automationKey));
         service.completer = Completer();
 
         final model = _getModel();
         await model.initialise();
-
         model.onClientAppEvent(kScrollEndNotification);
         verify(service.runToggleVisibiltyChecker(
-            kScrollEndNotification, kWidgetDescription2.automationKey, [
-          kWidgetDescription2,
+            kScrollEndNotification, kGeneralInteraction.automationKey, [
+          kGeneralInteraction,
         ]));
       });
       test('''When we call toggleVisibilty on the WidgetVisibiltyChangerService,
         Should toggle the visibilty of the triggered widgets''', () async {
         /// [testWidgetDescription] visiblilty is true by default
         getAndRegisterWidgetCaptureService(
-            listOfWidgetDescription: [kWidgetDescription1]);
+            viewInteractions: [kGeneralInteractionWithZeroOffset]);
         getAndRegisterWidgetVisibiltyChangerService(widgetDescriptions: [
-          kWidgetDescription1.copyWith(visibility: false)
+          kGeneralInteractionWithZeroOffset.copyWith(visibility: false)
         ], latestSweetcoreCommand: ScrollableCommand(widgetName: 'widgetName'));
         final model = _getModel();
-
+        await model.initialise();
         model.onClientAppEvent(kScrollEndNotification);
         await model.initialise();
 
@@ -124,9 +123,9 @@ void main() {
       });
       test('''When the triggerWidget has no targetIds, Should do nothing''',
           () {
-        getAndRegisterWidgetCaptureService(listOfWidgetDescription: [
-          kWidgetDescription2,
-          kWidgetDescription1
+        getAndRegisterWidgetCaptureService(viewInteractions: [
+          kGeneralInteraction,
+          kGeneralInteractionWithZeroOffset
         ]);
         getAndRegisterWidgetVisibiltyChangerService(
             latestSweetcoreCommand:

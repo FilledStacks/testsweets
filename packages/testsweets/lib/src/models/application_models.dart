@@ -1,5 +1,7 @@
 import 'dart:core';
 
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/widget_type_extension.dart';
@@ -9,10 +11,10 @@ part 'application_models.g.dart';
 
 /// Describes a widget that we will use to driver the app with
 @freezed
-class WidgetDescription with _$WidgetDescription {
-  const WidgetDescription._();
+class Interaction with _$Interaction {
+  const Interaction._();
 
-  factory WidgetDescription({
+  factory Interaction({
     /// The Id from the firebase backend
     String? id,
 
@@ -36,18 +38,22 @@ class WidgetDescription with _$WidgetDescription {
 
     /// Target widgets ids that will be affected when this widget activated
     @Default([]) List<String> targetIds,
-  }) = _WidgetDescription;
-  factory WidgetDescription.view(
+
+    /// Left-top offset for external widgets that affects this widget
+    /// (normally ListViews)
+    Set<ScrollableDescription>? externalities,
+  }) = _Interaction;
+  factory Interaction.view(
           {required String viewName, required String originalViewName}) =>
-      WidgetDescription(
+      Interaction(
         viewName: viewName,
         originalViewName: originalViewName,
         widgetType: WidgetType.view,
         position: WidgetPosition.empty(),
       );
 
-  factory WidgetDescription.fromJson(Map<String, dynamic> json) =>
-      _$WidgetDescriptionFromJson(json);
+  factory Interaction.fromJson(Map<String, dynamic> json) =>
+      _$InteractionFromJson(json);
 
   String get automationKey => widgetType == WidgetType.view
       ? '$viewName\_${widgetType.shortName}'
@@ -62,8 +68,74 @@ class WidgetPosition with _$WidgetPosition {
     required double y,
     double? capturedDeviceWidth,
     double? capturedDeviceHeight,
+    double? xDeviation,
+    double? yDeviation,
   }) = _WidgetPosition;
   factory WidgetPosition.empty() => WidgetPosition(x: 0, y: 0);
   factory WidgetPosition.fromJson(Map<String, dynamic> json) =>
       _$WidgetPositionFromJson(json);
+}
+
+@freezed
+class ScrollableDescription with _$ScrollableDescription {
+  factory ScrollableDescription(
+      {required Axis axis,
+      required SerializableRect rect,
+      required double scrollExtentByPixels,
+      required double maxScrollExtentByPixels,
+      @Default(false) bool nested}) = _ScrollableDescription;
+
+  factory ScrollableDescription.fromNotification({
+    required Offset globalPosition,
+    required Offset localPosition,
+    required ScrollDirection scrollDirection,
+    required ScrollMetrics metrics,
+  }) {
+    final position = -metrics.extentBefore;
+    final topLeftPointOfList = globalPosition - localPosition;
+
+    final rect = SerializableRect.fromLTWH(
+      topLeftPointOfList.dx,
+      topLeftPointOfList.dy,
+      // viewportDimension The extent of the viewport along the axisDirection.
+      metrics.axis == Axis.horizontal ? metrics.viewportDimension : 0,
+      metrics.axis == Axis.vertical ? metrics.viewportDimension : 0,
+    );
+
+    return ScrollableDescription(
+        axis: metrics.axis,
+        rect: rect,
+        scrollExtentByPixels: position,
+        maxScrollExtentByPixels: metrics.maxScrollExtent);
+  }
+  factory ScrollableDescription.fromJson(Map<String, dynamic> json) =>
+      _$ScrollableDescriptionFromJson(json);
+}
+
+class SerializableRect extends Rect {
+  const SerializableRect.fromLTWH(
+    double left,
+    double top,
+    double width,
+    double height,
+  ) : super.fromLTWH(left, top, width, height);
+
+  SerializableRect.fromPoints(Offset a, Offset b) : super.fromPoints(a, b);
+
+  factory SerializableRect.fromJson(Map<String, dynamic> json) {
+    return SerializableRect.fromLTWH(
+      (json['left']! as num).toDouble(),
+      (json['top']! as num).toDouble(),
+      (json['width']! as num).toDouble(),
+      (json['height']! as num).toDouble(),
+    );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'left': left,
+      'top': top,
+      'width': width,
+      'height': height,
+    };
+  }
 }

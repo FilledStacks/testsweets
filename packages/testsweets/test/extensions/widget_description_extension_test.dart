@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/extensions/widget_description_extension.dart';
+import 'package:testsweets/src/extensions/interaction_extension.dart';
 import 'package:testsweets/testsweets.dart';
 
 import '../helpers/test_helpers.dart';
@@ -15,7 +15,7 @@ void main() {
       test('''When capture a key with position x=100 on screenWidth = 200
    and new screenWidth is 500, Should adjust the position to x=225
    ''', () {
-        final description = WidgetDescription(
+        final description = Interaction(
             name: 'name',
             originalViewName: '',
             viewName: '',
@@ -34,7 +34,7 @@ void main() {
       test('''When capture a key with position y=100 on screenWidth = 200
    and new screenWidth is 500, Should adjust the position to y=225
    ''', () {
-        final description = WidgetDescription(
+        final description = Interaction(
             name: 'name',
             originalViewName: '',
             viewName: '',

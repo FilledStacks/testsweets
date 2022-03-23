@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_circle.dart';
 
 import 'widget_card.dart';
 

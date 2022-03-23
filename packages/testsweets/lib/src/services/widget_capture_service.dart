@@ -10,8 +10,8 @@ class WidgetCaptureService {
 
   final _cloudFunctionsService = locator<CloudFunctionsService>();
 
-  final Map<String, List<WidgetDescription>> widgetDescriptionMap =
-      Map<String, List<WidgetDescription>>();
+  final Map<String, List<Interaction>> widgetDescriptionMap =
+      Map<String, List<Interaction>>();
   late String _projectId;
 
   set projectId(String projectId) {
@@ -35,7 +35,7 @@ class WidgetCaptureService {
     }
   }
 
-  set addWidgetDescriptionToMap(WidgetDescription description) {
+  set addWidgetDescriptionToMap(Interaction description) {
     log.v(description);
     if (widgetDescriptionMap.containsKey(description.originalViewName)) {
       widgetDescriptionMap[description.originalViewName]?.add(description);
@@ -44,7 +44,7 @@ class WidgetCaptureService {
     }
   }
 
-  List<WidgetDescription> getDescriptionsForView({
+  List<Interaction> getDescriptionsForView({
     required String currentRoute,
   }) {
     var viewDescriptions = widgetDescriptionMap[currentRoute];
@@ -71,31 +71,28 @@ class WidgetCaptureService {
           : false;
 
   /// Captures a widgets description to the backend as well as locally in the [widgetDescriptionMap]
-  Future<String?> captureWidgetDescription({
-    required WidgetDescription description,
+  Future<String> captureWidgetDescription({
+    required Interaction description,
   }) async {
     log.i('description:$description projectId:$_projectId');
-    try {
-      await _checkViewIfExistOrCaptureIt(description.originalViewName);
 
-      final descriptionId =
-          await _cloudFunctionsService.uploadWidgetDescriptionToProject(
-        projectId: _projectId,
-        description: description,
-      );
-      // Add description to descriptionMap with id from the backend
-      addWidgetDescriptionToMap = description.copyWith(id: descriptionId);
+    await _checkViewIfExistOrCaptureIt(description.originalViewName);
 
-      log.i('descriptionId from Cloud: $descriptionId');
-    } catch (e) {
-      log.e(e);
-      return e.toString();
-    }
+    final descriptionId =
+        await _cloudFunctionsService.uploadWidgetDescriptionToProject(
+      projectId: _projectId,
+      description: description,
+    );
+    // Add description to descriptionMap with id from the backend
+    addWidgetDescriptionToMap = description.copyWith(id: descriptionId);
+
+    log.i('descriptionId from Cloud: $descriptionId');
+    return descriptionId;
   }
 
   /// Updates a widget description to the backend as well as locally in the [widgetDescriptionMap]
   Future<String?> updateWidgetDescription({
-    required WidgetDescription description,
+    required Interaction description,
   }) async {
     try {
       log.i('description:$description projectId:$_projectId');
@@ -108,9 +105,9 @@ class WidgetCaptureService {
               projectId: _projectId,
               newwidgetDescription: description,
               oldwidgetDescription: widgetToUpdate!);
-      // Request all keys from firestore
-      await loadWidgetDescriptionsForProject();
+
       log.i('descriptionId from Cloud: $descriptionId');
+      return null;
     } catch (e) {
       log.e(e);
       return e.toString();
@@ -118,16 +115,15 @@ class WidgetCaptureService {
   }
 
   /// Delete a widget descriptions from the project as well as locally
-  Future<String?> deleteWidgetDescription(
-      {required WidgetDescription description}) async {
+  Future<String?> removeWidgetDescription(
+      {required Interaction description}) async {
     try {
       final descriptionId =
           await _cloudFunctionsService.deleteWidgetDescription(
               projectId: _projectId, description: description);
-      // Request all keys from firestore
-      await loadWidgetDescriptionsForProject();
 
       log.i('descriptionId from Cloud: $descriptionId');
+      return null;
     } catch (e) {
       log.e(e);
       return e.toString();
@@ -138,7 +134,7 @@ class WidgetCaptureService {
     if (!checkCurrentViewIfAlreadyCaptured(originalViewName)) {
       log.i('originalViewName:$originalViewName projectId:$_projectId');
 
-      final viewDescription = WidgetDescription.view(
+      final viewDescription = Interaction.view(
           viewName: originalViewName.convertViewNameToValidFormat,
           originalViewName: originalViewName);
 

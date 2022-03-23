@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
+import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/testsweets.dart';
 
-extension WidgetDescriptionUtils on WidgetDescription {
+extension InteractionExtension on Interaction {
   Offset responsiveOffset(Size screenSize) {
     final responsiveWidth = responsiveXPosition(screenSize.width);
     final responsiveHeight = responsiveYPosition(screenSize.height);
@@ -44,4 +45,6 @@ extension WidgetDescriptionUtils on WidgetDescription {
       return currentScreenWidth / this.position.capturedDeviceWidth!;
     }
   }
+
+  bool get notView => this.widgetType != WidgetType.view;
 }

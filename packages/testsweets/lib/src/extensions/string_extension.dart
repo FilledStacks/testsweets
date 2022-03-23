@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 extension CapExtension on String {
   String get removePrecisionIfZero =>
       this.isEmpty ? '' : this.replaceAll(RegExp(r"([.]*0)(?!.*\d)"), "");

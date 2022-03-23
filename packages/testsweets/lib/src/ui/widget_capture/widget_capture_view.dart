@@ -29,7 +29,6 @@ class WidgetCaptureView extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return ViewModelBuilder<WidgetCaptureViewModel>.reactive(
-      staticChild: child,
       disposeViewModel: false,
       onModelReady: (model) async {
         await model.loadWidgetDescriptions();
@@ -39,24 +38,27 @@ class WidgetCaptureView extends StatelessWidget {
             x: size.width / 2,
             y: size.height / 2);
       },
-      builder: (context, model, child) => Scaffold(
+      builder: (context, model, _) => Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(
           alignment: Alignment.bottomCenter,
           children: [
-            // Client app
-            child!,
-
+            NotificationListener(
+                onNotification: (notification) {
+                  if (notification is Notification) {
+                    model.onClientNotifiaction(notification);
+                  }
+                  return false;
+                },
+                child: child),
             Align(
               alignment: Alignment.topLeft,
               child: RouteBanner(
-                isCaptured: model.currentViewIsCaptured,
+                isCaptured: model.currentViewCaptured,
                 routeName: model.currentViewName,
               ),
             ),
-
-            const CaptureOverlay(),
-
+            const CaptureOverlay(key: Key('CaptureOverlay ebrahim')),
             BusyIndicator(
               enable: model.isBusy,
             )

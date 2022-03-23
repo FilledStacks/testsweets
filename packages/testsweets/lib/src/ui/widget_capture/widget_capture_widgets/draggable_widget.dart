@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:testsweets/src/extensions/widget_description_extension.dart';
+import 'package:testsweets/src/extensions/interaction_extension.dart';
+import 'package:testsweets/src/extensions/widget_position_extension.dart';
 
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
@@ -12,11 +13,11 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
     final size = MediaQuery.of(context).size;
-    return model.widgetDescription == null
+    return model.inProgressInteraction == null
         ? const SizedBox()
         : Positioned(
-            top: model.widgetDescription?.responsiveYPosition(size.height),
-            left: model.widgetDescription?.responsiveXPosition(size.width),
+            top: model.inProgressInteraction!.position.offsetAfterScroll.dy,
+            left: model.inProgressInteraction!.position.offsetAfterScroll.dx,
             child: GestureDetector(
               onPanUpdate: (panEvent) {
                 final x = panEvent.globalPosition.dx;
@@ -24,8 +25,8 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
                 model.updateDescriptionPosition(x, y, size.width, size.height);
               },
               child: WidgetCircle(
-                transparency: model.widgetDescription!.visibility ? 1 : 0.5,
-                widgetType: model.widgetDescription!.widgetType,
+                transparency: model.inProgressInteraction!.visibility ? 1 : 0.5,
+                widgetType: model.inProgressInteraction!.widgetType,
               ),
             ));
   }

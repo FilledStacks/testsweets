@@ -73,14 +73,14 @@ const int testContentLength = 2;
 final testDataStream = Stream.value([1, 2, 3]);
 final testDateTime = DateTime.utc(1993, 12, 12, 12);
 
-final kWidgetDescription1 = WidgetDescription(
+final kGeneralInteractionWithZeroOffset = Interaction(
     id: 'testWidgetDescriptionId',
     viewName: 'viewName',
     originalViewName: 'originalViewName',
     name: 'widgetName',
     widgetType: WidgetType.general,
     position: WidgetPosition.empty());
-final kWidgetDescription2 = WidgetDescription(
+final kGeneralInteraction = Interaction(
   originalViewName: '/',
   viewName: 'login',
   id: 'id',
@@ -89,7 +89,25 @@ final kWidgetDescription2 = WidgetDescription(
       x: 100, y: 199, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
   widgetType: WidgetType.general,
 );
-final kWidgetDescriptionView = WidgetDescription(
+final kScrollableInteraction = Interaction(
+  originalViewName: '/',
+  viewName: 'initial',
+  id: 'kWidgetDescriptionTypeScrollId1',
+  name: 'ScrollId1',
+  position: WidgetPosition(
+      x: 20, y: 20, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
+  widgetType: WidgetType.scrollable,
+);
+final kScrollableInteraction2 = Interaction(
+  originalViewName: '/',
+  viewName: 'initial',
+  id: 'kWidgetDescriptionTypeScroll2',
+  name: 'ScrollId2',
+  position: WidgetPosition(
+      x: 25, y: 25, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
+  widgetType: WidgetType.scrollable,
+);
+final kViewInteraction = Interaction(
   originalViewName: '/',
   viewName: 'login',
   id: 'viewId',
@@ -106,3 +124,19 @@ final kScrollEndNotification = ScrollEndNotification(
         viewportDimension: 33,
         axisDirection: AxisDirection.right),
     context: MockBuildContext());
+
+final kTopLeftVerticalScrollableDescription = ScrollableDescription(
+    axis: Axis.vertical,
+    maxScrollExtentByPixels: 0,
+    scrollExtentByPixels: 100,
+    rect: SerializableRect.fromPoints(Offset(0, 0), Offset(22, 22)));
+final kFullScreenVerticalScrollableDescription = ScrollableDescription(
+    axis: Axis.vertical,
+    maxScrollExtentByPixels: 2000,
+    scrollExtentByPixels: 150,
+    rect: SerializableRect.fromPoints(Offset(0, 0), Offset(400, 900)));
+final kTopLeftHorizontalScrollableDescription = ScrollableDescription(
+    axis: Axis.horizontal,
+    maxScrollExtentByPixels: 0,
+    scrollExtentByPixels: 50,
+    rect: SerializableRect.fromPoints(Offset(0, 20), Offset(40, 40)));

@@ -1,0 +1,9 @@
+{
+    "explorer.experimental.fileNesting.enabled": true,
+    "explorer.experimental.fileNesting.expand": false,
+    "explorer.experimental.fileNesting.patterns": {
+        "*.dart": "$(capture).g.dart, $(capture).freezed.dart, $(capture).locator.dart, $(capture).logger.dart, $(capture).router.dart",
+    },
+    "dart.renameFilesWithClasses": "prompt",
+    "testing.automaticallyOpenPeekView": "never"
+}

@@ -1,0 +1,6 @@
+targets:
+  $default:
+    builders:
+      build_runner:
+        generate_for:
+          - lib/

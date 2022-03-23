@@ -3,17 +3,20 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/src/provider.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
+import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/custom_solid_controller.dart';
+import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 import 'package:testsweets/src/ui/shared/icon_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
+import 'package:testsweets/src/ui/shared/utils.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widgets_visualizer.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import '../widget_capture_view_form.dart';
-import 'draggable_widget.dart';
 import 'form_header.dart';
 import 'type_selector.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 class CaptureOverlay extends StatefulWidget {
   const CaptureOverlay({
@@ -44,7 +47,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
   @override
   Widget build(BuildContext context) {
     final model = context.watch<WidgetCaptureViewModel>();
-    final widgetDescription = model.widgetDescription;
+    final interaction = model.inProgressInteraction;
     final size = MediaQuery.of(context).size;
     return Stack(
       alignment: Alignment.bottomCenter,
@@ -52,7 +55,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
         WidgetsVisualizer(editActionSelected: () {
           /// Set the value of the edited widget to the form textfield
           /// and show the bottomsheet
-          widgetNameController.text = model.widgetDescription!.name;
+          widgetNameController.text = model.inProgressInteraction!.name;
           solidController.show();
         }),
         if (model.captureWidgetStatusEnum.showWidgetForm)
@@ -73,7 +76,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
               canUserSwipe: false,
               minHeight: 0,
               maxHeight: 300,
-              body: widgetDescription == null
+              body: interaction == null
                   ? const SizedBox.shrink()
                   : Container(
                       decoration: kdBlackRoundedEdgeDecoration,
@@ -86,7 +89,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                 textAlign: TextAlign.left, style: tsMedium()),
                           ),
                           TypeSelector(
-                            selectedWidgetType: widgetDescription.widgetType,
+                            selectedWidgetType: interaction.widgetType,
                             onTap: (widgetType) =>
                                 model.setWidgetType = widgetType,
                           ),
@@ -149,9 +152,9 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                         backgroundColor: kcCard,
                                         onTap: () {
                                           model.setVisibilty =
-                                              !widgetDescription.visibility;
+                                              !interaction.visibility;
                                         },
-                                        svgIcon: widgetDescription.visibility
+                                        svgIcon: interaction.visibility
                                             ? 'packages/testsweets/assets/svgs/eye.svg'
                                             : 'packages/testsweets/assets/svgs/eye_closed.svg',
                                         svgWidth: 30),
@@ -170,20 +173,28 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                 Expanded(
                                   flex: 5,
                                   child: CtaButton(
-                                      isDisabled: widgetDescription
-                                              .name.isEmpty ||
-                                          widgetDescription.widgetType == null,
+                                      isDisabled: interaction.name.isEmpty,
                                       onTap: () async {
-                                        final result = await model.submitForm();
-
                                         /// When widget is saved successfully hide
-                                        /// the bottom sheet and clear the text
-                                        if (result == null) {
-                                          await _closeBottomSheet();
-                                        }
+                                        /// the bottom sheet
+                                        await _closeBottomSheet();
+                                        final findScrollablesService =
+                                            locator<FindScrollables>();
+
+                                        findScrollablesService
+                                            .searchForScrollableElements();
+
+                                        final extractedScrollables =
+                                            findScrollablesService
+                                                .convertElementsToScrollDescriptions();
+
+                                        model.checkForExternalities(
+                                            extractedScrollables);
+                                        await model.submitForm();
+                                        _clearAndUnfocusTextField();
                                       },
                                       fillColor: kcPrimaryPurple,
-                                      title: widgetDescription.id != null
+                                      title: interaction.id != null
                                           ? 'Update'
                                           : 'Create'),
                                 ),
@@ -195,6 +206,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                   child: CtaButton(
                                       onTap: () async {
                                         await _closeBottomSheet();
+                                        _clearAndUnfocusTextField();
                                         model.clearWidgetDescriptionForm();
                                       },
                                       fillColor: kcError,
@@ -213,9 +225,12 @@ class _CaptureOverlayState extends State<CaptureOverlay>
   }
 
   Future<void> _closeBottomSheet() async {
+    solidController.hide();
+    await Future.delayed(const Duration(milliseconds: 1000));
+  }
+
+  void _clearAndUnfocusTextField() {
     widgetNameController.clear();
     widgetNameFocusNode.unfocus();
-    solidController.hide();
-    await Future.delayed(const Duration(milliseconds: 350));
   }
 }

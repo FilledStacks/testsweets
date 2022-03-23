@@ -13,15 +13,15 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-WidgetDescription _$WidgetDescriptionFromJson(Map<String, dynamic> json) {
-  return _WidgetDescription.fromJson(json);
+Interaction _$InteractionFromJson(Map<String, dynamic> json) {
+  return _Interaction.fromJson(json);
 }
 
 /// @nodoc
-class _$WidgetDescriptionTearOff {
-  const _$WidgetDescriptionTearOff();
+class _$InteractionTearOff {
+  const _$InteractionTearOff();
 
-  _WidgetDescription call(
+  _Interaction call(
       {String? id,
       required String viewName,
       required String originalViewName,
@@ -29,8 +29,9 @@ class _$WidgetDescriptionTearOff {
       required WidgetType widgetType,
       required WidgetPosition position,
       bool visibility = true,
-      List<String> targetIds = const []}) {
-    return _WidgetDescription(
+      List<String> targetIds = const [],
+      Set<ScrollableDescription>? externalities}) {
+    return _Interaction(
       id: id,
       viewName: viewName,
       originalViewName: originalViewName,
@@ -39,19 +40,20 @@ class _$WidgetDescriptionTearOff {
       position: position,
       visibility: visibility,
       targetIds: targetIds,
+      externalities: externalities,
     );
   }
 
-  WidgetDescription fromJson(Map<String, Object> json) {
-    return WidgetDescription.fromJson(json);
+  Interaction fromJson(Map<String, Object> json) {
+    return Interaction.fromJson(json);
   }
 }
 
 /// @nodoc
-const $WidgetDescription = _$WidgetDescriptionTearOff();
+const $Interaction = _$InteractionTearOff();
 
 /// @nodoc
-mixin _$WidgetDescription {
+mixin _$Interaction {
   /// The Id from the firebase backend
   String? get id => throw _privateConstructorUsedError;
 
@@ -76,17 +78,22 @@ mixin _$WidgetDescription {
   /// Target widgets ids that will be affected when this widget activated
   List<String> get targetIds => throw _privateConstructorUsedError;
 
+  /// Left-top offset for external widgets that affects this widget
+  /// (normally ListViews)
+  Set<ScrollableDescription>? get externalities =>
+      throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $WidgetDescriptionCopyWith<WidgetDescription> get copyWith =>
+  $InteractionCopyWith<Interaction> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $WidgetDescriptionCopyWith<$Res> {
-  factory $WidgetDescriptionCopyWith(
-          WidgetDescription value, $Res Function(WidgetDescription) then) =
-      _$WidgetDescriptionCopyWithImpl<$Res>;
+abstract class $InteractionCopyWith<$Res> {
+  factory $InteractionCopyWith(
+          Interaction value, $Res Function(Interaction) then) =
+      _$InteractionCopyWithImpl<$Res>;
   $Res call(
       {String? id,
       String viewName,
@@ -95,19 +102,19 @@ abstract class $WidgetDescriptionCopyWith<$Res> {
       WidgetType widgetType,
       WidgetPosition position,
       bool visibility,
-      List<String> targetIds});
+      List<String> targetIds,
+      Set<ScrollableDescription>? externalities});
 
   $WidgetPositionCopyWith<$Res> get position;
 }
 
 /// @nodoc
-class _$WidgetDescriptionCopyWithImpl<$Res>
-    implements $WidgetDescriptionCopyWith<$Res> {
-  _$WidgetDescriptionCopyWithImpl(this._value, this._then);
+class _$InteractionCopyWithImpl<$Res> implements $InteractionCopyWith<$Res> {
+  _$InteractionCopyWithImpl(this._value, this._then);
 
-  final WidgetDescription _value;
+  final Interaction _value;
   // ignore: unused_field
-  final $Res Function(WidgetDescription) _then;
+  final $Res Function(Interaction) _then;
 
   @override
   $Res call({
@@ -119,6 +126,7 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
     Object? position = freezed,
     Object? visibility = freezed,
     Object? targetIds = freezed,
+    Object? externalities = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -153,6 +161,10 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
           ? _value.targetIds
           : targetIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      externalities: externalities == freezed
+          ? _value.externalities
+          : externalities // ignore: cast_nullable_to_non_nullable
+              as Set<ScrollableDescription>?,
     ));
   }
 
@@ -165,11 +177,11 @@ class _$WidgetDescriptionCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class _$WidgetDescriptionCopyWith<$Res>
-    implements $WidgetDescriptionCopyWith<$Res> {
-  factory _$WidgetDescriptionCopyWith(
-          _WidgetDescription value, $Res Function(_WidgetDescription) then) =
-      __$WidgetDescriptionCopyWithImpl<$Res>;
+abstract class _$InteractionCopyWith<$Res>
+    implements $InteractionCopyWith<$Res> {
+  factory _$InteractionCopyWith(
+          _Interaction value, $Res Function(_Interaction) then) =
+      __$InteractionCopyWithImpl<$Res>;
   @override
   $Res call(
       {String? id,
@@ -179,22 +191,22 @@ abstract class _$WidgetDescriptionCopyWith<$Res>
       WidgetType widgetType,
       WidgetPosition position,
       bool visibility,
-      List<String> targetIds});
+      List<String> targetIds,
+      Set<ScrollableDescription>? externalities});
 
   @override
   $WidgetPositionCopyWith<$Res> get position;
 }
 
 /// @nodoc
-class __$WidgetDescriptionCopyWithImpl<$Res>
-    extends _$WidgetDescriptionCopyWithImpl<$Res>
-    implements _$WidgetDescriptionCopyWith<$Res> {
-  __$WidgetDescriptionCopyWithImpl(
-      _WidgetDescription _value, $Res Function(_WidgetDescription) _then)
-      : super(_value, (v) => _then(v as _WidgetDescription));
+class __$InteractionCopyWithImpl<$Res> extends _$InteractionCopyWithImpl<$Res>
+    implements _$InteractionCopyWith<$Res> {
+  __$InteractionCopyWithImpl(
+      _Interaction _value, $Res Function(_Interaction) _then)
+      : super(_value, (v) => _then(v as _Interaction));
 
   @override
-  _WidgetDescription get _value => super._value as _WidgetDescription;
+  _Interaction get _value => super._value as _Interaction;
 
   @override
   $Res call({
@@ -206,8 +218,9 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
     Object? position = freezed,
     Object? visibility = freezed,
     Object? targetIds = freezed,
+    Object? externalities = freezed,
   }) {
-    return _then(_WidgetDescription(
+    return _then(_Interaction(
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -240,14 +253,18 @@ class __$WidgetDescriptionCopyWithImpl<$Res>
           ? _value.targetIds
           : targetIds // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      externalities: externalities == freezed
+          ? _value.externalities
+          : externalities // ignore: cast_nullable_to_non_nullable
+              as Set<ScrollableDescription>?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$_WidgetDescription extends _WidgetDescription {
-  _$_WidgetDescription(
+class _$_Interaction extends _Interaction {
+  _$_Interaction(
       {this.id,
       required this.viewName,
       required this.originalViewName,
@@ -255,11 +272,12 @@ class _$_WidgetDescription extends _WidgetDescription {
       required this.widgetType,
       required this.position,
       this.visibility = true,
-      this.targetIds = const []})
+      this.targetIds = const [],
+      this.externalities})
       : super._();
 
-  factory _$_WidgetDescription.fromJson(Map<String, dynamic> json) =>
-      _$$_WidgetDescriptionFromJson(json);
+  factory _$_Interaction.fromJson(Map<String, dynamic> json) =>
+      _$$_InteractionFromJson(json);
 
   @override
 
@@ -296,16 +314,21 @@ class _$_WidgetDescription extends _WidgetDescription {
 
   /// Target widgets ids that will be affected when this widget activated
   final List<String> targetIds;
+  @override
+
+  /// Left-top offset for external widgets that affects this widget
+  /// (normally ListViews)
+  final Set<ScrollableDescription>? externalities;
 
   @override
   String toString() {
-    return 'WidgetDescription(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility, targetIds: $targetIds)';
+    return 'Interaction(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility, targetIds: $targetIds, externalities: $externalities)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _WidgetDescription &&
+        (other is _Interaction &&
             (identical(other.id, id) ||
                 const DeepCollectionEquality().equals(other.id, id)) &&
             (identical(other.viewName, viewName) ||
@@ -327,7 +350,10 @@ class _$_WidgetDescription extends _WidgetDescription {
                     .equals(other.visibility, visibility)) &&
             (identical(other.targetIds, targetIds) ||
                 const DeepCollectionEquality()
-                    .equals(other.targetIds, targetIds)));
+                    .equals(other.targetIds, targetIds)) &&
+            (identical(other.externalities, externalities) ||
+                const DeepCollectionEquality()
+                    .equals(other.externalities, externalities)));
   }
 
   @override
@@ -340,21 +366,22 @@ class _$_WidgetDescription extends _WidgetDescription {
       const DeepCollectionEquality().hash(widgetType) ^
       const DeepCollectionEquality().hash(position) ^
       const DeepCollectionEquality().hash(visibility) ^
-      const DeepCollectionEquality().hash(targetIds);
+      const DeepCollectionEquality().hash(targetIds) ^
+      const DeepCollectionEquality().hash(externalities);
 
   @JsonKey(ignore: true)
   @override
-  _$WidgetDescriptionCopyWith<_WidgetDescription> get copyWith =>
-      __$WidgetDescriptionCopyWithImpl<_WidgetDescription>(this, _$identity);
+  _$InteractionCopyWith<_Interaction> get copyWith =>
+      __$InteractionCopyWithImpl<_Interaction>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_WidgetDescriptionToJson(this);
+    return _$$_InteractionToJson(this);
   }
 }
 
-abstract class _WidgetDescription extends WidgetDescription {
-  factory _WidgetDescription(
+abstract class _Interaction extends Interaction {
+  factory _Interaction(
       {String? id,
       required String viewName,
       required String originalViewName,
@@ -362,11 +389,12 @@ abstract class _WidgetDescription extends WidgetDescription {
       required WidgetType widgetType,
       required WidgetPosition position,
       bool visibility,
-      List<String> targetIds}) = _$_WidgetDescription;
-  _WidgetDescription._() : super._();
+      List<String> targetIds,
+      Set<ScrollableDescription>? externalities}) = _$_Interaction;
+  _Interaction._() : super._();
 
-  factory _WidgetDescription.fromJson(Map<String, dynamic> json) =
-      _$_WidgetDescription.fromJson;
+  factory _Interaction.fromJson(Map<String, dynamic> json) =
+      _$_Interaction.fromJson;
 
   @override
 
@@ -401,8 +429,14 @@ abstract class _WidgetDescription extends WidgetDescription {
   /// Target widgets ids that will be affected when this widget activated
   List<String> get targetIds => throw _privateConstructorUsedError;
   @override
+
+  /// Left-top offset for external widgets that affects this widget
+  /// (normally ListViews)
+  Set<ScrollableDescription>? get externalities =>
+      throw _privateConstructorUsedError;
+  @override
   @JsonKey(ignore: true)
-  _$WidgetDescriptionCopyWith<_WidgetDescription> get copyWith =>
+  _$InteractionCopyWith<_Interaction> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -418,12 +452,16 @@ class _$WidgetPositionTearOff {
       {required double x,
       required double y,
       double? capturedDeviceWidth,
-      double? capturedDeviceHeight}) {
+      double? capturedDeviceHeight,
+      double? xDeviation,
+      double? yDeviation}) {
     return _WidgetPosition(
       x: x,
       y: y,
       capturedDeviceWidth: capturedDeviceWidth,
       capturedDeviceHeight: capturedDeviceHeight,
+      xDeviation: xDeviation,
+      yDeviation: yDeviation,
     );
   }
 
@@ -441,6 +479,8 @@ mixin _$WidgetPosition {
   double get y => throw _privateConstructorUsedError;
   double? get capturedDeviceWidth => throw _privateConstructorUsedError;
   double? get capturedDeviceHeight => throw _privateConstructorUsedError;
+  double? get xDeviation => throw _privateConstructorUsedError;
+  double? get yDeviation => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -457,7 +497,9 @@ abstract class $WidgetPositionCopyWith<$Res> {
       {double x,
       double y,
       double? capturedDeviceWidth,
-      double? capturedDeviceHeight});
+      double? capturedDeviceHeight,
+      double? xDeviation,
+      double? yDeviation});
 }
 
 /// @nodoc
@@ -475,6 +517,8 @@ class _$WidgetPositionCopyWithImpl<$Res>
     Object? y = freezed,
     Object? capturedDeviceWidth = freezed,
     Object? capturedDeviceHeight = freezed,
+    Object? xDeviation = freezed,
+    Object? yDeviation = freezed,
   }) {
     return _then(_value.copyWith(
       x: x == freezed
@@ -493,6 +537,14 @@ class _$WidgetPositionCopyWithImpl<$Res>
           ? _value.capturedDeviceHeight
           : capturedDeviceHeight // ignore: cast_nullable_to_non_nullable
               as double?,
+      xDeviation: xDeviation == freezed
+          ? _value.xDeviation
+          : xDeviation // ignore: cast_nullable_to_non_nullable
+              as double?,
+      yDeviation: yDeviation == freezed
+          ? _value.yDeviation
+          : yDeviation // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -508,7 +560,9 @@ abstract class _$WidgetPositionCopyWith<$Res>
       {double x,
       double y,
       double? capturedDeviceWidth,
-      double? capturedDeviceHeight});
+      double? capturedDeviceHeight,
+      double? xDeviation,
+      double? yDeviation});
 }
 
 /// @nodoc
@@ -528,6 +582,8 @@ class __$WidgetPositionCopyWithImpl<$Res>
     Object? y = freezed,
     Object? capturedDeviceWidth = freezed,
     Object? capturedDeviceHeight = freezed,
+    Object? xDeviation = freezed,
+    Object? yDeviation = freezed,
   }) {
     return _then(_WidgetPosition(
       x: x == freezed
@@ -546,6 +602,14 @@ class __$WidgetPositionCopyWithImpl<$Res>
           ? _value.capturedDeviceHeight
           : capturedDeviceHeight // ignore: cast_nullable_to_non_nullable
               as double?,
+      xDeviation: xDeviation == freezed
+          ? _value.xDeviation
+          : xDeviation // ignore: cast_nullable_to_non_nullable
+              as double?,
+      yDeviation: yDeviation == freezed
+          ? _value.yDeviation
+          : yDeviation // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -557,7 +621,9 @@ class _$_WidgetPosition implements _WidgetPosition {
       {required this.x,
       required this.y,
       this.capturedDeviceWidth,
-      this.capturedDeviceHeight});
+      this.capturedDeviceHeight,
+      this.xDeviation,
+      this.yDeviation});
 
   factory _$_WidgetPosition.fromJson(Map<String, dynamic> json) =>
       _$$_WidgetPositionFromJson(json);
@@ -570,10 +636,14 @@ class _$_WidgetPosition implements _WidgetPosition {
   final double? capturedDeviceWidth;
   @override
   final double? capturedDeviceHeight;
+  @override
+  final double? xDeviation;
+  @override
+  final double? yDeviation;
 
   @override
   String toString() {
-    return 'WidgetPosition(x: $x, y: $y, capturedDeviceWidth: $capturedDeviceWidth, capturedDeviceHeight: $capturedDeviceHeight)';
+    return 'WidgetPosition(x: $x, y: $y, capturedDeviceWidth: $capturedDeviceWidth, capturedDeviceHeight: $capturedDeviceHeight, xDeviation: $xDeviation, yDeviation: $yDeviation)';
   }
 
   @override
@@ -588,8 +658,14 @@ class _$_WidgetPosition implements _WidgetPosition {
                 const DeepCollectionEquality()
                     .equals(other.capturedDeviceWidth, capturedDeviceWidth)) &&
             (identical(other.capturedDeviceHeight, capturedDeviceHeight) ||
+                const DeepCollectionEquality().equals(
+                    other.capturedDeviceHeight, capturedDeviceHeight)) &&
+            (identical(other.xDeviation, xDeviation) ||
                 const DeepCollectionEquality()
-                    .equals(other.capturedDeviceHeight, capturedDeviceHeight)));
+                    .equals(other.xDeviation, xDeviation)) &&
+            (identical(other.yDeviation, yDeviation) ||
+                const DeepCollectionEquality()
+                    .equals(other.yDeviation, yDeviation)));
   }
 
   @override
@@ -598,7 +674,9 @@ class _$_WidgetPosition implements _WidgetPosition {
       const DeepCollectionEquality().hash(x) ^
       const DeepCollectionEquality().hash(y) ^
       const DeepCollectionEquality().hash(capturedDeviceWidth) ^
-      const DeepCollectionEquality().hash(capturedDeviceHeight);
+      const DeepCollectionEquality().hash(capturedDeviceHeight) ^
+      const DeepCollectionEquality().hash(xDeviation) ^
+      const DeepCollectionEquality().hash(yDeviation);
 
   @JsonKey(ignore: true)
   @override
@@ -616,7 +694,9 @@ abstract class _WidgetPosition implements WidgetPosition {
       {required double x,
       required double y,
       double? capturedDeviceWidth,
-      double? capturedDeviceHeight}) = _$_WidgetPosition;
+      double? capturedDeviceHeight,
+      double? xDeviation,
+      double? yDeviation}) = _$_WidgetPosition;
 
   factory _WidgetPosition.fromJson(Map<String, dynamic> json) =
       _$_WidgetPosition.fromJson;
@@ -630,7 +710,268 @@ abstract class _WidgetPosition implements WidgetPosition {
   @override
   double? get capturedDeviceHeight => throw _privateConstructorUsedError;
   @override
+  double? get xDeviation => throw _privateConstructorUsedError;
+  @override
+  double? get yDeviation => throw _privateConstructorUsedError;
+  @override
   @JsonKey(ignore: true)
   _$WidgetPositionCopyWith<_WidgetPosition> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+ScrollableDescription _$ScrollableDescriptionFromJson(
+    Map<String, dynamic> json) {
+  return _ScrollableDescription.fromJson(json);
+}
+
+/// @nodoc
+class _$ScrollableDescriptionTearOff {
+  const _$ScrollableDescriptionTearOff();
+
+  _ScrollableDescription call(
+      {required Axis axis,
+      required SerializableRect rect,
+      required double scrollExtentByPixels,
+      required double maxScrollExtentByPixels,
+      bool nested = false}) {
+    return _ScrollableDescription(
+      axis: axis,
+      rect: rect,
+      scrollExtentByPixels: scrollExtentByPixels,
+      maxScrollExtentByPixels: maxScrollExtentByPixels,
+      nested: nested,
+    );
+  }
+
+  ScrollableDescription fromJson(Map<String, Object> json) {
+    return ScrollableDescription.fromJson(json);
+  }
+}
+
+/// @nodoc
+const $ScrollableDescription = _$ScrollableDescriptionTearOff();
+
+/// @nodoc
+mixin _$ScrollableDescription {
+  Axis get axis => throw _privateConstructorUsedError;
+  SerializableRect get rect => throw _privateConstructorUsedError;
+  double get scrollExtentByPixels => throw _privateConstructorUsedError;
+  double get maxScrollExtentByPixels => throw _privateConstructorUsedError;
+  bool get nested => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ScrollableDescriptionCopyWith<ScrollableDescription> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ScrollableDescriptionCopyWith<$Res> {
+  factory $ScrollableDescriptionCopyWith(ScrollableDescription value,
+          $Res Function(ScrollableDescription) then) =
+      _$ScrollableDescriptionCopyWithImpl<$Res>;
+  $Res call(
+      {Axis axis,
+      SerializableRect rect,
+      double scrollExtentByPixels,
+      double maxScrollExtentByPixels,
+      bool nested});
+}
+
+/// @nodoc
+class _$ScrollableDescriptionCopyWithImpl<$Res>
+    implements $ScrollableDescriptionCopyWith<$Res> {
+  _$ScrollableDescriptionCopyWithImpl(this._value, this._then);
+
+  final ScrollableDescription _value;
+  // ignore: unused_field
+  final $Res Function(ScrollableDescription) _then;
+
+  @override
+  $Res call({
+    Object? axis = freezed,
+    Object? rect = freezed,
+    Object? scrollExtentByPixels = freezed,
+    Object? maxScrollExtentByPixels = freezed,
+    Object? nested = freezed,
+  }) {
+    return _then(_value.copyWith(
+      axis: axis == freezed
+          ? _value.axis
+          : axis // ignore: cast_nullable_to_non_nullable
+              as Axis,
+      rect: rect == freezed
+          ? _value.rect
+          : rect // ignore: cast_nullable_to_non_nullable
+              as SerializableRect,
+      scrollExtentByPixels: scrollExtentByPixels == freezed
+          ? _value.scrollExtentByPixels
+          : scrollExtentByPixels // ignore: cast_nullable_to_non_nullable
+              as double,
+      maxScrollExtentByPixels: maxScrollExtentByPixels == freezed
+          ? _value.maxScrollExtentByPixels
+          : maxScrollExtentByPixels // ignore: cast_nullable_to_non_nullable
+              as double,
+      nested: nested == freezed
+          ? _value.nested
+          : nested // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$ScrollableDescriptionCopyWith<$Res>
+    implements $ScrollableDescriptionCopyWith<$Res> {
+  factory _$ScrollableDescriptionCopyWith(_ScrollableDescription value,
+          $Res Function(_ScrollableDescription) then) =
+      __$ScrollableDescriptionCopyWithImpl<$Res>;
+  @override
+  $Res call(
+      {Axis axis,
+      SerializableRect rect,
+      double scrollExtentByPixels,
+      double maxScrollExtentByPixels,
+      bool nested});
+}
+
+/// @nodoc
+class __$ScrollableDescriptionCopyWithImpl<$Res>
+    extends _$ScrollableDescriptionCopyWithImpl<$Res>
+    implements _$ScrollableDescriptionCopyWith<$Res> {
+  __$ScrollableDescriptionCopyWithImpl(_ScrollableDescription _value,
+      $Res Function(_ScrollableDescription) _then)
+      : super(_value, (v) => _then(v as _ScrollableDescription));
+
+  @override
+  _ScrollableDescription get _value => super._value as _ScrollableDescription;
+
+  @override
+  $Res call({
+    Object? axis = freezed,
+    Object? rect = freezed,
+    Object? scrollExtentByPixels = freezed,
+    Object? maxScrollExtentByPixels = freezed,
+    Object? nested = freezed,
+  }) {
+    return _then(_ScrollableDescription(
+      axis: axis == freezed
+          ? _value.axis
+          : axis // ignore: cast_nullable_to_non_nullable
+              as Axis,
+      rect: rect == freezed
+          ? _value.rect
+          : rect // ignore: cast_nullable_to_non_nullable
+              as SerializableRect,
+      scrollExtentByPixels: scrollExtentByPixels == freezed
+          ? _value.scrollExtentByPixels
+          : scrollExtentByPixels // ignore: cast_nullable_to_non_nullable
+              as double,
+      maxScrollExtentByPixels: maxScrollExtentByPixels == freezed
+          ? _value.maxScrollExtentByPixels
+          : maxScrollExtentByPixels // ignore: cast_nullable_to_non_nullable
+              as double,
+      nested: nested == freezed
+          ? _value.nested
+          : nested // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$_ScrollableDescription implements _ScrollableDescription {
+  _$_ScrollableDescription(
+      {required this.axis,
+      required this.rect,
+      required this.scrollExtentByPixels,
+      required this.maxScrollExtentByPixels,
+      this.nested = false});
+
+  factory _$_ScrollableDescription.fromJson(Map<String, dynamic> json) =>
+      _$$_ScrollableDescriptionFromJson(json);
+
+  @override
+  final Axis axis;
+  @override
+  final SerializableRect rect;
+  @override
+  final double scrollExtentByPixels;
+  @override
+  final double maxScrollExtentByPixels;
+  @JsonKey(defaultValue: false)
+  @override
+  final bool nested;
+
+  @override
+  String toString() {
+    return 'ScrollableDescription(axis: $axis, rect: $rect, scrollExtentByPixels: $scrollExtentByPixels, maxScrollExtentByPixels: $maxScrollExtentByPixels, nested: $nested)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _ScrollableDescription &&
+            (identical(other.axis, axis) ||
+                const DeepCollectionEquality().equals(other.axis, axis)) &&
+            (identical(other.rect, rect) ||
+                const DeepCollectionEquality().equals(other.rect, rect)) &&
+            (identical(other.scrollExtentByPixels, scrollExtentByPixels) ||
+                const DeepCollectionEquality().equals(
+                    other.scrollExtentByPixels, scrollExtentByPixels)) &&
+            (identical(
+                    other.maxScrollExtentByPixels, maxScrollExtentByPixels) ||
+                const DeepCollectionEquality().equals(
+                    other.maxScrollExtentByPixels, maxScrollExtentByPixels)) &&
+            (identical(other.nested, nested) ||
+                const DeepCollectionEquality().equals(other.nested, nested)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(axis) ^
+      const DeepCollectionEquality().hash(rect) ^
+      const DeepCollectionEquality().hash(scrollExtentByPixels) ^
+      const DeepCollectionEquality().hash(maxScrollExtentByPixels) ^
+      const DeepCollectionEquality().hash(nested);
+
+  @JsonKey(ignore: true)
+  @override
+  _$ScrollableDescriptionCopyWith<_ScrollableDescription> get copyWith =>
+      __$ScrollableDescriptionCopyWithImpl<_ScrollableDescription>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$_ScrollableDescriptionToJson(this);
+  }
+}
+
+abstract class _ScrollableDescription implements ScrollableDescription {
+  factory _ScrollableDescription(
+      {required Axis axis,
+      required SerializableRect rect,
+      required double scrollExtentByPixels,
+      required double maxScrollExtentByPixels,
+      bool nested}) = _$_ScrollableDescription;
+
+  factory _ScrollableDescription.fromJson(Map<String, dynamic> json) =
+      _$_ScrollableDescription.fromJson;
+
+  @override
+  Axis get axis => throw _privateConstructorUsedError;
+  @override
+  SerializableRect get rect => throw _privateConstructorUsedError;
+  @override
+  double get scrollExtentByPixels => throw _privateConstructorUsedError;
+  @override
+  double get maxScrollExtentByPixels => throw _privateConstructorUsedError;
+  @override
+  bool get nested => throw _privateConstructorUsedError;
+  @override
+  @JsonKey(ignore: true)
+  _$ScrollableDescriptionCopyWith<_ScrollableDescription> get copyWith =>
       throw _privateConstructorUsedError;
 }

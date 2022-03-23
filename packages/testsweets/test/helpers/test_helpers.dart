@@ -5,10 +5,12 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
+import 'package:testsweets/src/services/reactive_scrollable.dart';
 import 'package:testsweets/src/services/sweetcore_command.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
+import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 
 import 'test_helpers.mocks.dart';
 
@@ -18,10 +20,12 @@ import 'test_helpers.mocks.dart';
   MockSpec<TestSweetsRouteTracker>(returnNullOnMissingStub: true),
   MockSpec<CloudFunctionsService>(returnNullOnMissingStub: true),
   MockSpec<WidgetVisibiltyChangerService>(returnNullOnMissingStub: true),
+  MockSpec<ReactiveScrollable>(returnNullOnMissingStub: true),
+  MockSpec<FindScrollables>(returnNullOnMissingStub: true),
 ])
 MockWidgetCaptureService getAndRegisterWidgetCaptureService(
-    {List<WidgetDescription> listOfWidgetDescription = const [],
-    WidgetDescription? description,
+    {List<Interaction> viewInteractions = const [],
+    Interaction? description,
     String? projectId,
     bool currentViewIsAlreadyCaptured = false}) {
   _removeRegistrationIfExists<WidgetCaptureService>();
@@ -32,16 +36,26 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
   when(service.captureWidgetDescription(description: anyNamed('description')))
       .thenAnswer((_) => Future.value());
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
-      .thenReturn(listOfWidgetDescription);
+      .thenReturn(viewInteractions);
   when(service.updateWidgetDescription(description: anyNamed('description')))
       .thenAnswer((_) => Future.value());
-  when(service.deleteWidgetDescription(description: anyNamed('description')))
+  when(service.removeWidgetDescription(description: anyNamed('description')))
       .thenAnswer((_) => Future.value());
 
   when(service.checkCurrentViewIfAlreadyCaptured(any))
       .thenReturn(currentViewIsAlreadyCaptured);
 
   locator.registerSingleton<WidgetCaptureService>(service);
+  return service;
+}
+
+FindScrollables getAndRegisterFindScrollables(
+    {Iterable<ScrollableDescription>? sds}) {
+  _removeRegistrationIfExists<FindScrollables>();
+  final service = MockFindScrollables();
+  when(service.convertElementsToScrollDescriptions()).thenReturn(sds ?? []);
+  when(service.searchForScrollableElements()).thenReturn(null);
+  locator.registerSingleton<FindScrollables>(service);
   return service;
 }
 
@@ -66,7 +80,7 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
   String addWidgetDescriptionToProjectResult = 'default_id',
   String updateWidgetDescription = 'default_id',
   String deleteWidgetDescription = 'default_id',
-  List<WidgetDescription> getWidgetDescriptionForProjectResult = const [],
+  List<Interaction> getWidgetDescriptionForProjectResult = const [],
 }) {
   _removeRegistrationIfExists<CloudFunctionsService>();
   final service = MockCloudFunctionsService();
@@ -116,8 +130,15 @@ SnackbarService getAndRegisterSnackbarService() {
   return service;
 }
 
+ReactiveScrollable getAndRegisterReactiveScrollable() {
+  _removeRegistrationIfExists<ReactiveScrollable>();
+  final service = MockReactiveScrollable();
+  locator.registerSingleton<ReactiveScrollable>(service);
+  return service;
+}
+
 WidgetVisibiltyChangerService getAndRegisterWidgetVisibiltyChangerService(
-    {List<WidgetDescription>? widgetDescriptions,
+    {List<Interaction>? widgetDescriptions,
     SweetcoreCommand? latestSweetcoreCommand}) {
   _removeRegistrationIfExists<WidgetVisibiltyChangerService>();
   final service = MockWidgetVisibiltyChangerService();
@@ -136,6 +157,8 @@ void registerServices() {
   getAndRegisterCloudFunctionsService();
   getAndRegisterSnackbarService();
   getAndRegisterWidgetVisibiltyChangerService();
+  getAndRegisterReactiveScrollable();
+  getAndRegisterFindScrollables();
 }
 
 void unregisterServices() {
@@ -144,6 +167,13 @@ void unregisterServices() {
   _removeRegistrationIfExists<CloudFunctionsService>();
   _removeRegistrationIfExists<SnackbarService>();
   _removeRegistrationIfExists<WidgetVisibiltyChangerService>();
+  _removeRegistrationIfExists<ReactiveScrollable>();
+  _removeRegistrationIfExists<FindScrollables>();
+}
+
+void registerServiceInsteadOfMockedOne<T extends Object>(T instance) {
+  _removeRegistrationIfExists<T>();
+  locator.registerSingleton<T>(instance);
 }
 
 // Call this before any service registration helper. This is to ensure that if there

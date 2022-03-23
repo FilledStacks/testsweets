@@ -1,10 +1,11 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
-import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/services/reactive_scrollable.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view_form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
@@ -39,9 +40,10 @@ void main() {
         final model = _getViewModel();
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
         model.showWidgetForm();
-        model.widgetDescription!.copyWith(widgetType: WidgetType.scrollable);
+        model.inProgressInteraction!
+            .copyWith(widgetType: WidgetType.scrollable);
         model.saveWidget();
-        expect(model.widgetDescription!.originalViewName, 'current route');
+        expect(model.inProgressInteraction!.originalViewName, 'current route');
       });
       test('''When called and the current route is `/current route`,
            Should convert it to `currentRoute` in viewName proberty before send it to backend''',
@@ -50,10 +52,11 @@ void main() {
         final model = _getViewModel();
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
         model.showWidgetForm();
-        model.widgetDescription!.copyWith(widgetType: WidgetType.scrollable);
+        model.inProgressInteraction!
+            .copyWith(widgetType: WidgetType.scrollable);
         model.saveWidget();
-        expect(model.widgetDescription!.viewName, 'currentRoute');
-        expect(model.widgetDescription!.originalViewName, '/current route');
+        expect(model.inProgressInteraction!.viewName, 'currentRoute');
+        expect(model.inProgressInteraction!.originalViewName, '/current route');
       });
       test('''When called and the current widget name is `login-button`,
            Should convert it to `loginButton` in name proberty before send it to backend''',
@@ -64,43 +67,81 @@ void main() {
 
         model.formValueMap[WidgetNameValueKey] = 'login-button';
 
-        model.widgetDescription =
-            model.widgetDescription!.copyWith(widgetType: WidgetType.touchable);
+        model.inProgressInteraction = model.inProgressInteraction!
+            .copyWith(widgetType: WidgetType.touchable);
         model.saveWidget();
-        expect(model.widgetDescription!.name, 'loginButton');
+        expect(model.inProgressInteraction!.name, 'loginButton');
       });
     });
 
     group('updateWidgetDescription -', () {
-      test(
-          'When change the name, should call updateWidgetDescription() in WidgetCaptureService with the new name"',
-          () async {
+      test('''When change the name, should call updateWidgetDescription()
+              in WidgetCaptureService with the new name"''', () async {
         final service = getAndRegisterWidgetCaptureService();
 
         final model = _getViewModel();
+        model.viewInteractions = [kGeneralInteraction];
+
         await model.popupMenuActionSelected(
-            kWidgetDescription2, PopupMenuAction.edit);
+            kGeneralInteraction, PopupMenuAction.edit);
         model.formValueMap[WidgetNameValueKey] = 'loginButton';
         model.setFormStatus();
 
         await model.updateWidgetDescription();
 
         verify(service.updateWidgetDescription(
-            description: kWidgetDescription2.copyWith(name: 'loginButton')));
+            description: kGeneralInteraction.copyWith(name: 'loginButton')));
       });
 
-      test(
-          'When called and update was successful, Should set the current CaptureWidgetStatusEnum to inspectMode',
-          () async {
+      test('''When called and update was successful,
+          Should set the current CaptureWidgetStatusEnum to idle''', () async {
         final model = _getViewModel();
-
-        model.showWidgetForm();
-
-        model.formValueMap[WidgetNameValueKey] = 'loginButton';
+        model.viewInteractions = [kGeneralInteraction];
+        model.inProgressInteraction = kGeneralInteraction;
 
         await model.updateWidgetDescription();
 
         expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
+      });
+      test('''When in quickPositionEdit mode and user trigger onLongPressUp
+       without changing the interaction position,
+       Should call updateWidgetDescription from WidgetCaptureService 
+       with the same interaction without changing its position''', () async {
+        final service = getAndRegisterWidgetCaptureService();
+
+        final model = _getViewModel();
+        model.startQuickPositionEdit(kGeneralInteraction);
+        model.viewInteractions = [kGeneralInteraction];
+
+        await model.onLongPressUp();
+
+        verify(
+            service.updateWidgetDescription(description: kGeneralInteraction));
+      });
+
+      test('''When in quickPositionEdit mode and user trigger onLongPressUp
+       while changeing the widget position to new place,
+       Should call updateWidgetDescription from WidgetCaptureService 
+       with the interaction new position''', () async {
+        final service = getAndRegisterWidgetCaptureService();
+
+        final model = _getViewModel();
+        model.startQuickPositionEdit(kGeneralInteraction);
+        model.viewInteractions = [kGeneralInteraction];
+        model.updateDescriptionPosition(
+            33,
+            33,
+            kGeneralInteraction.position.capturedDeviceWidth!,
+            kGeneralInteraction.position.capturedDeviceHeight!);
+
+        await model.onLongPressUp();
+
+        verify(service.updateWidgetDescription(
+            description: kGeneralInteraction.copyWith(
+                position: kGeneralInteraction.position.copyWith(
+          x: 33,
+          y: 33,
+        ))));
       });
     });
 
@@ -111,11 +152,11 @@ void main() {
         final widgetCaptureService = getAndRegisterWidgetCaptureService();
         final model = _getViewModel();
         model.popupMenuActionSelected(
-            kWidgetDescription2, PopupMenuAction.remove);
+            kGeneralInteraction, PopupMenuAction.remove);
 
         await model.removeWidgetDescription();
-        verify(widgetCaptureService.deleteWidgetDescription(
-            description: kWidgetDescription2));
+        verify(widgetCaptureService.removeWidgetDescription(
+            description: kGeneralInteraction));
       });
 
       test(
@@ -134,7 +175,7 @@ void main() {
           () {
         final model = _getViewModel();
         model.popupMenuActionSelected(
-            kWidgetDescription2, PopupMenuAction.edit);
+            kGeneralInteraction, PopupMenuAction.edit);
         expect(
             model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.editWidget);
       });
@@ -146,85 +187,136 @@ void main() {
         final model = _getViewModel();
 
         model.popupMenuActionSelected(
-            kWidgetDescription2, PopupMenuAction.remove);
-        verify(widgetCaptureService.deleteWidgetDescription(
-            description: kWidgetDescription2));
-      });
-      test(
-          'When popupMenuAction is attachToKey, Should call deleteWidgetDescription from captureService',
-          () {
-        final model = _getViewModel();
-
-        model.popupMenuActionSelected(
-            kWidgetDescription2, PopupMenuAction.attachToKey);
-        expect(model.captureWidgetStatusEnum,
-            CaptureWidgetStatusEnum.attachWidget);
-      });
-      test('''When popupMenuAction is attachToKey, Should show
-           a toast to let the user know that he need to choose a target''', () {
-        final snackbarService = getAndRegisterSnackbarService();
-        final model = _getViewModel();
-
-        model.popupMenuActionSelected(
-            kWidgetDescription2, PopupMenuAction.attachToKey);
-        verify(snackbarService.showCustomSnackBar(
-            message: 'Select Key to associate with Scroll View',
-            variant: SnackbarType.info));
+            kGeneralInteraction, PopupMenuAction.remove);
+        verify(widgetCaptureService.removeWidgetDescription(
+            description: kGeneralInteraction));
       });
     });
-    group('addNewTarget -', () {
-      test(
-          '''When selecting target widget but before calling updateWidgetDescription,
-           Should add it to current widgetDescription target ids list''',
-          () async {
+    group('reactToScroll -', () {
+      test('''
+        When called on multiple interactions,
+        Should pick the overlapping one add the scrollExtent
+        to the YTranslit if the scrollable is vertical
+        ''', () async {
+        getAndRegisterWidgetCaptureService(
+          viewInteractions: [
+            kGeneralInteractionWithZeroOffset.copyWith(externalities: {
+              ScrollableDescription(
+                rect: SerializableRect.fromLTWH(0, 0, 0, 0),
+                axis: Axis.vertical,
+                maxScrollExtentByPixels: 0,
+                scrollExtentByPixels: 0,
+              ),
+            }),
+            kGeneralInteraction
+          ],
+        );
+
+        // I want to use the real service not the mocked one
+        registerServiceInsteadOfMockedOne(ReactiveScrollable());
+
         final model = _getViewModel();
+        await model.loadWidgetDescriptions();
 
-        model.popupMenuActionSelected(
-            kWidgetDescription2, PopupMenuAction.attachToKey);
+        model.reactToScroll(kTopLeftVerticalScrollableDescription);
 
-        /// I didn't add await inorder to expect the state before the updateWidgetDescription call
-        model.addNewTarget('targetId');
-        expect(model.widgetDescription!.targetIds.first, 'targetId');
-        expect(model.captureWidgetStatusEnum,
-            CaptureWidgetStatusEnum.attachWidget);
+        /// It should be the first item not the second but replaceing
+        /// widget adds the widget at the end of the list
+        expect(model.viewInteractions[1].position.yDeviation, 100);
       });
+      test('''
+          When repeating the same scroll but now the interaction is already scrolled vertically
+          So YTranslate not null
+        ''', () async {
+        getAndRegisterWidgetCaptureService(
+          viewInteractions: [
+            kGeneralInteractionWithZeroOffset.copyWith(
+                position: WidgetPosition(x: 0, y: 0, yDeviation: 100),
+                externalities: {
+                  ScrollableDescription(
+                    rect: SerializableRect.fromLTWH(0, 0, 0, 0),
+                    axis: Axis.vertical,
+                    maxScrollExtentByPixels: 0,
+                    scrollExtentByPixels: 0,
+                  ),
+                }),
+            kGeneralInteraction
+          ],
+        );
 
-      test(
-          '''After adding a new target widget and update the widget on the backend,
-           Should set the widgetDescription to null and captureWidgetStatusEnum to idle''',
-          () async {
+        // I want to use the real service not the mocked one
+        registerServiceInsteadOfMockedOne(ReactiveScrollable());
+
         final model = _getViewModel();
+        await model.loadWidgetDescriptions();
 
-        model.popupMenuActionSelected(
-            kWidgetDescription2, PopupMenuAction.attachToKey);
+        model.reactToScroll(kTopLeftVerticalScrollableDescription);
 
-        await model.addNewTarget('targetId');
-        expect(model.widgetDescription, isNull);
-        expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
+        /// It should be the first item not the second but replaceing
+        /// widget adds the widget at the end of the list
+        expect(model.viewInteractions[1].position.yDeviation, 100);
       });
-    });
+      test('''
+        When called two times(one vertical list and one horizontal) on one interaction,
+        Should add the scrollExtent once for YTranslate and once for XTranslate
+        ''', () async {
+        getAndRegisterWidgetCaptureService(
+          viewInteractions: [
+            kGeneralInteractionWithZeroOffset.copyWith(
+                position: WidgetPosition(x: 21, y: 22),
+                externalities: {
+                  // captured vertical list rect
+                  ScrollableDescription(
+                    rect: SerializableRect.fromLTWH(0, 0, 0, 0),
+                    axis: Axis.vertical,
+                    maxScrollExtentByPixels: 0,
+                    scrollExtentByPixels: 0,
+                  ),
 
-    group('removeTarget -', () {
-      test('''When called and target is exist in targetIds list,
-       Should remove the targetId from the list of the source/s widget''',
-          () async {
+                  // captured horizontal list rect which is nested inside
+                  // the virtical one
+                  ScrollableDescription(
+                    nested: true,
+                    rect: SerializableRect.fromLTWH(0, 20, 0, 0),
+                    axis: Axis.horizontal,
+                    maxScrollExtentByPixels: 0,
+                    scrollExtentByPixels: 0,
+                  ),
+                }),
+            kGeneralInteraction
+          ],
+        );
+
+        registerServiceInsteadOfMockedOne(ReactiveScrollable());
+
         final model = _getViewModel();
+        await model.loadWidgetDescriptions();
 
-        await model.popupMenuActionSelected(
-            kWidgetDescription2.copyWith(targetIds: ['targetId']),
-            PopupMenuAction.deattachFromKey);
-        model.removeTarget('targetId');
-        expect(model.widgetDescription!.targetIds, isEmpty);
-      });
-      test('''When called and target doesn't exist in targetIds list,
-       Should return 'Target doesn\'t exist' ''', () async {
-        final model = _getViewModel();
+        model.reactToScroll(kTopLeftVerticalScrollableDescription);
 
-        await model.popupMenuActionSelected(
-            kWidgetDescription2.copyWith(targetIds: []),
-            PopupMenuAction.deattachFromKey);
-        model.removeTarget('targetId');
-        expect(await model.removeTarget('targetId'), 'Target doesn\'t exist');
+        /// Assumming that the horizontal list inside the vertical one
+        /// it should move after the we scroll the vertical and that will change its rect
+        /// so we will change it now manually to emulate the flutter scroll change
+        final horizontalScrollableDescription =
+            kTopLeftHorizontalScrollableDescription.copyWith(
+          rect: SerializableRect.fromPoints(
+            Offset(
+              0,
+              20 + 100, // where 100 is the scroll result from the vertical list
+            ),
+            Offset(
+              40,
+              40 + 100,
+            ),
+          ),
+        );
+
+        model.reactToScroll(horizontalScrollableDescription);
+
+        /// It should be the first index(0) not the second(1) but when
+        /// replacing an interaciton it adds it at the end of the list
+        expect(model.viewInteractions[1].position.yDeviation, 100);
+        expect(model.viewInteractions[1].position.xDeviation, 50);
       });
     });
   });

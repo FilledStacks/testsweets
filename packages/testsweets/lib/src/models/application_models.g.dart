@@ -6,8 +6,8 @@ part of 'application_models.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_WidgetDescription _$$_WidgetDescriptionFromJson(Map<String, dynamic> json) =>
-    _$_WidgetDescription(
+_$_Interaction _$$_InteractionFromJson(Map<String, dynamic> json) =>
+    _$_Interaction(
       id: json['id'] as String?,
       viewName: json['viewName'] as String,
       originalViewName: json['originalViewName'] as String,
@@ -20,10 +20,13 @@ _$_WidgetDescription _$$_WidgetDescriptionFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           [],
+      externalities: (json['externalities'] as List<dynamic>?)
+          ?.map(
+              (e) => ScrollableDescription.fromJson(e as Map<String, dynamic>))
+          .toSet(),
     );
 
-Map<String, dynamic> _$$_WidgetDescriptionToJson(
-        _$_WidgetDescription instance) =>
+Map<String, dynamic> _$$_InteractionToJson(_$_Interaction instance) =>
     <String, dynamic>{
       'id': instance.id,
       'viewName': instance.viewName,
@@ -33,6 +36,7 @@ Map<String, dynamic> _$$_WidgetDescriptionToJson(
       'position': instance.position,
       'visibility': instance.visibility,
       'targetIds': instance.targetIds,
+      'externalities': instance.externalities?.toList(),
     };
 
 K _$enumDecode<K, V>(
@@ -76,6 +80,8 @@ _$_WidgetPosition _$$_WidgetPositionFromJson(Map<String, dynamic> json) =>
       y: (json['y'] as num).toDouble(),
       capturedDeviceWidth: (json['capturedDeviceWidth'] as num?)?.toDouble(),
       capturedDeviceHeight: (json['capturedDeviceHeight'] as num?)?.toDouble(),
+      xDeviation: (json['xDeviation'] as num?)?.toDouble(),
+      yDeviation: (json['yDeviation'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$_WidgetPositionToJson(_$_WidgetPosition instance) =>
@@ -84,4 +90,32 @@ Map<String, dynamic> _$$_WidgetPositionToJson(_$_WidgetPosition instance) =>
       'y': instance.y,
       'capturedDeviceWidth': instance.capturedDeviceWidth,
       'capturedDeviceHeight': instance.capturedDeviceHeight,
+      'xDeviation': instance.xDeviation,
+      'yDeviation': instance.yDeviation,
     };
+
+_$_ScrollableDescription _$$_ScrollableDescriptionFromJson(
+        Map<String, dynamic> json) =>
+    _$_ScrollableDescription(
+      axis: _$enumDecode(_$AxisEnumMap, json['axis']),
+      rect: SerializableRect.fromJson(json['rect'] as Map<String, dynamic>),
+      scrollExtentByPixels: (json['scrollExtentByPixels'] as num).toDouble(),
+      maxScrollExtentByPixels:
+          (json['maxScrollExtentByPixels'] as num).toDouble(),
+      nested: json['nested'] as bool? ?? false,
+    );
+
+Map<String, dynamic> _$$_ScrollableDescriptionToJson(
+        _$_ScrollableDescription instance) =>
+    <String, dynamic>{
+      'axis': _$AxisEnumMap[instance.axis],
+      'rect': instance.rect,
+      'scrollExtentByPixels': instance.scrollExtentByPixels,
+      'maxScrollExtentByPixels': instance.maxScrollExtentByPixels,
+      'nested': instance.nested,
+    };
+
+const _$AxisEnumMap = {
+  Axis.horizontal: 'horizontal',
+  Axis.vertical: 'vertical',
+};
