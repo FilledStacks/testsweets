@@ -12,9 +12,11 @@ class LoginView extends StatelessWidget {
       Colors.blue,
       Colors.red,
       Colors.green,
+    ];
+    List<Color> colorItems2 = [
       Colors.purple,
       Colors.orange,
-      Colors.black,
+      Colors.blueGrey,
     ];
 
     return ViewModelBuilder<LoginViewModel>.reactive(
@@ -29,12 +31,9 @@ class LoginView extends StatelessWidget {
                 height: size.height,
                 child: ListView(
                   children: [
-                    ...List.generate(
-                      3,
-                      (index) => Container(
-                        height: 500,
-                        color: colorItems[index],
-                      ),
+                    Container(
+                      height: 500,
+                      color: colorItems2[2],
                     ),
                     Container(
                       height: 150,
@@ -50,12 +49,27 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    ...List.generate(
-                      3,
-                      (index) => Container(
-                        height: 500,
-                        color: colorItems[index],
+                    Container(
+                      height: 500,
+                      color: colorItems2[2],
+                    ),
+                    Container(
+                      height: 150,
+                      color: Colors.white,
+                      child: ListView.builder(
+                        controller: ScrollController(),
+                        itemCount: colorItems.length,
+                        scrollDirection: Axis.horizontal,
+                        padding: EdgeInsets.all(10),
+                        itemBuilder: (context, index) => Container(
+                          width: 150,
+                          color: colorItems2[index],
+                        ),
                       ),
+                    ),
+                    Container(
+                      height: 500,
+                      color: colorItems2[2],
                     ),
                   ],
                 ),
