@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/extensions/scrollable_description_extension.dart';
 import 'package:testsweets/src/extensions/serializable_rect_extension.dart';
-import 'package:testsweets/src/extensions/widget_description_extension.dart';
+import 'package:testsweets/src/extensions/interaction_extension.dart';
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
 import 'package:testsweets/testsweets.dart';
 
@@ -34,6 +34,7 @@ class ReactiveScrollable {
     Iterable<ScrollableDescription> overlapScrollableWithInteraction,
     Interaction interaction,
   ) {
+    interaction.copyWith(externalities: null);
     ScrollableDescription? biggestScrollable;
 
     if (overlapScrollableWithInteraction.length > 1) {
@@ -78,9 +79,9 @@ class ReactiveScrollable {
         return interaction.externalities!
             .where((sd) => sd.axis == scrollableDescription.axis)
             .any(
-          (sd) {
-            final distance = distanceSquaredBetweenScrollableAndExternal(
-                sd, offsetDeviation, scrollableDescription);
+          (interacrionSd) {
+            final distance = _distanceSquaredBetweenScrollableAndExternal(
+                interacrionSd, offsetDeviation, scrollableDescription);
 
             final included = distance < 10;
             return included;
@@ -90,12 +91,13 @@ class ReactiveScrollable {
     );
   }
 
-  double distanceSquaredBetweenScrollableAndExternal(ScrollableDescription sd,
-      Offset offsetDeviation, ScrollableDescription scrollableDescription) {
-    return (sd.rect.topLeft -
-            (sd.nested ? offsetDeviation : Offset.zero) -
-            scrollableDescription.rect.topLeft)
-        .distanceSquared;
+  double _distanceSquaredBetweenScrollableAndExternal(
+      ScrollableDescription interacrionSd,
+      Offset offsetDeviation,
+      ScrollableDescription sd) {
+    final deviation = (interacrionSd.nested ? offsetDeviation : Offset.zero);
+    final offset = interacrionSd.rect.topLeft - deviation;
+    return (offset - sd.rect.topLeft).distanceSquared;
   }
 
   Offset calculateOffsetDeviation(
