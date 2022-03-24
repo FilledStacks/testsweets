@@ -23,7 +23,7 @@ class WidgetCard extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       child: Material(
         type: MaterialType.card,
-        color: widgetType.getColorOfWidgetType,
+        color: selected ? widgetType.getColorOfWidgetType : kcBackground,
         borderRadius: BorderRadius.circular(12),
         child: InkWell(
           highlightColor: Colors.transparent,
