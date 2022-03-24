@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/extensions/interaction_extension.dart';
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
+import 'package:testsweets/src/ui/shared/utils.dart';
 import 'package:testsweets/testsweets.dart';
 
 import '../app/logger.dart';
@@ -19,7 +20,7 @@ class ReactiveScrollable {
       List<Interaction> viewDescription) {
     log.v(_currentScrollableDescription);
 
-    return viewDescription.where((interaciton) => interaciton.notView).where(
+    return viewDescription.where(InteractionUtils.notView).where(
       (interaction) {
         if (interaction.externalities == null) return false;
 

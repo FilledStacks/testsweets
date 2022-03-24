@@ -45,6 +45,4 @@ extension InteractionExtension on Interaction {
       return currentScreenWidth / this.position.capturedDeviceWidth!;
     }
   }
-
-  bool get notView => this.widgetType != WidgetType.view;
 }

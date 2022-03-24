@@ -50,13 +50,12 @@ class _CaptureOverlayState extends State<CaptureOverlay>
     final model = context.watch<WidgetCaptureViewModel>();
     final interaction = model.inProgressInteraction;
     final size = MediaQuery.of(context).size;
-    print('interaction: $interaction');
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
         WidgetsVisualizer(editActionSelected: () {
-          /// Set the value of the edited widget to the form textfield
-          /// and show the bottomsheet
+          /// Set the value of the edited interaction to the
+          /// form textfield and show the bottomsheet.
           widgetNameController.text = model.inProgressInteraction!.name;
           bottomSheetController.show();
         }),
