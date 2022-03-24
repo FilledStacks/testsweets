@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/models/application_models.dart';
-import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 import 'package:testsweets/src/ui/shared/popup_menu/popup_menu_content.dart';
-import 'package:testsweets/src/ui/shared/utils.dart';
 
 import '../../../enums/popup_menu_action.dart';
 import '../../widget_capture/widget_capture_viewmodel.dart';

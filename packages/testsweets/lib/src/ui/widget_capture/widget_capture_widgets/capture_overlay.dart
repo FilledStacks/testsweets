@@ -179,10 +179,8 @@ class _CaptureOverlayState extends State<CaptureOverlay>
                                         /// the bottom sheet
                                         await _closeBottomSheet();
                                         final findScrollablesService =
-                                            locator<FindScrollables>();
-
-                                        findScrollablesService
-                                            .searchForScrollableElements();
+                                            locator<FindScrollables>()
+                                              ..searchForScrollableElements();
 
                                         final extractedScrollables =
                                             findScrollablesService

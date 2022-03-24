@@ -58,7 +58,7 @@ class WidgetCaptureView extends StatelessWidget {
                 routeName: model.currentViewName,
               ),
             ),
-            const CaptureOverlay(key: Key('CaptureOverlay ebrahim')),
+            const CaptureOverlay(),
             BusyIndicator(
               enable: model.isBusy,
             )
