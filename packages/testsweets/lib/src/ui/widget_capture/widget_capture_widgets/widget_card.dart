@@ -24,11 +24,11 @@ class WidgetCard extends StatelessWidget {
       child: Material(
         type: MaterialType.card,
         color: selected ? widgetType.getColorOfWidgetType : kcBackground,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(8),
         child: InkWell(
           highlightColor: Colors.transparent,
           splashColor: widgetType.getColorOfWidgetType.withOpacity(0.7),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           onTap: () => onTap(widgetType),
           child: Container(
             height: 50,

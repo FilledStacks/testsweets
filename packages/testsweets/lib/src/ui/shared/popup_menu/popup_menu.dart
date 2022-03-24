@@ -24,7 +24,6 @@ class PopupMenu extends StatelessWidget {
     final model = context.watch<WidgetCaptureViewModel>();
     final size = MediaQuery.of(context).size;
     return CustomPopupMenu(
-      disable: model.captureWidgetStatusEnum.attachMode,
       onMoveStart: () => model.startQuickPositionEdit(description),
       onTap: () => model.onTapWidget(description),
       onLongPressUp: model.onLongPressUp,

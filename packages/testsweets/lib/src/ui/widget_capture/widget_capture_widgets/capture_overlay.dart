@@ -50,6 +50,7 @@ class _CaptureOverlayState extends State<CaptureOverlay>
     final model = context.watch<WidgetCaptureViewModel>();
     final interaction = model.inProgressInteraction;
     final size = MediaQuery.of(context).size;
+    print('interaction: $interaction');
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
@@ -74,14 +75,17 @@ class _CaptureOverlayState extends State<CaptureOverlay>
               ),
               minHeight: 0,
               maxHeight: 300,
-              body: interaction == null
-                  ? const SizedBox.shrink()
-                  : _Content(
-                      interaction: interaction,
-                      bottomSheetController: bottomSheetController,
-                      widgetNameController: widgetNameController,
-                      widgetNameFocusNode: widgetNameFocusNode,
-                    ),
+              body: Container(
+                decoration: kdBlackRoundedEdgeDecoration,
+                child: interaction == null
+                    ? const SizedBox.shrink()
+                    : _Content(
+                        interaction: interaction,
+                        bottomSheetController: bottomSheetController,
+                        widgetNameController: widgetNameController,
+                        widgetNameFocusNode: widgetNameFocusNode,
+                      ),
+              ),
             ),
           ),
       ],
@@ -106,140 +110,138 @@ class _Content extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = context.watch<WidgetCaptureViewModel>();
 
-    return Container(
-      decoration: kdBlackRoundedEdgeDecoration,
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text('Select widget type:',
-                textAlign: TextAlign.left, style: tsMedium()),
-          ),
-          TypeSelector(
-            selectedWidgetType: interaction.widgetType,
-            onTap: (widgetType) => model.setWidgetType = widgetType,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Select widget name and visibilty:',
-                    textAlign: TextAlign.left, style: tsMedium()),
-                const SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        focusNode: widgetNameFocusNode,
-                        controller: widgetNameController,
-                        style: tsNormal().copyWith(color: kcPrimaryWhite),
-                        decoration: InputDecoration(
-                            hintStyle: tsNormal().copyWith(
-                              color: kcSubtext,
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text('Select widget type:',
+              textAlign: TextAlign.left, style: tsMedium()),
+        ),
+        TypeSelector(
+          selectedWidgetType: interaction.widgetType,
+          onTap: (widgetType) => model.setWidgetType = widgetType,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Select widget name and visibilty:',
+                  textAlign: TextAlign.left, style: tsMedium()),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      focusNode: widgetNameFocusNode,
+                      controller: widgetNameController,
+                      style: tsNormal().copyWith(color: kcPrimaryWhite),
+                      decoration: InputDecoration(
+                          hintStyle: tsNormal().copyWith(
+                            color: kcSubtext,
+                          ),
+                          fillColor: kcTextField,
+                          filled: true,
+                          hintText: 'Widget Name',
+                          contentPadding: const EdgeInsets.only(
+                            left: 16,
+                            right: 16,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: kcPrimaryPurple,
                             ),
-                            fillColor: kcTextField,
-                            filled: true,
-                            hintText: 'Widget Name',
-                            contentPadding: const EdgeInsets.only(
-                              left: 16,
-                              right: 16,
+                            borderRadius: BorderRadius.all(
+                              crTextFieldCornerRadius(),
                             ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: kcPrimaryPurple,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                crTextFieldCornerRadius(),
-                              ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: kcCard,
                             ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: kcCard,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                crTextFieldCornerRadius(),
-                              ),
-                            )),
-                      ),
+                            borderRadius: BorderRadius.all(
+                              crTextFieldCornerRadius(),
+                            ),
+                          )),
                     ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    SweetIconButton(
-                        backgroundColor: kcCard,
-                        onTap: () {
-                          model.setVisibilty = !interaction.visibility;
-                        },
-                        svgIcon: interaction.visibility
-                            ? 'packages/testsweets/assets/svgs/eye.svg'
-                            : 'packages/testsweets/assets/svgs/eye_closed.svg',
-                        svgWidth: 30),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 5,
-                  child: CtaButton(
-                      isDisabled: interaction.name.isEmpty,
-                      onTap: () async {
-                        /// When widget is saved successfully hide
-                        /// the bottom sheet
-                        await _closeBottomSheet();
-                        final findScrollablesService =
-                            locator<FindScrollables>()
-                              ..searchForScrollableElements();
-
-                        final extractedScrollables = findScrollablesService
-                            .convertElementsToScrollDescriptions();
-
-                        model.checkForExternalities(extractedScrollables);
-                        await model.submitForm();
-                        _clearAndUnfocusTextField();
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  SweetIconButton(
+                      backgroundColor: kcCard,
+                      onTap: () {
+                        model.setVisibilty = !interaction.visibility;
                       },
-                      fillColor: kcPrimaryPurple,
-                      title: interaction.id != null ? 'Update' : 'Create'),
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Expanded(
-                  flex: 2,
-                  child: CtaButton(
-                      onTap: () async {
-                        await _closeBottomSheet();
-                        _clearAndUnfocusTextField();
-                        model.clearWidgetDescriptionForm();
-                      },
-                      fillColor: kcError,
-                      title: 'Clear'),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
+                      svgIcon: interaction.visibility
+                          ? 'packages/testsweets/assets/svgs/eye.svg'
+                          : 'packages/testsweets/assets/svgs/eye_closed.svg',
+                      svgWidth: 30),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 5,
+                child: CtaButton(
+                    isDisabled: interaction.name.isEmpty,
+                    onTap: () async {
+                      await _closeBottomSheet();
+
+                      /// Give a delay to prevent the [searchForScrollableElements]
+                      /// form accedintally capturing any list in the bottomsheet
+                      await Future.delayed(const Duration(milliseconds: 500));
+
+                      final findScrollablesService = locator<FindScrollables>()
+                        ..searchForScrollableElements();
+
+                      final extractedScrollables = findScrollablesService
+                          .convertElementsToScrollDescriptions();
+
+                      model.checkForExternalities(extractedScrollables);
+                      await model.submitForm();
+                      _clearAndUnfocusTextField();
+                    },
+                    fillColor: kcPrimaryPurple,
+                    title: interaction.id != null ? 'Update' : 'Create'),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Expanded(
+                flex: 2,
+                child: CtaButton(
+                    onTap: () async {
+                      await _closeBottomSheet();
+                      _clearAndUnfocusTextField();
+                      model.clearWidgetDescriptionForm();
+                    },
+                    fillColor: kcError,
+                    title: 'Clear'),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 
   Future<void> _closeBottomSheet() async {
     bottomSheetController.hide();
-    await Future.delayed(const Duration(milliseconds: 1000));
   }
 
   void _clearAndUnfocusTextField() {
