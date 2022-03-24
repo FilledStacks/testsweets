@@ -3,18 +3,20 @@
 // Do not manually edit this file.
 
 import 'dart:async' as _i9;
-import 'dart:ui' as _i5;
+import 'dart:ui' as _i4;
 
-import 'package:flutter/material.dart' as _i8;
+import 'package:flutter/cupertino.dart' as _i8;
 import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked_services/src/snackbar/snackbar_config.dart' as _i7;
 import 'package:stacked_services/src/snackbar/snackbar_service.dart' as _i6;
 import 'package:testsweets/src/enums/handler_message_response.dart' as _i15;
-import 'package:testsweets/src/models/application_models.dart' as _i4;
+import 'package:testsweets/src/models/application_models.dart' as _i5;
 import 'package:testsweets/src/services/cloud_functions_service.dart' as _i12;
 import 'package:testsweets/src/services/http_service.dart' as _i3;
+import 'package:testsweets/src/services/notification_extractor.dart' as _i19;
 import 'package:testsweets/src/services/reactive_scrollable.dart' as _i16;
+import 'package:testsweets/src/services/scroll_appliance.dart' as _i18;
 import 'package:testsweets/src/services/sweetcore_command.dart' as _i14;
 import 'package:testsweets/src/services/testsweets_route_tracker.dart' as _i11;
 import 'package:testsweets/src/services/widget_capture_service.dart' as _i10;
@@ -36,12 +38,12 @@ class _FakeLogger_0 extends _i1.Fake implements _i2.Logger {}
 
 class _FakeHttpService_1 extends _i1.Fake implements _i3.HttpService {}
 
-class _FakeInteraction_2 extends _i1.Fake implements _i4.Interaction {}
+class _FakeOffset_2 extends _i1.Fake implements _i4.Offset {}
 
-class _FakeScrollableDescription_3 extends _i1.Fake
-    implements _i4.ScrollableDescription {}
+class _FakeInteraction_3 extends _i1.Fake implements _i5.Interaction {}
 
-class _FakeOffset_4 extends _i1.Fake implements _i5.Offset {}
+class _FakeScrollableDescription_4 extends _i1.Fake
+    implements _i5.ScrollableDescription {}
 
 /// A class which mocks [SnackbarService].
 ///
@@ -128,10 +130,10 @@ class MockWidgetCaptureService extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_0())
           as _i2.Logger);
   @override
-  Map<String, List<_i4.Interaction>> get widgetDescriptionMap =>
+  Map<String, List<_i5.Interaction>> get widgetDescriptionMap =>
       (super.noSuchMethod(Invocation.getter(#widgetDescriptionMap),
-              returnValue: <String, List<_i4.Interaction>>{})
-          as Map<String, List<_i4.Interaction>>);
+              returnValue: <String, List<_i5.Interaction>>{})
+          as Map<String, List<_i5.Interaction>>);
   @override
   bool get verbose =>
       (super.noSuchMethod(Invocation.getter(#verbose), returnValue: false)
@@ -141,7 +143,7 @@ class MockWidgetCaptureService extends _i1.Mock
       super.noSuchMethod(Invocation.setter(#projectId, projectId),
           returnValueForMissingStub: null);
   @override
-  set addWidgetDescriptionToMap(_i4.Interaction? description) => super
+  set addWidgetDescriptionToMap(_i5.Interaction? description) => super
       .noSuchMethod(Invocation.setter(#addWidgetDescriptionToMap, description),
           returnValueForMissingStub: null);
   @override
@@ -150,11 +152,11 @@ class MockWidgetCaptureService extends _i1.Mock
       returnValue: Future<void>.value(),
       returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  List<_i4.Interaction> getDescriptionsForView({String? currentRoute}) =>
+  List<_i5.Interaction> getDescriptionsForView({String? currentRoute}) =>
       (super.noSuchMethod(
           Invocation.method(
               #getDescriptionsForView, [], {#currentRoute: currentRoute}),
-          returnValue: <_i4.Interaction>[]) as List<_i4.Interaction>);
+          returnValue: <_i5.Interaction>[]) as List<_i5.Interaction>);
   @override
   bool checkCurrentViewIfAlreadyCaptured(String? originalViewName) =>
       (super.noSuchMethod(
@@ -162,19 +164,19 @@ class MockWidgetCaptureService extends _i1.Mock
               #checkCurrentViewIfAlreadyCaptured, [originalViewName]),
           returnValue: false) as bool);
   @override
-  _i9.Future<String> captureWidgetDescription({_i4.Interaction? description}) =>
+  _i9.Future<String> captureWidgetDescription({_i5.Interaction? description}) =>
       (super.noSuchMethod(
           Invocation.method(
               #captureWidgetDescription, [], {#description: description}),
           returnValue: Future<String>.value('')) as _i9.Future<String>);
   @override
-  _i9.Future<String?> updateWidgetDescription({_i4.Interaction? description}) =>
+  _i9.Future<String?> updateWidgetDescription({_i5.Interaction? description}) =>
       (super.noSuchMethod(
           Invocation.method(
               #updateWidgetDescription, [], {#description: description}),
           returnValue: Future<String?>.value()) as _i9.Future<String?>);
   @override
-  _i9.Future<String?> removeWidgetDescription({_i4.Interaction? description}) =>
+  _i9.Future<String?> removeWidgetDescription({_i5.Interaction? description}) =>
       (super.noSuchMethod(
           Invocation.method(
               #removeWidgetDescription, [], {#description: description}),
@@ -197,6 +199,15 @@ class MockTestSweetsRouteTracker extends _i1.Mock
   @override
   set testMode(bool? _testMode) =>
       super.noSuchMethod(Invocation.setter(#testMode, _testMode),
+          returnValueForMissingStub: null);
+  @override
+  Map<String, int> get indexedRouteStateMap =>
+      (super.noSuchMethod(Invocation.getter(#indexedRouteStateMap),
+          returnValue: <String, int>{}) as Map<String, int>);
+  @override
+  set indexedRouteStateMap(Map<String, int>? _indexedRouteStateMap) =>
+      super.noSuchMethod(
+          Invocation.setter(#indexedRouteStateMap, _indexedRouteStateMap),
           returnValueForMissingStub: null);
   @override
   bool get isChildRouteActivated =>
@@ -254,11 +265,23 @@ class MockTestSweetsRouteTracker extends _i1.Mock
   void refreshUi() => super.noSuchMethod(Invocation.method(#refreshUi, []),
       returnValueForMissingStub: null);
   @override
-  void addListener(_i5.VoidCallback? listener) =>
+  void changeRouteIndex(String? viewName, int? index) => super.noSuchMethod(
+      Invocation.method(#changeRouteIndex, [viewName, index]),
+      returnValueForMissingStub: null);
+  @override
+  void saveRouteIndex(String? viewName, int? index) =>
+      super.noSuchMethod(Invocation.method(#saveRouteIndex, [viewName, index]),
+          returnValueForMissingStub: null);
+  @override
+  void loadRouteIndexIfExist(String? viewName) =>
+      super.noSuchMethod(Invocation.method(#loadRouteIndexIfExist, [viewName]),
+          returnValueForMissingStub: null);
+  @override
+  void addListener(_i4.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#addListener, [listener]),
           returnValueForMissingStub: null);
   @override
-  void removeListener(_i5.VoidCallback? listener) =>
+  void removeListener(_i4.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#removeListener, [listener]),
           returnValueForMissingStub: null);
   @override
@@ -300,25 +323,25 @@ class MockCloudFunctionsService extends _i1.Mock
           returnValue: Future<bool>.value(false)) as _i9.Future<bool>);
   @override
   _i9.Future<String> uploadWidgetDescriptionToProject(
-          {String? projectId, _i4.Interaction? description}) =>
+          {String? projectId, _i5.Interaction? description}) =>
       (super.noSuchMethod(
           Invocation.method(#uploadWidgetDescriptionToProject, [],
               {#projectId: projectId, #description: description}),
           returnValue: Future<String>.value('')) as _i9.Future<String>);
   @override
-  _i9.Future<List<_i4.Interaction>> getWidgetDescriptionForProject(
+  _i9.Future<List<_i5.Interaction>> getWidgetDescriptionForProject(
           {String? projectId}) =>
       (super.noSuchMethod(
               Invocation.method(
                   #getWidgetDescriptionForProject, [], {#projectId: projectId}),
               returnValue:
-                  Future<List<_i4.Interaction>>.value(<_i4.Interaction>[]))
-          as _i9.Future<List<_i4.Interaction>>);
+                  Future<List<_i5.Interaction>>.value(<_i5.Interaction>[]))
+          as _i9.Future<List<_i5.Interaction>>);
   @override
   _i9.Future<String> updateWidgetDescription(
           {String? projectId,
-          _i4.Interaction? oldwidgetDescription,
-          _i4.Interaction? newwidgetDescription}) =>
+          _i5.Interaction? oldwidgetDescription,
+          _i5.Interaction? newwidgetDescription}) =>
       (super.noSuchMethod(
           Invocation.method(#updateWidgetDescription, [], {
             #projectId: projectId,
@@ -328,7 +351,7 @@ class MockCloudFunctionsService extends _i1.Mock
           returnValue: Future<String>.value('')) as _i9.Future<String>);
   @override
   _i9.Future<String> deleteWidgetDescription(
-          {String? projectId, _i4.Interaction? description}) =>
+          {String? projectId, _i5.Interaction? description}) =>
       (super.noSuchMethod(
           Invocation.method(#deleteWidgetDescription, [],
               {#projectId: projectId, #description: description}),
@@ -357,38 +380,38 @@ class MockWidgetVisibiltyChangerService extends _i1.Mock
       super.noSuchMethod(Invocation.method(#completeCompleter, [message]),
           returnValueForMissingStub: null);
   @override
-  Iterable<_i4.Interaction>? runToggleVisibiltyChecker(
+  Iterable<_i5.Interaction>? runToggleVisibiltyChecker(
           _i8.Notification? notification,
           String? automationKeyName,
-          List<_i4.Interaction>? viewWidgets) =>
+          List<_i5.Interaction>? viewWidgets) =>
       (super.noSuchMethod(Invocation.method(#runToggleVisibiltyChecker, [
         notification,
         automationKeyName,
         viewWidgets
-      ])) as Iterable<_i4.Interaction>?);
+      ])) as Iterable<_i5.Interaction>?);
   @override
-  Iterable<_i4.Interaction> toggleVisibilty(
-          Iterable<_i4.Interaction>? targetedWidgets,
-          List<_i4.Interaction>? originalWidgets) =>
+  Iterable<_i5.Interaction> toggleVisibilty(
+          Iterable<_i5.Interaction>? targetedWidgets,
+          List<_i5.Interaction>? originalWidgets) =>
       (super.noSuchMethod(
           Invocation.method(
               #toggleVisibilty, [targetedWidgets, originalWidgets]),
-          returnValue: <_i4.Interaction>[]) as Iterable<_i4.Interaction>);
+          returnValue: <_i5.Interaction>[]) as Iterable<_i5.Interaction>);
   @override
-  Iterable<_i4.Interaction> updateViewWidgetsList(
-          Iterable<_i4.Interaction>? widgetAfterToggleVisibilty,
-          List<_i4.Interaction>? originalWidgets) =>
+  Iterable<_i5.Interaction> updateViewWidgetsList(
+          Iterable<_i5.Interaction>? widgetAfterToggleVisibilty,
+          List<_i5.Interaction>? originalWidgets) =>
       (super.noSuchMethod(
           Invocation.method(#updateViewWidgetsList,
               [widgetAfterToggleVisibilty, originalWidgets]),
-          returnValue: <_i4.Interaction>[]) as Iterable<_i4.Interaction>);
+          returnValue: <_i5.Interaction>[]) as Iterable<_i5.Interaction>);
   @override
-  Iterable<_i4.Interaction> filterTargetedWidgets(String? automationKeyName,
-          Iterable<_i4.Interaction>? descriptionsForView) =>
+  Iterable<_i5.Interaction> filterTargetedWidgets(String? automationKeyName,
+          Iterable<_i5.Interaction>? descriptionsForView) =>
       (super.noSuchMethod(
           Invocation.method(
               #filterTargetedWidgets, [automationKeyName, descriptionsForView]),
-          returnValue: <_i4.Interaction>[]) as Iterable<_i4.Interaction>);
+          returnValue: <_i5.Interaction>[]) as Iterable<_i5.Interaction>);
 }
 
 /// A class which mocks [ReactiveScrollable].
@@ -401,55 +424,34 @@ class MockReactiveScrollable extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_0())
           as _i2.Logger);
   @override
-  _i4.Interaction applyScrollableOnInteraction(
-          Iterable<_i4.ScrollableDescription>? scrollables,
-          _i4.Interaction? interaction) =>
+  set currentScrollableDescription(
+          _i5.ScrollableDescription? currentScrollableDescription) =>
+      super.noSuchMethod(
+          Invocation.setter(
+              #currentScrollableDescription, currentScrollableDescription),
+          returnValueForMissingStub: null);
+  @override
+  Iterable<_i5.Interaction> filterAffectedInteractionsByScrollable(
+          List<_i5.Interaction>? viewDescription) =>
       (super.noSuchMethod(
           Invocation.method(
-              #applyScrollableOnInteraction, [scrollables, interaction]),
-          returnValue: _FakeInteraction_2()) as _i4.Interaction);
+              #filterAffectedInteractionsByScrollable, [viewDescription]),
+          returnValue: <_i5.Interaction>[]) as Iterable<_i5.Interaction>);
   @override
-  _i4.ScrollableDescription findBiggestScrollable(
-          Iterable<_i4.ScrollableDescription>?
-              overlapScrollableWithInteraction) =>
-      (super.noSuchMethod(
-              Invocation.method(
-                  #findBiggestScrollable, [overlapScrollableWithInteraction]),
-              returnValue: _FakeScrollableDescription_3())
-          as _i4.ScrollableDescription);
-  @override
-  Iterable<_i4.Interaction> filterAffectedInteractionsByScrollable(
-          _i4.ScrollableDescription? scrollableDescription,
-          List<_i4.Interaction>? viewDescription) =>
-      (super.noSuchMethod(
-          Invocation.method(#filterAffectedInteractionsByScrollable,
-              [scrollableDescription, viewDescription]),
-          returnValue: <_i4.Interaction>[]) as Iterable<_i4.Interaction>);
-  @override
-  double distanceSquaredBetweenScrollableAndExternal(
-          _i4.ScrollableDescription? sd,
-          _i5.Offset? offsetDeviation,
-          _i4.ScrollableDescription? scrollableDescription) =>
-      (super.noSuchMethod(
-          Invocation.method(#distanceSquaredBetweenScrollableAndExternal,
-              [sd, offsetDeviation, scrollableDescription]),
-          returnValue: 0.0) as double);
-  @override
-  _i5.Offset calculateOffsetDeviation(
-          _i4.ScrollableDescription? scrollableDescription,
-          _i4.Interaction? interaction) =>
+  _i4.Offset calculateOffsetDeviation(
+          _i5.ScrollableDescription? scrollableDescription,
+          _i5.Interaction? interaction) =>
       (super.noSuchMethod(
           Invocation.method(
               #calculateOffsetDeviation, [scrollableDescription, interaction]),
-          returnValue: _FakeOffset_4()) as _i5.Offset);
+          returnValue: _FakeOffset_2()) as _i4.Offset);
   @override
-  Iterable<_i4.Interaction> moveInteractionsWithScrollable(
-          _i4.ScrollableDescription? scrollableDescription,
-          Iterable<_i4.Interaction>? affectedInteractions) =>
+  Iterable<_i5.Interaction> moveInteractionsWithScrollable(
+          Iterable<_i5.Interaction>? affectedInteractions) =>
       (super.noSuchMethod(
-          Invocation.method(#moveInteractionsWithScrollable,
-              [scrollableDescription, affectedInteractions]),
-          returnValue: <_i4.Interaction>[]) as Iterable<_i4.Interaction>);
+          Invocation.method(
+              #moveInteractionsWithScrollable, [affectedInteractions]),
+          returnValue: <_i5.Interaction>[]) as Iterable<_i5.Interaction>);
 }
 
 /// A class which mocks [FindScrollables].
@@ -461,9 +463,73 @@ class MockFindScrollables extends _i1.Mock implements _i17.FindScrollables {
       super.noSuchMethod(Invocation.setter(#foundedElements, _foundedElements),
           returnValueForMissingStub: null);
   @override
-  Iterable<_i4.ScrollableDescription> convertElementsToScrollDescriptions() =>
+  void searchForScrollableElements() =>
+      super.noSuchMethod(Invocation.method(#searchForScrollableElements, []),
+          returnValueForMissingStub: null);
+  @override
+  Iterable<_i5.ScrollableDescription> convertElementsToScrollDescriptions() =>
       (super.noSuchMethod(
               Invocation.method(#convertElementsToScrollDescriptions, []),
-              returnValue: <_i4.ScrollableDescription>[])
-          as Iterable<_i4.ScrollableDescription>);
+              returnValue: <_i5.ScrollableDescription>[])
+          as Iterable<_i5.ScrollableDescription>);
+}
+
+/// A class which mocks [ScrollAppliance].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockScrollAppliance extends _i1.Mock implements _i18.ScrollAppliance {
+  @override
+  _i2.Logger get log =>
+      (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_0())
+          as _i2.Logger);
+  @override
+  _i5.Interaction applyScrollableOnInteraction(
+          Iterable<_i5.ScrollableDescription>? scrollables,
+          _i5.Interaction? interaction) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #applyScrollableOnInteraction, [scrollables, interaction]),
+          returnValue: _FakeInteraction_3()) as _i5.Interaction);
+  @override
+  _i5.Interaction storeScrollablesRectInExternalities(
+          Iterable<_i5.ScrollableDescription>? overlapScrollableWithInteraction,
+          _i5.Interaction? interaction) =>
+      (super.noSuchMethod(
+          Invocation.method(#storeScrollablesRectInExternalities,
+              [overlapScrollableWithInteraction, interaction]),
+          returnValue: _FakeInteraction_3()) as _i5.Interaction);
+  @override
+  _i5.ScrollableDescription findBiggestScrollable(
+          Iterable<_i5.ScrollableDescription>?
+              overlapScrollableWithInteraction) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #findBiggestScrollable, [overlapScrollableWithInteraction]),
+              returnValue: _FakeScrollableDescription_4())
+          as _i5.ScrollableDescription);
+}
+
+/// A class which mocks [NotificationExtractor].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockNotificationExtractor extends _i1.Mock
+    implements _i19.NotificationExtractor {
+  @override
+  _i5.ScrollableDescription toScrollableDescription(
+          _i8.ScrollUpdateNotification? notification) =>
+      (super.noSuchMethod(
+              Invocation.method(#toScrollableDescription, [notification]),
+              returnValue: _FakeScrollableDescription_4())
+          as _i5.ScrollableDescription);
+  @override
+  void setScrollDirection(
+          _i8.UserScrollNotification? scrollUpdateNotification) =>
+      super.noSuchMethod(
+          Invocation.method(#setScrollDirection, [scrollUpdateNotification]),
+          returnValueForMissingStub: null);
+  @override
+  void setGlobalAndLocalOffsets(_i8.ScrollStartNotification? notification) =>
+      super.noSuchMethod(
+          Invocation.method(#setGlobalAndLocalOffsets, [notification]),
+          returnValueForMissingStub: null);
 }

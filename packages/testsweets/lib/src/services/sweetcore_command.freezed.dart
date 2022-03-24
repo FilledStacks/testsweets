@@ -149,15 +149,15 @@ class _$ScrollableCommand extends ScrollableCommand {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is ScrollableCommand &&
-            (identical(other.widgetName, widgetName) ||
-                const DeepCollectionEquality()
-                    .equals(other.widgetName, widgetName)));
+        (other.runtimeType == runtimeType &&
+            other is ScrollableCommand &&
+            const DeepCollectionEquality()
+                .equals(other.widgetName, widgetName));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(widgetName);
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(widgetName));
 
   @JsonKey(ignore: true)
   @override
@@ -226,7 +226,7 @@ abstract class ScrollableCommand extends SweetcoreCommand {
   ScrollableCommand._() : super._();
 
   @override
-  String get widgetName => throw _privateConstructorUsedError;
+  String get widgetName;
   @override
   @JsonKey(ignore: true)
   $ScrollableCommandCopyWith<ScrollableCommand> get copyWith =>

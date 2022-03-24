@@ -44,7 +44,7 @@ class _$InteractionTearOff {
     );
   }
 
-  Interaction fromJson(Map<String, Object> json) {
+  Interaction fromJson(Map<String, Object?> json) {
     return Interaction.fromJson(json);
   }
 }
@@ -291,7 +291,7 @@ class _$_Interaction extends _Interaction {
 
   /// The orignal name of the view this widget was captured on before the prettify
   final String originalViewName;
-  @JsonKey(defaultValue: '')
+  @JsonKey()
   @override
 
   /// The name we want to use when referring to the widget in the scripts
@@ -304,12 +304,12 @@ class _$_Interaction extends _Interaction {
 
   /// The position we defined for he widget
   final WidgetPosition position;
-  @JsonKey(defaultValue: true)
+  @JsonKey()
   @override
 
   /// Whether the key will be visible to the driver or not
   final bool visibility;
-  @JsonKey(defaultValue: const [])
+  @JsonKey()
   @override
 
   /// Target widgets ids that will be affected when this widget activated
@@ -328,46 +328,35 @@ class _$_Interaction extends _Interaction {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _Interaction &&
-            (identical(other.id, id) ||
-                const DeepCollectionEquality().equals(other.id, id)) &&
-            (identical(other.viewName, viewName) ||
-                const DeepCollectionEquality()
-                    .equals(other.viewName, viewName)) &&
-            (identical(other.originalViewName, originalViewName) ||
-                const DeepCollectionEquality()
-                    .equals(other.originalViewName, originalViewName)) &&
-            (identical(other.name, name) ||
-                const DeepCollectionEquality().equals(other.name, name)) &&
-            (identical(other.widgetType, widgetType) ||
-                const DeepCollectionEquality()
-                    .equals(other.widgetType, widgetType)) &&
-            (identical(other.position, position) ||
-                const DeepCollectionEquality()
-                    .equals(other.position, position)) &&
-            (identical(other.visibility, visibility) ||
-                const DeepCollectionEquality()
-                    .equals(other.visibility, visibility)) &&
-            (identical(other.targetIds, targetIds) ||
-                const DeepCollectionEquality()
-                    .equals(other.targetIds, targetIds)) &&
-            (identical(other.externalities, externalities) ||
-                const DeepCollectionEquality()
-                    .equals(other.externalities, externalities)));
+        (other.runtimeType == runtimeType &&
+            other is _Interaction &&
+            const DeepCollectionEquality().equals(other.id, id) &&
+            const DeepCollectionEquality().equals(other.viewName, viewName) &&
+            const DeepCollectionEquality()
+                .equals(other.originalViewName, originalViewName) &&
+            const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality()
+                .equals(other.widgetType, widgetType) &&
+            const DeepCollectionEquality().equals(other.position, position) &&
+            const DeepCollectionEquality()
+                .equals(other.visibility, visibility) &&
+            const DeepCollectionEquality().equals(other.targetIds, targetIds) &&
+            const DeepCollectionEquality()
+                .equals(other.externalities, externalities));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(id) ^
-      const DeepCollectionEquality().hash(viewName) ^
-      const DeepCollectionEquality().hash(originalViewName) ^
-      const DeepCollectionEquality().hash(name) ^
-      const DeepCollectionEquality().hash(widgetType) ^
-      const DeepCollectionEquality().hash(position) ^
-      const DeepCollectionEquality().hash(visibility) ^
-      const DeepCollectionEquality().hash(targetIds) ^
-      const DeepCollectionEquality().hash(externalities);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(id),
+      const DeepCollectionEquality().hash(viewName),
+      const DeepCollectionEquality().hash(originalViewName),
+      const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(widgetType),
+      const DeepCollectionEquality().hash(position),
+      const DeepCollectionEquality().hash(visibility),
+      const DeepCollectionEquality().hash(targetIds),
+      const DeepCollectionEquality().hash(externalities));
 
   @JsonKey(ignore: true)
   @override
@@ -399,41 +388,40 @@ abstract class _Interaction extends Interaction {
   @override
 
   /// The Id from the firebase backend
-  String? get id => throw _privateConstructorUsedError;
+  String? get id;
   @override
 
   /// The name of the view this widget was captured on
-  String get viewName => throw _privateConstructorUsedError;
+  String get viewName;
   @override
 
   /// The orignal name of the view this widget was captured on before the prettify
-  String get originalViewName => throw _privateConstructorUsedError;
+  String get originalViewName;
   @override
 
   /// The name we want to use when referring to the widget in the scripts
-  String get name => throw _privateConstructorUsedError;
+  String get name;
   @override
 
   /// The type of the widget that's being added
-  WidgetType get widgetType => throw _privateConstructorUsedError;
+  WidgetType get widgetType;
   @override
 
   /// The position we defined for he widget
-  WidgetPosition get position => throw _privateConstructorUsedError;
+  WidgetPosition get position;
   @override
 
   /// Whether the key will be visible to the driver or not
-  bool get visibility => throw _privateConstructorUsedError;
+  bool get visibility;
   @override
 
   /// Target widgets ids that will be affected when this widget activated
-  List<String> get targetIds => throw _privateConstructorUsedError;
+  List<String> get targetIds;
   @override
 
   /// Left-top offset for external widgets that affects this widget
   /// (normally ListViews)
-  Set<ScrollableDescription>? get externalities =>
-      throw _privateConstructorUsedError;
+  Set<ScrollableDescription>? get externalities;
   @override
   @JsonKey(ignore: true)
   _$InteractionCopyWith<_Interaction> get copyWith =>
@@ -465,7 +453,7 @@ class _$WidgetPositionTearOff {
     );
   }
 
-  WidgetPosition fromJson(Map<String, Object> json) {
+  WidgetPosition fromJson(Map<String, Object?> json) {
     return WidgetPosition.fromJson(json);
   }
 }
@@ -649,34 +637,29 @@ class _$_WidgetPosition implements _WidgetPosition {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _WidgetPosition &&
-            (identical(other.x, x) ||
-                const DeepCollectionEquality().equals(other.x, x)) &&
-            (identical(other.y, y) ||
-                const DeepCollectionEquality().equals(other.y, y)) &&
-            (identical(other.capturedDeviceWidth, capturedDeviceWidth) ||
-                const DeepCollectionEquality()
-                    .equals(other.capturedDeviceWidth, capturedDeviceWidth)) &&
-            (identical(other.capturedDeviceHeight, capturedDeviceHeight) ||
-                const DeepCollectionEquality().equals(
-                    other.capturedDeviceHeight, capturedDeviceHeight)) &&
-            (identical(other.xDeviation, xDeviation) ||
-                const DeepCollectionEquality()
-                    .equals(other.xDeviation, xDeviation)) &&
-            (identical(other.yDeviation, yDeviation) ||
-                const DeepCollectionEquality()
-                    .equals(other.yDeviation, yDeviation)));
+        (other.runtimeType == runtimeType &&
+            other is _WidgetPosition &&
+            const DeepCollectionEquality().equals(other.x, x) &&
+            const DeepCollectionEquality().equals(other.y, y) &&
+            const DeepCollectionEquality()
+                .equals(other.capturedDeviceWidth, capturedDeviceWidth) &&
+            const DeepCollectionEquality()
+                .equals(other.capturedDeviceHeight, capturedDeviceHeight) &&
+            const DeepCollectionEquality()
+                .equals(other.xDeviation, xDeviation) &&
+            const DeepCollectionEquality()
+                .equals(other.yDeviation, yDeviation));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(x) ^
-      const DeepCollectionEquality().hash(y) ^
-      const DeepCollectionEquality().hash(capturedDeviceWidth) ^
-      const DeepCollectionEquality().hash(capturedDeviceHeight) ^
-      const DeepCollectionEquality().hash(xDeviation) ^
-      const DeepCollectionEquality().hash(yDeviation);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(x),
+      const DeepCollectionEquality().hash(y),
+      const DeepCollectionEquality().hash(capturedDeviceWidth),
+      const DeepCollectionEquality().hash(capturedDeviceHeight),
+      const DeepCollectionEquality().hash(xDeviation),
+      const DeepCollectionEquality().hash(yDeviation));
 
   @JsonKey(ignore: true)
   @override
@@ -702,17 +685,17 @@ abstract class _WidgetPosition implements WidgetPosition {
       _$_WidgetPosition.fromJson;
 
   @override
-  double get x => throw _privateConstructorUsedError;
+  double get x;
   @override
-  double get y => throw _privateConstructorUsedError;
+  double get y;
   @override
-  double? get capturedDeviceWidth => throw _privateConstructorUsedError;
+  double? get capturedDeviceWidth;
   @override
-  double? get capturedDeviceHeight => throw _privateConstructorUsedError;
+  double? get capturedDeviceHeight;
   @override
-  double? get xDeviation => throw _privateConstructorUsedError;
+  double? get xDeviation;
   @override
-  double? get yDeviation => throw _privateConstructorUsedError;
+  double? get yDeviation;
   @override
   @JsonKey(ignore: true)
   _$WidgetPositionCopyWith<_WidgetPosition> get copyWith =>
@@ -743,7 +726,7 @@ class _$ScrollableDescriptionTearOff {
     );
   }
 
-  ScrollableDescription fromJson(Map<String, Object> json) {
+  ScrollableDescription fromJson(Map<String, Object?> json) {
     return ScrollableDescription.fromJson(json);
   }
 }
@@ -900,7 +883,7 @@ class _$_ScrollableDescription implements _ScrollableDescription {
   final double scrollExtentByPixels;
   @override
   final double maxScrollExtentByPixels;
-  @JsonKey(defaultValue: false)
+  @JsonKey()
   @override
   final bool nested;
 
@@ -912,30 +895,25 @@ class _$_ScrollableDescription implements _ScrollableDescription {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is _ScrollableDescription &&
-            (identical(other.axis, axis) ||
-                const DeepCollectionEquality().equals(other.axis, axis)) &&
-            (identical(other.rect, rect) ||
-                const DeepCollectionEquality().equals(other.rect, rect)) &&
-            (identical(other.scrollExtentByPixels, scrollExtentByPixels) ||
-                const DeepCollectionEquality().equals(
-                    other.scrollExtentByPixels, scrollExtentByPixels)) &&
-            (identical(
-                    other.maxScrollExtentByPixels, maxScrollExtentByPixels) ||
-                const DeepCollectionEquality().equals(
-                    other.maxScrollExtentByPixels, maxScrollExtentByPixels)) &&
-            (identical(other.nested, nested) ||
-                const DeepCollectionEquality().equals(other.nested, nested)));
+        (other.runtimeType == runtimeType &&
+            other is _ScrollableDescription &&
+            const DeepCollectionEquality().equals(other.axis, axis) &&
+            const DeepCollectionEquality().equals(other.rect, rect) &&
+            const DeepCollectionEquality()
+                .equals(other.scrollExtentByPixels, scrollExtentByPixels) &&
+            const DeepCollectionEquality().equals(
+                other.maxScrollExtentByPixels, maxScrollExtentByPixels) &&
+            const DeepCollectionEquality().equals(other.nested, nested));
   }
 
   @override
-  int get hashCode =>
-      runtimeType.hashCode ^
-      const DeepCollectionEquality().hash(axis) ^
-      const DeepCollectionEquality().hash(rect) ^
-      const DeepCollectionEquality().hash(scrollExtentByPixels) ^
-      const DeepCollectionEquality().hash(maxScrollExtentByPixels) ^
-      const DeepCollectionEquality().hash(nested);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(axis),
+      const DeepCollectionEquality().hash(rect),
+      const DeepCollectionEquality().hash(scrollExtentByPixels),
+      const DeepCollectionEquality().hash(maxScrollExtentByPixels),
+      const DeepCollectionEquality().hash(nested));
 
   @JsonKey(ignore: true)
   @override
@@ -961,15 +939,15 @@ abstract class _ScrollableDescription implements ScrollableDescription {
       _$_ScrollableDescription.fromJson;
 
   @override
-  Axis get axis => throw _privateConstructorUsedError;
+  Axis get axis;
   @override
-  SerializableRect get rect => throw _privateConstructorUsedError;
+  SerializableRect get rect;
   @override
-  double get scrollExtentByPixels => throw _privateConstructorUsedError;
+  double get scrollExtentByPixels;
   @override
-  double get maxScrollExtentByPixels => throw _privateConstructorUsedError;
+  double get maxScrollExtentByPixels;
   @override
-  bool get nested => throw _privateConstructorUsedError;
+  bool get nested;
   @override
   @JsonKey(ignore: true)
   _$ScrollableDescriptionCopyWith<_ScrollableDescription> get copyWith =>

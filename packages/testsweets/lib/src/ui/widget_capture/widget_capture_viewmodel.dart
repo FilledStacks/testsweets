@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -16,6 +14,8 @@ import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/extensions/widgets_description_list_extensions.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/services/notification_extractor.dart';
+import 'package:testsweets/src/services/scroll_appliance.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/ui/shared/find_scrollables.dart';
@@ -30,12 +30,25 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _widgetCaptureService = locator<WidgetCaptureService>();
   final _snackbarService = locator<SnackbarService>();
   final _reactiveScrollable = locator<ReactiveScrollable>();
-  final _notificationController = StreamController<Notification>.broadcast();
+  final _scrollAppliance = locator<ScrollAppliance>();
+  final _notificationExtractor = locator<NotificationExtractor>();
 
+  final _notificationController = StreamController<Notification>.broadcast();
   var _captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
 
   WidgetCaptureViewModel({required String projectId}) {
-    listenToNotifications();
+    _notificationController.stream
+      ..where((event) => event is UserScrollNotification)
+          .cast<UserScrollNotification>()
+          .listen(_notificationExtractor.setScrollDirection)
+      ..where((event) => event is ScrollStartNotification)
+          .cast<ScrollStartNotification>()
+          .listen(_notificationExtractor.setGlobalAndLocalOffsets)
+      ..where((event) => event is ScrollUpdateNotification)
+          .cast<ScrollUpdateNotification>()
+          .map(_notificationExtractor.toScrollableDescription)
+          .listen(reactToScroll);
+
     _widgetCaptureService.projectId = projectId;
   }
 
@@ -292,6 +305,8 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   bool onClientNotifiaction(Notification notification) {
     _notificationController.add(notification);
+
+    /// We return false to keep the notification bubbling in the widget tree
     return false;
   }
 
@@ -301,44 +316,20 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     if (scrollableDescription.isEmpty) return;
 
-    inProgressInteraction = _reactiveScrollable.applyScrollableOnInteraction(
+    inProgressInteraction = _scrollAppliance.applyScrollableOnInteraction(
         scrollableDescription, inProgressInteraction!);
 
     log.i('after:' + inProgressInteraction.toString());
   }
 
-  void listenToNotifications() {
-    ScrollDirection? scrollDirection;
-    Offset? globalPosition;
-    Offset? localPosition;
-    _notificationController.stream.listen((notification) {
-      if (notification is UserScrollNotification) {
-        scrollDirection = notification.direction;
-      } else if (notification is ScrollStartNotification) {
-        globalPosition = notification.dragDetails!.globalPosition;
-        localPosition = notification.dragDetails!.localPosition;
-      } else if (notification is ScrollUpdateNotification &&
-          globalPosition != null &&
-          scrollDirection != ScrollDirection.idle) {
-        final scrollableDescription = ScrollableDescription.fromNotification(
-            globalPosition: globalPosition!,
-            localPosition: localPosition!,
-            metrics: notification.metrics,
-            scrollDirection: scrollDirection!);
-
-        reactToScroll(scrollableDescription);
-      }
-    });
-  }
-
   void reactToScroll(ScrollableDescription scrollableDescription) {
-    final affectedInteractions =
-        _reactiveScrollable.filterAffectedInteractionsByScrollable(
-            scrollableDescription, viewInteractions);
+    _reactiveScrollable.currentScrollableDescription = scrollableDescription;
 
-    final scrolledInteractions =
-        _reactiveScrollable.moveInteractionsWithScrollable(
-            scrollableDescription, affectedInteractions);
+    final affectedInteractions = _reactiveScrollable
+        .filterAffectedInteractionsByScrollable(viewInteractions);
+
+    final scrolledInteractions = _reactiveScrollable
+        .moveInteractionsWithScrollable(affectedInteractions);
 
     viewInteractions =
         viewInteractions.replaceInteractions(scrolledInteractions);
