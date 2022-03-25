@@ -20,12 +20,12 @@ void main() {
     setUp(registerServices);
     tearDown(unregisterServices);
 
-    group('onClientAppEvent -', () {
+    group('onClientNotifiaction -', () {
       test('''When the sweetcoreCommand is null, Should return without calling
           WidgetVisibiltyChangerService''', () {
         final service = getAndRegisterWidgetVisibiltyChangerService();
         final model = _getModel();
-        model.onClientAppEvent(kScrollEndNotification);
+        model.onClientNotifiaction(kScrollEndNotification);
         verifyNever(service.toggleVisibilty([], []));
         verifyNever(service.completeCompleter(
             HandlerMessageResponse.couldnotFindAutomationKey));
@@ -56,7 +56,7 @@ void main() {
                 HandlerMessageResponse.foundAutomationKeyWithNoTargets.name)));
         final model = _getModel();
         await model.initialise();
-        model.onClientAppEvent(kScrollEndNotification);
+        model.onClientNotifiaction(kScrollEndNotification);
       });
       test(
           'When we recive new notification other than ScrollEndNotification, Do nothing ',
@@ -64,7 +64,7 @@ void main() {
         final service = getAndRegisterWidgetVisibiltyChangerService();
         final model = _getModel();
 
-        model.onClientAppEvent(TestNotification());
+        model.onClientNotifiaction(TestNotification());
         verifyNever(service.runToggleVisibiltyChecker(
             TestNotification(), '', [kGeneralInteractionWithZeroOffset]));
       });
@@ -78,7 +78,7 @@ void main() {
         service.completer = Completer();
 
         final model = _getModel();
-        model.onClientAppEvent(kScrollEndNotification);
+        model.onClientNotifiaction(kScrollEndNotification);
         verify(service.completeCompleter(
             HandlerMessageResponse.couldnotFindAutomationKey));
         verifyNever(service.runToggleVisibiltyChecker(
@@ -99,7 +99,7 @@ void main() {
 
         final model = _getModel();
         await model.initialise();
-        model.onClientAppEvent(kScrollEndNotification);
+        model.onClientNotifiaction(kScrollEndNotification);
         verify(service.runToggleVisibiltyChecker(
             kScrollEndNotification, kGeneralInteraction.automationKey, [
           kGeneralInteraction,
@@ -115,11 +115,11 @@ void main() {
         ], latestSweetcoreCommand: ScrollableCommand(widgetName: 'widgetName'));
         final model = _getModel();
         await model.initialise();
-        model.onClientAppEvent(kScrollEndNotification);
+        model.onClientNotifiaction(kScrollEndNotification);
         await model.initialise();
 
         /// sence we have just one widget we can do this shortcut
-        expect(model.descriptionsForView.first.visibility, true);
+        expect(model.viewInteractions.first.visibility, true);
       });
       test('''When the triggerWidget has no targetIds, Should do nothing''',
           () {
@@ -131,9 +131,9 @@ void main() {
             latestSweetcoreCommand:
                 ScrollableCommand(widgetName: 'viewName_general_widgetName'));
         final model = _getModel();
-        final before = model.descriptionsForView;
-        model.onClientAppEvent(kScrollEndNotification);
-        final after = model.descriptionsForView;
+        final before = model.viewInteractions;
+        model.onClientNotifiaction(kScrollEndNotification);
+        final after = model.viewInteractions;
 
         expect(before, after);
       });

@@ -11,7 +11,6 @@ import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
-import 'package:testsweets/src/extensions/widgets_description_list_extensions.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/notification_extractor.dart';
@@ -21,33 +20,24 @@ import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_view_form.dart';
 
-import '../../services/reactive_scrollable.dart';
-
 class WidgetCaptureViewModel extends FormViewModel {
   final log = getLogger('WidgetCaptureViewModel');
 
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
   final _snackbarService = locator<SnackbarService>();
-  final _reactiveScrollable = locator<ReactiveScrollable>();
   final _scrollAppliance = locator<ScrollAppliance>();
-  final _notificationExtractor = locator<NotificationExtractor>();
+  final _notiExtr = locator<NotificationExtractor>();
 
   final _notificationController = StreamController<Notification>.broadcast();
   var _captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
 
   WidgetCaptureViewModel({required String projectId}) {
     _notificationController.stream
-      ..where((event) => event is UserScrollNotification)
-          .cast<UserScrollNotification>()
-          .listen(_notificationExtractor.setScrollDirection)
-      ..where((event) => event is ScrollStartNotification)
-          .cast<ScrollStartNotification>()
-          .listen(_notificationExtractor.setGlobalAndLocalOffsets)
-      ..where((event) => event is ScrollUpdateNotification)
-          .cast<ScrollUpdateNotification>()
-          .map(_notificationExtractor.toScrollableDescription)
-          .listen(reactToScroll);
+        .where(_notiExtr.onlyScrollUpdateNotification)
+        .map(_notiExtr.notificationToScrollableDescription)
+        .listen((notification) => viewInteractions =
+            _notiExtr.scrollInteractions(notification, viewInteractions));
 
     _widgetCaptureService.projectId = projectId;
   }
@@ -320,19 +310,6 @@ class WidgetCaptureViewModel extends FormViewModel {
         scrollableDescription, inProgressInteraction!);
 
     log.i('after:' + inProgressInteraction.toString());
-  }
-
-  void reactToScroll(ScrollableDescription scrollableDescription) {
-    _reactiveScrollable.currentScrollableDescription = scrollableDescription;
-
-    final affectedInteractions = _reactiveScrollable
-        .filterAffectedInteractionsByScrollable(viewInteractions);
-
-    final scrolledInteractions = _reactiveScrollable
-        .moveInteractionsWithScrollable(affectedInteractions);
-
-    viewInteractions =
-        viewInteractions.replaceInteractions(scrolledInteractions);
   }
 
   @override

@@ -39,7 +39,7 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
           body: HittableStack(
             children: [
               NotificationListener(
-                onNotification: model.onClientAppEvent,
+                onNotification: model.onClientNotifiaction,
                 child: widget.child,
               ),
               Positioned(
@@ -59,14 +59,14 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
               BusyIndicator(
                 enable: model.isBusy,
               ),
-              ...model.descriptionsForView
+              ...model.viewInteractions
                   .where((element) => element.visibility)
                   .map(
-                    (description) => Positioned(
-                      top: description.responsiveYPosition(size.height),
-                      left: description.responsiveXPosition(size.width),
+                    (interaction) => Positioned(
+                      top: interaction.responsiveYPosition(size.height),
+                      left: interaction.responsiveXPosition(size.width),
                       child: Container(
-                        key: Key(description.automationKey),
+                        key: Key(interaction.automationKey),
                         width: WIDGET_DESCRIPTION_VISUAL_SIZE,
                         height: WIDGET_DESCRIPTION_VISUAL_SIZE,
                         decoration: BoxDecoration(
@@ -82,7 +82,7 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
                     ),
                   ),
               if (_showDebugInformation)
-                ...model.descriptionsForView
+                ...model.viewInteractions
                     .where((element) => element.visibility)
                     .map(
                       (description) => Positioned(

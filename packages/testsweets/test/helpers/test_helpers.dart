@@ -14,6 +14,7 @@ import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
 import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 
+import 'test_consts.dart';
 import 'test_helpers.mocks.dart';
 
 @GenerateMocks([], customMocks: [
@@ -137,6 +138,7 @@ SnackbarService getAndRegisterSnackbarService() {
 ReactiveScrollable getAndRegisterReactiveScrollable() {
   _removeRegistrationIfExists<ReactiveScrollable>();
   final service = MockReactiveScrollable();
+
   locator.registerSingleton<ReactiveScrollable>(service);
   return service;
 }

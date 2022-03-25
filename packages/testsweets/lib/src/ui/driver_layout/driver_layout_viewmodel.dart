@@ -1,26 +1,34 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/app/logger.dart';
-import 'package:testsweets/src/enums/handler_message_response.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/services/notification_extractor.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
-import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
 
 class DriverLayoutViewModel extends BaseViewModel {
   final log = getLogger('DriverLayoutViewModel');
 
   final _widgetCaptureService = locator<WidgetCaptureService>();
   final _testSweetsRouteTracer = locator<TestSweetsRouteTracker>();
-  final _widgetVisibiltyChangerService =
-      locator<WidgetVisibiltyChangerService>();
+  final _notiExtr = locator<NotificationExtractor>();
+
+  final _notificationController = StreamController<Notification>.broadcast();
 
   DriverLayoutViewModel({required projectId}) {
+    _notificationController.stream
+        .where(_notiExtr.onlyScrollUpdateNotification)
+        .map(_notiExtr.notificationToScrollableDescription)
+        .listen((notification) =>
+            _notiExtr.scrollInteractions(notification, viewInteractions));
+
     _widgetCaptureService.projectId = projectId;
   }
 
-  List<Interaction> descriptionsForView = [];
+  List<Interaction> viewInteractions = [];
 
   Future<void> initialise() async {
     setBusy(true);
@@ -35,42 +43,19 @@ class DriverLayoutViewModel extends BaseViewModel {
   }
 
   void getWidgetsForRoute() {
-    descriptionsForView = _widgetCaptureService.getDescriptionsForView(
+    viewInteractions = _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracer.currentRoute);
     notifyListeners();
   }
 
-  /// This will triggered whenever the client app
-  /// populate a new event aka `notification`
-  ///
-  /// By returning false we don't resolve the notification
-  /// so it keeps populating up through the widget tree
-  bool onClientAppEvent(Notification notification) {
-    final automationKeyName =
-        _widgetVisibiltyChangerService.sweetcoreCommand?.widgetName;
-
-    // When widget name is null abort
-    if (automationKeyName == null) return false;
-
-    if (notification is ScrollEndNotification &&
-        automationKeyOnScreen(automationKeyName)) {
-      final newDescriptionsForView = _widgetVisibiltyChangerService
-          .runToggleVisibiltyChecker(
-              notification, automationKeyName, descriptionsForView)
-          ?.toList();
-      if (newDescriptionsForView != null)
-        descriptionsForView = newDescriptionsForView;
-    } else {
-      _widgetVisibiltyChangerService
-          .completeCompleter(HandlerMessageResponse.couldnotFindAutomationKey);
-    }
-    notifyListeners();
-
-    return false;
-  }
-
-  bool automationKeyOnScreen(String automationKeyName) =>
-      descriptionsForView.any(
+  bool automationKeyOnScreen(String automationKeyName) => viewInteractions.any(
         (element) => element.automationKey == automationKeyName,
       );
+
+  bool onClientNotifiaction(Notification notification) {
+    _notificationController.add(notification);
+
+    /// We return false to keep the notification bubbling in the widget tree
+    return false;
+  }
 }

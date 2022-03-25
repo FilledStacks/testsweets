@@ -9,16 +9,11 @@ import '../app/logger.dart';
 class ReactiveScrollable {
   final log = getLogger('ReactiveScrollable');
 
-  late ScrollableDescription _currentScrollableDescription;
-
-  set currentScrollableDescription(
-      ScrollableDescription currentScrollableDescription) {
-    _currentScrollableDescription = currentScrollableDescription;
-  }
+  late ScrollableDescription currentScrollableDescription;
 
   Iterable<Interaction> filterAffectedInteractionsByScrollable(
       List<Interaction> viewDescription) {
-    log.v(_currentScrollableDescription);
+    log.v(currentScrollableDescription);
 
     return viewDescription.where(InteractionUtils.notView).where(
       (interaction) {
@@ -26,14 +21,14 @@ class ReactiveScrollable {
 
         /// This fixes the nested scrollables issue where the first scrollable
         /// deviate the second one's offset
-        Offset offsetDeviation = calculateOffsetDeviation(
-            _currentScrollableDescription, interaction);
+        Offset offsetDeviation =
+            calculateOffsetDeviation(currentScrollableDescription, interaction);
         return interaction.externalities!
-            .where((sd) => sd.axis == _currentScrollableDescription.axis)
+            .where((sd) => sd.axis == currentScrollableDescription.axis)
             .any(
           (interacrionSd) {
             final distance = _distanceSquaredBetweenScrollableAndExternal(
-                interacrionSd, offsetDeviation, _currentScrollableDescription);
+                interacrionSd, offsetDeviation, currentScrollableDescription);
 
             final included = distance < 10;
             return included;
@@ -66,10 +61,10 @@ class ReactiveScrollable {
   Iterable<Interaction> moveInteractionsWithScrollable(
     Iterable<Interaction> affectedInteractions,
   ) {
-    log.v(_currentScrollableDescription);
+    log.v(currentScrollableDescription);
 
     return affectedInteractions.map((interaction) => interaction.copyWith(
         position:
-            interaction.position.applyScroll(_currentScrollableDescription)));
+            interaction.position.applyScroll(currentScrollableDescription)));
   }
 }
