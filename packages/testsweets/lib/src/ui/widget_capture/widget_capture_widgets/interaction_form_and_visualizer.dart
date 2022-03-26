@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
 
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
@@ -15,21 +15,22 @@ import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widgets_visualizer.dart';
 
-import '../widget_capture_view_form.dart';
+import '../interaction_capture_form.dart';
 import 'form_header.dart';
 import 'type_selector.dart';
 
-class CaptureOverlay extends StatefulWidget {
-  const CaptureOverlay({
+class InteractionFormAndVisualizer extends StatefulWidget {
+  const InteractionFormAndVisualizer({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<CaptureOverlay> createState() => _CaptureOverlayState();
+  State<InteractionFormAndVisualizer> createState() =>
+      _InteractionFormAndVisualizerState();
 }
 
-class _CaptureOverlayState extends State<CaptureOverlay>
-    with WidgetCaptureViewForm {
+class _InteractionFormAndVisualizerState
+    extends State<InteractionFormAndVisualizer> with InteractionCaptureForm {
   late SolidController bottomSheetController;
   @override
   void initState() {
@@ -53,12 +54,15 @@ class _CaptureOverlayState extends State<CaptureOverlay>
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        WidgetsVisualizer(editActionSelected: () {
-          /// Set the value of the edited interaction to the
-          /// form textfield and show the bottomsheet.
-          widgetNameController.text = model.inProgressInteraction!.name;
-          bottomSheetController.show();
-        }),
+        if (model.captureWidgetStatusEnum.showWidgets)
+          WidgetsVisualizer(
+              descriptionsForViewNotifier: model.descriptionsForViewNotifier,
+              editActionSelected: () {
+                /// Set the value of the edited interaction to the
+                /// form textfield and show the bottomsheet.
+                widgetNameController.text = model.inProgressInteraction!.name;
+                bottomSheetController.show();
+              }),
         if (model.captureWidgetStatusEnum.showWidgetForm)
           Container(
             margin: EdgeInsets.only(

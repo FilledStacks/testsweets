@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 
 import 'package:testsweets/src/ui/shared/busy_indecator.dart';
 import 'package:testsweets/src/ui/shared/route_banner.dart';
 
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/capture_overlay.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/interaction_form_and_visualizer.dart';
+import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/draggable_widget.dart';
 import 'package:testsweets/testsweets.dart';
 
 class WidgetCaptureView extends StatelessWidget {
@@ -46,6 +48,8 @@ class WidgetCaptureView extends StatelessWidget {
                   return false;
                 },
                 child: child),
+
+            /// Show the current route name and whether its captured or not
             Align(
               alignment: Alignment.topLeft,
               child: RouteBanner(
@@ -53,10 +57,15 @@ class WidgetCaptureView extends StatelessWidget {
                 routeName: model.currentViewName,
               ),
             ),
-            const CaptureOverlay(),
+
+            const InteractionFormAndVisualizer(),
+
+            if (model.captureWidgetStatusEnum.showDraggableWidget)
+              const DraggableWidget(),
+
             BusyIndicator(
               enable: model.isBusy,
-            )
+            ),
           ],
         ),
       ),
