@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:stacked/stacked_annotations.dart';
-import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
+
 import 'package:testsweets/src/ui/shared/busy_indecator.dart';
 import 'package:testsweets/src/ui/shared/route_banner.dart';
-import 'package:testsweets/src/ui/shared/utils.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widgets_visualizer.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_view_form.dart';
 
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/capture_overlay.dart';

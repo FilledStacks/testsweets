@@ -496,20 +496,27 @@ class MockScrollAppliance extends _i1.Mock implements _i18.ScrollAppliance {
               #applyScrollableOnInteraction, [scrollables, interaction]),
           returnValue: _FakeInteraction_4()) as _i4.Interaction);
   @override
-  _i4.Interaction storeScrollablesRectInExternalities(
-          Iterable<_i4.ScrollableDescription>? overlapScrollableWithInteraction,
+  _i4.Interaction storeDescriptionInScrollableExternalities(
+          Iterable<_i4.ScrollableDescription>? scrollablesBelowInteraction,
           _i4.Interaction? interaction) =>
       (super.noSuchMethod(
-          Invocation.method(#storeScrollablesRectInExternalities,
-              [overlapScrollableWithInteraction, interaction]),
+          Invocation.method(#storeDescriptionInScrollableExternalities,
+              [scrollablesBelowInteraction, interaction]),
+          returnValue: _FakeInteraction_4()) as _i4.Interaction);
+  @override
+  _i4.Interaction storeDescriptionInExternalities(
+          Iterable<_i4.ScrollableDescription>? scrollablesBelowInteraction,
+          _i4.Interaction? interaction) =>
+      (super.noSuchMethod(
+          Invocation.method(#storeDescriptionInExternalities,
+              [scrollablesBelowInteraction, interaction]),
           returnValue: _FakeInteraction_4()) as _i4.Interaction);
   @override
   _i4.ScrollableDescription findBiggestScrollable(
-          Iterable<_i4.ScrollableDescription>?
-              overlapScrollableWithInteraction) =>
+          Iterable<_i4.ScrollableDescription>? scrollablesBelowInteraction) =>
       (super.noSuchMethod(
               Invocation.method(
-                  #findBiggestScrollable, [overlapScrollableWithInteraction]),
+                  #findBiggestScrollable, [scrollablesBelowInteraction]),
               returnValue: _FakeScrollableDescription_2())
           as _i4.ScrollableDescription);
 }
@@ -522,14 +529,14 @@ class MockNotificationExtractor extends _i1.Mock
   @override
   bool onlyScrollUpdateNotification(_i8.Notification? notification) =>
       (super.noSuchMethod(
-          Invocation.method(
-              #filterAllExceptScrollUpdateNotificationEvents, [notification]),
+          Invocation.method(#onlyScrollUpdateNotification, [notification]),
           returnValue: false) as bool);
   @override
   _i4.ScrollableDescription notificationToScrollableDescription(
           _i8.Notification? notification) =>
       (super.noSuchMethod(
-              Invocation.method(#toScrollableDescription, [notification]),
+              Invocation.method(
+                  #notificationToScrollableDescription, [notification]),
               returnValue: _FakeScrollableDescription_2())
           as _i4.ScrollableDescription);
   @override
@@ -537,6 +544,7 @@ class MockNotificationExtractor extends _i1.Mock
           _i4.ScrollableDescription? scrollableDescription,
           List<_i4.Interaction>? viewInteractions) =>
       (super.noSuchMethod(
-          Invocation.method(#scroll, [scrollableDescription, viewInteractions]),
+          Invocation.method(
+              #scrollInteractions, [scrollableDescription, viewInteractions]),
           returnValue: <_i4.Interaction>[]) as List<_i4.Interaction>);
 }

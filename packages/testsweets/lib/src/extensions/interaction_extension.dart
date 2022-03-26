@@ -45,4 +45,6 @@ extension InteractionExtension on Interaction {
       return currentScreenWidth / this.position.capturedDeviceWidth!;
     }
   }
+
+  bool get isScrollable => this.widgetType == WidgetType.scrollable;
 }

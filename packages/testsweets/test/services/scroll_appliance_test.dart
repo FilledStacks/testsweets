@@ -11,29 +11,30 @@ void main() {
     tearDown(unregisterServices);
 
     group('applyScrollableOnInteraction -', () {
-      test('''When we have one scrollable that been scrolled 100px vertically, 
+      test('''When we have one list that been scrolled 100px vertically, 
     Should add the scroll to the y of widgetPosition of our interaction''', () {
         final service = ScrollAppliance();
         final result = service.applyScrollableOnInteraction(
           [kTopLeftVerticalScrollableDescription],
-          kScrollableInteraction,
+          kTouchableInteraction,
         );
-        expect(result.position.y, kScrollableInteraction.position.y + 100);
+        expect(result.position.y, kTouchableInteraction.position.y + 100);
       });
 
-      test(
-          'When we have one scrollable, Should add the rect to externalities Set',
+      test('''
+          When scroll a list on interaction,
+          Should add its ScrollableDescription to interaction externalities ''',
           () {
         final service = ScrollAppliance();
         final result = service.applyScrollableOnInteraction(
           [kTopLeftVerticalScrollableDescription],
-          kScrollableInteraction,
+          kTouchableInteraction,
         );
         expect(
             result.externalities!.first, kTopLeftVerticalScrollableDescription);
       });
-      test('''When we have two scrollables that been scrolled 100px vertically
-    and 50px horizontally, Should add the scroll to the y of
+      test('''When we have two lists that been scrolled 100px vertically
+    and 50px horizontally respectivily, Should add the scroll to the y of
     widgetPosition of our interaction''', () {
         final service = ScrollAppliance();
         final result = service.applyScrollableOnInteraction(
@@ -41,10 +42,10 @@ void main() {
             kTopLeftVerticalScrollableDescription,
             kTopLeftHorizontalScrollableDescription
           ],
-          kScrollableInteraction,
+          kTouchableInteraction,
         );
-        expect(result.position.y, kScrollableInteraction.position.y + 100);
-        expect(result.position.x, kScrollableInteraction.position.x + 50);
+        expect(result.position.y, kTouchableInteraction.position.y + 100);
+        expect(result.position.x, kTouchableInteraction.position.x + 50);
       });
       test('''When we capture an interaction located inside a horizontal  
       list which also located inside a bigger vertical list,
@@ -65,7 +66,7 @@ void main() {
             kFullScreenVerticalScrollableDescription,
             kTopLeftHorizontalScrollableDescription
           ],
-          kScrollableInteraction,
+          kTouchableInteraction,
         );
         final largestSd = result.externalities!.reduce(
             (curr, next) => curr.rect.size > next.rect.size ? curr : next);
@@ -75,6 +76,31 @@ void main() {
         expect(largestSd.rect.topLeft,
             kTopLeftVerticalScrollableDescription.rect.topLeft);
         expect(smallestSd.rect.top, 170);
+      });
+      test(
+          '''When interaction type is scrollable and there is only one list below it,
+            Shouldn't add the list to externalities of the interaction''', () {
+        final service = ScrollAppliance();
+
+        final result = service.applyScrollableOnInteraction(
+          [kTopLeftVerticalScrollableDescription],
+          kScrollableInteraction,
+        );
+        expect(result.externalities, isNull);
+      });
+      test(
+          '''When interaction type is scrollable and there is two list below it,
+            Should capture just the biggest one''', () {
+        final service = ScrollAppliance();
+        final biggestList = kTopLeftVerticalScrollableDescription.copyWith(
+            rect: SerializableRect.fromLTWH(0, 0, 1000, 1000));
+
+        final result = service.applyScrollableOnInteraction(
+          [kTopLeftHorizontalScrollableDescription, biggestList],
+          kScrollableInteraction,
+        );
+        expect(result.externalities!.length, 1);
+        expect(result.externalities!.first, biggestList);
       });
     });
 

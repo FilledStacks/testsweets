@@ -1,4 +1,5 @@
 import 'package:testsweets/src/app/logger.dart';
+import 'package:testsweets/src/extensions/interaction_extension.dart';
 import 'package:testsweets/src/extensions/scrollable_description_extension.dart';
 import 'package:testsweets/src/extensions/serializable_rect_extension.dart';
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
@@ -12,7 +13,7 @@ class ScrollAppliance {
     Interaction interaction,
   ) {
     log.v(interaction);
-    final overlapScrollableWithInteraction = scrollables.where(
+    final scrollablesBelowInteraction = scrollables.where(
       (element) => element.rect.contains(
         interaction.position.toOffset,
       ),
@@ -20,27 +21,50 @@ class ScrollAppliance {
 
     /// If there is no overlapping with any scrollable
     /// Return the interaction without changing anything
-    if (overlapScrollableWithInteraction.isEmpty) return interaction;
+    if (scrollablesBelowInteraction.isEmpty) return interaction;
 
-    interaction = storeScrollablesRectInExternalities(
-        overlapScrollableWithInteraction, interaction);
+    interaction.copyWith(externalities: null);
 
+    if (interaction.isScrollable) {
+      return storeDescriptionInScrollableExternalities(
+          scrollablesBelowInteraction, interaction);
+    } else {
+      return storeDescriptionInExternalities(
+          scrollablesBelowInteraction, interaction);
+    }
+  }
+
+  Interaction storeDescriptionInScrollableExternalities(
+    Iterable<ScrollableDescription> scrollablesBelowInteraction,
+    Interaction interaction,
+  ) {
+    /// When interaction type is scrollable and there is only one list below it,
+    /// Shouldn't add the list to externalities of the interaction cause it will
+    /// scroll itself
+    if (interaction.isScrollable && scrollablesBelowInteraction.length == 1) {
+      return interaction;
+    }
+
+    final biggestScrollable =
+        findBiggestScrollable(scrollablesBelowInteraction);
+
+    interaction = interaction.copyWith(
+      externalities: {
+        biggestScrollable.transferBy(biggestScrollable),
+      },
+      position: interaction.position.withScrollable(biggestScrollable),
+    );
     return interaction;
   }
 
-  Interaction storeScrollablesRectInExternalities(
-    Iterable<ScrollableDescription> overlapScrollableWithInteraction,
+  Interaction storeDescriptionInExternalities(
+    Iterable<ScrollableDescription> scrollablesBelowInteraction,
     Interaction interaction,
   ) {
-    interaction.copyWith(externalities: null);
-    ScrollableDescription? biggestScrollable;
+    final biggestScrollable =
+        findBiggestScrollable(scrollablesBelowInteraction);
 
-    if (overlapScrollableWithInteraction.length > 1) {
-      biggestScrollable =
-          findBiggestScrollable(overlapScrollableWithInteraction);
-    }
-
-    for (var scrollable in overlapScrollableWithInteraction.toList()) {
+    for (var scrollable in scrollablesBelowInteraction.toList()) {
       interaction = interaction.copyWith(
         externalities: {
           ...interaction.externalities ?? {},
@@ -53,11 +77,9 @@ class ScrollAppliance {
   }
 
   ScrollableDescription findBiggestScrollable(
-          Iterable<ScrollableDescription> overlapScrollableWithInteraction) =>
-      overlapScrollableWithInteraction.reduce((curr, next) {
-        if (curr.rect.biggestThan(next.rect))
-          return curr;
-        else
-          return next;
-      });
+      Iterable<ScrollableDescription> scrollablesBelowInteraction) {
+    return scrollablesBelowInteraction.reduce(
+      (curr, next) => curr.rect.biggestThan(next.rect) ? curr : next,
+    );
+  }
 }

@@ -89,6 +89,15 @@ final kGeneralInteraction = Interaction(
       x: 100, y: 199, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
   widgetType: WidgetType.general,
 );
+final kTouchableInteraction = Interaction(
+  originalViewName: '/',
+  viewName: 'initial',
+  id: 'kWidgetDescriptionTypeScrollId1',
+  name: 'ScrollId1',
+  position: WidgetPosition(
+      x: 20, y: 20, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
+  widgetType: WidgetType.touchable,
+);
 final kScrollableInteraction = Interaction(
   originalViewName: '/',
   viewName: 'initial',

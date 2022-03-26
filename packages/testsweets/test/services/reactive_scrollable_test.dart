@@ -167,7 +167,7 @@ void main() {
         expect(affectedInteractions, isEmpty);
       });
     });
-    group('reactToScrollEvent -', () {
+    group('moveInteractionsWithScrollable -', () {
       test('''When add scrollDescription of 100px on vertical,
        Should add 100 to yTranslate of the interaction''', () {
         final service = ReactiveScrollable();
