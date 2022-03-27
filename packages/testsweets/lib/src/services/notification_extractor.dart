@@ -26,15 +26,21 @@ class NotificationExtractorImp implements NotificationExtractor {
 
   @override
   bool onlyScrollUpdateNotification(Notification notification) {
+    _setScrollablePositionAndScrollDirection(notification);
+
+    if (notification is ScrollUpdateNotification) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void _setScrollablePositionAndScrollDirection(Notification notification) {
     if (notification is ScrollStartNotification) {
       globalPosition = notification.dragDetails!.globalPosition;
       localPosition = notification.dragDetails!.localPosition;
-      return false;
     } else if (notification is UserScrollNotification) {
       scrollDirection = notification.direction;
-      return false;
-    } else {
-      return true;
     }
   }
 
