@@ -24,7 +24,7 @@ class InteractionCircleWithPopupMenu extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return CustomPopupMenu(
       onMoveStart: () => model.startQuickPositionEdit(description),
-      onTap: () => model.onTapWidget(description),
+      onTap: () => model.interactionOnTap(description),
       onLongPressUp: model.onLongPressUp,
       onLongPressMoveUpdate: (position) {
         final x = position.globalPosition.dx;

@@ -287,7 +287,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.quickPositionEdit;
   }
 
-  void onTapWidget(Interaction widgetDescription) async {
+  void interactionOnTap(Interaction widgetDescription) async {
     notifyListeners();
     await _snackbarService.showCustomSnackBar(
         message: widgetDescription.name, variant: SnackbarType.info);

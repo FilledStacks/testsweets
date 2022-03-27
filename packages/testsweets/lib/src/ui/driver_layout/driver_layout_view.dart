@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:stacked/stacked.dart';
-import 'package:testsweets/src/constants/app_constants.dart';
-import 'package:testsweets/src/extensions/interaction_extension.dart';
+
 import 'package:testsweets/src/ui/driver_layout/hittable_stack.dart';
-import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/busy_indecator.dart';
+import 'package:testsweets/src/ui/shared/route_banner.dart';
 
 import 'driver_layout_viewmodel.dart';
+import 'widgets/interaction_visualizer_driver_mode.dart';
 
-class DriverLayoutView extends StatefulWidget {
+class DriverLayoutView extends StatelessWidget {
   final Widget child;
   final String projectId;
 
@@ -18,17 +18,8 @@ class DriverLayoutView extends StatefulWidget {
     required this.child,
     required this.projectId,
   }) : super(key: key);
-
-  @override
-  State<DriverLayoutView> createState() => _DriverLayoutViewState();
-}
-
-class _DriverLayoutViewState extends State<DriverLayoutView> {
-  bool _showDebugInformation = true;
-
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return ViewModelBuilder<DriverLayoutViewModel>.reactive(
       onModelReady: (model) {
         SchedulerBinding.instance
@@ -40,74 +31,24 @@ class _DriverLayoutViewState extends State<DriverLayoutView> {
             children: [
               NotificationListener(
                 onNotification: model.onClientNotifiaction,
-                child: widget.child,
+                child: child,
               ),
-              Positioned(
-                  right: 15,
-                  top: 15,
-                  child: IconButton(
-                    icon: Icon(
-                      Icons.remove_red_eye,
-                      color: _showDebugInformation ? kcGreen : kcError,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _showDebugInformation = !_showDebugInformation;
-                      });
-                    },
-                  )),
+              Align(
+                alignment: Alignment.topLeft,
+                child: RouteBanner(
+                  isCaptured: model.currentViewCaptured,
+                  routeName: model.currentViewName,
+                ),
+              ),
+              const InteractionsVisualizerDriverMode(),
               BusyIndicator(
                 enable: model.isBusy,
-              ),
-              ...model.viewInteractions
-                  .where((element) => element.visibility)
-                  .map(
-                    (interaction) => Positioned(
-                      top: interaction.responsiveYPosition(size.height),
-                      left: interaction.responsiveXPosition(size.width),
-                      child: Container(
-                        key: Key(interaction.automationKey),
-                        width: WIDGET_DESCRIPTION_VISUAL_SIZE,
-                        height: WIDGET_DESCRIPTION_VISUAL_SIZE,
-                        decoration: BoxDecoration(
-                          color: Color(0x01000000),
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                              color: _showDebugInformation
-                                  ? Colors.red
-                                  : Colors.transparent,
-                              width: 1),
-                        ),
-                      ),
-                    ),
-                  ),
-              if (_showDebugInformation)
-                ...model.viewInteractions
-                    .where((element) => element.visibility)
-                    .map(
-                      (description) => Positioned(
-                        top: description.position.y -
-                            (WIDGET_DESCRIPTION_VISUAL_SIZE / 3),
-                        left: description.position.x -
-                            (WIDGET_DESCRIPTION_VISUAL_SIZE / 2),
-                        child: Container(
-                          color: kcError,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 5,
-                          ),
-                          child: Text(
-                            description.automationKey,
-                          ),
-                        ),
-                      ),
-                    )
+              )
             ],
           ),
         );
       },
-      viewModelBuilder: () =>
-          DriverLayoutViewModel(projectId: widget.projectId),
+      viewModelBuilder: () => DriverLayoutViewModel(projectId: projectId),
     );
   }
 }

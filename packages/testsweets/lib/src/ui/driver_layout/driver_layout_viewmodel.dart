@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/app/logger.dart';
+import 'package:testsweets/src/enums/toast_type.dart';
+import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/notification_extractor.dart';
@@ -11,9 +14,10 @@ import 'package:testsweets/src/services/widget_capture_service.dart';
 
 class DriverLayoutViewModel extends BaseViewModel {
   final log = getLogger('DriverLayoutViewModel');
+  final _snackbarService = locator<SnackbarService>();
 
   final _widgetCaptureService = locator<WidgetCaptureService>();
-  final _testSweetsRouteTracer = locator<TestSweetsRouteTracker>();
+  final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _notiExtr = locator<NotificationExtractor>();
 
   final _notificationController = StreamController<Notification>.broadcast();
@@ -22,13 +26,23 @@ class DriverLayoutViewModel extends BaseViewModel {
     _notificationController.stream
         .where(_notiExtr.onlyScrollUpdateNotification)
         .map(_notiExtr.notificationToScrollableDescription)
-        .listen((notification) =>
+        .listen((notification) => viewInteractions =
             _notiExtr.scrollInteractions(notification, viewInteractions));
 
     _widgetCaptureService.projectId = projectId;
   }
 
-  List<Interaction> viewInteractions = [];
+  ValueNotifier<List<Interaction>> descriptionsForViewNotifier =
+      ValueNotifier([]);
+  List<Interaction> get viewInteractions => descriptionsForViewNotifier.value;
+  set viewInteractions(List<Interaction> widgetDescriptions) {
+    descriptionsForViewNotifier.value = widgetDescriptions;
+  }
+
+  bool get currentViewCaptured => viewInteractions.any(
+        (element) => element.widgetType == WidgetType.view,
+      );
+  String get currentViewName => _testSweetsRouteTracker.formatedCurrentRoute;
 
   Future<void> initialise() async {
     setBusy(true);
@@ -38,13 +52,13 @@ class DriverLayoutViewModel extends BaseViewModel {
       log.e('Could not get widgetDescriptions: $e');
     }
     getWidgetsForRoute();
-    _testSweetsRouteTracer.addListener(getWidgetsForRoute);
+    _testSweetsRouteTracker.addListener(getWidgetsForRoute);
     setBusy(false);
   }
 
   void getWidgetsForRoute() {
     viewInteractions = _widgetCaptureService.getDescriptionsForView(
-        currentRoute: _testSweetsRouteTracer.currentRoute);
+        currentRoute: _testSweetsRouteTracker.currentRoute);
     notifyListeners();
   }
 
@@ -57,5 +71,11 @@ class DriverLayoutViewModel extends BaseViewModel {
 
     /// We return false to keep the notification bubbling in the widget tree
     return false;
+  }
+
+  void interactionOnTap(Interaction widgetDescription) {
+    notifyListeners();
+    _snackbarService.showCustomSnackBar(
+        message: widgetDescription.name, variant: SnackbarType.info);
   }
 }

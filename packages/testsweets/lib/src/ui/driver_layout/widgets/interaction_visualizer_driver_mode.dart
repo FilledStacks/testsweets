@@ -1,34 +1,38 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
 import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/ui/driver_layout/driver_layout_viewmodel.dart';
 
 import 'package:testsweets/src/ui/shared/interaction_circle.dart';
 
-class InteractionsVisualizerDriverMode extends StatelessWidget {
-  final ValueListenable<List<Interaction>> descriptionsForViewNotifier;
+class InteractionsVisualizerDriverMode
+    extends ViewModelWidget<DriverLayoutViewModel> {
   const InteractionsVisualizerDriverMode({
     Key? key,
-    required this.descriptionsForViewNotifier,
   }) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, viewModel) {
     return ValueListenableBuilder<List<Interaction>>(
-        valueListenable: descriptionsForViewNotifier,
+        valueListenable: viewModel.descriptionsForViewNotifier,
         builder: (_, descriptionsForView, __) {
           return Stack(
             children: [
               ...descriptionsForView.where(visibleOnScreen).map(
-                    (description) => Positioned(
-                      top: description.position.offsetAfterScroll.dy,
-                      left: description.position.offsetAfterScroll.dx,
-                      child: InteractionCircle(
-                        key: Key(description.automationKey),
-                        driverMode: true,
-                        transparency: description.visibility ? 1 : 0.5,
-                        widgetType: description.widgetType,
+                    (interaction) => Positioned(
+                      top: interaction.position.offsetAfterScroll.dy,
+                      left: interaction.position.offsetAfterScroll.dx,
+                      child: GestureDetector(
+                        onTap: () => viewModel.interactionOnTap(interaction),
+                        child: InteractionCircle(
+                          key: Key(interaction.automationKey),
+                          driverMode: true,
+                          transparency: interaction.visibility ? 1 : 0.5,
+                          widgetType: interaction.widgetType,
+                        ),
                       ),
                     ),
                   )
