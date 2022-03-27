@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
-import 'widget_capture_widgets/interaction_form_and_visualizer.dart';
+import 'interaction_form_and_visualizer.dart';
 
 const String WidgetNameValueKey = 'widgetName';
 

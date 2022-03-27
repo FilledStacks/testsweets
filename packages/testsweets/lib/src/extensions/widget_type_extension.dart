@@ -15,7 +15,7 @@ extension WidgetTypeExtension on WidgetType {
         return kcGreen;
 
       default:
-        return kcError;
+        return kcBackground;
     }
   }
 

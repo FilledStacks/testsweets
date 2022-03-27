@@ -3,7 +3,7 @@ import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/widget_type_extension.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_circle.dart';
+import 'package:testsweets/src/ui/shared/interaction_circle.dart';
 
 class WidgetCard extends StatelessWidget {
   final WidgetType widgetType;
@@ -37,7 +37,7 @@ class WidgetCard extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: WidgetCircle(
+                  child: InteractionCircle(
                     minify: true,
                     widgetType: widgetType,
                   ),

@@ -13,10 +13,10 @@ import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 import 'package:testsweets/src/ui/shared/icon_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widgets_visualizer.dart';
 
-import '../interaction_capture_form.dart';
+import 'interaction_capture_form.dart';
 import 'form_header.dart';
+import 'interactions_visualizer_capture_mode.dart';
 import 'type_selector.dart';
 
 class InteractionFormAndVisualizer extends StatefulWidget {
@@ -55,7 +55,7 @@ class _InteractionFormAndVisualizerState
       alignment: Alignment.bottomCenter,
       children: [
         if (model.captureWidgetStatusEnum.showWidgets)
-          WidgetsVisualizer(
+          InteractionsVisualizerCaptureMode(
               descriptionsForViewNotifier: model.descriptionsForViewNotifier,
               editActionSelected: () {
                 /// Set the value of the edited interaction to the

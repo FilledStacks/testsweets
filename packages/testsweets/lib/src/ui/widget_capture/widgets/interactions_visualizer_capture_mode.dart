@@ -4,13 +4,13 @@ import 'package:testsweets/src/constants/app_constants.dart';
 
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
 import 'package:testsweets/src/models/application_models.dart';
-import 'package:testsweets/src/ui/shared/popup_menu/popup_menu.dart';
+import 'package:testsweets/src/ui/shared/popup_menu/interaction_circle_with_popup_menu.dart';
 import 'package:testsweets/src/ui/shared/utils.dart';
 
-class WidgetsVisualizer extends StatelessWidget {
+class InteractionsVisualizerCaptureMode extends StatelessWidget {
   final Function editActionSelected;
   final ValueListenable<List<Interaction>> descriptionsForViewNotifier;
-  const WidgetsVisualizer({
+  const InteractionsVisualizerCaptureMode({
     Key? key,
     required this.descriptionsForViewNotifier,
     required this.editActionSelected,
@@ -29,7 +29,8 @@ class WidgetsVisualizer extends StatelessWidget {
                     (description) => Positioned(
                       top: description.position.offsetAfterScroll.dy,
                       left: description.position.offsetAfterScroll.dx,
-                      child: PopupMenu(
+                      child: InteractionCircleWithPopupMenu(
+                          key: Key(description.automationKey),
                           description: description,
                           editActionSelected: editActionSelected),
                     ),

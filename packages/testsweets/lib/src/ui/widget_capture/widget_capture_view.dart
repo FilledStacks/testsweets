@@ -6,9 +6,10 @@ import 'package:testsweets/src/ui/shared/busy_indecator.dart';
 import 'package:testsweets/src/ui/shared/route_banner.dart';
 
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/interaction_form_and_visualizer.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/draggable_widget.dart';
 import 'package:testsweets/testsweets.dart';
+
+import 'widgets/draggable_widget.dart';
+import 'widgets/interaction_form_and_visualizer.dart';
 
 class WidgetCaptureView extends StatelessWidget {
   final String projectId;

@@ -5,7 +5,7 @@ import 'package:testsweets/src/extensions/widget_position_extension.dart';
 
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
-import 'widget_circle.dart';
+import '../../shared/interaction_circle.dart';
 
 class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
   const DraggableWidget({Key? key}) : super(key: key);
@@ -24,7 +24,7 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
                 final y = panEvent.globalPosition.dy;
                 model.updateDescriptionPosition(x, y, size.width, size.height);
               },
-              child: WidgetCircle(
+              child: InteractionCircle(
                 transparency: model.inProgressInteraction!.visibility ? 1 : 0.5,
                 widgetType: model.inProgressInteraction!.widgetType,
               ),
