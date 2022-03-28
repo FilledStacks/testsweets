@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/extensions/interaction_extension.dart';
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
 import 'package:testsweets/src/ui/shared/utils.dart';
@@ -30,7 +31,7 @@ class ReactiveScrollable {
             final distance = _distanceSquaredBetweenScrollableAndExternal(
                 interacrionSd, offsetDeviation, currentScrollableDescription);
 
-            final included = distance < 10;
+            final included = distance < SCROLLABLE_DETECTION_FORGIVENESS;
             return included;
           },
         );

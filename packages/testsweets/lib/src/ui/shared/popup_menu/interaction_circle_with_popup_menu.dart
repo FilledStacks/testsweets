@@ -31,8 +31,6 @@ class InteractionCircleWithPopupMenu extends StatelessWidget {
         final y = position.globalPosition.dy;
         model.updateDescriptionPosition(x, y, size.width, size.height);
       },
-      barrierColor: kcBackground.withOpacity(0.3),
-      showArrow: false,
       menuBuilder: () => PopupMenuContent(
         onMenuAction: (popupMenuAction) async {
           await model.popupMenuActionSelected(description, popupMenuAction);

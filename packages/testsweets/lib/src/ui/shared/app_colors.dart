@@ -4,6 +4,7 @@ const kcTextField = const Color.fromRGBO(33, 34, 40, 1);
 const kcSubtext = const Color.fromRGBO(153, 157, 170, 1);
 
 const kcBackground = const Color.fromRGBO(32, 33, 41, 1);
+const kPopupMenuBariarColor = const Color.fromRGBO(32, 33, 41, 0.3);
 const kcCard = const Color.fromRGBO(24, 25, 32, 1);
 
 const kcPrimaryFuchsia = const Color.fromRGBO(253, 113, 215, 1);

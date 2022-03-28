@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:testsweets/src/ui/shared/app_colors.dart';
 
 enum PressType {
   longPress,
@@ -43,8 +44,8 @@ class CustomPopupMenu extends StatefulWidget {
     required this.pressType,
     this.controller,
     this.arrowColor = const Color(0xFF4C4C4C),
-    this.showArrow = true,
-    this.barrierColor = Colors.black12,
+    this.showArrow = false,
+    this.barrierColor = kcBackground,
     this.arrowSize = 10.0,
     this.horizontalMargin = 10.0,
     this.verticalMargin = 10.0,
