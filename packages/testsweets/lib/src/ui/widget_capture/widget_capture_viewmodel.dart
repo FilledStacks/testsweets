@@ -304,8 +304,6 @@ class WidgetCaptureViewModel extends FormViewModel {
       Iterable<ScrollableDescription> scrollableDescription) {
     log.i('before:' + inProgressInteraction.toString());
 
-    if (scrollableDescription.isEmpty) return;
-
     inProgressInteraction = _scrollAppliance.applyScrollableOnInteraction(
         scrollableDescription, inProgressInteraction!);
 

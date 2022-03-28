@@ -19,11 +19,11 @@ class ScrollAppliance {
       ),
     );
 
+    interaction = interaction.copyWith(externalities: null);
+
     /// If there is no overlapping with any scrollable
     /// Return the interaction without changing anything
     if (scrollablesBelowInteraction.isEmpty) return interaction;
-
-    interaction.copyWith(externalities: null);
 
     if (interaction.isScrollable) {
       return storeDescriptionInScrollableExternalities(

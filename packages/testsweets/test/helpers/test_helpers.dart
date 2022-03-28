@@ -160,6 +160,11 @@ WidgetVisibiltyChangerService getAndRegisterWidgetVisibiltyChangerService(
 ScrollAppliance getAndRegisterScrollAppliance() {
   _removeRegistrationIfExists<ScrollAppliance>();
   final service = MockScrollAppliance();
+
+  when(service.applyScrollableOnInteraction(any, any)).thenAnswer(
+    (invocation) =>
+        invocation.positionalArguments[1], // return the same interaction
+  );
   locator.registerSingleton<ScrollAppliance>(service);
   return service;
 }
