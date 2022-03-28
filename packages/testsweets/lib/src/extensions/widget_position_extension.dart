@@ -7,9 +7,9 @@ extension WidgetPositionExtension on WidgetPosition {
     final scrollingPixels = scrollable.scrollExtentByPixels;
 
     if (scrollable.axis == Axis.vertical) {
-      return WidgetPosition(x: x, y: y + scrollingPixels);
+      return this.copyWith(x: x, y: y + scrollingPixels);
     } else {
-      return WidgetPosition(x: x + scrollingPixels, y: y);
+      return this.copyWith(x: x + scrollingPixels, y: y);
     }
   }
 
