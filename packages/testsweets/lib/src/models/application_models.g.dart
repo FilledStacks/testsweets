@@ -12,14 +12,14 @@ _$_Interaction _$$_InteractionFromJson(Map<String, dynamic> json) =>
       viewName: json['viewName'] as String,
       originalViewName: json['originalViewName'] as String,
       name: json['name'] as String? ?? '',
-      widgetType: $enumDecode(_$WidgetTypeEnumMap, json['widgetType']),
+      widgetType: _$enumDecode(_$WidgetTypeEnumMap, json['widgetType']),
       position:
           WidgetPosition.fromJson(json['position'] as Map<String, dynamic>),
       visibility: json['visibility'] as bool? ?? true,
       targetIds: (json['targetIds'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
-          const [],
+          [],
       externalities: (json['externalities'] as List<dynamic>?)
           ?.map(
               (e) => ScrollableDescription.fromJson(e as Map<String, dynamic>))
@@ -38,6 +38,32 @@ Map<String, dynamic> _$$_InteractionToJson(_$_Interaction instance) =>
       'targetIds': instance.targetIds,
       'externalities': instance.externalities?.toList(),
     };
+
+K _$enumDecode<K, V>(
+  Map<K, V> enumValues,
+  Object? source, {
+  K? unknownValue,
+}) {
+  if (source == null) {
+    throw ArgumentError(
+      'A value must be provided. Supported values: '
+      '${enumValues.values.join(', ')}',
+    );
+  }
+
+  return enumValues.entries.singleWhere(
+    (e) => e.value == source,
+    orElse: () {
+      if (unknownValue == null) {
+        throw ArgumentError(
+          '`$source` is not one of the supported values: '
+          '${enumValues.values.join(', ')}',
+        );
+      }
+      return MapEntry(unknownValue, enumValues.values.first);
+    },
+  ).key;
+}
 
 const _$WidgetTypeEnumMap = {
   WidgetType.touchable: 'touchable',
@@ -71,7 +97,7 @@ Map<String, dynamic> _$$_WidgetPositionToJson(_$_WidgetPosition instance) =>
 _$_ScrollableDescription _$$_ScrollableDescriptionFromJson(
         Map<String, dynamic> json) =>
     _$_ScrollableDescription(
-      axis: $enumDecode(_$AxisEnumMap, json['axis']),
+      axis: _$enumDecode(_$AxisEnumMap, json['axis']),
       rect: SerializableRect.fromJson(json['rect'] as Map<String, dynamic>),
       scrollExtentByPixels: (json['scrollExtentByPixels'] as num).toDouble(),
       maxScrollExtentByPixels:
