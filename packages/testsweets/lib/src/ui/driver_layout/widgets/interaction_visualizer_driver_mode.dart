@@ -26,7 +26,8 @@ class InteractionsVisualizerDriverMode
                       top: interaction.position.offsetAfterScroll.dy,
                       left: interaction.position.offsetAfterScroll.dx,
                       child: GestureDetector(
-                        onTap: () => viewModel.interactionOnTap(interaction),
+                        onLongPress: () =>
+                            viewModel.interactionOnTap(interaction),
                         child: InteractionCircle(
                           key: Key(interaction.automationKey),
                           driverMode: true,
