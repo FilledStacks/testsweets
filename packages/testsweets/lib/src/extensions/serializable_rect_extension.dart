@@ -8,4 +8,8 @@ extension SerializableRectExtension on SerializableRect {
     else
       return false;
   }
+
+  SerializableRect get resposivy {
+    return SerializableRect.fromPoints(this.topLeft, this.bottomRight);
+  }
 }

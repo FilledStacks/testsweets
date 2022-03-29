@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:testsweets/src/constants/app_constants.dart';
 
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
 import 'package:testsweets/src/models/application_models.dart';
@@ -17,6 +16,7 @@ class InteractionsVisualizerCaptureMode extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return ValueListenableBuilder<List<Interaction>>(
         valueListenable: descriptionsForViewNotifier,
         builder: (_, descriptionsForView, __) {
@@ -24,11 +24,14 @@ class InteractionsVisualizerCaptureMode extends StatelessWidget {
             children: [
               ...descriptionsForView
                   .where(InteractionUtils.notView)
-                  .where(visibleOnScreen)
+                  .where((interaction) =>
+                      InteractionUtils.visibleOnScreen(interaction, size))
                   .map(
                     (description) => Positioned(
-                      top: description.position.offsetAfterScroll.dy,
-                      left: description.position.offsetAfterScroll.dx,
+                      top:
+                          description.position.responsiveYPosition(size.height),
+                      left:
+                          description.position.responsiveXPosition(size.width),
                       child: InteractionCircleWithPopupMenu(
                           key: Key(description.automationKey),
                           description: description,
@@ -38,21 +41,5 @@ class InteractionsVisualizerCaptureMode extends StatelessWidget {
             ],
           );
         });
-  }
-
-  bool visibleOnScreen(Interaction interaction) {
-    final unionSd = interaction.externalities?.reduce((sd, nextSd) {
-      final result = sd.rect.expandToInclude(nextSd.rect);
-      return sd.copyWith(
-          rect: SerializableRect.fromLTWH(
-              result.left, result.top, result.width, result.height));
-    });
-
-    final visible = unionSd?.rect.contains(
-        interaction.position.offsetAfterScroll +
-            Offset(WIDGET_DESCRIPTION_VISUAL_SIZE / 2,
-                WIDGET_DESCRIPTION_VISUAL_SIZE / 2));
-
-    return visible ?? true;
   }
 }
