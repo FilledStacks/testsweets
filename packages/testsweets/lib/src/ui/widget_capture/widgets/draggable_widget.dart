@@ -16,8 +16,10 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
     return model.inProgressInteraction == null
         ? const SizedBox()
         : Positioned(
-            top: model.inProgressInteraction!.position.offsetAfterScroll.dy,
-            left: model.inProgressInteraction!.position.offsetAfterScroll.dx,
+            top: model.inProgressInteraction!.position
+                .responsiveYPosition(size.height),
+            left: model.inProgressInteraction!.position
+                .responsiveXPosition(size.width),
             child: GestureDetector(
               onPanUpdate: (panEvent) {
                 final x = panEvent.globalPosition.dx;

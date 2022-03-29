@@ -16,15 +16,20 @@ class InteractionsVisualizerDriverMode
 
   @override
   Widget build(BuildContext context, viewModel) {
+    final size = MediaQuery.of(context).size;
     return ValueListenableBuilder<List<Interaction>>(
         valueListenable: viewModel.descriptionsForViewNotifier,
         builder: (_, descriptionsForView, __) {
           return Stack(
             children: [
-              ...descriptionsForView.where(visibleOnScreen).map(
+              ...descriptionsForView
+                  .where((interaction) => visibleOnScreen(interaction, size))
+                  .map(
                     (interaction) => Positioned(
-                      top: interaction.position.offsetAfterScroll.dy,
-                      left: interaction.position.offsetAfterScroll.dx,
+                      top:
+                          interaction.position.responsiveYPosition(size.height),
+                      left:
+                          interaction.position.responsiveXPosition(size.width),
                       child: GestureDetector(
                         onLongPress: () =>
                             viewModel.interactionOnTap(interaction),
@@ -42,7 +47,7 @@ class InteractionsVisualizerDriverMode
         });
   }
 
-  bool visibleOnScreen(Interaction interaction) {
+  bool visibleOnScreen(Interaction interaction, Size screenSize) {
     final unionSd = interaction.externalities?.reduce((sd, nextSd) {
       final result = sd.rect.expandToInclude(nextSd.rect);
       return sd.copyWith(
@@ -50,10 +55,8 @@ class InteractionsVisualizerDriverMode
               result.left, result.top, result.width, result.height));
     });
 
-    final visible = unionSd?.rect.contains(
-        interaction.position.offsetAfterScroll +
-            Offset(WIDGET_DESCRIPTION_VISUAL_SIZE / 2,
-                WIDGET_DESCRIPTION_VISUAL_SIZE / 2));
+    final visible = unionSd?.rect
+        .contains(interaction.position.responsiveOffset(screenSize));
 
     return visible ?? true;
   }
