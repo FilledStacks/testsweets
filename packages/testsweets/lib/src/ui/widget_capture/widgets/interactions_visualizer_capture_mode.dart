@@ -24,7 +24,8 @@ class InteractionsVisualizerCaptureMode extends StatelessWidget {
             children: [
               ...descriptionsForView
                   .where(InteractionUtils.notView)
-                  .where((interaction) => visibleOnScreen(interaction, size))
+                  .where((interaction) =>
+                      InteractionUtils.visibleOnScreen(interaction, size))
                   .map(
                     (description) => Positioned(
                       top:
@@ -40,19 +41,5 @@ class InteractionsVisualizerCaptureMode extends StatelessWidget {
             ],
           );
         });
-  }
-
-  bool visibleOnScreen(Interaction interaction, Size screenSize) {
-    final unionSd = interaction.externalities?.reduce((sd, nextSd) {
-      final result = sd.rect.expandToInclude(nextSd.rect);
-      return sd.copyWith(
-          rect: SerializableRect.fromLTWH(
-              result.left, result.top, result.width, result.height));
-    });
-
-    final visible = unionSd?.rect
-        .contains(interaction.position.responsiveOffset(screenSize));
-
-    return visible ?? true;
   }
 }
