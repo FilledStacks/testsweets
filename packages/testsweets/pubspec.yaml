@@ -28,7 +28,7 @@ dependencies:
   recase: ^4.0.0
   solid_bottom_sheet: ^0.1.10
   flutter_svg: ^1.0.3
-
+  collection: ^1.15.0
   
 dev_dependencies:
   stacked_generator: ^0.5.0
