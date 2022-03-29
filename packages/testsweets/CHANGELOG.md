@@ -1,4 +1,4 @@
-### 1.8.6
+### 1.8.6+1
 - Re-add responsiveness to interactions
 - Driver layout new UI that match the capture UI
 ### 1.8.5
