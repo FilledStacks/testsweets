@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/testsweets.dart';
 
 extension WidgetPositionExtension on WidgetPosition {
@@ -32,13 +33,15 @@ extension WidgetPositionExtension on WidgetPosition {
 
   double responsiveXPosition(double currentScreenWidth) {
     final result = _calculateWidthRatio(currentScreenWidth) * this.x +
-        (this.xDeviation ?? 0);
+        (this.xDeviation ?? 0) -
+        (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
     return result;
   }
 
   double responsiveYPosition(double currentScreenHeight) {
     final result = _calculateHeightRatio(currentScreenHeight) * this.y +
-        (this.yDeviation ?? 0);
+        (this.yDeviation ?? 0) -
+        (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
     return result;
   }
 
