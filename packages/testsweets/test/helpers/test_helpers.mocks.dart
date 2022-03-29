@@ -5,7 +5,7 @@
 import 'dart:async' as _i9;
 import 'dart:ui' as _i5;
 
-import 'package:flutter/material.dart' as _i8;
+import 'package:flutter/cupertino.dart' as _i8;
 import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked_services/src/snackbar/snackbar_config.dart' as _i7;
@@ -14,7 +14,9 @@ import 'package:testsweets/src/enums/handler_message_response.dart' as _i15;
 import 'package:testsweets/src/models/application_models.dart' as _i4;
 import 'package:testsweets/src/services/cloud_functions_service.dart' as _i12;
 import 'package:testsweets/src/services/http_service.dart' as _i3;
+import 'package:testsweets/src/services/notification_extractor.dart' as _i19;
 import 'package:testsweets/src/services/reactive_scrollable.dart' as _i16;
+import 'package:testsweets/src/services/scroll_appliance.dart' as _i18;
 import 'package:testsweets/src/services/sweetcore_command.dart' as _i14;
 import 'package:testsweets/src/services/testsweets_route_tracker.dart' as _i11;
 import 'package:testsweets/src/services/widget_capture_service.dart' as _i10;
@@ -36,12 +38,12 @@ class _FakeLogger_0 extends _i1.Fake implements _i2.Logger {}
 
 class _FakeHttpService_1 extends _i1.Fake implements _i3.HttpService {}
 
-class _FakeInteraction_2 extends _i1.Fake implements _i4.Interaction {}
-
-class _FakeScrollableDescription_3 extends _i1.Fake
+class _FakeScrollableDescription_2 extends _i1.Fake
     implements _i4.ScrollableDescription {}
 
-class _FakeOffset_4 extends _i1.Fake implements _i5.Offset {}
+class _FakeOffset_3 extends _i1.Fake implements _i5.Offset {}
+
+class _FakeInteraction_4 extends _i1.Fake implements _i4.Interaction {}
 
 /// A class which mocks [SnackbarService].
 ///
@@ -199,6 +201,15 @@ class MockTestSweetsRouteTracker extends _i1.Mock
       super.noSuchMethod(Invocation.setter(#testMode, _testMode),
           returnValueForMissingStub: null);
   @override
+  Map<String, int> get indexedRouteStateMap =>
+      (super.noSuchMethod(Invocation.getter(#indexedRouteStateMap),
+          returnValue: <String, int>{}) as Map<String, int>);
+  @override
+  set indexedRouteStateMap(Map<String, int>? _indexedRouteStateMap) =>
+      super.noSuchMethod(
+          Invocation.setter(#indexedRouteStateMap, _indexedRouteStateMap),
+          returnValueForMissingStub: null);
+  @override
   bool get isChildRouteActivated =>
       (super.noSuchMethod(Invocation.getter(#isChildRouteActivated),
           returnValue: false) as bool);
@@ -253,6 +264,18 @@ class MockTestSweetsRouteTracker extends _i1.Mock
   @override
   void refreshUi() => super.noSuchMethod(Invocation.method(#refreshUi, []),
       returnValueForMissingStub: null);
+  @override
+  void changeRouteIndex(String? viewName, int? index) => super.noSuchMethod(
+      Invocation.method(#changeRouteIndex, [viewName, index]),
+      returnValueForMissingStub: null);
+  @override
+  void saveRouteIndex(String? viewName, int? index) =>
+      super.noSuchMethod(Invocation.method(#saveRouteIndex, [viewName, index]),
+          returnValueForMissingStub: null);
+  @override
+  void loadRouteIndexIfExist(String? viewName) =>
+      super.noSuchMethod(Invocation.method(#loadRouteIndexIfExist, [viewName]),
+          returnValueForMissingStub: null);
   @override
   void addListener(_i5.VoidCallback? listener) =>
       super.noSuchMethod(Invocation.method(#addListener, [listener]),
@@ -401,39 +424,24 @@ class MockReactiveScrollable extends _i1.Mock
       (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_0())
           as _i2.Logger);
   @override
-  _i4.Interaction applyScrollableOnInteraction(
-          Iterable<_i4.ScrollableDescription>? scrollables,
-          _i4.Interaction? interaction) =>
-      (super.noSuchMethod(
-          Invocation.method(
-              #applyScrollableOnInteraction, [scrollables, interaction]),
-          returnValue: _FakeInteraction_2()) as _i4.Interaction);
-  @override
-  _i4.ScrollableDescription findBiggestScrollable(
-          Iterable<_i4.ScrollableDescription>?
-              overlapScrollableWithInteraction) =>
-      (super.noSuchMethod(
-              Invocation.method(
-                  #findBiggestScrollable, [overlapScrollableWithInteraction]),
-              returnValue: _FakeScrollableDescription_3())
+  _i4.ScrollableDescription get currentScrollableDescription =>
+      (super.noSuchMethod(Invocation.getter(#currentScrollableDescription),
+              returnValue: _FakeScrollableDescription_2())
           as _i4.ScrollableDescription);
   @override
+  set currentScrollableDescription(
+          _i4.ScrollableDescription? _currentScrollableDescription) =>
+      super.noSuchMethod(
+          Invocation.setter(
+              #currentScrollableDescription, _currentScrollableDescription),
+          returnValueForMissingStub: null);
+  @override
   Iterable<_i4.Interaction> filterAffectedInteractionsByScrollable(
-          _i4.ScrollableDescription? scrollableDescription,
           List<_i4.Interaction>? viewDescription) =>
       (super.noSuchMethod(
-          Invocation.method(#filterAffectedInteractionsByScrollable,
-              [scrollableDescription, viewDescription]),
+          Invocation.method(
+              #filterAffectedInteractionsByScrollable, [viewDescription]),
           returnValue: <_i4.Interaction>[]) as Iterable<_i4.Interaction>);
-  @override
-  double distanceSquaredBetweenScrollableAndExternal(
-          _i4.ScrollableDescription? sd,
-          _i5.Offset? offsetDeviation,
-          _i4.ScrollableDescription? scrollableDescription) =>
-      (super.noSuchMethod(
-          Invocation.method(#distanceSquaredBetweenScrollableAndExternal,
-              [sd, offsetDeviation, scrollableDescription]),
-          returnValue: 0.0) as double);
   @override
   _i5.Offset calculateOffsetDeviation(
           _i4.ScrollableDescription? scrollableDescription,
@@ -441,14 +449,13 @@ class MockReactiveScrollable extends _i1.Mock
       (super.noSuchMethod(
           Invocation.method(
               #calculateOffsetDeviation, [scrollableDescription, interaction]),
-          returnValue: _FakeOffset_4()) as _i5.Offset);
+          returnValue: _FakeOffset_3()) as _i5.Offset);
   @override
   Iterable<_i4.Interaction> moveInteractionsWithScrollable(
-          _i4.ScrollableDescription? scrollableDescription,
           Iterable<_i4.Interaction>? affectedInteractions) =>
       (super.noSuchMethod(
-          Invocation.method(#moveInteractionsWithScrollable,
-              [scrollableDescription, affectedInteractions]),
+          Invocation.method(
+              #moveInteractionsWithScrollable, [affectedInteractions]),
           returnValue: <_i4.Interaction>[]) as Iterable<_i4.Interaction>);
 }
 
@@ -461,9 +468,83 @@ class MockFindScrollables extends _i1.Mock implements _i17.FindScrollables {
       super.noSuchMethod(Invocation.setter(#foundedElements, _foundedElements),
           returnValueForMissingStub: null);
   @override
+  void searchForScrollableElements() =>
+      super.noSuchMethod(Invocation.method(#searchForScrollableElements, []),
+          returnValueForMissingStub: null);
+  @override
   Iterable<_i4.ScrollableDescription> convertElementsToScrollDescriptions() =>
       (super.noSuchMethod(
               Invocation.method(#convertElementsToScrollDescriptions, []),
               returnValue: <_i4.ScrollableDescription>[])
           as Iterable<_i4.ScrollableDescription>);
+}
+
+/// A class which mocks [ScrollAppliance].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockScrollAppliance extends _i1.Mock implements _i18.ScrollAppliance {
+  @override
+  _i2.Logger get log =>
+      (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_0())
+          as _i2.Logger);
+  @override
+  _i4.Interaction applyScrollableOnInteraction(
+          Iterable<_i4.ScrollableDescription>? scrollables,
+          _i4.Interaction? interaction) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #applyScrollableOnInteraction, [scrollables, interaction]),
+          returnValue: _FakeInteraction_4()) as _i4.Interaction);
+  @override
+  _i4.Interaction storeDescriptionInScrollableExternalities(
+          Iterable<_i4.ScrollableDescription>? scrollablesBelowInteraction,
+          _i4.Interaction? interaction) =>
+      (super.noSuchMethod(
+          Invocation.method(#storeDescriptionInScrollableExternalities,
+              [scrollablesBelowInteraction, interaction]),
+          returnValue: _FakeInteraction_4()) as _i4.Interaction);
+  @override
+  _i4.Interaction storeDescriptionInExternalities(
+          Iterable<_i4.ScrollableDescription>? scrollablesBelowInteraction,
+          _i4.Interaction? interaction) =>
+      (super.noSuchMethod(
+          Invocation.method(#storeDescriptionInExternalities,
+              [scrollablesBelowInteraction, interaction]),
+          returnValue: _FakeInteraction_4()) as _i4.Interaction);
+  @override
+  _i4.ScrollableDescription findBiggestScrollable(
+          Iterable<_i4.ScrollableDescription>? scrollablesBelowInteraction) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #findBiggestScrollable, [scrollablesBelowInteraction]),
+              returnValue: _FakeScrollableDescription_2())
+          as _i4.ScrollableDescription);
+}
+
+/// A class which mocks [NotificationExtractor].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockNotificationExtractor extends _i1.Mock
+    implements _i19.NotificationExtractor {
+  @override
+  bool onlyScrollUpdateNotification(_i8.Notification? notification) =>
+      (super.noSuchMethod(
+          Invocation.method(#onlyScrollUpdateNotification, [notification]),
+          returnValue: false) as bool);
+  @override
+  _i4.ScrollableDescription notificationToScrollableDescription(
+          _i8.Notification? notification) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #notificationToScrollableDescription, [notification]),
+              returnValue: _FakeScrollableDescription_2())
+          as _i4.ScrollableDescription);
+  @override
+  List<_i4.Interaction> scrollInteractions(
+          _i4.ScrollableDescription? scrollableDescription,
+          List<_i4.Interaction>? viewInteractions) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #scrollInteractions, [scrollableDescription, viewInteractions]),
+          returnValue: <_i4.Interaction>[]) as List<_i4.Interaction>);
 }

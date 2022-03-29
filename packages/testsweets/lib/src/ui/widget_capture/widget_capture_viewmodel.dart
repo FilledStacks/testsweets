@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -13,15 +11,14 @@ import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
-import 'package:testsweets/src/extensions/widgets_description_list_extensions.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/services/notification_extractor.dart';
+import 'package:testsweets/src/services/scroll_appliance.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/ui/shared/find_scrollables.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_view_form.dart';
-
-import '../../services/reactive_scrollable.dart';
+import 'package:testsweets/src/ui/widget_capture/widgets/interaction_capture_form.dart';
 
 class WidgetCaptureViewModel extends FormViewModel {
   final log = getLogger('WidgetCaptureViewModel');
@@ -29,13 +26,19 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _widgetCaptureService = locator<WidgetCaptureService>();
   final _snackbarService = locator<SnackbarService>();
-  final _reactiveScrollable = locator<ReactiveScrollable>();
-  final _notificationController = StreamController<Notification>.broadcast();
+  final _scrollAppliance = locator<ScrollAppliance>();
+  final _notiExtr = locator<NotificationExtractor>();
 
+  final _notificationController = StreamController<Notification>.broadcast();
   var _captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
 
   WidgetCaptureViewModel({required String projectId}) {
-    listenToNotifications();
+    _notificationController.stream
+        .where(_notiExtr.onlyScrollUpdateNotification)
+        .map(_notiExtr.notificationToScrollableDescription)
+        .listen((notification) => viewInteractions =
+            _notiExtr.scrollInteractions(notification, viewInteractions));
+
     _widgetCaptureService.projectId = projectId;
   }
 
@@ -263,10 +266,8 @@ class WidgetCaptureViewModel extends FormViewModel {
     log.v(captureWidgetStatusEnum);
 
     if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.quickPositionEdit) {
-      final findScrollablesService = locator<FindScrollables>();
-
-      findScrollablesService.searchForScrollableElements();
-
+      final findScrollablesService = locator<FindScrollables>()
+        ..searchForScrollableElements();
       final extractedScrollables =
           findScrollablesService.convertElementsToScrollDescriptions();
 
@@ -286,7 +287,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.quickPositionEdit;
   }
 
-  void onTapWidget(Interaction widgetDescription) async {
+  void interactionOnTap(Interaction widgetDescription) async {
     notifyListeners();
     await _snackbarService.showCustomSnackBar(
         message: widgetDescription.name, variant: SnackbarType.info);
@@ -294,6 +295,8 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   bool onClientNotifiaction(Notification notification) {
     _notificationController.add(notification);
+
+    /// We return false to keep the notification bubbling in the widget tree
     return false;
   }
 
@@ -301,49 +304,10 @@ class WidgetCaptureViewModel extends FormViewModel {
       Iterable<ScrollableDescription> scrollableDescription) {
     log.i('before:' + inProgressInteraction.toString());
 
-    if (scrollableDescription.isEmpty) return;
-
-    inProgressInteraction = _reactiveScrollable.applyScrollableOnInteraction(
+    inProgressInteraction = _scrollAppliance.applyScrollableOnInteraction(
         scrollableDescription, inProgressInteraction!);
 
     log.i('after:' + inProgressInteraction.toString());
-  }
-
-  void listenToNotifications() {
-    ScrollDirection? scrollDirection;
-    Offset? globalPosition;
-    Offset? localPosition;
-    _notificationController.stream.listen((notification) {
-      if (notification is UserScrollNotification) {
-        scrollDirection = notification.direction;
-      } else if (notification is ScrollStartNotification) {
-        globalPosition = notification.dragDetails!.globalPosition;
-        localPosition = notification.dragDetails!.localPosition;
-      } else if (notification is ScrollUpdateNotification &&
-          globalPosition != null &&
-          scrollDirection != ScrollDirection.idle) {
-        final scrollableDescription = ScrollableDescription.fromNotification(
-            globalPosition: globalPosition!,
-            localPosition: localPosition!,
-            metrics: notification.metrics,
-            scrollDirection: scrollDirection!);
-
-        reactToScroll(scrollableDescription);
-      }
-    });
-  }
-
-  void reactToScroll(ScrollableDescription scrollableDescription) {
-    final affectedInteractions =
-        _reactiveScrollable.filterAffectedInteractionsByScrollable(
-            scrollableDescription, viewInteractions);
-
-    final scrolledInteractions =
-        _reactiveScrollable.moveInteractionsWithScrollable(
-            scrollableDescription, affectedInteractions);
-
-    viewInteractions =
-        viewInteractions.replaceInteractions(scrolledInteractions);
   }
 
   @override

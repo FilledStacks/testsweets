@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
-import 'widget_capture_widgets/capture_overlay.dart';
+import 'interaction_form_and_visualizer.dart';
 
 const String WidgetNameValueKey = 'widgetName';
 
-mixin WidgetCaptureViewForm on State<CaptureOverlay> {
+mixin InteractionCaptureForm on State<InteractionFormAndVisualizer> {
   final TextEditingController widgetNameController = TextEditingController();
   final FocusNode widgetNameFocusNode = FocusNode();
 

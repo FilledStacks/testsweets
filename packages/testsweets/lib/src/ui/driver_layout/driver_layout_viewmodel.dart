@@ -1,26 +1,48 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
+
+import 'package:flutter/widgets.dart';
 import 'package:stacked/stacked.dart';
+import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/app/logger.dart';
-import 'package:testsweets/src/enums/handler_message_response.dart';
+import 'package:testsweets/src/enums/toast_type.dart';
+import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/services/notification_extractor.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
-import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
 
 class DriverLayoutViewModel extends BaseViewModel {
   final log = getLogger('DriverLayoutViewModel');
+  final _snackbarService = locator<SnackbarService>();
 
   final _widgetCaptureService = locator<WidgetCaptureService>();
-  final _testSweetsRouteTracer = locator<TestSweetsRouteTracker>();
-  final _widgetVisibiltyChangerService =
-      locator<WidgetVisibiltyChangerService>();
+  final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
+  final _notificationExtractor = locator<NotificationExtractor>();
+
+  final _notificationController = StreamController<Notification>.broadcast();
 
   DriverLayoutViewModel({required projectId}) {
+    _notificationController.stream
+        .where(_notificationExtractor.onlyScrollUpdateNotification)
+        .map(_notificationExtractor.notificationToScrollableDescription)
+        .listen((notification) => viewInteractions = _notificationExtractor
+            .scrollInteractions(notification, viewInteractions));
+
     _widgetCaptureService.projectId = projectId;
   }
 
-  List<Interaction> descriptionsForView = [];
+  ValueNotifier<List<Interaction>> descriptionsForViewNotifier =
+      ValueNotifier([]);
+  List<Interaction> get viewInteractions => descriptionsForViewNotifier.value;
+  set viewInteractions(List<Interaction> widgetDescriptions) {
+    descriptionsForViewNotifier.value = widgetDescriptions;
+  }
+
+  bool get currentViewCaptured => viewInteractions.any(
+        (element) => element.widgetType == WidgetType.view,
+      );
+  String get currentViewName => _testSweetsRouteTracker.formatedCurrentRoute;
 
   Future<void> initialise() async {
     setBusy(true);
@@ -30,47 +52,30 @@ class DriverLayoutViewModel extends BaseViewModel {
       log.e('Could not get widgetDescriptions: $e');
     }
     getWidgetsForRoute();
-    _testSweetsRouteTracer.addListener(getWidgetsForRoute);
+    _testSweetsRouteTracker.addListener(getWidgetsForRoute);
     setBusy(false);
   }
 
   void getWidgetsForRoute() {
-    descriptionsForView = _widgetCaptureService.getDescriptionsForView(
-        currentRoute: _testSweetsRouteTracer.currentRoute);
+    viewInteractions = _widgetCaptureService.getDescriptionsForView(
+        currentRoute: _testSweetsRouteTracker.currentRoute);
     notifyListeners();
   }
 
-  /// This will triggered whenever the client app
-  /// populate a new event aka `notification`
-  ///
-  /// By returning false we don't resolve the notification
-  /// so it keeps populating up through the widget tree
-  bool onClientAppEvent(Notification notification) {
-    final automationKeyName =
-        _widgetVisibiltyChangerService.sweetcoreCommand?.widgetName;
+  bool automationKeyOnScreen(String automationKeyName) => viewInteractions.any(
+        (element) => element.automationKey == automationKeyName,
+      );
 
-    // When widget name is null abort
-    if (automationKeyName == null) return false;
+  bool onClientNotifiaction(Notification notification) {
+    _notificationController.add(notification);
 
-    if (notification is ScrollEndNotification &&
-        automationKeyOnScreen(automationKeyName)) {
-      final newDescriptionsForView = _widgetVisibiltyChangerService
-          .runToggleVisibiltyChecker(
-              notification, automationKeyName, descriptionsForView)
-          ?.toList();
-      if (newDescriptionsForView != null)
-        descriptionsForView = newDescriptionsForView;
-    } else {
-      _widgetVisibiltyChangerService
-          .completeCompleter(HandlerMessageResponse.couldnotFindAutomationKey);
-    }
-    notifyListeners();
-
+    /// We return false to keep the notification bubbling in the widget tree
     return false;
   }
 
-  bool automationKeyOnScreen(String automationKeyName) =>
-      descriptionsForView.any(
-        (element) => element.automationKey == automationKeyName,
-      );
+  void interactionOnTap(Interaction widgetDescription) {
+    notifyListeners();
+    _snackbarService.showCustomSnackBar(
+        message: widgetDescription.name, variant: SnackbarType.info);
+  }
 }

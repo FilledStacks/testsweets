@@ -3,19 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/widget_type_extension.dart';
-import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 
-class WidgetCircle extends StatelessWidget {
+class InteractionCircle extends StatelessWidget {
   final WidgetType widgetType;
   final double transparency;
   final bool minify;
-  const WidgetCircle({
+  final bool driverMode;
+  const InteractionCircle({
     Key? key,
     required this.widgetType,
     this.transparency = 1.0,
     this.minify = false,
+    this.driverMode = false,
   })  : assert(transparency <= 1 && transparency >= 0),
         super(key: key);
 
@@ -34,15 +35,23 @@ class WidgetCircle extends StatelessWidget {
                     ? kcPrimaryWhite
                     : widgetType.getColorOfWidgetType.withOpacity(transparency),
                 width: 2)),
-        child: Text(widgetType.returnFirstLetterOfWidgetTypeCapitalized,
-            textAlign: TextAlign.center,
-            style: minify
-                ? tsLargeBold().copyWith(
-                    color: kcPrimaryWhite,
-                  )
-                : tsExtraLarge().copyWith(
-                    color: widgetType.getColorOfWidgetType
-                        .withOpacity(transparency),
-                  )));
+        child: driverMode
+            ? Container(
+                width: 4,
+                height: 4,
+                decoration: BoxDecoration(
+                    color: widgetType.getColorOfWidgetType,
+                    shape: BoxShape.circle),
+              )
+            : Text(widgetType.returnFirstLetterOfWidgetTypeCapitalized,
+                textAlign: TextAlign.center,
+                style: minify
+                    ? tsLargeBold().copyWith(
+                        color: kcPrimaryWhite,
+                      )
+                    : tsExtraLarge().copyWith(
+                        color: widgetType.getColorOfWidgetType
+                            .withOpacity(transparency),
+                      )));
   }
 }

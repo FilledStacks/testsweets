@@ -46,5 +46,5 @@ extension InteractionExtension on Interaction {
     }
   }
 
-  bool get notView => this.widgetType != WidgetType.view;
+  bool get isScrollable => this.widgetType == WidgetType.scrollable;
 }

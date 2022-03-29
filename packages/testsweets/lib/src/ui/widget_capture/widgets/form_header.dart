@@ -4,10 +4,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:testsweets/src/ui/shared/animation_rotation.dart' as ar;
 
 class FormHeader extends StatelessWidget {
-  final Stream<bool> openStream;
+  final Stream<bool> openBottomSheet;
   const FormHeader({
     Key? key,
-    required this.openStream,
+    required this.openBottomSheet,
   }) : super(key: key);
 
   @override
@@ -19,7 +19,7 @@ class FormHeader extends StatelessWidget {
           'packages/testsweets/assets/svgs/eclipse.svg',
         ),
         StreamBuilder<bool>(
-            stream: openStream,
+            stream: openBottomSheet,
             builder: (context, snapshot) {
               return ar.AnimatedRotation(
                 duration: const Duration(milliseconds: 350),

@@ -5,13 +5,16 @@ import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
+import 'package:testsweets/src/services/notification_extractor.dart';
 import 'package:testsweets/src/services/reactive_scrollable.dart';
+import 'package:testsweets/src/services/scroll_appliance.dart';
 import 'package:testsweets/src/services/sweetcore_command.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
 import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 
+import 'test_consts.dart';
 import 'test_helpers.mocks.dart';
 
 @GenerateMocks([], customMocks: [
@@ -22,6 +25,8 @@ import 'test_helpers.mocks.dart';
   MockSpec<WidgetVisibiltyChangerService>(returnNullOnMissingStub: true),
   MockSpec<ReactiveScrollable>(returnNullOnMissingStub: true),
   MockSpec<FindScrollables>(returnNullOnMissingStub: true),
+  MockSpec<ScrollAppliance>(returnNullOnMissingStub: true),
+  MockSpec<NotificationExtractor>(returnNullOnMissingStub: true),
 ])
 MockWidgetCaptureService getAndRegisterWidgetCaptureService(
     {List<Interaction> viewInteractions = const [],
@@ -133,6 +138,7 @@ SnackbarService getAndRegisterSnackbarService() {
 ReactiveScrollable getAndRegisterReactiveScrollable() {
   _removeRegistrationIfExists<ReactiveScrollable>();
   final service = MockReactiveScrollable();
+
   locator.registerSingleton<ReactiveScrollable>(service);
   return service;
 }
@@ -151,6 +157,26 @@ WidgetVisibiltyChangerService getAndRegisterWidgetVisibiltyChangerService(
   return service;
 }
 
+ScrollAppliance getAndRegisterScrollAppliance() {
+  _removeRegistrationIfExists<ScrollAppliance>();
+  final service = MockScrollAppliance();
+
+  when(service.applyScrollableOnInteraction(any, any)).thenAnswer(
+    (invocation) =>
+        invocation.positionalArguments[1], // return the same interaction
+  );
+  locator.registerSingleton<ScrollAppliance>(service);
+  return service;
+}
+
+NotificationExtractor getAndRegisterNotificationExtractor() {
+  _removeRegistrationIfExists<NotificationExtractor>();
+  final service = MockNotificationExtractor();
+
+  locator.registerSingleton<NotificationExtractor>(service);
+  return service;
+}
+
 void registerServices() {
   getAndRegisterTestSweetsRouteTracker();
   getAndRegisterWidgetCaptureService();
@@ -159,6 +185,8 @@ void registerServices() {
   getAndRegisterWidgetVisibiltyChangerService();
   getAndRegisterReactiveScrollable();
   getAndRegisterFindScrollables();
+  getAndRegisterScrollAppliance();
+  getAndRegisterNotificationExtractor();
 }
 
 void unregisterServices() {
@@ -169,6 +197,8 @@ void unregisterServices() {
   _removeRegistrationIfExists<WidgetVisibiltyChangerService>();
   _removeRegistrationIfExists<ReactiveScrollable>();
   _removeRegistrationIfExists<FindScrollables>();
+  _removeRegistrationIfExists<ScrollAppliance>();
+  _removeRegistrationIfExists<NotificationExtractor>();
 }
 
 void registerServiceInsteadOfMockedOne<T extends Object>(T instance) {

@@ -3,7 +3,7 @@ import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/widget_type_extension.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_widgets/widget_circle.dart';
+import 'package:testsweets/src/ui/shared/interaction_circle.dart';
 
 class WidgetCard extends StatelessWidget {
   final WidgetType widgetType;
@@ -23,12 +23,12 @@ class WidgetCard extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       child: Material(
         type: MaterialType.card,
-        color: widgetType.getColorOfWidgetType,
-        borderRadius: BorderRadius.circular(12),
+        color: selected ? widgetType.getColorOfWidgetType : kcBackground,
+        borderRadius: BorderRadius.circular(8),
         child: InkWell(
           highlightColor: Colors.transparent,
           splashColor: widgetType.getColorOfWidgetType.withOpacity(0.7),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           onTap: () => onTap(widgetType),
           child: Container(
             height: 50,
@@ -37,7 +37,7 @@ class WidgetCard extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: WidgetCircle(
+                  child: InteractionCircle(
                     minify: true,
                     widgetType: widgetType,
                   ),
