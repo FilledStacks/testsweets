@@ -10,19 +10,16 @@ import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked_services/src/snackbar/snackbar_config.dart' as _i7;
 import 'package:stacked_services/src/snackbar/snackbar_service.dart' as _i6;
-import 'package:testsweets/src/enums/handler_message_response.dart' as _i15;
 import 'package:testsweets/src/models/application_models.dart' as _i4;
 import 'package:testsweets/src/services/cloud_functions_service.dart' as _i12;
 import 'package:testsweets/src/services/http_service.dart' as _i3;
-import 'package:testsweets/src/services/notification_extractor.dart' as _i19;
-import 'package:testsweets/src/services/reactive_scrollable.dart' as _i16;
-import 'package:testsweets/src/services/scroll_appliance.dart' as _i18;
-import 'package:testsweets/src/services/sweetcore_command.dart' as _i14;
+import 'package:testsweets/src/services/notification_extractor.dart' as _i17;
+import 'package:testsweets/src/services/reactive_scrollable.dart' as _i14;
+import 'package:testsweets/src/services/scroll_appliance.dart' as _i16;
+import 'package:testsweets/src/services/test_integrity.dart' as _i13;
 import 'package:testsweets/src/services/testsweets_route_tracker.dart' as _i11;
 import 'package:testsweets/src/services/widget_capture_service.dart' as _i10;
-import 'package:testsweets/src/services/widget_visibilty_changer_service.dart'
-    as _i13;
-import 'package:testsweets/src/ui/shared/find_scrollables.dart' as _i17;
+import 'package:testsweets/src/ui/shared/find_scrollables.dart' as _i15;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -358,67 +355,39 @@ class MockCloudFunctionsService extends _i1.Mock
           returnValue: Future<String>.value('')) as _i9.Future<String>);
 }
 
-/// A class which mocks [WidgetVisibiltyChangerService].
+/// A class which mocks [TestIntegrity].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockWidgetVisibiltyChangerService extends _i1.Mock
-    implements _i13.WidgetVisibiltyChangerService {
+class MockTestIntegrity<T> extends _i1.Mock implements _i13.TestIntegrity<T> {
   @override
-  _i2.Logger get log =>
-      (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_0())
-          as _i2.Logger);
-  @override
-  set completer(_i9.Completer<dynamic>? _completer) =>
-      super.noSuchMethod(Invocation.setter(#completer, _completer),
+  void commandExecutingFails() =>
+      super.noSuchMethod(Invocation.method(#commandExecutingFails, []),
           returnValueForMissingStub: null);
   @override
-  set sweetcoreCommand(_i14.SweetcoreCommand? _sweetcoreCommand) => super
-      .noSuchMethod(Invocation.setter(#sweetcoreCommand, _sweetcoreCommand),
+  void commandExecutingConfirmed() =>
+      super.noSuchMethod(Invocation.method(#commandExecutingConfirmed, []),
           returnValueForMissingStub: null);
   @override
-  void completeCompleter(_i15.HandlerMessageResponse? message) =>
-      super.noSuchMethod(Invocation.method(#completeCompleter, [message]),
+  void whenNotificationTypeMatchesConfirmCommand(
+          _i8.Notification? notification) =>
+      super.noSuchMethod(
+          Invocation.method(#checkNotificationType, [notification]),
           returnValueForMissingStub: null);
   @override
-  Iterable<_i4.Interaction>? runToggleVisibiltyChecker(
-          _i8.Notification? notification,
-          String? automationKeyName,
-          List<_i4.Interaction>? viewWidgets) =>
-      (super.noSuchMethod(Invocation.method(#runToggleVisibiltyChecker, [
-        notification,
-        automationKeyName,
-        viewWidgets
-      ])) as Iterable<_i4.Interaction>?);
-  @override
-  Iterable<_i4.Interaction> toggleVisibilty(
-          Iterable<_i4.Interaction>? targetedWidgets,
-          List<_i4.Interaction>? originalWidgets) =>
+  _i9.Future<bool> startListeningReturnTrueIfCommandVerifiedOrFalseOnTimeout(
+          Duration? timeoutDuration) =>
       (super.noSuchMethod(
           Invocation.method(
-              #toggleVisibilty, [targetedWidgets, originalWidgets]),
-          returnValue: <_i4.Interaction>[]) as Iterable<_i4.Interaction>);
-  @override
-  Iterable<_i4.Interaction> updateViewWidgetsList(
-          Iterable<_i4.Interaction>? widgetAfterToggleVisibilty,
-          List<_i4.Interaction>? originalWidgets) =>
-      (super.noSuchMethod(
-          Invocation.method(#updateViewWidgetsList,
-              [widgetAfterToggleVisibilty, originalWidgets]),
-          returnValue: <_i4.Interaction>[]) as Iterable<_i4.Interaction>);
-  @override
-  Iterable<_i4.Interaction> filterTargetedWidgets(String? automationKeyName,
-          Iterable<_i4.Interaction>? descriptionsForView) =>
-      (super.noSuchMethod(
-          Invocation.method(
-              #filterTargetedWidgets, [automationKeyName, descriptionsForView]),
-          returnValue: <_i4.Interaction>[]) as Iterable<_i4.Interaction>);
+              #startListeningReturnTrueIfCommandVerifiedOrFalseOnTimeout,
+              [timeoutDuration]),
+          returnValue: Future<bool>.value(false)) as _i9.Future<bool>);
 }
 
 /// A class which mocks [ReactiveScrollable].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockReactiveScrollable extends _i1.Mock
-    implements _i16.ReactiveScrollable {
+    implements _i14.ReactiveScrollable {
   @override
   _i2.Logger get log =>
       (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_0())
@@ -462,7 +431,7 @@ class MockReactiveScrollable extends _i1.Mock
 /// A class which mocks [FindScrollables].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFindScrollables extends _i1.Mock implements _i17.FindScrollables {
+class MockFindScrollables extends _i1.Mock implements _i15.FindScrollables {
   @override
   set foundedElements(Iterable<_i8.Element>? _foundedElements) =>
       super.noSuchMethod(Invocation.setter(#foundedElements, _foundedElements),
@@ -482,7 +451,7 @@ class MockFindScrollables extends _i1.Mock implements _i17.FindScrollables {
 /// A class which mocks [ScrollAppliance].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockScrollAppliance extends _i1.Mock implements _i18.ScrollAppliance {
+class MockScrollAppliance extends _i1.Mock implements _i16.ScrollAppliance {
   @override
   _i2.Logger get log =>
       (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_0())
@@ -525,7 +494,7 @@ class MockScrollAppliance extends _i1.Mock implements _i18.ScrollAppliance {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockNotificationExtractor extends _i1.Mock
-    implements _i19.NotificationExtractor {
+    implements _i17.NotificationExtractor {
   @override
   bool onlyScrollUpdateNotification(_i8.Notification? notification) =>
       (super.noSuchMethod(
