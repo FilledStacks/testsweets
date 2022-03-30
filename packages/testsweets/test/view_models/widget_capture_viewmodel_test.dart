@@ -6,6 +6,7 @@ import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/reactive_scrollable.dart';
+import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/ui/widget_capture/widgets/interaction_capture_form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
@@ -136,12 +137,37 @@ void main() {
 
         await model.onLongPressUp();
 
-        verify(service.updateWidgetDescription(
-            description: kGeneralInteraction.copyWith(
-                position: kGeneralInteraction.position.copyWith(
-          x: 33,
-          y: 33,
-        ))));
+        final updatedInteraction = kGeneralInteraction.copyWith(
+          position: kGeneralInteraction.position.copyWith(
+            x: 33,
+            y: 33,
+          ),
+        );
+
+        verify(
+            service.updateWidgetDescription(description: updatedInteraction));
+      });
+      test('''
+            When update interaction position,
+            Should update the interaction in viewInteractions list
+  ''', () async {
+        final model = _getViewModel();
+        model.startQuickPositionEdit(kGeneralInteraction);
+        model.viewInteractions = [kGeneralInteraction];
+        model.updateDescriptionPosition(
+            22,
+            33,
+            kGeneralInteraction.position.capturedDeviceWidth!,
+            kGeneralInteraction.position.capturedDeviceHeight!);
+
+        await model.onLongPressUp();
+
+        final updatedInteractionPosition = model.viewInteractions
+            .firstWhere((element) => element.id == kGeneralInteraction.id)
+            .position;
+
+        expect(updatedInteractionPosition.x, 22);
+        expect(updatedInteractionPosition.y, 33);
       });
     });
 

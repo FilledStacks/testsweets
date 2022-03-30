@@ -201,9 +201,10 @@ void unregisterServices() {
   _removeRegistrationIfExists<NotificationExtractor>();
 }
 
-void registerServiceInsteadOfMockedOne<T extends Object>(T instance) {
+T registerServiceInsteadOfMockedOne<T extends Object>(T instance) {
   _removeRegistrationIfExists<T>();
   locator.registerSingleton<T>(instance);
+  return instance;
 }
 
 // Call this before any service registration helper. This is to ensure that if there
