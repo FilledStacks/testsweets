@@ -38,6 +38,8 @@ class ScrollAppliance {
     Iterable<ScrollableDescription> scrollablesBelowInteraction,
     Interaction interaction,
   ) {
+    log.v(scrollablesBelowInteraction);
+
     /// When interaction type is scrollable and there is only one list below it,
     /// Shouldn't add the list to externalities of the interaction cause it will
     /// scroll itself
