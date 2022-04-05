@@ -17,13 +17,11 @@ class SignUpView extends StatelessWidget {
     return ViewModelBuilder<SignUpViewModel>.reactive(
       builder: (context, model, child) => Scaffold(
         body: Column(
-          key: Key("ebraColumn1"),
           children: [
             Expanded(
               child: Padding(
                 padding: EdgeInsets.all(10),
                 child: ListView.builder(
-                  key: Key("ebralist1"),
                   itemCount: colorItems.length,
                   itemBuilder: (context, index) => Container(
                     width: 150,
@@ -33,6 +31,7 @@ class SignUpView extends StatelessWidget {
                 ),
               ),
             ),
+            TextField(),
             Expanded(
               child: Center(
                 child: MaterialButton(

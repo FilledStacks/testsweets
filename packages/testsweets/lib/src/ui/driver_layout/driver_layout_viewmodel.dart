@@ -9,6 +9,7 @@ import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/notification_extractor.dart';
+import 'package:testsweets/src/services/test_integrity.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 
@@ -21,14 +22,15 @@ class DriverLayoutViewModel extends BaseViewModel {
   final _notificationExtractor = locator<NotificationExtractor>();
 
   final _notificationController = StreamController<Notification>.broadcast();
+  final _testIntegrity = locator<TestIntegrity>();
 
   DriverLayoutViewModel({required projectId}) {
     _notificationController.stream
-        .where(_notificationExtractor.onlyScrollUpdateNotification)
-        .map(_notificationExtractor.notificationToScrollableDescription)
-        .listen((notification) => viewInteractions = _notificationExtractor
-            .scrollInteractions(notification, viewInteractions));
-
+      ..listen(_testIntegrity.whenNotificationTypeMatchesConfirmCommand)
+      ..where(_notificationExtractor.onlyScrollUpdateNotification)
+          .map(_notificationExtractor.notificationToScrollableDescription)
+          .listen((notification) => viewInteractions = _notificationExtractor
+              .scrollInteractions(notification, viewInteractions));
     _widgetCaptureService.projectId = projectId;
   }
 
