@@ -1,3 +1,5 @@
+### 1.8.7
+- Test integrity feature
 ### 1.8.6+2
 - Fix bugs
 ### 1.8.6+1
