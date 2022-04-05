@@ -1,32 +1,31 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:testsweets/src/services/test_integrity.dart';
 
 import '../helpers/test_consts.dart';
 
 void main() {
-  group('ScrollableTestIntegrity -', () {
+  group('TestIntegrity -', () {
     group('startListeningReturnTrueIfCommandVerifiedOrFalseOnTimeout -', () {
       test('''
               When the timeoutTimer reaches the given duration, 
               Should execute the commandExecutingFails 
               which returns false from the completer''', () async {
-        final testIntegrity = ScrollableTestIntegrity();
+        final testIntegrity = TestIntegrity();
 
         final result = await testIntegrity
-            .startListeningReturnTrueIfCommandVerifiedOrFalseOnTimeout(
-                kTimeoutDuration);
+            .trueIfCommandVerifiedOrFalseIfTimeout(kTimeoutDuration);
         expect(result, false);
       });
       test('''
               When commandExecutingConfirmed executed before
               the timeoutTimer reaches the given duration, 
               Completer should return true''', () async {
-        final testIntegrity = ScrollableTestIntegrity();
+        final testIntegrity = TestIntegrity();
 
         final result = testIntegrity
-            .startListeningReturnTrueIfCommandVerifiedOrFalseOnTimeout(
-                kTimeoutDuration);
-        testIntegrity.commandExecutingConfirmed();
+            .trueIfCommandVerifiedOrFalseIfTimeout(kTimeoutDuration);
+        testIntegrity.confirmCommand();
 
         expect(await result, true);
       });
@@ -35,11 +34,12 @@ void main() {
       test('''
               When Notification Type Matches,
               Should call commandExecutingConfirmed''', () async {
-        final testIntegrity = ScrollableTestIntegrity();
+        final testIntegrity = TestIntegrity();
+
+        testIntegrity.triggeringNotificationType = ScrollEndNotification;
 
         final result = testIntegrity
-            .startListeningReturnTrueIfCommandVerifiedOrFalseOnTimeout(
-                kTimeoutDuration);
+            .trueIfCommandVerifiedOrFalseIfTimeout(kTimeoutDuration);
         testIntegrity
             .whenNotificationTypeMatchesConfirmCommand(kScrollEndNotification);
 

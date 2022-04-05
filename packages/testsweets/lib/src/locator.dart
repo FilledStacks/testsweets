@@ -19,15 +19,14 @@ Future<void> setupLocator() async {
       ));
   locator.registerLazySingleton(() => TestSweetsRouteTracker());
   locator.registerLazySingleton(() => SnackbarService());
-  locator.registerLazySingleton(() => WidgetCaptureService(verbose: true));
-  locator.registerFactoryParam<TestIntegrity, String, void>(
-    (message, _) => TestIntegrity.fromString(message),
-  );
+  locator.registerLazySingleton(() => WidgetCaptureService());
   locator.registerLazySingleton(() => ReactiveScrollable());
   locator.registerLazySingleton(() => ScrollAppliance());
   locator.registerLazySingleton<FindScrollables>(() => FindScrollablesImp());
   locator.registerLazySingleton<NotificationExtractor>(
       () => NotificationExtractorImp());
+
+  locator.registerLazySingleton(() => TestIntegrity());
   setupSnackbarUi();
 
   locatorSetup = true;

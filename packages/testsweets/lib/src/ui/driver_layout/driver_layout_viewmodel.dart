@@ -20,9 +20,9 @@ class DriverLayoutViewModel extends BaseViewModel {
   final _widgetCaptureService = locator<WidgetCaptureService>();
   final _testSweetsRouteTracker = locator<TestSweetsRouteTracker>();
   final _notificationExtractor = locator<NotificationExtractor>();
-  final _testIntegrity = locator<TestIntegrity>();
 
   final _notificationController = StreamController<Notification>.broadcast();
+  final _testIntegrity = locator<TestIntegrity>();
 
   DriverLayoutViewModel({required projectId}) {
     _notificationController.stream
@@ -31,7 +31,6 @@ class DriverLayoutViewModel extends BaseViewModel {
           .map(_notificationExtractor.notificationToScrollableDescription)
           .listen((notification) => viewInteractions = _notificationExtractor
               .scrollInteractions(notification, viewInteractions));
-
     _widgetCaptureService.projectId = projectId;
   }
 

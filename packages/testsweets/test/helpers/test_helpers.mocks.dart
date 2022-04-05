@@ -358,23 +358,34 @@ class MockCloudFunctionsService extends _i1.Mock
 /// A class which mocks [TestIntegrity].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTestIntegrity<T> extends _i1.Mock implements _i13.TestIntegrity<T> {
+class MockTestIntegrity extends _i1.Mock implements _i13.TestIntegrity {
   @override
-  void commandExecutingFails() =>
+  _i2.Logger get log =>
+      (super.noSuchMethod(Invocation.getter(#log), returnValue: _FakeLogger_0())
+          as _i2.Logger);
+  @override
+  set triggeringNotificationType(Type? _triggeringNotificationType) =>
+      super.noSuchMethod(
+          Invocation.setter(
+              #triggeringNotificationType, _triggeringNotificationType),
+          returnValueForMissingStub: null);
+  @override
+  void failCommand() =>
       super.noSuchMethod(Invocation.method(#commandExecutingFails, []),
           returnValueForMissingStub: null);
   @override
-  void commandExecutingConfirmed() =>
+  void confirmCommand() =>
       super.noSuchMethod(Invocation.method(#commandExecutingConfirmed, []),
           returnValueForMissingStub: null);
   @override
   void whenNotificationTypeMatchesConfirmCommand(
           _i8.Notification? notification) =>
       super.noSuchMethod(
-          Invocation.method(#checkNotificationType, [notification]),
+          Invocation.method(
+              #whenNotificationTypeMatchesConfirmCommand, [notification]),
           returnValueForMissingStub: null);
   @override
-  _i9.Future<bool> startListeningReturnTrueIfCommandVerifiedOrFalseOnTimeout(
+  _i9.Future<bool> trueIfCommandVerifiedOrFalseIfTimeout(
           Duration? timeoutDuration) =>
       (super.noSuchMethod(
           Invocation.method(

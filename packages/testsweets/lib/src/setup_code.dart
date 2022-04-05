@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/locator.dart';
@@ -24,15 +26,36 @@ Future<void> setupTestSweets() async {
         /// arrives to the  notification listener of the driver layout
         ///
         if (message != null) {
-          final testIntegrity = locator.get<TestIntegrity>(param1: message);
+          final testIntegrity = locator<TestIntegrity>();
+
+          testIntegrity.triggeringNotificationType =
+              _getNotificationTypeFromCommandMessage(message);
 
           return await testIntegrity
-              .startListeningReturnTrueIfCommandVerifiedOrFalseOnTimeout(
-                  TEST_INTEGRITY_TIMEOUT)
-              .then<String>((value) => value.toString());
+              .trueIfCommandVerifiedOrFalseIfTimeout(
+                TEST_INTEGRITY_TIMEOUT,
+              )
+              .then<String>(
+                (value) => value.toString(),
+              );
         }
         return 'message is null $message';
       },
     );
+  }
+}
+
+Type _getNotificationTypeFromCommandMessage(String message) {
+  final messageMap = json.decode(message) as Map<String, dynamic>;
+  final commandType = messageMap['commandType'];
+  switch (commandType) {
+    case 'ScrollCommand':
+      return ScrollStartNotification;
+    case 'TapCommand':
+    case 'EnterTextCommand':
+      return KeepAliveNotification;
+    default:
+      throw Exception(
+          'We couldn\'t extract the command from this message: $message');
   }
 }
