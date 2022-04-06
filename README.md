@@ -13,19 +13,12 @@ dependencies:
 ```
 
 
-### Optionally
-If you want to add general keys to check for when a certain widget is visible like a dialog or a button
-you have to add the testsweets_generator package too
-
-```
-dev_dependencies:
-  testsweets_generator: [latest_version]
-  build_runner: [latest_version]
-```
-
 ## Setup
 
 After the packages have been added we have to setup the code. TestSweets makes use of Flutter Driver to drive the test cases that we write. This means we have to enable flutter driver for the version of the app that we build that goes through automation. Flutter driver disables certain things like the on screen keyboard
+
+
+
 
 ```dart
 ...
@@ -61,36 +54,86 @@ class MyApp extends StatelessWidget {
     );
 ```
 
-### Using the capture functionality
+## Capturing Interactions
 
 To run the app in capture mode you just start the application and capture mode will be enabled. This can be turned on or off if you pass `captureMode` false to the `TestSweetsOverlayView`.
 
-<table>
-  <tr align="center">
-    <td>Intro screen</td>
-     <td>Entered capture mode</td>
-     <td>Types of widgets you can capture</td>
-  </tr>
-  <tr>
-    <td> <img src="https://user-images.githubusercontent.com/89080323/133254053-bbcffc0b-b274-494e-a2a7-9271e05870ea.png"/></td>
-    <td><img src="https://user-images.githubusercontent.com/89080323/133254068-01564574-3676-4834-915d-aba58c4d5f74.png" /></td>
-    <td><img src="https://user-images.githubusercontent.com/89080323/133254040-8efcbc86-2050-438d-851b-c49a3b85f002.png"/></td>
-  </tr> 
-    <tr>
-    <td>Choose a name for the widget</td>
-     <td>Exit capture mode and go to inspect mode to see your keys</td>
-  </tr>
-  <tr>
-    <td><img src="https://user-images.githubusercontent.com/89080323/133254072-9a3e5567-3151-4411-b578-ac6744af7ec5.png" /></td>
-    <td><img src="https://user-images.githubusercontent.com/89080323/133254062-9cde8983-4a92-41d3-ab9c-a656753beef7.png"/></td>
-  </tr>
- </table>
+### How to add an Interaction
 
-### Putting the app in Drive Mode
+Note: The view you are on is automatically captured
+
+1. Click the arrow to show the bottomsheet
+2. Select one of the three interaction types (default to Touchable)
+3. Drag the "T" icon onto the touchable widget e.g. a button
+4. Enter a widget name
+5. Tap the **Save Widget** button
+
+*Note: you can tap the arrow again to close the bottomsheet and move the widget freely and it will preserve the information*
+
+
+https://user-images.githubusercontent.com/89080323/161919116-9d27c9d1-bf6f-47c4-86a5-18cde8e9a514.mp4
+
+
+
+### How to inspect a view
+
+Inspecting view is the default state when you open the app
+
+However, if you’re Creating/Editing a widget and you want to go back to inspect mode
+
+you can tap the Clear button
+
+
+
+### How to edit an interaction
+
+#### Normal Edit
+
+1. To start editing first you have to be in inspecting mode
+2. Long press on the widget you want to edit 
+3. Choose Edit from the menu that appeared
+4. That will pop up the bottom sheet with the old content of the interaction
+5. Change name, type, and position 
+6. Tap update when done
+7. If you change your mind you can tap Clear to return to inspect mode without saving
+
+
+https://user-images.githubusercontent.com/89080323/161919018-c0ca2a62-c45c-4def-87ee-3809bbb926d3.mp4
+
+
+#### Quick position edit
+
+If you want to adjust the position only, there is a shortcut 
+
+1. Long press and hold on the interaction you want to change size
+2. While holding drag to the preferred position
+3. Lift your finger to save the current position
+
+
+
+https://user-images.githubusercontent.com/89080323/161918909-1cd79398-f3ad-4fe2-bfe4-d0a1c713f8bd.mp4
+
+
+
+### How to remove an interaction
+
+1. To start editing first you have to be in inspecting mode
+2. Long press on the widget you want to edit 
+3. Choose Remove from the menu that appeared and that’s it!
+
+
+https://user-images.githubusercontent.com/89080323/161917599-17be16bb-b2e7-4563-a528-c20845ba359a.mp4
+
+
+
+
+## Putting the app in Drive Mode
 
 To ensure the app is built for TestSweets to be able to drive it you you should pass `--dart-define=DRIVE_MODE=true` when building or running the app for TestSweets.
 
-### Build the apk
+
+
+## Build the apk
 
 ```dart
 
