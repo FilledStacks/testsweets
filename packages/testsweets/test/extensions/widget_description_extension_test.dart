@@ -20,7 +20,7 @@ void main() {
               capturedDeviceWidth: 200,
               capturedDeviceHeight: 0,
             ));
-        expect(description.position.responsiveXPosition(500), 250);
+        expect(description.position.responsiveXPosition(500), 229);
       });
 
       test('''When capture a key with position y=100 on screenWidth = 200
@@ -37,7 +37,7 @@ void main() {
               capturedDeviceWidth: 0,
               capturedDeviceHeight: 200,
             ));
-        expect(description.position.responsiveYPosition(500), 250);
+        expect(description.position.responsiveYPosition(500), 229);
       });
     });
   });
