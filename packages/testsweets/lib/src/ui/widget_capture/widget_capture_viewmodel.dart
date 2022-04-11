@@ -39,10 +39,6 @@ class WidgetCaptureViewModel extends FormViewModel {
         .listen((notification) => viewInteractions =
             _notiExtr.scrollInteractions(notification, viewInteractions));
 
-    _testSweetsRouteTracker.addListener(() async {
-      await loadWidgetDescriptions();
-    });
-
     _widgetCaptureService.projectId = projectId;
   }
 
@@ -79,10 +75,12 @@ class WidgetCaptureViewModel extends FormViewModel {
     log.v('');
     try {
       setBusy(true);
-      await _widgetCaptureService.loadWidgetDescriptionsForProject();
-
-      setInteractionForCurrentRoute();
-
+      await _widgetCaptureService.loadWidgetDescriptionsForProject().then((_) {
+        refreshInteractions();
+        _testSweetsRouteTracker.addListener(() {
+          refreshInteractions();
+        });
+      });
       setBusy(false);
     } catch (e) {
       log.e('Could not get widgetDescriptions: $e');
@@ -92,9 +90,10 @@ class WidgetCaptureViewModel extends FormViewModel {
     }
   }
 
-  void setInteractionForCurrentRoute() {
+  void refreshInteractions() {
     viewInteractions = _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracker.currentRoute);
+    notifyListeners();
   }
 
   set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
