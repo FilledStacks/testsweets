@@ -60,11 +60,12 @@ class WidgetCaptureView extends StatelessWidget {
             ),
             if (model.captureWidgetStatusEnum.showDraggableWidget)
               const DraggableWidget(),
-              
+
             const InteractionFormAndVisualizer(),
 
-
-
+            BusyIndicator(
+              enable: model.busy(WidgetCaptureViewModel.crudBusyIndicator),
+            ),
             BusyIndicator(
               enable: model.isBusy,
             ),

@@ -32,6 +32,8 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _notificationController = StreamController<Notification>.broadcast();
   var _captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
 
+  static String crudBusyIndicator = 'crudBusyIndicator';
+
   WidgetCaptureViewModel({required String projectId}) {
     _notificationController.stream
         .where(_notiExtr.onlyScrollUpdateNotification)
@@ -93,7 +95,6 @@ class WidgetCaptureViewModel extends FormViewModel {
   void refreshInteractions() {
     viewInteractions = _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracker.currentRoute);
-    notifyListeners();
   }
 
   set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
@@ -148,7 +149,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     _gatherInteracitonInfo();
 
-    setBusy(true);
+    setBusyForObject(crudBusyIndicator, true);
 
     try {
       final ineractionId = await _widgetCaptureService.captureWidgetDescription(
@@ -159,7 +160,7 @@ class WidgetCaptureViewModel extends FormViewModel {
           message: e.toString(), variant: SnackbarType.failed);
     }
 
-    setBusy(false);
+    setBusyForObject(crudBusyIndicator, false);
   }
 
   void _gatherInteracitonInfo() {
@@ -180,7 +181,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   Future<String?> updateWidgetDescription() async {
     log.i(inProgressInteraction);
 
-    setBusy(true);
+    setBusyForObject(crudBusyIndicator, true);
 
     final result = await _widgetCaptureService.updateWidgetDescription(
         description: inProgressInteraction!);
@@ -192,7 +193,7 @@ class WidgetCaptureViewModel extends FormViewModel {
       _updateInteractionInViewWhenSuccess();
     }
 
-    setBusy(false);
+    setBusyForObject(crudBusyIndicator, false);
     return result;
   }
 
@@ -207,7 +208,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   Future<String?> removeWidgetDescription() async {
     log.i(inProgressInteraction);
 
-    setBusy(true);
+    setBusyForObject(crudBusyIndicator, true);
 
     final result = await _widgetCaptureService.removeWidgetDescription(
         description: inProgressInteraction!);
@@ -218,7 +219,7 @@ class WidgetCaptureViewModel extends FormViewModel {
       _removeInteractionFromViewWhenSuccess();
     }
 
-    setBusy(false);
+    setBusyForObject(crudBusyIndicator, false);
     return result;
   }
 

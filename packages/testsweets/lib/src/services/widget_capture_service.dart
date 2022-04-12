@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/locator.dart';
@@ -10,8 +11,8 @@ class WidgetCaptureService {
 
   final _cloudFunctionsService = locator<CloudFunctionsService>();
 
-  final Map<String, List<Interaction>> widgetDescriptionMap =
-      Map<String, List<Interaction>>();
+  @visibleForTesting
+  final widgetDescriptionMap = Map<String, List<Interaction>>();
   late String _projectId;
 
   set projectId(String projectId) {
@@ -29,7 +30,9 @@ class WidgetCaptureService {
   Future<void> loadWidgetDescriptionsForProject() async {
     final widgetDescriptions = await _cloudFunctionsService
         .getWidgetDescriptionForProject(projectId: _projectId);
+
     widgetDescriptionMap.clear();
+
     for (final description in widgetDescriptions) {
       addWidgetDescriptionToMap = description;
     }
@@ -44,32 +47,6 @@ class WidgetCaptureService {
     }
   }
 
-  List<Interaction> getDescriptionsForView({
-    required String currentRoute,
-  }) {
-    var viewDescriptions = widgetDescriptionMap[currentRoute];
-    log.v('currentRoute:$currentRoute viewDescriptions:$viewDescriptions');
-
-    final potentialParentRoute = currentRoute.replaceAll(RegExp('[0-9]'), '');
-
-    if (currentRoute != potentialParentRoute) {
-      final additionalDescriptions = widgetDescriptionMap[potentialParentRoute];
-      if (additionalDescriptions != null) {
-        log.v('Parent route has descriptions: $potentialParentRoute');
-
-        viewDescriptions = [...?viewDescriptions, ...additionalDescriptions];
-      }
-    }
-
-    return viewDescriptions ?? [];
-  }
-
-  bool checkCurrentViewIfAlreadyCaptured(String originalViewName) =>
-      widgetDescriptionMap.containsKey(originalViewName)
-          ? widgetDescriptionMap[originalViewName]!
-              .any((element) => element.name == '')
-          : false;
-
   /// Captures a widgets description to the backend as well as locally in the [widgetDescriptionMap]
   Future<String> captureWidgetDescription({
     required Interaction description,
@@ -83,8 +60,6 @@ class WidgetCaptureService {
       projectId: _projectId,
       description: description,
     );
-    // Add description to descriptionMap with id from the backend
-    addWidgetDescriptionToMap = description.copyWith(id: descriptionId);
 
     log.i('descriptionId from Cloud: $descriptionId');
     return descriptionId;
@@ -148,5 +123,37 @@ class WidgetCaptureService {
       // Add view to descriptionMap with id from the backend
       addWidgetDescriptionToMap = viewDescription.copyWith(id: descriptionId);
     }
+  }
+
+  List<Interaction> getDescriptionsForView({required String currentRoute}) {
+    var viewDescriptions = widgetDescriptionMap[currentRoute];
+    log.v('currentRoute:$currentRoute viewDescriptions:$viewDescriptions');
+
+    final potentialParentRoute = currentRoute.replaceAll(RegExp('[0-9]'), '');
+
+    if (currentRoute != potentialParentRoute) {
+      final additionalDescriptions = widgetDescriptionMap[potentialParentRoute];
+      if (additionalDescriptions != null) {
+        log.v('Parent route has descriptions: $potentialParentRoute');
+
+        viewDescriptions = [...?viewDescriptions, ...additionalDescriptions];
+      }
+    }
+
+    return viewDescriptions ?? [];
+  }
+
+  bool checkCurrentViewIfAlreadyCaptured(String originalViewName) =>
+      widgetDescriptionMap.containsKey(originalViewName)
+          ? widgetDescriptionMap[originalViewName]!
+              .any((element) => element.name == '')
+          : false;
+
+  void syncRouteInteractions(String routeName, List<Interaction> interactions) {
+    widgetDescriptionMap.update(
+      routeName,
+      (_) => interactions,
+      ifAbsent: () => interactions,
+    );
   }
 }

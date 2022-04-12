@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 
@@ -549,6 +548,36 @@ void main() {
 
         expect(_service.widgetDescriptionMap['/']!.first.name,
             kGeneralInteraction.name);
+      });
+    });
+    group('syncRouteInteractions -', () {
+      const routeName = 'routeName';
+      test('''
+When called with a new route, Add the new route
+with its interactions to widgetDescriptionMap''', () {
+        final _service = _getService;
+
+        _service.syncRouteInteractions(
+            routeName, [kGeneralInteraction, kViewInteraction]);
+
+        expect(_service.widgetDescriptionMap, {
+          routeName: [kGeneralInteraction, kViewInteraction]
+        });
+      });
+      test('''
+When called with existing route, Should override the route interactions
+with the new ones ''', () {
+        final _service = _getService;
+
+        _service.widgetDescriptionMap.addAll({
+          routeName: [kGeneralInteractionWithZeroOffset]
+        });
+        _service.syncRouteInteractions(
+            routeName, [kGeneralInteraction, kViewInteraction]);
+
+        expect(_service.widgetDescriptionMap, {
+          routeName: [kGeneralInteraction, kViewInteraction]
+        });
       });
     });
   });
