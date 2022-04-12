@@ -43,8 +43,8 @@ void main() {
         model.showWidgetForm();
         model.inProgressInteraction!
             .copyWith(widgetType: WidgetType.scrollable);
-        model.saveWidget();
-        expect(model.inProgressInteraction!.originalViewName, 'current route');
+        model.captureNewInteraction();
+        expect(model.interactionInfo.originalViewName, 'current route');
       });
       test('''When called and the current route is `/current route`,
            Should convert it to `currentRoute` in viewName proberty before send it to backend''',
@@ -55,9 +55,9 @@ void main() {
         model.showWidgetForm();
         model.inProgressInteraction!
             .copyWith(widgetType: WidgetType.scrollable);
-        model.saveWidget();
-        expect(model.inProgressInteraction!.viewName, 'currentRoute');
-        expect(model.inProgressInteraction!.originalViewName, '/current route');
+        model.captureNewInteraction();
+        expect(model.interactionInfo.viewName, 'currentRoute');
+        expect(model.interactionInfo.originalViewName, '/current route');
       });
       test('''When called and the current widget name is `login-button`,
            Should convert it to `loginButton` in name proberty before send it to backend''',
@@ -70,8 +70,8 @@ void main() {
 
         model.inProgressInteraction = model.inProgressInteraction!
             .copyWith(widgetType: WidgetType.touchable);
-        model.saveWidget();
-        expect(model.inProgressInteraction!.name, 'loginButton');
+        model.captureNewInteraction();
+        expect(model.interactionInfo.name, 'loginButton');
       });
     });
 

@@ -144,17 +144,16 @@ class WidgetCaptureViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  Future<void> saveWidget() async {
+  Future<void> captureNewInteraction() async {
     log.i(inProgressInteraction);
-
-    _gatherInteracitonInfo();
 
     setBusyForObject(crudBusyIndicator, true);
 
     try {
-      final ineractionId = await _widgetCaptureService.captureWidgetDescription(
-          description: inProgressInteraction!);
-      _addSavedInteractionToViewWhenSuccess(ineractionId);
+      final interaction = await _widgetCaptureService
+          .saveInteractionInDatabase(interactionInfo);
+
+      _addSavedInteractionToViewWhenSuccess(interaction);
     } catch (e) {
       _snackbarService.showCustomSnackBar(
           message: e.toString(), variant: SnackbarType.failed);
@@ -163,17 +162,15 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusyForObject(crudBusyIndicator, false);
   }
 
-  void _gatherInteracitonInfo() {
-    inProgressInteraction = inProgressInteraction?.copyWith(
-      name: widgetNameValue!.convertWidgetNameToValidFormat,
-      viewName:
-          _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
-      originalViewName: _testSweetsRouteTracker.currentRoute,
-    );
-  }
+  Interaction get interactionInfo => inProgressInteraction!.copyWith(
+        name: widgetNameValue!.convertWidgetNameToValidFormat,
+        viewName:
+            _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
+        originalViewName: _testSweetsRouteTracker.currentRoute,
+      );
 
-  void _addSavedInteractionToViewWhenSuccess(String id) {
-    viewInteractions.add(inProgressInteraction!.copyWith(id: id));
+  void _addSavedInteractionToViewWhenSuccess(Interaction interaction) {
+    viewInteractions.add(interaction);
     inProgressInteraction = null;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
   }
@@ -244,7 +241,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     if (inProgressInteraction?.id != null) {
       await updateWidgetDescription();
     } else {
-      await saveWidget();
+      await captureNewInteraction();
     }
   }
 

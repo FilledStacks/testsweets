@@ -123,42 +123,12 @@ void main() {
         _service.addWidgetDescriptionToMap = Interaction.view(
             viewName: 'OriginalLoginView',
             originalViewName: 'OriginalLoginView');
-        await _service.captureWidgetDescription(
-          description: description,
-        );
+        await _service.saveInteractionInDatabase(description);
 
         verify(cloudFunctionsService.uploadWidgetDescriptionToProject(
           projectId: 'projectId',
           description: description,
         ));
-      });
-
-      test(
-          'When widget has been added to backend, add description to descriptionMap with id from the backend',
-          () async {
-        final description = Interaction(
-          originalViewName: 'login_view',
-          viewName: 'loginView',
-          name: 'email',
-          position: WidgetPosition(
-              x: 100, y: 199, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
-          widgetType: WidgetType.general,
-        );
-
-        final String idToReturn = 'cloud_id';
-
-        getAndRegisterCloudFunctionsService(
-            addWidgetDescriptionToProjectResult: idToReturn);
-        final _service = _getService;
-
-        await _service.captureWidgetDescription(
-          description: description,
-        );
-
-        expect(
-          _service.widgetDescriptionMap[description.originalViewName]?.first.id,
-          idToReturn,
-        );
       });
     });
     group('checkCurrentViewIfAlreadyCaptured -', () {

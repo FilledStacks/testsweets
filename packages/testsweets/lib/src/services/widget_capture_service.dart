@@ -47,22 +47,17 @@ class WidgetCaptureService {
     }
   }
 
-  /// Captures a widgets description to the backend as well as locally in the [widgetDescriptionMap]
-  Future<String> captureWidgetDescription({
-    required Interaction description,
-  }) async {
-    log.i('description:$description projectId:$_projectId');
+  Future<Interaction> saveInteractionInDatabase(Interaction interaction) async {
+    log.i('interaction:$interaction projectId:$_projectId');
 
-    await _checkViewIfExistOrCaptureIt(description.originalViewName);
-
-    final descriptionId =
+    final interactionId =
         await _cloudFunctionsService.uploadWidgetDescriptionToProject(
       projectId: _projectId,
-      description: description,
+      description: interaction,
     );
 
-    log.i('descriptionId from Cloud: $descriptionId');
-    return descriptionId;
+    log.i('interactionId from Cloud: $interactionId');
+    return interaction.copyWith(id: interactionId);
   }
 
   /// Updates a widget description to the backend as well as locally in the [widgetDescriptionMap]
@@ -75,13 +70,13 @@ class WidgetCaptureService {
       final widgetToUpdate = widgetDescriptionMap[description.originalViewName]
           ?.firstWhere((element) => element.id == description.id);
 
-      final descriptionId =
+      final interactionId =
           await _cloudFunctionsService.updateWidgetDescription(
               projectId: _projectId,
               newwidgetDescription: description,
               oldwidgetDescription: widgetToUpdate!);
 
-      log.i('descriptionId from Cloud: $descriptionId');
+      log.i('interactionId from Cloud: $interactionId');
       return null;
     } catch (e) {
       log.e(e);
@@ -93,11 +88,11 @@ class WidgetCaptureService {
   Future<String?> removeWidgetDescription(
       {required Interaction description}) async {
     try {
-      final descriptionId =
+      final interactionId =
           await _cloudFunctionsService.deleteWidgetDescription(
               projectId: _projectId, description: description);
 
-      log.i('descriptionId from Cloud: $descriptionId');
+      log.i('interactionId from Cloud: $interactionId');
       return null;
     } catch (e) {
       log.e(e);
@@ -105,23 +100,25 @@ class WidgetCaptureService {
     }
   }
 
-  Future<void> _checkViewIfExistOrCaptureIt(String originalViewName) async {
+  Future<Interaction?> checkViewIfExistOrCaptureIt(
+      String originalViewName) async {
     if (!checkCurrentViewIfAlreadyCaptured(originalViewName)) {
       log.i('originalViewName:$originalViewName projectId:$_projectId');
 
-      final viewDescription = Interaction.view(
+      final viewInteraction = Interaction.view(
           viewName: originalViewName.convertViewNameToValidFormat,
           originalViewName: originalViewName);
 
-      final descriptionId =
+      final interactionId =
           await _cloudFunctionsService.uploadWidgetDescriptionToProject(
         projectId: _projectId,
-        description: viewDescription,
+        description: viewInteraction,
       );
-      log.v('descriptionId from Cloud: $descriptionId');
+      log.v('interactionId from Cloud: $interactionId');
 
-      // Add view to descriptionMap with id from the backend
-      addWidgetDescriptionToMap = viewDescription.copyWith(id: descriptionId);
+      return viewInteraction.copyWith(id: interactionId);
+    } else {
+      return null;
     }
   }
 
