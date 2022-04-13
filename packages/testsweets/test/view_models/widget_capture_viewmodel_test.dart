@@ -33,7 +33,7 @@ void main() {
         verify(service.projectId = _projectId);
       });
     });
-    group('saveWidget -', () {
+    group('captureNewInteraction -', () {
       test('''When called on route `current route`,
            Should added it to widgetDescription and send it to backend''',
           () async {
@@ -44,7 +44,7 @@ void main() {
         model.inProgressInteraction!
             .copyWith(widgetType: WidgetType.scrollable);
         model.captureNewInteraction();
-        expect(model.interactionInfo.originalViewName, 'current route');
+        expect(model.fullInteraction.originalViewName, 'current route');
       });
       test('''When called and the current route is `/current route`,
            Should convert it to `currentRoute` in viewName proberty before send it to backend''',
@@ -56,8 +56,8 @@ void main() {
         model.inProgressInteraction!
             .copyWith(widgetType: WidgetType.scrollable);
         model.captureNewInteraction();
-        expect(model.interactionInfo.viewName, 'currentRoute');
-        expect(model.interactionInfo.originalViewName, '/current route');
+        expect(model.fullInteraction.viewName, 'currentRoute');
+        expect(model.fullInteraction.originalViewName, '/current route');
       });
       test('''When called and the current widget name is `login-button`,
            Should convert it to `loginButton` in name proberty before send it to backend''',
@@ -71,7 +71,26 @@ void main() {
         model.inProgressInteraction = model.inProgressInteraction!
             .copyWith(widgetType: WidgetType.touchable);
         model.captureNewInteraction();
-        expect(model.interactionInfo.name, 'loginButton');
+        expect(model.fullInteraction.name, 'loginButton');
+      });
+      test('''
+When capture a new intercation, Should sync with any scrollable underneath it ''',
+          () async {
+        getAndRegisterTestSweetsRouteTracker(currentRoute: 'current route');
+        getAndRegisterWidgetCaptureService();
+        final notificationExtractor = getAndRegisterNotificationExtractor();
+        final model = _getViewModel();
+        model
+          ..formValueMap[WidgetNameValueKey] = 'myWidgetName'
+          ..showWidgetForm()
+          ..inProgressInteraction!.copyWith(widgetType: WidgetType.scrollable)
+          ..viewInteractions
+              .add(kViewInteraction); // to skip capturing the view
+
+        await model.captureNewInteraction();
+
+        verify(notificationExtractor
+            .syncInteractionWithScrollable(kGeneralInteraction));
       });
     });
 

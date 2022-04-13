@@ -158,7 +158,7 @@ class WidgetCaptureViewModel extends FormViewModel {
         viewInteractions.add(capturedView);
       }
       final interaction = await _widgetCaptureService
-          .saveInteractionInDatabase(interactionInfo);
+          .saveInteractionInDatabase(fullInteraction);
 
       _addSavedInteractionToViewWhenSuccess(interaction);
     } catch (e) {
@@ -169,14 +169,17 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusyForObject(sideBusyIndicator, false);
   }
 
-  Interaction get interactionInfo => inProgressInteraction!.copyWith(
+  Interaction get fullInteraction => inProgressInteraction!.copyWith(
         name: widgetNameValue!.convertWidgetNameToValidFormat,
         viewName: _testSweetsRouteTracker.formatedCurrentRoute,
         originalViewName: _testSweetsRouteTracker.currentRoute,
       );
 
-  void _addSavedInteractionToViewWhenSuccess(Interaction interaction) {
-    viewInteractions.add(interaction);
+  void _addSavedInteractionToViewWhenSuccess(Interaction createdInteraction) {
+    final syncedInteraction =
+        _notifictionExtractor.syncInteractionWithScrollable(createdInteraction);
+
+    viewInteractions.add(syncedInteraction);
     inProgressInteraction = null;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
   }

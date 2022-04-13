@@ -36,7 +36,7 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
   _removeRegistrationIfExists<WidgetCaptureService>();
   final service = MockWidgetCaptureService();
   when(service.saveInteractionInDatabase(any))
-      .thenAnswer((_) => Future.value());
+      .thenAnswer((_) => Future.value(kGeneralInteraction));
 
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
       .thenReturn(viewInteractions);
