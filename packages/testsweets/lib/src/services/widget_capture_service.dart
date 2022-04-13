@@ -82,26 +82,21 @@ class WidgetCaptureService {
     log.v('Remove interaction that have id: $interactionId from database');
   }
 
-  Future<Interaction?> checkViewIfExistOrCaptureIt(
-      String originalViewName) async {
-    if (!checkCurrentViewIfAlreadyCaptured(originalViewName)) {
-      log.i('originalViewName:$originalViewName projectId:$_projectId');
+  Future<Interaction> captureView(String originalViewName) async {
+    log.i('originalViewName:$originalViewName projectId:$_projectId');
 
-      final viewInteraction = Interaction.view(
-          viewName: originalViewName.convertViewNameToValidFormat,
-          originalViewName: originalViewName);
+    final viewInteraction = Interaction.view(
+        viewName: originalViewName.convertViewNameToValidFormat,
+        originalViewName: originalViewName);
 
-      final interactionId =
-          await _cloudFunctionsService.uploadWidgetDescriptionToProject(
-        projectId: _projectId,
-        description: viewInteraction,
-      );
-      log.v('interactionId from Cloud: $interactionId');
+    final interactionId =
+        await _cloudFunctionsService.uploadWidgetDescriptionToProject(
+      projectId: _projectId,
+      description: viewInteraction,
+    );
+    log.v('interactionId from Cloud: $interactionId');
 
-      return viewInteraction.copyWith(id: interactionId);
-    } else {
-      return null;
-    }
+    return viewInteraction.copyWith(id: interactionId);
   }
 
   List<Interaction> getDescriptionsForView({required String currentRoute}) {

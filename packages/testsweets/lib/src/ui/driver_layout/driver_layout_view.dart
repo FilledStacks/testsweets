@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:stacked/stacked.dart';
 
 import 'package:testsweets/src/ui/driver_layout/hittable_stack.dart';
+import 'package:testsweets/src/ui/route_banner/route_banner_view.dart';
 import 'package:testsweets/src/ui/shared/busy_indecator.dart';
 import 'package:testsweets/src/ui/shared/route_banner.dart';
 
@@ -33,16 +34,10 @@ class DriverLayoutView extends StatelessWidget {
                 onNotification: model.onClientNotifiaction,
                 child: child,
               ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: RouteBanner(
-                  isCaptured: model.currentViewCaptured,
-                  routeName: model.currentViewName,
-                ),
-              ),
+              RouteBannerView(isCaptured: model.currentViewCaptured),
               const InteractionsVisualizerDriverMode(),
               BusyIndicator(
-                enable: model.isBusy,
+                center: model.isBusy,
               )
             ],
           ),

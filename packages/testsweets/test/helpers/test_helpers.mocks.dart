@@ -172,13 +172,10 @@ class MockWidgetCaptureService extends _i1.Mock
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i9.Future<_i3.Interaction?> checkViewIfExistOrCaptureIt(
-          String? originalViewName) =>
-      (super.noSuchMethod(
-          Invocation.method(#checkViewIfExistOrCaptureIt, [originalViewName]),
-          returnValue:
-              Future<_i3.Interaction?>.value()) as _i9
-          .Future<_i3.Interaction?>);
+  _i9.Future<_i3.Interaction> captureView(String? originalViewName) =>
+      (super.noSuchMethod(Invocation.method(#captureView, [originalViewName]),
+              returnValue: Future<_i3.Interaction>.value(_FakeInteraction_1()))
+          as _i9.Future<_i3.Interaction>);
   @override
   List<_i3.Interaction> getDescriptionsForView({String? currentRoute}) =>
       (super.noSuchMethod(
@@ -224,6 +221,14 @@ class MockTestSweetsRouteTracker extends _i1.Mock
   set indexedRouteStateMap(Map<String, int>? _indexedRouteStateMap) =>
       super.noSuchMethod(
           Invocation.setter(#indexedRouteStateMap, _indexedRouteStateMap),
+          returnValueForMissingStub: null);
+  @override
+  String get previosRoute =>
+      (super.noSuchMethod(Invocation.getter(#previosRoute), returnValue: '')
+          as String);
+  @override
+  set previosRoute(String? _previosRoute) =>
+      super.noSuchMethod(Invocation.setter(#previosRoute, _previosRoute),
           returnValueForMissingStub: null);
   @override
   bool get isChildRouteActivated =>

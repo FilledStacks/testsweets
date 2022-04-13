@@ -42,6 +42,12 @@ class WidgetCaptureViewModel extends FormViewModel {
         .listen((notification) => viewInteractions =
             _notiExtr.scrollInteractions(notification, viewInteractions));
 
+    _testSweetsRouteTracker.addListener(() {
+      _widgetCaptureService.syncRouteInteractions(
+          _testSweetsRouteTracker.previosRoute, viewInteractions);
+      loadCurrentRouteInteractions();
+    });
+
     _widgetCaptureService.projectId = projectId;
   }
 
@@ -54,10 +60,8 @@ class WidgetCaptureViewModel extends FormViewModel {
     descriptionsForViewNotifier.value = widgetDescriptions;
   }
 
-  bool get currentViewCaptured => viewInteractions.any(
-        (element) => element.widgetType == WidgetType.view,
-      );
-  String get currentViewName => _testSweetsRouteTracker.formatedCurrentRoute;
+  bool get currentViewCaptured =>
+      viewInteractions.any((element) => element.widgetType == WidgetType.view);
 
   /// We use this position as the starter point of any new widget
   late WidgetPosition screenCenterPosition;
@@ -77,18 +81,20 @@ class WidgetCaptureViewModel extends FormViewModel {
   Future<void> loadWidgetDescriptions() async {
     log.v('');
     setBusyForObject(fullScreenBusyIndicator, true);
+
     try {
       await _widgetCaptureService.loadWidgetDescriptionsForProject();
-    } catch (e) {
-      log.e('Could not get widgetDescriptions: $e');
+      loadCurrentRouteInteractions();
+    } catch (error) {
+      log.e('Could not get widgetDescriptions: $error');
       _snackbarService.showCustomSnackBar(
-          message: 'Could not get widgetDescriptions: $e',
+          message: 'Could not get widgetDescriptions: $error',
           variant: SnackbarType.failed);
     }
     setBusyForObject(fullScreenBusyIndicator, false);
   }
 
-  void refreshInteractions() {
+  void loadCurrentRouteInteractions() {
     viewInteractions = _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracker.currentRoute);
   }
@@ -146,6 +152,11 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusyForObject(sideBusyIndicator, true);
 
     try {
+      if (!currentViewCaptured) {
+        final capturedView = await _widgetCaptureService
+            .captureView(_testSweetsRouteTracker.currentRoute);
+        _addSavedInteractionToViewWhenSuccess(capturedView);
+      }
       final interaction = await _widgetCaptureService
           .saveInteractionInDatabase(interactionInfo);
 
@@ -160,8 +171,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   Interaction get interactionInfo => inProgressInteraction!.copyWith(
         name: widgetNameValue!.convertWidgetNameToValidFormat,
-        viewName:
-            _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
+        viewName: _testSweetsRouteTracker.formatedCurrentRoute,
         originalViewName: _testSweetsRouteTracker.currentRoute,
       );
 

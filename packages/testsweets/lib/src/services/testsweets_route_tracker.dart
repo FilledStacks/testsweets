@@ -19,6 +19,7 @@ class TestSweetsRouteTracker extends ChangeNotifier {
   bool get isChildRouteActivated => _tempRoute.isEmpty;
   bool get isNestedView => _tempRoute.isNotEmpty || _parentRoute.isNotEmpty;
 
+  String previosRoute = '';
   String _currentRoute = '';
   String get currentRoute => _currentRoute;
   String get formatedCurrentRoute => _currentRoute.isNotEmpty
@@ -48,6 +49,7 @@ class TestSweetsRouteTracker extends ChangeNotifier {
     log.i('setCurrentRoute | route: $route');
     _parentRoute = '';
     _tempRoute = '';
+    previosRoute = _currentRoute;
     _currentRoute = route;
     loadRouteIndexIfExist(route);
     refreshUi();
