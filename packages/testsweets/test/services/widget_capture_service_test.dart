@@ -488,9 +488,7 @@ void main() {
         final _service = _getService;
 
         _service.addWidgetDescriptionToMap = description;
-        await _service.updateWidgetDescription(
-          description: description,
-        );
+        await _service.updateInteractionInDatabase(description);
 
         verify(cloudFunctionsService.updateWidgetDescription(
             projectId: 'projectId',
@@ -512,9 +510,8 @@ void main() {
         await _service.loadWidgetDescriptionsForProject();
 
         // update [kWidgetDescription] key
-        await _service.updateWidgetDescription(
-          description: kGeneralInteraction.copyWith(name: 'login22'),
-        );
+        await _service.updateInteractionInDatabase(
+            kGeneralInteraction.copyWith(name: 'login22'));
 
         expect(_service.widgetDescriptionMap['/']!.first.name,
             kGeneralInteraction.name);

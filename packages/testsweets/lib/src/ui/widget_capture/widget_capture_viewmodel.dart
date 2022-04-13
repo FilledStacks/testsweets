@@ -175,29 +175,28 @@ class WidgetCaptureViewModel extends FormViewModel {
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
   }
 
-  Future<String?> updateWidgetDescription() async {
+  Future<void> updateInteraction() async {
     log.i(inProgressInteraction);
 
     setBusyForObject(crudBusyIndicator, true);
 
-    final result = await _widgetCaptureService.updateWidgetDescription(
-        description: inProgressInteraction!);
+    try {
+      await _widgetCaptureService
+          .updateInteractionInDatabase(inProgressInteraction!);
 
-    if (result is String) {
+      _updateInteractionInViewWhenSuccess(inProgressInteraction!);
+    } catch (error) {
       _snackbarService.showCustomSnackBar(
-          message: result, variant: SnackbarType.failed);
-    } else {
-      _updateInteractionInViewWhenSuccess();
+          message: error.toString(), variant: SnackbarType.failed);
     }
 
     setBusyForObject(crudBusyIndicator, false);
-    return result;
   }
 
-  void _updateInteractionInViewWhenSuccess() {
-    final updatedIndex = viewInteractions.indexWhere(
-        (interaction) => inProgressInteraction!.id == interaction.id);
-    viewInteractions[updatedIndex] = inProgressInteraction!;
+  void _updateInteractionInViewWhenSuccess(Interaction updatedInteraction) {
+    final updatedIndex = viewInteractions
+        .indexWhere((interaction) => updatedInteraction.id == interaction.id);
+    viewInteractions[updatedIndex] = updatedInteraction;
     inProgressInteraction = null;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
   }
@@ -239,7 +238,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   Future<void> submitForm() async {
     if (inProgressInteraction?.id != null) {
-      await updateWidgetDescription();
+      await updateInteraction();
     } else {
       await captureNewInteraction();
     }
@@ -271,7 +270,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
       checkForExternalities(extractedScrollables);
 
-      await updateWidgetDescription();
+      await updateInteraction();
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
     inProgressInteraction = null;

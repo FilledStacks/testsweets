@@ -88,10 +88,10 @@ void main() {
         model.formValueMap[WidgetNameValueKey] = 'loginButton';
         model.setFormStatus();
 
-        await model.updateWidgetDescription();
+        await model.updateInteraction();
 
-        verify(service.updateWidgetDescription(
-            description: kGeneralInteraction.copyWith(name: 'loginButton')));
+        verify(service.updateInteractionInDatabase(
+            kGeneralInteraction.copyWith(name: 'loginButton')));
       });
 
       test('''When called and update was successful,
@@ -100,7 +100,7 @@ void main() {
         model.viewInteractions = [kGeneralInteraction];
         model.inProgressInteraction = kGeneralInteraction;
 
-        await model.updateWidgetDescription();
+        await model.updateInteraction();
 
         expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
       });
@@ -116,8 +116,7 @@ void main() {
 
         await model.onLongPressUp();
 
-        verify(
-            service.updateWidgetDescription(description: kGeneralInteraction));
+        verify(service.updateInteractionInDatabase(kGeneralInteraction));
       });
 
       test('''When in quickPositionEdit mode and user trigger onLongPressUp
@@ -144,8 +143,7 @@ void main() {
           ),
         );
 
-        verify(
-            service.updateWidgetDescription(description: updatedInteraction));
+        verify(service.updateInteractionInDatabase(updatedInteraction));
       });
       test('''
             When update interaction position,

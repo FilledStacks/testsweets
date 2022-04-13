@@ -60,28 +60,17 @@ class WidgetCaptureService {
     return interaction.copyWith(id: interactionId);
   }
 
-  /// Updates a widget description to the backend as well as locally in the [widgetDescriptionMap]
-  Future<String?> updateWidgetDescription({
-    required Interaction description,
-  }) async {
-    try {
-      log.i('description:$description projectId:$_projectId');
+  Future<void> updateInteractionInDatabase(Interaction interaction) async {
+    log.i('interaction:$interaction projectId:$_projectId');
 
-      final widgetToUpdate = widgetDescriptionMap[description.originalViewName]
-          ?.firstWhere((element) => element.id == description.id);
+    final interactionToUpdate =
+        widgetDescriptionMap[interaction.originalViewName]
+            ?.firstWhere((element) => element.id == interaction.id);
 
-      final interactionId =
-          await _cloudFunctionsService.updateWidgetDescription(
-              projectId: _projectId,
-              newwidgetDescription: description,
-              oldwidgetDescription: widgetToUpdate!);
-
-      log.i('interactionId from Cloud: $interactionId');
-      return null;
-    } catch (e) {
-      log.e(e);
-      return e.toString();
-    }
+    await _cloudFunctionsService.updateWidgetDescription(
+        projectId: _projectId,
+        newwidgetDescription: interaction,
+        oldwidgetDescription: interactionToUpdate!);
   }
 
   /// Delete a widget descriptions from the project as well as locally

@@ -35,14 +35,12 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
     bool currentViewIsAlreadyCaptured = false}) {
   _removeRegistrationIfExists<WidgetCaptureService>();
   final service = MockWidgetCaptureService();
-  when(service.captureWidgetDescription(
-    description: anyNamed('description'),
-  )).thenAnswer((realInvocation) => Future.value());
-  when(service.captureWidgetDescription(description: anyNamed('description')))
+  when(service.saveInteractionInDatabase(any))
       .thenAnswer((_) => Future.value());
+
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
       .thenReturn(viewInteractions);
-  when(service.updateWidgetDescription(description: anyNamed('description')))
+  when(service.updateInteractionInDatabase(any))
       .thenAnswer((_) => Future.value());
   when(service.removeWidgetDescription(description: anyNamed('description')))
       .thenAnswer((_) => Future.value());
