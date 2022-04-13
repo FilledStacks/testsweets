@@ -155,7 +155,7 @@ class WidgetCaptureViewModel extends FormViewModel {
       if (!currentViewCaptured) {
         final capturedView = await _widgetCaptureService
             .captureView(_testSweetsRouteTracker.currentRoute);
-        _addSavedInteractionToViewWhenSuccess(capturedView);
+        viewInteractions.add(capturedView);
       }
       final interaction = await _widgetCaptureService
           .saveInteractionInDatabase(interactionInfo);

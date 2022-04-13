@@ -42,7 +42,7 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
       .thenReturn(viewInteractions);
   when(service.updateInteractionInDatabase(any))
       .thenAnswer((_) => Future.value());
-  when(service.removeInteractionFromDatabase(anyNamed('description')))
+  when(service.removeInteractionFromDatabase(any))
       .thenAnswer((_) => Future.value());
 
   when(service.checkCurrentViewIfAlreadyCaptured(any))
@@ -64,6 +64,7 @@ FindScrollables getAndRegisterFindScrollables(
 
 MockTestSweetsRouteTracker getAndRegisterTestSweetsRouteTracker(
     {String currentRoute = 'current route',
+    String formattedCurrentRoute = 'currentRoute',
     bool isChildRouteActivated = true,
     bool isNestedView = true,
     String parentRoute = 'parentRoute'}) {
@@ -71,6 +72,7 @@ MockTestSweetsRouteTracker getAndRegisterTestSweetsRouteTracker(
   final service = MockTestSweetsRouteTracker();
   when(service.currentRoute).thenReturn(currentRoute);
   when(service.parentRoute).thenReturn(parentRoute);
+  when(service.formatedCurrentRoute).thenReturn(formattedCurrentRoute);
   when(service.isChildRouteActivated).thenReturn(isChildRouteActivated);
   when(service.isNestedView).thenReturn(isNestedView);
   locator.registerSingleton<TestSweetsRouteTracker>(service);
