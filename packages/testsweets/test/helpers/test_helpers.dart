@@ -40,7 +40,9 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
 
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
       .thenReturn(viewInteractions);
-  when(service.updateInteractionInDatabase(any))
+  when(service.updateInteractionInDatabase(
+          updatedInteraction: anyNamed('updatedInteraction'),
+          oldInteraction: anyNamed('oldInteraction')))
       .thenAnswer((_) => Future.value());
   when(service.removeInteractionFromDatabase(any))
       .thenAnswer((_) => Future.value());
@@ -138,7 +140,8 @@ SnackbarService getAndRegisterSnackbarService() {
 ReactiveScrollable getAndRegisterReactiveScrollable() {
   _removeRegistrationIfExists<ReactiveScrollable>();
   final service = MockReactiveScrollable();
-
+  when(service.filterAffectedInteractionsByScrollable(any)).thenReturn([]);
+  when(service.moveInteractionsWithScrollable(any)).thenReturn([]);
   locator.registerSingleton<ReactiveScrollable>(service);
   return service;
 }
@@ -169,10 +172,15 @@ ScrollAppliance getAndRegisterScrollAppliance() {
   return service;
 }
 
-NotificationExtractor getAndRegisterNotificationExtractor() {
+NotificationExtractor getAndRegisterNotificationExtractor(
+    {Interaction? interactionAfterSyncInteractionWithScrollable}) {
   _removeRegistrationIfExists<NotificationExtractor>();
   final service = MockNotificationExtractor();
 
+  when(service.syncInteractionWithScrollable(any)).thenAnswer(
+      (realInvocation) =>
+          interactionAfterSyncInteractionWithScrollable ??
+          realInvocation.positionalArguments[0]);
   locator.registerSingleton<NotificationExtractor>(service);
   return service;
 }

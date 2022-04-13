@@ -83,10 +83,10 @@ final kGeneralInteractionWithZeroOffset = Interaction(
 final kGeneralInteraction = Interaction(
   originalViewName: '/',
   viewName: 'login',
-  id: 'id',
+  id: 'generalId',
   name: 'email',
   position: WidgetPosition(
-      x: 100, y: 199, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
+      x: 100.0, y: 199.0, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
   widgetType: WidgetType.general,
 );
 final kTouchableInteraction = Interaction(

@@ -85,13 +85,16 @@ void main() {
 
         await model.popupMenuActionSelected(
             kGeneralInteraction, PopupMenuAction.edit);
-        model.formValueMap[WidgetNameValueKey] = 'loginButton';
         model.setFormStatus();
 
+        model.inProgressInteraction =
+            kGeneralInteraction.copyWith(name: 'loginButton');
         await model.updateInteraction();
 
         verify(service.updateInteractionInDatabase(
-            kGeneralInteraction.copyWith(name: 'loginButton')));
+            oldInteraction: kGeneralInteraction,
+            updatedInteraction:
+                kGeneralInteraction.copyWith(name: 'loginButton')));
       });
 
       test('''When called and update was successful,
@@ -116,7 +119,9 @@ void main() {
 
         await model.onLongPressUp();
 
-        verify(service.updateInteractionInDatabase(kGeneralInteraction));
+        verify(service.updateInteractionInDatabase(
+            oldInteraction: kGeneralInteraction,
+            updatedInteraction: kGeneralInteraction));
       });
 
       test('''When in quickPositionEdit mode and user trigger onLongPressUp
@@ -138,12 +143,14 @@ void main() {
 
         final updatedInteraction = kGeneralInteraction.copyWith(
           position: kGeneralInteraction.position.copyWith(
-            x: 33,
-            y: 33,
+            x: 33.0,
+            y: 33.0,
           ),
         );
 
-        verify(service.updateInteractionInDatabase(updatedInteraction));
+        verify(service.updateInteractionInDatabase(
+            updatedInteraction: updatedInteraction,
+            oldInteraction: kGeneralInteraction));
       });
       test('''
             When update interaction position,

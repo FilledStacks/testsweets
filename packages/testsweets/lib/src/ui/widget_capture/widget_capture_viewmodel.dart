@@ -27,7 +27,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _widgetCaptureService = locator<WidgetCaptureService>();
   final _snackbarService = locator<SnackbarService>();
   final _scrollAppliance = locator<ScrollAppliance>();
-  final _notiExtr = locator<NotificationExtractor>();
+  final _notifictionExtractor = locator<NotificationExtractor>();
 
   final _notificationController = StreamController<Notification>.broadcast();
   var _captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
@@ -37,10 +37,10 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   WidgetCaptureViewModel({required String projectId}) {
     _notificationController.stream
-        .where(_notiExtr.onlyScrollUpdateNotification)
-        .map(_notiExtr.notificationToScrollableDescription)
-        .listen((notification) => viewInteractions =
-            _notiExtr.scrollInteractions(notification, viewInteractions));
+        .where(_notifictionExtractor.onlyScrollUpdateNotification)
+        .map(_notifictionExtractor.notificationToScrollableDescription)
+        .listen((notification) => viewInteractions = _notifictionExtractor
+            .scrollInteractions(notification, viewInteractions));
 
     _testSweetsRouteTracker.addListener(() {
       _widgetCaptureService.syncRouteInteractions(
@@ -187,8 +187,12 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusyForObject(sideBusyIndicator, true);
 
     try {
-      await _widgetCaptureService
-          .updateInteractionInDatabase(inProgressInteraction!);
+      final updatedInteraction = viewInteractions.firstWhere(
+          (oldInteraciton) => oldInteraciton.id == inProgressInteraction!.id);
+
+      await _widgetCaptureService.updateInteractionInDatabase(
+          oldInteraction: updatedInteraction,
+          updatedInteraction: inProgressInteraction!);
 
       _updateInteractionInViewWhenSuccess(inProgressInteraction!);
     } catch (error) {
@@ -200,9 +204,13 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void _updateInteractionInViewWhenSuccess(Interaction updatedInteraction) {
-    final updatedIndex = viewInteractions
-        .indexWhere((interaction) => updatedInteraction.id == interaction.id);
-    viewInteractions[updatedIndex] = updatedInteraction;
+    final syncedInteraction =
+        _notifictionExtractor.syncInteractionWithScrollable(updatedInteraction);
+
+    final indexToUpdate = viewInteractions
+        .indexWhere((element) => syncedInteraction.id == element.id);
+
+    viewInteractions[indexToUpdate] = syncedInteraction;
     inProgressInteraction = null;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
   }

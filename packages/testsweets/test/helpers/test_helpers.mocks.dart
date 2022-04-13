@@ -159,9 +159,14 @@ class MockWidgetCaptureService extends _i1.Mock
               returnValue: Future<_i3.Interaction>.value(_FakeInteraction_1()))
           as _i9.Future<_i3.Interaction>);
   @override
-  _i9.Future<void> updateInteractionInDatabase(_i3.Interaction? interaction) =>
+  _i9.Future<void> updateInteractionInDatabase(
+          {_i3.Interaction? updatedInteraction,
+          _i3.Interaction? oldInteraction}) =>
       (super.noSuchMethod(
-          Invocation.method(#updateInteractionInDatabase, [interaction]),
+          Invocation.method(#updateInteractionInDatabase, [], {
+            #updatedInteraction: updatedInteraction,
+            #oldInteraction: oldInteraction
+          }),
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
@@ -568,4 +573,9 @@ class MockNotificationExtractor extends _i1.Mock
           Invocation.method(
               #scrollInteractions, [scrollableDescription, viewInteractions]),
           returnValue: <_i3.Interaction>[]) as List<_i3.Interaction>);
+  @override
+  _i3.Interaction syncInteractionWithScrollable(_i3.Interaction? interaction) =>
+      (super.noSuchMethod(
+          Invocation.method(#syncInteractionWithScrollable, [interaction]),
+          returnValue: _FakeInteraction_1()) as _i3.Interaction);
 }

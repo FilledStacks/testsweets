@@ -15,6 +15,8 @@ abstract class NotificationExtractor {
   List<Interaction> scrollInteractions(
       ScrollableDescription scrollableDescription,
       List<Interaction> viewInteractions);
+
+  Interaction syncInteractionWithScrollable(Interaction interaction);
 }
 
 class NotificationExtractorImp implements NotificationExtractor {
@@ -24,6 +26,7 @@ class NotificationExtractorImp implements NotificationExtractor {
   Offset? globalPosition;
   Offset? localPosition;
 
+  ScrollableDescription? lastScrollEvent;
   @override
   bool onlyScrollUpdateNotification(Notification notification) {
     _setScrollablePositionAndScrollDirection(notification);
@@ -48,6 +51,8 @@ class NotificationExtractorImp implements NotificationExtractor {
   List<Interaction> scrollInteractions(
       ScrollableDescription scrollableDescription,
       List<Interaction> viewInteractions) {
+    lastScrollEvent = scrollableDescription;
+
     _reactiveScrollable.currentScrollableDescription = scrollableDescription;
 
     final affectedInteractions = _reactiveScrollable
@@ -67,5 +72,18 @@ class NotificationExtractorImp implements NotificationExtractor {
         localPosition: localPosition!,
         metrics: (notification as ScrollUpdateNotification).metrics,
         scrollDirection: scrollDirection!);
+  }
+
+  @override
+  Interaction syncInteractionWithScrollable(Interaction interaction) {
+    if (lastScrollEvent != null) {
+      final scrollInteractionOrEmpty =
+          scrollInteractions(lastScrollEvent!, [interaction]);
+      return scrollInteractionOrEmpty.isNotEmpty
+          ? scrollInteractionOrEmpty.first
+          : interaction;
+    } else {
+      return interaction;
+    }
   }
 }
