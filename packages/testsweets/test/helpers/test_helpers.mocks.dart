@@ -5,7 +5,7 @@
 import 'dart:async' as _i9;
 import 'dart:ui' as _i5;
 
-import 'package:flutter/material.dart' as _i8;
+import 'package:flutter/cupertino.dart' as _i8;
 import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:stacked_services/src/snackbar/snackbar_config.dart' as _i7;
@@ -165,11 +165,12 @@ class MockWidgetCaptureService extends _i1.Mock
           returnValue: Future<void>.value(),
           returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
-  _i9.Future<String?> removeWidgetDescription({_i3.Interaction? description}) =>
+  _i9.Future<void> removeInteractionFromDatabase(
+          _i3.Interaction? interaction) =>
       (super.noSuchMethod(
-          Invocation.method(
-              #removeWidgetDescription, [], {#description: description}),
-          returnValue: Future<String?>.value()) as _i9.Future<String?>);
+          Invocation.method(#removeInteractionFromDatabase, [interaction]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i9.Future<void>);
   @override
   _i9.Future<_i3.Interaction?> checkViewIfExistOrCaptureIt(
           String? originalViewName) =>

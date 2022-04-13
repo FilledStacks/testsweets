@@ -64,10 +64,11 @@ class WidgetCaptureView extends StatelessWidget {
             const InteractionFormAndVisualizer(),
 
             BusyIndicator(
-              enable: model.busy(WidgetCaptureViewModel.crudBusyIndicator),
+              enable: model.busy(WidgetCaptureViewModel.sideBusyIndicator),
             ),
             BusyIndicator(
-              enable: model.isBusy,
+              enable:
+                  model.busy(WidgetCaptureViewModel.fullScreenBusyIndicator),
             ),
           ],
         ),

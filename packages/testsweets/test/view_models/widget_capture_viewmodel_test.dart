@@ -179,8 +179,8 @@ void main() {
             kGeneralInteraction, PopupMenuAction.remove);
 
         await model.removeWidgetDescription();
-        verify(widgetCaptureService.removeWidgetDescription(
-            description: kGeneralInteraction));
+        verify(widgetCaptureService
+            .removeInteractionFromDatabase(kGeneralInteraction));
       });
 
       test(
@@ -212,8 +212,8 @@ void main() {
 
         model.popupMenuActionSelected(
             kGeneralInteraction, PopupMenuAction.remove);
-        verify(widgetCaptureService.removeWidgetDescription(
-            description: kGeneralInteraction));
+        verify(widgetCaptureService
+            .removeInteractionFromDatabase(kGeneralInteraction));
       });
     });
   });

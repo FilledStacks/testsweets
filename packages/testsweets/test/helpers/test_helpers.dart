@@ -42,7 +42,7 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
       .thenReturn(viewInteractions);
   when(service.updateInteractionInDatabase(any))
       .thenAnswer((_) => Future.value());
-  when(service.removeWidgetDescription(description: anyNamed('description')))
+  when(service.removeInteractionFromDatabase(anyNamed('description')))
       .thenAnswer((_) => Future.value());
 
   when(service.checkCurrentViewIfAlreadyCaptured(any))

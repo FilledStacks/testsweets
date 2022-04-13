@@ -32,7 +32,8 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _notificationController = StreamController<Notification>.broadcast();
   var _captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
 
-  static String crudBusyIndicator = 'crudBusyIndicator';
+  static String sideBusyIndicator = 'sideBusyIndicator';
+  static String fullScreenBusyIndicator = 'fullScreenBusyIndicator';
 
   WidgetCaptureViewModel({required String projectId}) {
     _notificationController.stream
@@ -75,21 +76,16 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   Future<void> loadWidgetDescriptions() async {
     log.v('');
+    setBusyForObject(fullScreenBusyIndicator, true);
     try {
-      setBusy(true);
-      await _widgetCaptureService.loadWidgetDescriptionsForProject().then((_) {
-        refreshInteractions();
-        _testSweetsRouteTracker.addListener(() {
-          refreshInteractions();
-        });
-      });
-      setBusy(false);
+      await _widgetCaptureService.loadWidgetDescriptionsForProject();
     } catch (e) {
       log.e('Could not get widgetDescriptions: $e');
       _snackbarService.showCustomSnackBar(
           message: 'Could not get widgetDescriptions: $e',
           variant: SnackbarType.failed);
     }
+    setBusyForObject(fullScreenBusyIndicator, false);
   }
 
   void refreshInteractions() {
@@ -147,7 +143,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   Future<void> captureNewInteraction() async {
     log.i(inProgressInteraction);
 
-    setBusyForObject(crudBusyIndicator, true);
+    setBusyForObject(sideBusyIndicator, true);
 
     try {
       final interaction = await _widgetCaptureService
@@ -159,7 +155,7 @@ class WidgetCaptureViewModel extends FormViewModel {
           message: e.toString(), variant: SnackbarType.failed);
     }
 
-    setBusyForObject(crudBusyIndicator, false);
+    setBusyForObject(sideBusyIndicator, false);
   }
 
   Interaction get interactionInfo => inProgressInteraction!.copyWith(
@@ -178,7 +174,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   Future<void> updateInteraction() async {
     log.i(inProgressInteraction);
 
-    setBusyForObject(crudBusyIndicator, true);
+    setBusyForObject(sideBusyIndicator, true);
 
     try {
       await _widgetCaptureService
@@ -190,7 +186,7 @@ class WidgetCaptureViewModel extends FormViewModel {
           message: error.toString(), variant: SnackbarType.failed);
     }
 
-    setBusyForObject(crudBusyIndicator, false);
+    setBusyForObject(sideBusyIndicator, false);
   }
 
   void _updateInteractionInViewWhenSuccess(Interaction updatedInteraction) {
@@ -201,22 +197,22 @@ class WidgetCaptureViewModel extends FormViewModel {
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
   }
 
-  Future<String?> removeWidgetDescription() async {
+  Future<void> removeWidgetDescription() async {
     log.i(inProgressInteraction);
 
-    setBusyForObject(crudBusyIndicator, true);
+    setBusyForObject(sideBusyIndicator, true);
 
-    final result = await _widgetCaptureService.removeWidgetDescription(
-        description: inProgressInteraction!);
-    if (result is String) {
-      _snackbarService.showCustomSnackBar(
-          message: result, variant: SnackbarType.failed);
-    } else {
+    try {
+      await _widgetCaptureService
+          .removeInteractionFromDatabase(inProgressInteraction!);
+
       _removeInteractionFromViewWhenSuccess();
+    } catch (error) {
+      _snackbarService.showCustomSnackBar(
+          message: error.toString(), variant: SnackbarType.failed);
     }
 
-    setBusyForObject(crudBusyIndicator, false);
-    return result;
+    setBusyForObject(sideBusyIndicator, false);
   }
 
   void _removeInteractionFromViewWhenSuccess() {

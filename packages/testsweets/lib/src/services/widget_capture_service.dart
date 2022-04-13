@@ -73,20 +73,13 @@ class WidgetCaptureService {
         oldwidgetDescription: interactionToUpdate!);
   }
 
-  /// Delete a widget descriptions from the project as well as locally
-  Future<String?> removeWidgetDescription(
-      {required Interaction description}) async {
-    try {
-      final interactionId =
-          await _cloudFunctionsService.deleteWidgetDescription(
-              projectId: _projectId, description: description);
+  Future<void> removeInteractionFromDatabase(Interaction interaction) async {
+    log.i('Remove $interaction from DB');
 
-      log.i('interactionId from Cloud: $interactionId');
-      return null;
-    } catch (e) {
-      log.e(e);
-      return e.toString();
-    }
+    final interactionId = await _cloudFunctionsService.deleteWidgetDescription(
+        projectId: _projectId, description: interaction);
+
+    log.v('Remove interaction that have id: $interactionId from database');
   }
 
   Future<Interaction?> checkViewIfExistOrCaptureIt(

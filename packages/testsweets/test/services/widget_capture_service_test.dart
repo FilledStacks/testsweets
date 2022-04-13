@@ -250,9 +250,7 @@ void main() {
         final cloudFunctionsService = getAndRegisterCloudFunctionsService();
         final _service = _getService;
 
-        await _service.removeWidgetDescription(
-          description: description,
-        );
+        await _service.removeInteractionFromDatabase(description);
 
         verify(cloudFunctionsService.deleteWidgetDescription(
             projectId: 'projectId', description: description));
@@ -288,8 +286,8 @@ void main() {
             ]);
         final _service = _getService;
 
-        await _service.removeWidgetDescription(
-          description: Interaction(
+        await _service.removeInteractionFromDatabase(
+          Interaction(
             viewName: 'signUp',
             originalViewName: '/signUp_view',
             name: 'loginButton',
