@@ -63,12 +63,10 @@ FindScrollables getAndRegisterFindScrollables(
   return service;
 }
 
-MockTestSweetsRouteTracker getAndRegisterTestSweetsRouteTracker(
-    {String currentRoute = 'current route',
-    String formattedCurrentRoute = 'currentRoute',
-    bool isChildRouteActivated = true,
-    bool isNestedView = true,
-    String parentRoute = 'parentRoute'}) {
+MockTestSweetsRouteTracker getAndRegisterTestSweetsRouteTracker({
+  String currentRoute = 'current route',
+  String formattedCurrentRoute = 'currentRoute',
+}) {
   _removeRegistrationIfExists<TestSweetsRouteTracker>();
   final service = MockTestSweetsRouteTracker();
   when(service.currentRoute).thenReturn(currentRoute);
