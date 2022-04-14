@@ -12,9 +12,7 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<MainViewModel>.reactive(
-      onModelReady: (model) {
-        getViewForIndex(0);
-      },
+      onModelReady: (model) {},
       builder: (context, model, child) => Scaffold(
         body: getViewForIndex(model.currentIndex),
         bottomNavigationBar: BottomNavigationBar(

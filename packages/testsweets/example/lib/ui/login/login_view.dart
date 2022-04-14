@@ -53,6 +53,14 @@ class LoginView extends StatelessWidget {
                       height: 500,
                       color: colorItems2[2],
                     ),
+                    MaterialButton(
+                      color: Colors.blue,
+                      child: Text(
+                        'Go to Home',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      onPressed: model.navigateToOtherView,
+                    ),
                     Container(
                       height: 150,
                       color: Colors.white,
