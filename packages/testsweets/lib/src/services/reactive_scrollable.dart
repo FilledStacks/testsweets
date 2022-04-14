@@ -14,8 +14,6 @@ class ReactiveScrollable {
 
   Iterable<Interaction> filterAffectedInteractionsByScrollable(
       List<Interaction> viewDescription) {
-    log.v(currentScrollableDescription);
-
     return viewDescription.where(InteractionUtils.notView).where(
       (interaction) {
         if (interaction.externalities == null) return false;
@@ -62,8 +60,6 @@ class ReactiveScrollable {
   Iterable<Interaction> moveInteractionsWithScrollable(
     Iterable<Interaction> affectedInteractions,
   ) {
-    log.v(currentScrollableDescription);
-
     return affectedInteractions.map((interaction) => interaction.copyWith(
         position:
             interaction.position.applyScroll(currentScrollableDescription)));
