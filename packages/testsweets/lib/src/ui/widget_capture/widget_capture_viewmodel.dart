@@ -53,11 +53,11 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   Interaction? inProgressInteraction;
 
-  ValueNotifier<List<Interaction>> descriptionsForViewNotifier =
+  ValueNotifier<List<Interaction>> interactionsForViewNotifier =
       ValueNotifier([]);
-  List<Interaction> get viewInteractions => descriptionsForViewNotifier.value;
-  set viewInteractions(List<Interaction> widgetDescriptions) {
-    descriptionsForViewNotifier.value = widgetDescriptions;
+  List<Interaction> get viewInteractions => interactionsForViewNotifier.value;
+  set viewInteractions(List<Interaction> interactions) {
+    interactionsForViewNotifier.value = interactions;
   }
 
   bool get currentViewCaptured =>

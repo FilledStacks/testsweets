@@ -123,10 +123,8 @@ class WidgetCaptureService {
           : false;
 
   void syncRouteInteractions(String routeName, List<Interaction> interactions) {
-    widgetDescriptionMap.update(
-      routeName,
-      (_) => interactions,
-      ifAbsent: () => interactions,
-    );
+    log.i('In $routeName: ${interactions.length} ');
+    widgetDescriptionMap[routeName] = interactions;
+    log.i('Out $routeName: ${interactions.length} ');
   }
 }
