@@ -1,5 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
+import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/extensions/widgets_description_list_extensions.dart';
 import 'package:testsweets/src/services/reactive_scrollable.dart';
 import 'package:testsweets/testsweets.dart';
@@ -20,6 +21,7 @@ abstract class NotificationExtractor {
 }
 
 class NotificationExtractorImp implements NotificationExtractor {
+  final log = getLogger('NotificationExtractorImp');
   final _reactiveScrollable = locator<ReactiveScrollable>();
 
   ScrollDirection? scrollDirection;
@@ -29,6 +31,7 @@ class NotificationExtractorImp implements NotificationExtractor {
   ScrollableDescription? lastScrollEvent;
   @override
   bool onlyScrollUpdateNotification(Notification notification) {
+    log.v(notification);
     _setScrollablePositionAndScrollDirection(notification);
 
     if (notification is ScrollUpdateNotification) {
@@ -67,6 +70,8 @@ class NotificationExtractorImp implements NotificationExtractor {
   @override
   ScrollableDescription notificationToScrollableDescription(
       Notification notification) {
+    log.v(notification);
+
     return ScrollableDescription.fromNotification(
         globalPosition: globalPosition!,
         localPosition: localPosition!,

@@ -149,3 +149,4 @@ final kTopLeftHorizontalScrollableDescription = ScrollableDescription(
     maxScrollExtentByPixels: 0,
     scrollExtentByPixels: 50,
     rect: SerializableRect.fromPoints(Offset(0, 20), Offset(40, 40)));
+const kTimeoutDuration = const Duration(milliseconds: 1);

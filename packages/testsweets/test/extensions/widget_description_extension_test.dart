@@ -22,7 +22,8 @@ void main() {
             ));
         expect(description.position.responsiveXPosition(500), 229);
       });
-
+    });
+    group('responsiveYPosition -', () {
       test('''When capture a key with position y=100 on screenWidth = 200
    and new screenWidth is 500, Should adjust the position to y=250
    ''', () {

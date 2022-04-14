@@ -8,10 +8,9 @@ import 'package:testsweets/src/services/cloud_functions_service.dart';
 import 'package:testsweets/src/services/notification_extractor.dart';
 import 'package:testsweets/src/services/reactive_scrollable.dart';
 import 'package:testsweets/src/services/scroll_appliance.dart';
-import 'package:testsweets/src/services/sweetcore_command.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
-import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
+import 'package:testsweets/src/services/test_integrity.dart';
 import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 
 import 'test_consts.dart';
@@ -22,7 +21,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<WidgetCaptureService>(returnNullOnMissingStub: true),
   MockSpec<TestSweetsRouteTracker>(returnNullOnMissingStub: true),
   MockSpec<CloudFunctionsService>(returnNullOnMissingStub: true),
-  MockSpec<WidgetVisibiltyChangerService>(returnNullOnMissingStub: true),
+  MockSpec<TestIntegrity>(returnNullOnMissingStub: true),
   MockSpec<ReactiveScrollable>(returnNullOnMissingStub: true),
   MockSpec<FindScrollables>(returnNullOnMissingStub: true),
   MockSpec<ScrollAppliance>(returnNullOnMissingStub: true),
@@ -73,10 +72,7 @@ MockTestSweetsRouteTracker getAndRegisterTestSweetsRouteTracker(
   _removeRegistrationIfExists<TestSweetsRouteTracker>();
   final service = MockTestSweetsRouteTracker();
   when(service.currentRoute).thenReturn(currentRoute);
-  when(service.parentRoute).thenReturn(parentRoute);
   when(service.formatedCurrentRoute).thenReturn(formattedCurrentRoute);
-  when(service.isChildRouteActivated).thenReturn(isChildRouteActivated);
-  when(service.isNestedView).thenReturn(isNestedView);
   locator.registerSingleton<TestSweetsRouteTracker>(service);
   return service;
 }
@@ -146,20 +142,6 @@ ReactiveScrollable getAndRegisterReactiveScrollable() {
   return service;
 }
 
-WidgetVisibiltyChangerService getAndRegisterWidgetVisibiltyChangerService(
-    {List<Interaction>? widgetDescriptions,
-    SweetcoreCommand? latestSweetcoreCommand}) {
-  _removeRegistrationIfExists<WidgetVisibiltyChangerService>();
-  final service = MockWidgetVisibiltyChangerService();
-  when(service.runToggleVisibiltyChecker(any, any, any))
-      .thenReturn(widgetDescriptions);
-  when(service.toggleVisibilty(any, any)).thenReturn(widgetDescriptions ?? []);
-  when(service.completeCompleter(any)).thenReturn(true);
-  when(service.sweetcoreCommand).thenReturn(latestSweetcoreCommand);
-  locator.registerSingleton<WidgetVisibiltyChangerService>(service);
-  return service;
-}
-
 ScrollAppliance getAndRegisterScrollAppliance() {
   _removeRegistrationIfExists<ScrollAppliance>();
   final service = MockScrollAppliance();
@@ -185,16 +167,23 @@ NotificationExtractor getAndRegisterNotificationExtractor(
   return service;
 }
 
+TestIntegrity getAndRegisterTestIntegrity() {
+  _removeRegistrationIfExists<TestIntegrity>();
+  final service = MockTestIntegrity();
+  locator.registerSingleton<TestIntegrity>(service);
+  return service;
+}
+
 void registerServices() {
   getAndRegisterTestSweetsRouteTracker();
   getAndRegisterWidgetCaptureService();
   getAndRegisterCloudFunctionsService();
   getAndRegisterSnackbarService();
-  getAndRegisterWidgetVisibiltyChangerService();
   getAndRegisterReactiveScrollable();
   getAndRegisterFindScrollables();
   getAndRegisterScrollAppliance();
   getAndRegisterNotificationExtractor();
+  getAndRegisterTestIntegrity();
 }
 
 void unregisterServices() {
@@ -202,11 +191,11 @@ void unregisterServices() {
   _removeRegistrationIfExists<WidgetCaptureService>();
   _removeRegistrationIfExists<CloudFunctionsService>();
   _removeRegistrationIfExists<SnackbarService>();
-  _removeRegistrationIfExists<WidgetVisibiltyChangerService>();
   _removeRegistrationIfExists<ReactiveScrollable>();
   _removeRegistrationIfExists<FindScrollables>();
   _removeRegistrationIfExists<ScrollAppliance>();
   _removeRegistrationIfExists<NotificationExtractor>();
+  _removeRegistrationIfExists<TestIntegrity>();
 }
 
 T registerServiceInsteadOfMockedOne<T extends Object>(T instance) {
