@@ -8,6 +8,7 @@ import 'package:testsweets/src/ui/shared/route_banner.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/testsweets.dart';
 
+import '../route_banner/route_banner_view.dart';
 import 'widgets/draggable_widget.dart';
 import 'widgets/interaction_form_and_visualizer.dart';
 
@@ -49,24 +50,17 @@ class WidgetCaptureView extends StatelessWidget {
                   return false;
                 },
                 child: child),
-
-            /// Show the current route name and whether its captured or not
-            Align(
-              alignment: Alignment.topLeft,
-              child: RouteBanner(
-                isCaptured: model.currentViewCaptured,
-                routeName: model.currentViewName,
-              ),
-            ),
+            ValueListenableBuilder(
+                valueListenable: model.interactionsForViewNotifier,
+                builder: (_, __, ___) =>
+                    RouteBannerView(isCaptured: model.currentViewCaptured)),
             if (model.captureWidgetStatusEnum.showDraggableWidget)
               const DraggableWidget(),
-              
             const InteractionFormAndVisualizer(),
-
-
-
             BusyIndicator(
-              enable: model.isBusy,
+              center:
+                  model.busy(WidgetCaptureViewModel.fullScreenBusyIndicator),
+              side: model.busy(WidgetCaptureViewModel.sideBusyIndicator),
             ),
           ],
         ),

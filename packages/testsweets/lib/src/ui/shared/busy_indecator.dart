@@ -1,27 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:testsweets/src/ui/shared/shared_styles.dart';
 
 import 'app_colors.dart';
+import 'shared_styles.dart';
 
 class BusyIndicator extends StatelessWidget {
-  final bool enable;
-  const BusyIndicator({Key? key, required this.enable}) : super(key: key);
+  final bool center;
+  final bool side;
+  const BusyIndicator({
+    Key? key,
+    required this.center,
+    this.side = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return enable
-        ? Container(
-            color: kcCard.withOpacity(0.3),
-            child: Center(
+    return side
+        ? SafeArea(
+            child: Align(
+              alignment: Alignment.topRight,
               child: Container(
-                padding: const EdgeInsets.all(16),
-                decoration: blackBoxDecoration,
+                width: 24,
+                height: 24,
+                margin: const EdgeInsets.all(8),
                 child: CircularProgressIndicator(
+                  backgroundColor: kcCard.withOpacity(0.3),
                   valueColor: AlwaysStoppedAnimation(kcPrimaryPurple),
                 ),
               ),
             ),
           )
-        : const SizedBox();
+        : center
+            ? Container(
+                color: kcCard.withOpacity(0.3),
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: blackBoxDecoration,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(kcPrimaryPurple),
+                    ),
+                  ),
+                ),
+              )
+            : const SizedBox();
   }
 }

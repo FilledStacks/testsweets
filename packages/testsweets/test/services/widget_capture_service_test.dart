@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 
@@ -124,42 +123,12 @@ void main() {
         _service.addWidgetDescriptionToMap = Interaction.view(
             viewName: 'OriginalLoginView',
             originalViewName: 'OriginalLoginView');
-        await _service.captureWidgetDescription(
-          description: description,
-        );
+        await _service.saveInteractionInDatabase(description);
 
         verify(cloudFunctionsService.uploadWidgetDescriptionToProject(
           projectId: 'projectId',
           description: description,
         ));
-      });
-
-      test(
-          'When widget has been added to backend, add description to descriptionMap with id from the backend',
-          () async {
-        final description = Interaction(
-          originalViewName: 'login_view',
-          viewName: 'loginView',
-          name: 'email',
-          position: WidgetPosition(
-              x: 100, y: 199, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
-          widgetType: WidgetType.general,
-        );
-
-        final String idToReturn = 'cloud_id';
-
-        getAndRegisterCloudFunctionsService(
-            addWidgetDescriptionToProjectResult: idToReturn);
-        final _service = _getService;
-
-        await _service.captureWidgetDescription(
-          description: description,
-        );
-
-        expect(
-          _service.widgetDescriptionMap[description.originalViewName]?.first.id,
-          idToReturn,
-        );
       });
     });
     group('checkCurrentViewIfAlreadyCaptured -', () {
@@ -281,9 +250,7 @@ void main() {
         final cloudFunctionsService = getAndRegisterCloudFunctionsService();
         final _service = _getService;
 
-        await _service.removeWidgetDescription(
-          description: description,
-        );
+        await _service.removeInteractionFromDatabase(description);
 
         verify(cloudFunctionsService.deleteWidgetDescription(
             projectId: 'projectId', description: description));
@@ -319,8 +286,8 @@ void main() {
             ]);
         final _service = _getService;
 
-        await _service.removeWidgetDescription(
-          description: Interaction(
+        await _service.removeInteractionFromDatabase(
+          Interaction(
             viewName: 'signUp',
             originalViewName: '/signUp_view',
             name: 'loginButton',
@@ -518,9 +485,9 @@ void main() {
         final cloudFunctionsService = getAndRegisterCloudFunctionsService();
         final _service = _getService;
 
-        _service.addWidgetDescriptionToMap = description;
-        await _service.updateWidgetDescription(
-          description: description,
+        await _service.updateInteractionInDatabase(
+          oldInteraction: description,
+          updatedInteraction: description,
         );
 
         verify(cloudFunctionsService.updateWidgetDescription(
@@ -543,12 +510,42 @@ void main() {
         await _service.loadWidgetDescriptionsForProject();
 
         // update [kWidgetDescription] key
-        await _service.updateWidgetDescription(
-          description: kGeneralInteraction.copyWith(name: 'login22'),
-        );
+        await _service.updateInteractionInDatabase(
+            oldInteraction: kGeneralInteraction,
+            updatedInteraction: kGeneralInteraction.copyWith(name: 'login22'));
 
         expect(_service.widgetDescriptionMap['/']!.first.name,
             kGeneralInteraction.name);
+      });
+    });
+    group('syncRouteInteractions -', () {
+      const routeName = 'routeName';
+      test('''
+When called with a new route, Add the new route
+with its interactions to widgetDescriptionMap''', () {
+        final _service = _getService;
+
+        _service.syncRouteInteractions(
+            routeName, [kGeneralInteraction, kViewInteraction]);
+
+        expect(_service.widgetDescriptionMap, {
+          routeName: [kGeneralInteraction, kViewInteraction]
+        });
+      });
+      test('''
+When called with existing route, Should override the route interactions
+with the new ones ''', () {
+        final _service = _getService;
+
+        _service.widgetDescriptionMap.addAll({
+          routeName: [kGeneralInteractionWithZeroOffset]
+        });
+        _service.syncRouteInteractions(
+            routeName, [kGeneralInteraction, kViewInteraction]);
+
+        expect(_service.widgetDescriptionMap, {
+          routeName: [kGeneralInteraction, kViewInteraction]
+        });
       });
     });
   });

@@ -56,7 +56,7 @@ class _InteractionFormAndVisualizerState
       children: [
         if (model.captureWidgetStatusEnum.showWidgets)
           InteractionsVisualizerCaptureMode(
-              descriptionsForViewNotifier: model.descriptionsForViewNotifier,
+              descriptionsForViewNotifier: model.interactionsForViewNotifier,
               editActionSelected: () {
                 /// Set the value of the edited interaction to the
                 /// form textfield and show the bottomsheet.

@@ -44,7 +44,6 @@ class DriverLayoutViewModel extends BaseViewModel {
   bool get currentViewCaptured => viewInteractions.any(
         (element) => element.widgetType == WidgetType.view,
       );
-  String get currentViewName => _testSweetsRouteTracker.formatedCurrentRoute;
 
   Future<void> initialise() async {
     setBusy(true);

@@ -8,20 +8,19 @@ import 'package:testsweets/testsweets.dart';
 import '../helpers/test_consts.dart';
 import '../helpers/test_helpers.dart';
 
-final _service = NotificationExtractorImp();
-
 void main() {
   group('NotificationExtractorTest -', () {
     setUp(registerServices);
     tearDown(unregisterServices);
 
-    group('reactToScroll -', () {
+    group('scrollInteractions -', () {
       test('''
         When called on multiple interactions,
         Should pick the overlapping one add the scrollExtent
         to the YTranslit if the scrollable is vertical
         ''', () async {
         registerServiceInsteadOfMockedOne(ReactiveScrollable());
+        final _service = NotificationExtractorImp();
 
         var viewInteraction = [
           kGeneralInteractionWithZeroOffset.copyWith(
@@ -49,6 +48,7 @@ void main() {
             So YTranslate not null
           ''', () async {
         registerServiceInsteadOfMockedOne(ReactiveScrollable());
+        final _service = NotificationExtractorImp();
 
         final viewInteraction = [
           kGeneralInteractionWithZeroOffset.copyWith(
@@ -76,6 +76,7 @@ void main() {
           Should add the scrollExtent once for YTranslate and once for XTranslate
           ''', () async {
         registerServiceInsteadOfMockedOne(ReactiveScrollable());
+        final _service = NotificationExtractorImp();
 
         final viewInteraction = [
           kGeneralInteractionWithZeroOffset
@@ -128,6 +129,28 @@ void main() {
         /// replacing an interaciton it adds it at the end of the list
         expect(horizontlScrollResult[1].position.yDeviation, 100);
         expect(horizontlScrollResult[1].position.xDeviation, 50);
+      });
+      test('Should save the latest scrollableDescription', () {
+        final _service = NotificationExtractorImp();
+
+        _service
+            .scrollInteractions(kTopLeftHorizontalScrollableDescription, []);
+        _service.scrollInteractions(kTopLeftVerticalScrollableDescription, []);
+
+        expect(_service.lastScrollEvent, kTopLeftVerticalScrollableDescription);
+      });
+    });
+    group('syncUpdatedInteractionWithScroll -', () {
+      test('''
+When updateOrCreate interaction,
+ Should sync it with the scrollable if its on one''', () {
+        final _service = NotificationExtractorImp();
+
+        _service
+            .scrollInteractions(kTopLeftHorizontalScrollableDescription, []);
+
+        expect(_service.syncInteractionWithScrollable(kTouchableInteraction),
+            kTouchableInteraction);
       });
     });
   });

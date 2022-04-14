@@ -13,6 +13,7 @@ import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/services/test_integrity.dart';
 import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 
+import 'test_consts.dart';
 import 'test_helpers.mocks.dart';
 
 @GenerateMocks([], customMocks: [
@@ -33,16 +34,16 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService(
     bool currentViewIsAlreadyCaptured = false}) {
   _removeRegistrationIfExists<WidgetCaptureService>();
   final service = MockWidgetCaptureService();
-  when(service.captureWidgetDescription(
-    description: anyNamed('description'),
-  )).thenAnswer((realInvocation) => Future.value());
-  when(service.captureWidgetDescription(description: anyNamed('description')))
-      .thenAnswer((_) => Future.value());
+  when(service.saveInteractionInDatabase(any))
+      .thenAnswer((_) => Future.value(kGeneralInteraction));
+
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
       .thenReturn(viewInteractions);
-  when(service.updateWidgetDescription(description: anyNamed('description')))
+  when(service.updateInteractionInDatabase(
+          updatedInteraction: anyNamed('updatedInteraction'),
+          oldInteraction: anyNamed('oldInteraction')))
       .thenAnswer((_) => Future.value());
-  when(service.removeWidgetDescription(description: anyNamed('description')))
+  when(service.removeInteractionFromDatabase(any))
       .thenAnswer((_) => Future.value());
 
   when(service.checkCurrentViewIfAlreadyCaptured(any))
@@ -62,17 +63,14 @@ FindScrollables getAndRegisterFindScrollables(
   return service;
 }
 
-MockTestSweetsRouteTracker getAndRegisterTestSweetsRouteTracker(
-    {String currentRoute = 'current route',
-    bool isChildRouteActivated = true,
-    bool isNestedView = true,
-    String parentRoute = 'parentRoute'}) {
+MockTestSweetsRouteTracker getAndRegisterTestSweetsRouteTracker({
+  String currentRoute = 'current route',
+  String formattedCurrentRoute = 'currentRoute',
+}) {
   _removeRegistrationIfExists<TestSweetsRouteTracker>();
   final service = MockTestSweetsRouteTracker();
   when(service.currentRoute).thenReturn(currentRoute);
-  when(service.parentRoute).thenReturn(parentRoute);
-  when(service.isChildRouteActivated).thenReturn(isChildRouteActivated);
-  when(service.isNestedView).thenReturn(isNestedView);
+  when(service.formatedCurrentRoute).thenReturn(formattedCurrentRoute);
   locator.registerSingleton<TestSweetsRouteTracker>(service);
   return service;
 }
@@ -136,7 +134,8 @@ SnackbarService getAndRegisterSnackbarService() {
 ReactiveScrollable getAndRegisterReactiveScrollable() {
   _removeRegistrationIfExists<ReactiveScrollable>();
   final service = MockReactiveScrollable();
-
+  when(service.filterAffectedInteractionsByScrollable(any)).thenReturn([]);
+  when(service.moveInteractionsWithScrollable(any)).thenReturn([]);
   locator.registerSingleton<ReactiveScrollable>(service);
   return service;
 }
@@ -153,10 +152,15 @@ ScrollAppliance getAndRegisterScrollAppliance() {
   return service;
 }
 
-NotificationExtractor getAndRegisterNotificationExtractor() {
+NotificationExtractor getAndRegisterNotificationExtractor(
+    {Interaction? interactionAfterSyncInteractionWithScrollable}) {
   _removeRegistrationIfExists<NotificationExtractor>();
   final service = MockNotificationExtractor();
 
+  when(service.syncInteractionWithScrollable(any)).thenAnswer(
+      (realInvocation) =>
+          interactionAfterSyncInteractionWithScrollable ??
+          realInvocation.positionalArguments[0]);
   locator.registerSingleton<NotificationExtractor>(service);
   return service;
 }

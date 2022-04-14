@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/locator.dart';
@@ -10,8 +11,8 @@ class WidgetCaptureService {
 
   final _cloudFunctionsService = locator<CloudFunctionsService>();
 
-  final Map<String, List<Interaction>> widgetDescriptionMap =
-      Map<String, List<Interaction>>();
+  @visibleForTesting
+  final widgetDescriptionMap = Map<String, List<Interaction>>();
   late String _projectId;
 
   set projectId(String projectId) {
@@ -29,7 +30,9 @@ class WidgetCaptureService {
   Future<void> loadWidgetDescriptionsForProject() async {
     final widgetDescriptions = await _cloudFunctionsService
         .getWidgetDescriptionForProject(projectId: _projectId);
+
     widgetDescriptionMap.clear();
+
     for (final description in widgetDescriptions) {
       addWidgetDescriptionToMap = description;
     }
@@ -44,9 +47,58 @@ class WidgetCaptureService {
     }
   }
 
-  List<Interaction> getDescriptionsForView({
-    required String currentRoute,
-  }) {
+  Future<Interaction> saveInteractionInDatabase(Interaction interaction) async {
+    log.i('interaction:$interaction projectId:$_projectId');
+
+    final interactionId =
+        await _cloudFunctionsService.uploadWidgetDescriptionToProject(
+      projectId: _projectId,
+      description: interaction,
+    );
+
+    log.i('interactionId from Cloud: $interactionId');
+    return interaction.copyWith(id: interactionId);
+  }
+
+  Future<void> updateInteractionInDatabase(
+      {required Interaction updatedInteraction,
+      required Interaction oldInteraction}) async {
+    log.i(
+        'updatedinteraction:$updatedInteraction, oldinteraction:$updatedInteraction  projectId:$_projectId');
+
+    await _cloudFunctionsService.updateWidgetDescription(
+        projectId: _projectId,
+        newwidgetDescription: updatedInteraction,
+        oldwidgetDescription: oldInteraction);
+  }
+
+  Future<void> removeInteractionFromDatabase(Interaction interaction) async {
+    log.i('Remove $interaction from DB');
+
+    final interactionId = await _cloudFunctionsService.deleteWidgetDescription(
+        projectId: _projectId, description: interaction);
+
+    log.v('Remove interaction that have id: $interactionId from database');
+  }
+
+  Future<Interaction> captureView(String originalViewName) async {
+    log.i('originalViewName:$originalViewName projectId:$_projectId');
+
+    final viewInteraction = Interaction.view(
+        viewName: originalViewName.convertViewNameToValidFormat,
+        originalViewName: originalViewName);
+
+    final interactionId =
+        await _cloudFunctionsService.uploadWidgetDescriptionToProject(
+      projectId: _projectId,
+      description: viewInteraction,
+    );
+    log.v('interactionId from Cloud: $interactionId');
+
+    return viewInteraction.copyWith(id: interactionId);
+  }
+
+  List<Interaction> getDescriptionsForView({required String currentRoute}) {
     var viewDescriptions = widgetDescriptionMap[currentRoute];
     log.v('currentRoute:$currentRoute viewDescriptions:$viewDescriptions');
 
@@ -70,83 +122,9 @@ class WidgetCaptureService {
               .any((element) => element.name == '')
           : false;
 
-  /// Captures a widgets description to the backend as well as locally in the [widgetDescriptionMap]
-  Future<String> captureWidgetDescription({
-    required Interaction description,
-  }) async {
-    log.i('description:$description projectId:$_projectId');
-
-    await _checkViewIfExistOrCaptureIt(description.originalViewName);
-
-    final descriptionId =
-        await _cloudFunctionsService.uploadWidgetDescriptionToProject(
-      projectId: _projectId,
-      description: description,
-    );
-    // Add description to descriptionMap with id from the backend
-    addWidgetDescriptionToMap = description.copyWith(id: descriptionId);
-
-    log.i('descriptionId from Cloud: $descriptionId');
-    return descriptionId;
-  }
-
-  /// Updates a widget description to the backend as well as locally in the [widgetDescriptionMap]
-  Future<String?> updateWidgetDescription({
-    required Interaction description,
-  }) async {
-    try {
-      log.i('description:$description projectId:$_projectId');
-
-      final widgetToUpdate = widgetDescriptionMap[description.originalViewName]
-          ?.firstWhere((element) => element.id == description.id);
-
-      final descriptionId =
-          await _cloudFunctionsService.updateWidgetDescription(
-              projectId: _projectId,
-              newwidgetDescription: description,
-              oldwidgetDescription: widgetToUpdate!);
-
-      log.i('descriptionId from Cloud: $descriptionId');
-      return null;
-    } catch (e) {
-      log.e(e);
-      return e.toString();
-    }
-  }
-
-  /// Delete a widget descriptions from the project as well as locally
-  Future<String?> removeWidgetDescription(
-      {required Interaction description}) async {
-    try {
-      final descriptionId =
-          await _cloudFunctionsService.deleteWidgetDescription(
-              projectId: _projectId, description: description);
-
-      log.i('descriptionId from Cloud: $descriptionId');
-      return null;
-    } catch (e) {
-      log.e(e);
-      return e.toString();
-    }
-  }
-
-  Future<void> _checkViewIfExistOrCaptureIt(String originalViewName) async {
-    if (!checkCurrentViewIfAlreadyCaptured(originalViewName)) {
-      log.i('originalViewName:$originalViewName projectId:$_projectId');
-
-      final viewDescription = Interaction.view(
-          viewName: originalViewName.convertViewNameToValidFormat,
-          originalViewName: originalViewName);
-
-      final descriptionId =
-          await _cloudFunctionsService.uploadWidgetDescriptionToProject(
-        projectId: _projectId,
-        description: viewDescription,
-      );
-      log.v('descriptionId from Cloud: $descriptionId');
-
-      // Add view to descriptionMap with id from the backend
-      addWidgetDescriptionToMap = viewDescription.copyWith(id: descriptionId);
-    }
+  void syncRouteInteractions(String routeName, List<Interaction> interactions) {
+    log.i('In $routeName: ${interactions.length} ');
+    widgetDescriptionMap[routeName] = interactions;
+    log.i('Out $routeName: ${interactions.length} ');
   }
 }

@@ -33,7 +33,7 @@ void main() {
         verify(service.projectId = _projectId);
       });
     });
-    group('saveWidget -', () {
+    group('captureNewInteraction -', () {
       test('''When called on route `current route`,
            Should added it to widgetDescription and send it to backend''',
           () async {
@@ -43,8 +43,8 @@ void main() {
         model.showWidgetForm();
         model.inProgressInteraction!
             .copyWith(widgetType: WidgetType.scrollable);
-        model.saveWidget();
-        expect(model.inProgressInteraction!.originalViewName, 'current route');
+        model.captureNewInteraction();
+        expect(model.fullInteraction.originalViewName, 'current route');
       });
       test('''When called and the current route is `/current route`,
            Should convert it to `currentRoute` in viewName proberty before send it to backend''',
@@ -55,9 +55,9 @@ void main() {
         model.showWidgetForm();
         model.inProgressInteraction!
             .copyWith(widgetType: WidgetType.scrollable);
-        model.saveWidget();
-        expect(model.inProgressInteraction!.viewName, 'currentRoute');
-        expect(model.inProgressInteraction!.originalViewName, '/current route');
+        model.captureNewInteraction();
+        expect(model.fullInteraction.viewName, 'currentRoute');
+        expect(model.fullInteraction.originalViewName, '/current route');
       });
       test('''When called and the current widget name is `login-button`,
            Should convert it to `loginButton` in name proberty before send it to backend''',
@@ -70,8 +70,27 @@ void main() {
 
         model.inProgressInteraction = model.inProgressInteraction!
             .copyWith(widgetType: WidgetType.touchable);
-        model.saveWidget();
-        expect(model.inProgressInteraction!.name, 'loginButton');
+        model.captureNewInteraction();
+        expect(model.fullInteraction.name, 'loginButton');
+      });
+      test('''
+When capture a new intercation, Should sync with any scrollable underneath it ''',
+          () async {
+        getAndRegisterTestSweetsRouteTracker(currentRoute: 'current route');
+        getAndRegisterWidgetCaptureService();
+        final notificationExtractor = getAndRegisterNotificationExtractor();
+        final model = _getViewModel();
+        model
+          ..formValueMap[WidgetNameValueKey] = 'myWidgetName'
+          ..showWidgetForm()
+          ..inProgressInteraction!.copyWith(widgetType: WidgetType.scrollable)
+          ..viewInteractions
+              .add(kViewInteraction); // to skip capturing the view
+
+        await model.captureNewInteraction();
+
+        verify(notificationExtractor
+            .syncInteractionWithScrollable(kGeneralInteraction));
       });
     });
 
@@ -85,13 +104,16 @@ void main() {
 
         await model.popupMenuActionSelected(
             kGeneralInteraction, PopupMenuAction.edit);
-        model.formValueMap[WidgetNameValueKey] = 'loginButton';
         model.setFormStatus();
 
-        await model.updateWidgetDescription();
+        model.inProgressInteraction =
+            kGeneralInteraction.copyWith(name: 'loginButton');
+        await model.updateInteraction();
 
-        verify(service.updateWidgetDescription(
-            description: kGeneralInteraction.copyWith(name: 'loginButton')));
+        verify(service.updateInteractionInDatabase(
+            oldInteraction: kGeneralInteraction,
+            updatedInteraction:
+                kGeneralInteraction.copyWith(name: 'loginButton')));
       });
 
       test('''When called and update was successful,
@@ -100,7 +122,7 @@ void main() {
         model.viewInteractions = [kGeneralInteraction];
         model.inProgressInteraction = kGeneralInteraction;
 
-        await model.updateWidgetDescription();
+        await model.updateInteraction();
 
         expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
       });
@@ -116,8 +138,9 @@ void main() {
 
         await model.onLongPressUp();
 
-        verify(
-            service.updateWidgetDescription(description: kGeneralInteraction));
+        verify(service.updateInteractionInDatabase(
+            oldInteraction: kGeneralInteraction,
+            updatedInteraction: kGeneralInteraction));
       });
 
       test('''When in quickPositionEdit mode and user trigger onLongPressUp
@@ -139,13 +162,14 @@ void main() {
 
         final updatedInteraction = kGeneralInteraction.copyWith(
           position: kGeneralInteraction.position.copyWith(
-            x: 33,
-            y: 33,
+            x: 33.0,
+            y: 33.0,
           ),
         );
 
-        verify(
-            service.updateWidgetDescription(description: updatedInteraction));
+        verify(service.updateInteractionInDatabase(
+            updatedInteraction: updatedInteraction,
+            oldInteraction: kGeneralInteraction));
       });
       test('''
             When update interaction position,
@@ -181,8 +205,8 @@ void main() {
             kGeneralInteraction, PopupMenuAction.remove);
 
         await model.removeWidgetDescription();
-        verify(widgetCaptureService.removeWidgetDescription(
-            description: kGeneralInteraction));
+        verify(widgetCaptureService
+            .removeInteractionFromDatabase(kGeneralInteraction));
       });
 
       test(
@@ -214,8 +238,8 @@ void main() {
 
         model.popupMenuActionSelected(
             kGeneralInteraction, PopupMenuAction.remove);
-        verify(widgetCaptureService.removeWidgetDescription(
-            description: kGeneralInteraction));
+        verify(widgetCaptureService
+            .removeInteractionFromDatabase(kGeneralInteraction));
       });
     });
   });

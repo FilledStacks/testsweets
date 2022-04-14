@@ -27,20 +27,25 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _widgetCaptureService = locator<WidgetCaptureService>();
   final _snackbarService = locator<SnackbarService>();
   final _scrollAppliance = locator<ScrollAppliance>();
-  final _notiExtr = locator<NotificationExtractor>();
+  final _notifictionExtractor = locator<NotificationExtractor>();
 
   final _notificationController = StreamController<Notification>.broadcast();
   var _captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
 
+  static String sideBusyIndicator = 'sideBusyIndicator';
+  static String fullScreenBusyIndicator = 'fullScreenBusyIndicator';
+
   WidgetCaptureViewModel({required String projectId}) {
     _notificationController.stream
-        .where(_notiExtr.onlyScrollUpdateNotification)
-        .map(_notiExtr.notificationToScrollableDescription)
-        .listen((notification) => viewInteractions =
-            _notiExtr.scrollInteractions(notification, viewInteractions));
+        .where(_notifictionExtractor.onlyScrollUpdateNotification)
+        .map(_notifictionExtractor.notificationToScrollableDescription)
+        .listen((notification) => viewInteractions = _notifictionExtractor
+            .scrollInteractions(notification, viewInteractions));
 
-    _testSweetsRouteTracker.addListener(() async {
-      await loadWidgetDescriptions();
+    _testSweetsRouteTracker.addListener(() {
+      _widgetCaptureService.syncRouteInteractions(
+          _testSweetsRouteTracker.previosRoute, viewInteractions);
+      loadCurrentRouteInteractions();
     });
 
     _widgetCaptureService.projectId = projectId;
@@ -48,17 +53,15 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   Interaction? inProgressInteraction;
 
-  ValueNotifier<List<Interaction>> descriptionsForViewNotifier =
+  ValueNotifier<List<Interaction>> interactionsForViewNotifier =
       ValueNotifier([]);
-  List<Interaction> get viewInteractions => descriptionsForViewNotifier.value;
-  set viewInteractions(List<Interaction> widgetDescriptions) {
-    descriptionsForViewNotifier.value = widgetDescriptions;
+  List<Interaction> get viewInteractions => interactionsForViewNotifier.value;
+  set viewInteractions(List<Interaction> interactions) {
+    interactionsForViewNotifier.value = interactions;
   }
 
-  bool get currentViewCaptured => viewInteractions.any(
-        (element) => element.widgetType == WidgetType.view,
-      );
-  String get currentViewName => _testSweetsRouteTracker.formatedCurrentRoute;
+  bool get currentViewCaptured =>
+      viewInteractions.any((element) => element.widgetType == WidgetType.view);
 
   /// We use this position as the starter point of any new widget
   late WidgetPosition screenCenterPosition;
@@ -77,22 +80,21 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   Future<void> loadWidgetDescriptions() async {
     log.v('');
+    setBusyForObject(fullScreenBusyIndicator, true);
+
     try {
-      setBusy(true);
       await _widgetCaptureService.loadWidgetDescriptionsForProject();
-
-      setInteractionForCurrentRoute();
-
-      setBusy(false);
-    } catch (e) {
-      log.e('Could not get widgetDescriptions: $e');
+      loadCurrentRouteInteractions();
+    } catch (error) {
+      log.e('Could not get widgetDescriptions: $error');
       _snackbarService.showCustomSnackBar(
-          message: 'Could not get widgetDescriptions: $e',
+          message: 'Could not get widgetDescriptions: $error',
           variant: SnackbarType.failed);
     }
+    setBusyForObject(fullScreenBusyIndicator, false);
   }
 
-  void setInteractionForCurrentRoute() {
+  void loadCurrentRouteInteractions() {
     viewInteractions = _widgetCaptureService.getDescriptionsForView(
         currentRoute: _testSweetsRouteTracker.currentRoute);
   }
@@ -144,83 +146,94 @@ class WidgetCaptureViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  Future<void> saveWidget() async {
+  Future<void> captureNewInteraction() async {
     log.i(inProgressInteraction);
 
-    _gatherInteracitonInfo();
-
-    setBusy(true);
+    setBusyForObject(sideBusyIndicator, true);
 
     try {
-      final ineractionId = await _widgetCaptureService.captureWidgetDescription(
-          description: inProgressInteraction!);
-      _addSavedInteractionToViewWhenSuccess(ineractionId);
+      if (!currentViewCaptured) {
+        final capturedView = await _widgetCaptureService
+            .captureView(_testSweetsRouteTracker.currentRoute);
+        viewInteractions.add(capturedView);
+      }
+      final interaction = await _widgetCaptureService
+          .saveInteractionInDatabase(fullInteraction);
+
+      _addSavedInteractionToViewWhenSuccess(interaction);
     } catch (e) {
       _snackbarService.showCustomSnackBar(
           message: e.toString(), variant: SnackbarType.failed);
     }
 
-    setBusy(false);
+    setBusyForObject(sideBusyIndicator, false);
   }
 
-  void _gatherInteracitonInfo() {
-    inProgressInteraction = inProgressInteraction?.copyWith(
-      name: widgetNameValue!.convertWidgetNameToValidFormat,
-      viewName:
-          _testSweetsRouteTracker.currentRoute.convertViewNameToValidFormat,
-      originalViewName: _testSweetsRouteTracker.currentRoute,
-    );
-  }
+  Interaction get fullInteraction => inProgressInteraction!.copyWith(
+        name: widgetNameValue!.convertWidgetNameToValidFormat,
+        viewName: _testSweetsRouteTracker.formatedCurrentRoute,
+        originalViewName: _testSweetsRouteTracker.currentRoute,
+      );
 
-  void _addSavedInteractionToViewWhenSuccess(String id) {
-    viewInteractions.add(inProgressInteraction!.copyWith(id: id));
+  void _addSavedInteractionToViewWhenSuccess(Interaction createdInteraction) {
+    final syncedInteraction =
+        _notifictionExtractor.syncInteractionWithScrollable(createdInteraction);
+
+    viewInteractions.add(syncedInteraction);
     inProgressInteraction = null;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
   }
 
-  Future<String?> updateWidgetDescription() async {
+  Future<void> updateInteraction() async {
     log.i(inProgressInteraction);
 
-    setBusy(true);
+    setBusyForObject(sideBusyIndicator, true);
 
-    final result = await _widgetCaptureService.updateWidgetDescription(
-        description: inProgressInteraction!);
+    try {
+      final updatedInteraction = viewInteractions.firstWhere(
+          (oldInteraciton) => oldInteraciton.id == inProgressInteraction!.id);
 
-    if (result is String) {
+      await _widgetCaptureService.updateInteractionInDatabase(
+          oldInteraction: updatedInteraction,
+          updatedInteraction: inProgressInteraction!);
+
+      _updateInteractionInViewWhenSuccess(inProgressInteraction!);
+    } catch (error) {
       _snackbarService.showCustomSnackBar(
-          message: result, variant: SnackbarType.failed);
-    } else {
-      _updateInteractionInViewWhenSuccess();
+          message: error.toString(), variant: SnackbarType.failed);
     }
 
-    setBusy(false);
-    return result;
+    setBusyForObject(sideBusyIndicator, false);
   }
 
-  void _updateInteractionInViewWhenSuccess() {
-    final updatedIndex = viewInteractions.indexWhere(
-        (interaction) => inProgressInteraction!.id == interaction.id);
-    viewInteractions[updatedIndex] = inProgressInteraction!;
+  void _updateInteractionInViewWhenSuccess(Interaction updatedInteraction) {
+    final syncedInteraction =
+        _notifictionExtractor.syncInteractionWithScrollable(updatedInteraction);
+
+    final indexToUpdate = viewInteractions
+        .indexWhere((element) => syncedInteraction.id == element.id);
+
+    viewInteractions[indexToUpdate] = syncedInteraction;
     inProgressInteraction = null;
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
   }
 
-  Future<String?> removeWidgetDescription() async {
+  Future<void> removeWidgetDescription() async {
     log.i(inProgressInteraction);
 
-    setBusy(true);
+    setBusyForObject(sideBusyIndicator, true);
 
-    final result = await _widgetCaptureService.removeWidgetDescription(
-        description: inProgressInteraction!);
-    if (result is String) {
-      _snackbarService.showCustomSnackBar(
-          message: result, variant: SnackbarType.failed);
-    } else {
+    try {
+      await _widgetCaptureService
+          .removeInteractionFromDatabase(inProgressInteraction!);
+
       _removeInteractionFromViewWhenSuccess();
+    } catch (error) {
+      _snackbarService.showCustomSnackBar(
+          message: error.toString(), variant: SnackbarType.failed);
     }
 
-    setBusy(false);
-    return result;
+    setBusyForObject(sideBusyIndicator, false);
   }
 
   void _removeInteractionFromViewWhenSuccess() {
@@ -242,9 +255,9 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   Future<void> submitForm() async {
     if (inProgressInteraction?.id != null) {
-      await updateWidgetDescription();
+      await updateInteraction();
     } else {
-      await saveWidget();
+      await captureNewInteraction();
     }
   }
 
@@ -274,7 +287,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
       checkForExternalities(extractedScrollables);
 
-      await updateWidgetDescription();
+      await updateInteraction();
       captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
     }
     inProgressInteraction = null;
