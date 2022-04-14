@@ -50,7 +50,10 @@ class WidgetCaptureView extends StatelessWidget {
                   return false;
                 },
                 child: child),
-            RouteBannerView(isCaptured: model.currentViewCaptured),
+            ValueListenableBuilder(
+                valueListenable: model.interactionsForViewNotifier,
+                builder: (_, __, ___) =>
+                    RouteBannerView(isCaptured: model.currentViewCaptured)),
             if (model.captureWidgetStatusEnum.showDraggableWidget)
               const DraggableWidget(),
             const InteractionFormAndVisualizer(),
