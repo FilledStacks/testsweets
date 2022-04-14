@@ -1,3 +1,7 @@
+### 1.8.8
+- Fix the gap between capturing interaction on scrollable and moving the list to sync it
+- Remove deprecate code from testroutetracker
+- Reduce the get interactions calls to the DB
 ### 1.8.7
 - Test integrity feature
 ### 1.8.6+2
