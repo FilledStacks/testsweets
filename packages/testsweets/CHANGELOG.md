@@ -1,19 +1,27 @@
+### 1.8.9
+- Fix all analyzer issues
+
 ### 1.8.8
 - Fix the gap between capturing interaction on scrollable and moving the list to sync it
 - Remove deprecate code from testroutetracker
 - Reduce the get interactions calls to the DB
+
 ### 1.8.7
 - Test integrity feature
+
 ### 1.8.6+2
 - Fix bugs
+
 ### 1.8.6+1
 - Re-add responsiveness to interactions
 - Driver layout new UI that match the capture UI
+
 ### 1.8.5
 - Add scrollable interaction feature
 
 ### 1.7.5
 - Fix route bug
+
 ### 1.7.4
 - Fix testsweets doesn't respond to clearStackAndShow
 - Fix scroll comand verification require a target to succeed
@@ -35,8 +43,8 @@
 - Redesigning the capturing layout
 - Add attach/deatach widgets feature
 - Add quick edit position feature
-### 1.6.1
 
+### 1.6.1
 - Fix `buildAndUpload` for windows and mac
 - Relative automation point is now optional(old keys will not break any more)
 
