@@ -34,7 +34,7 @@ class TestSweetsRouteTracker extends ChangeNotifier {
       return;
     }
 
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       setRoute(route);
       notifyListeners();
     });

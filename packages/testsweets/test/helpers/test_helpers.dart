@@ -8,24 +8,24 @@ import 'package:testsweets/src/services/cloud_functions_service.dart';
 import 'package:testsweets/src/services/notification_extractor.dart';
 import 'package:testsweets/src/services/reactive_scrollable.dart';
 import 'package:testsweets/src/services/scroll_appliance.dart';
+import 'package:testsweets/src/services/test_integrity.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
-import 'package:testsweets/src/services/test_integrity.dart';
 import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 
 import 'test_consts.dart';
 import 'test_helpers.mocks.dart';
 
 @GenerateMocks([], customMocks: [
-  MockSpec<SnackbarService>(returnNullOnMissingStub: true),
-  MockSpec<WidgetCaptureService>(returnNullOnMissingStub: true),
-  MockSpec<TestSweetsRouteTracker>(returnNullOnMissingStub: true),
-  MockSpec<CloudFunctionsService>(returnNullOnMissingStub: true),
-  MockSpec<TestIntegrity>(returnNullOnMissingStub: true),
-  MockSpec<ReactiveScrollable>(returnNullOnMissingStub: true),
-  MockSpec<FindScrollables>(returnNullOnMissingStub: true),
-  MockSpec<ScrollAppliance>(returnNullOnMissingStub: true),
-  MockSpec<NotificationExtractor>(returnNullOnMissingStub: true),
+  MockSpec<SnackbarService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<WidgetCaptureService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<TestSweetsRouteTracker>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<CloudFunctionsService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<TestIntegrity>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<ReactiveScrollable>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<FindScrollables>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<ScrollAppliance>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<NotificationExtractor>(onMissingStub: OnMissingStub.returnDefault),
 ])
 MockWidgetCaptureService getAndRegisterWidgetCaptureService(
     {List<Interaction> viewInteractions = const [],

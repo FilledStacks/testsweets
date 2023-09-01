@@ -20,16 +20,17 @@ import 'stubed_proccess.dart';
 import 'test_consts.dart';
 
 @GenerateMocks([], customMocks: [
-  MockSpec<TestSweetsConfigFileService>(returnNullOnMissingStub: true),
-  MockSpec<BuildService>(returnNullOnMissingStub: true),
-  MockSpec<FileSystemService>(returnNullOnMissingStub: true),
-  MockSpec<FlutterProcess>(returnNullOnMissingStub: true),
-  MockSpec<HttpService>(returnNullOnMissingStub: true),
-  MockSpec<TimeService>(returnNullOnMissingStub: true),
-  MockSpec<CloudFunctionsService>(returnNullOnMissingStub: true),
-  MockSpec<DynamicKeysGenerator>(returnNullOnMissingStub: true),
-  MockSpec<UploadService>(returnNullOnMissingStub: true),
-  MockSpec<AutomationKeysService>(returnNullOnMissingStub: true),
+  MockSpec<TestSweetsConfigFileService>(
+      onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<BuildService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<FileSystemService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<FlutterProcess>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<HttpService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<TimeService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<CloudFunctionsService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<DynamicKeysGenerator>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<UploadService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<AutomationKeysService>(onMissingStub: OnMissingStub.returnDefault),
 ])
 MockFileSystemService getAndRegisterFileSystemService({
   bool doesFileExist = false,

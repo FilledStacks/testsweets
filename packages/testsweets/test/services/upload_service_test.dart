@@ -48,7 +48,7 @@ void main() {
           yield [1, 2, 3];
         }
 
-        final dataStream = makeDataStream();
+        makeDataStream();
 
         getAndRegisterCloudFunctionsService(
             getV4BuildUploadSignedUrlResult: dummySignedUrl,

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/setup_code.dart';
 import 'package:testsweets/src/ui/driver_layout/driver_layout_view.dart';

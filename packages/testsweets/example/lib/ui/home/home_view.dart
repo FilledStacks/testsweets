@@ -22,7 +22,7 @@ class HomeView extends StatelessWidget {
               ),
               Text(
                 model.counter.toString(),
-                style: Theme.of(context).textTheme.headline4,
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
             ],
           ),

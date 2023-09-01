@@ -40,6 +40,8 @@ class HttpServiceImplementation implements HttpService {
       Map<String, String>? headers}) async {
     headers = headers ?? <String, String>{};
 
+    // TODO (Refactor): This is a terrible implementation, it needs to be changed
+    // ignore: close_sinks
     final request = await HttpClient().putUrl(Uri.parse(to));
     headers.forEach((key, value) => request.headers.set(key, value));
 

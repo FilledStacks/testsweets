@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
-import 'package:testsweets/src/extensions/interaction_extension.dart';
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
 import 'package:testsweets/src/ui/shared/utils.dart';
 import 'package:testsweets/testsweets.dart';

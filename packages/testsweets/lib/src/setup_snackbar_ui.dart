@@ -16,7 +16,7 @@ void setupSnackbarUi() {
         icon: SvgPicture.asset(
           'packages/testsweets/assets/svgs/fail.svg',
           width: 15,
-          color: kcPrimaryWhite,
+          theme: SvgTheme(currentColor: kcPrimaryWhite),
         ),
         textColor: kcPrimaryWhite,
       ));
@@ -29,7 +29,7 @@ void setupSnackbarUi() {
         icon: SvgPicture.asset(
           'packages/testsweets/assets/svgs/pass.svg',
           width: 15,
-          color: kcPrimaryWhite,
+          theme: SvgTheme(currentColor: kcPrimaryWhite),
         ),
         shouldIconPulse: true,
         textColor: kcPrimaryWhite,
@@ -43,7 +43,7 @@ void setupSnackbarUi() {
         icon: SvgPicture.asset(
           'packages/testsweets/assets/svgs/info.svg',
           width: 15,
-          color: kcPrimaryWhite,
+          theme: SvgTheme(currentColor: kcPrimaryWhite),
         ),
         shouldIconPulse: true,
         textColor: kcPrimaryWhite,

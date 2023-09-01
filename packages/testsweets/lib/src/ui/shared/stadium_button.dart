@@ -7,7 +7,6 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 
 import 'app_colors.dart';
@@ -156,12 +155,7 @@ class StadiumButton extends StatelessWidget {
     this.enableFeedback = true,
     this.constraints,
     required this.icon,
-  })  : assert(iconSize != null),
-        assert(padding != null),
-        assert(alignment != null),
-        assert(splashRadius == null || splashRadius > 0),
-        assert(autofocus != null),
-        assert(icon != null),
+  })  : assert(splashRadius == null || splashRadius > 0),
         super(key: key);
 
   /// The size of the icon inside the button.

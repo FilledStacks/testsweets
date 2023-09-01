@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
-
 import 'package:testsweets/src/ui/shared/busy_indecator.dart';
-import 'package:testsweets/src/ui/shared/route_banner.dart';
-
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/testsweets.dart';
 
@@ -29,7 +26,7 @@ class WidgetCaptureView extends StatelessWidget {
 
     return ViewModelBuilder<WidgetCaptureViewModel>.reactive(
       disposeViewModel: false,
-      onModelReady: (model) async {
+      onViewModelReady: (model) async {
         await model.loadWidgetDescriptions();
         model.screenCenterPosition = WidgetPosition(
             capturedDeviceHeight: size.height,

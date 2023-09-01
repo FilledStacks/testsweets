@@ -1,9 +1,7 @@
 import 'package:testsweets/src/dart_only_locator.dart';
 import 'package:testsweets/src/models/build_error.dart';
 import 'package:testsweets/src/models/build_info.dart';
-import 'package:testsweets/src/services/automation_keys_service.dart';
 import 'package:testsweets/src/services/build_service.dart';
-import 'package:testsweets/src/services/cloud_functions_service.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/upload_service.dart';
 import 'package:testsweets/utils/error_messages.dart';

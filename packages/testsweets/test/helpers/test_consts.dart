@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
-import 'package:flutter/material.dart';
 import 'package:testsweets/src/models/build_info.dart';
 import 'package:testsweets/testsweets.dart';
 
@@ -127,11 +127,13 @@ final kViewInteraction = Interaction(
 
 final kScrollEndNotification = ScrollEndNotification(
     metrics: FixedScrollMetrics(
-        minScrollExtent: 50,
-        maxScrollExtent: 100,
-        pixels: 50,
-        viewportDimension: 33,
-        axisDirection: AxisDirection.right),
+      minScrollExtent: 50,
+      maxScrollExtent: 100,
+      pixels: 50,
+      viewportDimension: 33,
+      axisDirection: AxisDirection.right,
+      devicePixelRatio: 1.0,
+    ),
     context: MockBuildContext());
 
 final kTopLeftVerticalScrollableDescription = ScrollableDescription(

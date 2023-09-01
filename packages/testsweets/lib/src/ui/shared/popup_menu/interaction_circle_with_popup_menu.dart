@@ -6,7 +6,6 @@ import 'package:testsweets/src/ui/shared/popup_menu/popup_menu_content.dart';
 import '../../../enums/popup_menu_action.dart';
 import '../../widget_capture/widget_capture_viewmodel.dart';
 import '../interaction_circle.dart';
-import '../app_colors.dart';
 import 'custom_popup_menu.dart';
 
 class InteractionCircleWithPopupMenu extends StatelessWidget {

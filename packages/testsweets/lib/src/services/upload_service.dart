@@ -79,5 +79,5 @@ class BuildUploadError {
   operator ==(other) =>
       other is BuildUploadError && other.message == this.message;
 
-  int get hasCode => message.hashCode;
+  int get hashCode => super.hashCode;
 }

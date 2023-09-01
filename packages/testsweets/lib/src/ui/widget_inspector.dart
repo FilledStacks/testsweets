@@ -103,15 +103,12 @@ class _OverlayState extends State<Overlay> {
       element.visitChildren(visitor);
     }
 
-    // TODO: Prevent infinite loop if setState is used
-    // setState(() {  });
-
     context.visitChildElements(visitor);
   }
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance?.addPostFrameCallback((_) => getElements(context));
+    WidgetsBinding.instance.addPostFrameCallback((_) => getElements(context));
     return Expanded(
       child: Stack(
         children: [

@@ -1,14 +1,11 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/models/application_models.dart';
-import 'package:testsweets/src/services/reactive_scrollable.dart';
-import 'package:testsweets/src/services/testsweets_route_tracker.dart';
-import 'package:testsweets/src/ui/widget_capture/widgets/interaction_capture_form.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
+import 'package:testsweets/src/ui/widget_capture/widgets/interaction_capture_form.dart';
 
 import '../helpers/test_consts.dart';
 import '../helpers/test_helpers.dart';
@@ -41,8 +38,6 @@ void main() {
         final model = _getViewModel();
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
         model.showWidgetForm();
-        model.inProgressInteraction!
-            .copyWith(widgetType: WidgetType.scrollable);
         model.captureNewInteraction();
         expect(model.fullInteraction.originalViewName, 'current route');
       });
@@ -53,8 +48,6 @@ void main() {
         final model = _getViewModel();
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
         model.showWidgetForm();
-        model.inProgressInteraction!
-            .copyWith(widgetType: WidgetType.scrollable);
         model.captureNewInteraction();
         expect(model.fullInteraction.viewName, 'currentRoute');
         expect(model.fullInteraction.originalViewName, '/current route');
@@ -83,7 +76,6 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         model
           ..formValueMap[WidgetNameValueKey] = 'myWidgetName'
           ..showWidgetForm()
-          ..inProgressInteraction!.copyWith(widgetType: WidgetType.scrollable)
           ..viewInteractions
               .add(kViewInteraction); // to skip capturing the view
 

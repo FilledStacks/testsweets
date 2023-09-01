@@ -36,7 +36,7 @@ class CustomSolidBottomSheet extends StatefulWidget {
   // This flag enable that users can swipe the header and hide or show the
   // solid bottom sheet. Turn on false if you don't want to let the user
   // interact with the solid bottom sheet. By default is true.
-  final bool canUserSwipe; // TODO: Change to draggableHeader
+  final bool canUserSwipe;
 
   // This property defines how 'smooth' or fast will be the animation. Low is
   // the slowest velocity and high is the fastest. By default is medium.
@@ -49,7 +49,7 @@ class CustomSolidBottomSheet extends StatefulWidget {
   // This flag controls if the body is shown to the user by default. If it's
   // true, the body will be shown. If it's false the body will be hided. By
   // default it's false.
-  final bool showOnAppear; // TODO: change to openedByDefault
+  final bool showOnAppear;
 
   // This object used to control behavior internally
   // from the app and don't depend of user's interaction.
