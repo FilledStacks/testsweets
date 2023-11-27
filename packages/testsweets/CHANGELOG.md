@@ -1,3 +1,23 @@
+### 1.9.0
+
+Adds constructor for `TestSweetsNavigatorObserver`. This is a fix for a bug that occurs when you add the observer to multiple navigators. The only instance of this bug happening is in `goRouter` when using `shellRoutes` and you need to add the observer to multiple places. 
+
+Going forward documentation will ask for navigators to be added as follows:
+
+```dart
+navigatorObservers: [
+    TestSweetsNavigatorObserver(),
+],
+```
+
+Instead of
+
+```dart
+navigatorObservers: [
+    TestSweetsNavigatorObserver.instance,
+],
+```
+
 ### 1.8.9
 - Fix all analyzer issues
 

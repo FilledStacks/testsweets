@@ -31,12 +31,15 @@ class DriverLayoutViewModel extends BaseViewModel {
           .map(_notificationExtractor.notificationToScrollableDescription)
           .listen((notification) => viewInteractions = _notificationExtractor
               .scrollInteractions(notification, viewInteractions));
+
     _widgetCaptureService.projectId = projectId;
   }
 
   ValueNotifier<List<Interaction>> descriptionsForViewNotifier =
       ValueNotifier([]);
+
   List<Interaction> get viewInteractions => descriptionsForViewNotifier.value;
+
   set viewInteractions(List<Interaction> widgetDescriptions) {
     descriptionsForViewNotifier.value = widgetDescriptions;
   }

@@ -5,6 +5,8 @@ import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 class TestSweetsNavigatorObserver extends NavigatorObserver {
   final routeTracker = locator<TestSweetsRouteTracker>();
 
+  TestSweetsNavigatorObserver();
+
   static final TestSweetsNavigatorObserver _instance =
       TestSweetsNavigatorObserver._internal();
 

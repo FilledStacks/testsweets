@@ -27,7 +27,9 @@ class ScrollAppliance {
 
     if (interaction.isScrollable) {
       return storeDescriptionInScrollableExternalities(
-          scrollablesBelowInteraction, interaction);
+        scrollablesBelowInteraction,
+        interaction,
+      );
     } else {
       return storeDescriptionInExternalities(
           scrollablesBelowInteraction, interaction);
@@ -81,7 +83,7 @@ class ScrollAppliance {
   ScrollableDescription findBiggestScrollable(
       Iterable<ScrollableDescription> scrollablesBelowInteraction) {
     return scrollablesBelowInteraction.reduce(
-      (curr, next) => curr.rect.biggestThan(next.rect) ? curr : next,
+      (curr, next) => curr.rect.biggerThan(next.rect) ? curr : next,
     );
   }
 }

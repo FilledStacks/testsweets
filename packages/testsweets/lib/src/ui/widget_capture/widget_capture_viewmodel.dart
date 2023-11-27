@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
@@ -315,11 +314,14 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   void checkForExternalities(
-      Iterable<ScrollableDescription> scrollableDescription) {
+    Iterable<ScrollableDescription> scrollableDescription,
+  ) {
     log.i('before:' + inProgressInteraction.toString());
 
     inProgressInteraction = _scrollAppliance.applyScrollableOnInteraction(
-        scrollableDescription, inProgressInteraction!);
+      scrollableDescription,
+      inProgressInteraction!,
+    );
 
     log.i('after:' + inProgressInteraction.toString());
   }

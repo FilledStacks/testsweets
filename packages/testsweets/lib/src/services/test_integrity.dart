@@ -10,18 +10,18 @@ class TestIntegrity {
   Type? triggeringNotificationType;
 
   void failCommand() {
-    log.v('');
+    // log.v('');
     _completer?.complete(false);
   }
 
   void confirmCommand() {
-    log.v('');
+    // log.v('');
     _timeoutTimer?.cancel();
     _completer?.complete(true);
   }
 
   void whenNotificationTypeMatchesConfirmCommand(Notification notification) {
-    log.v(notification.runtimeType);
+    // log.v(notification.runtimeType);
 
     if (triggeringNotificationType != null &&
         triggeringNotificationType == notification.runtimeType) {
@@ -30,7 +30,7 @@ class TestIntegrity {
   }
 
   Future<bool> trueIfCommandVerifiedOrFalseIfTimeout(Duration timeoutDuration) {
-    log.v('');
+    // log.v('');
     _completer = Completer();
 
     _timeoutTimer = Timer(timeoutDuration, failCommand);

@@ -80,6 +80,7 @@ final kGeneralInteractionWithZeroOffset = Interaction(
     name: 'widgetName',
     widgetType: WidgetType.general,
     position: WidgetPosition.empty());
+
 final kGeneralInteraction = Interaction(
   originalViewName: '/',
   viewName: 'login',

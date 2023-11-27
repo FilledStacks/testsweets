@@ -73,10 +73,11 @@ class NotificationExtractorImp implements NotificationExtractor {
     log.v(notification);
 
     return ScrollableDescription.fromNotification(
-        globalPosition: globalPosition!,
-        localPosition: localPosition!,
-        metrics: (notification as ScrollUpdateNotification).metrics,
-        scrollDirection: scrollDirection!);
+      globalPosition: globalPosition!,
+      localPosition: localPosition!,
+      metrics: (notification as ScrollUpdateNotification).metrics,
+      scrollDirection: scrollDirection!,
+    );
   }
 
   @override

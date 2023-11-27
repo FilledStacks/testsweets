@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       builder: (ctx, child) => TestSweetsOverlayView(
-        projectId: 'fGuFgPNXDnu56FEoe8Rn',
+        projectId: 'mqAdFjIE3CTunAszoP5M',
         child: child!,
       ),
       initialRoute: Routes.signUpView,
