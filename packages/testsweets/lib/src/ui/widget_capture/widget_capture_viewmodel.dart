@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
@@ -14,6 +13,7 @@ import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/notification_extractor.dart';
 import 'package:testsweets/src/services/scroll_appliance.dart';
+import 'package:testsweets/src/services/snackbar_service.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/ui/shared/find_scrollables.dart';
@@ -77,6 +77,10 @@ class WidgetCaptureViewModel extends FormViewModel {
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.createWidget;
   }
 
+  void setSnackbarContext(BuildContext context) {
+    _snackbarService.setBuildContext(context);
+  }
+
   Future<void> loadWidgetDescriptions() async {
     log.v('');
     setBusyForObject(fullScreenBusyIndicator, true);
@@ -87,8 +91,9 @@ class WidgetCaptureViewModel extends FormViewModel {
     } catch (error) {
       log.e('Could not get widgetDescriptions: $error');
       _snackbarService.showCustomSnackBar(
-          message: 'Could not get widgetDescriptions: $error',
-          variant: SnackbarType.failed);
+        message: 'Could not get widgetDescriptions: $error',
+        variant: SnackbarType.failed,
+      );
     }
     setBusyForObject(fullScreenBusyIndicator, false);
   }
@@ -152,8 +157,10 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     try {
       if (!currentViewCaptured) {
-        final capturedView = await _widgetCaptureService
-            .captureView(_testSweetsRouteTracker.currentRoute);
+        final capturedView = await _widgetCaptureService.captureView(
+          _testSweetsRouteTracker.currentRoute,
+        );
+
         viewInteractions.add(capturedView);
       }
       final interaction = await _widgetCaptureService
@@ -300,10 +307,12 @@ class WidgetCaptureViewModel extends FormViewModel {
     captureWidgetStatusEnum = CaptureWidgetStatusEnum.quickPositionEdit;
   }
 
-  void interactionOnTap(Interaction widgetDescription) async {
+  void interactionOnTap(Interaction widgetDescription) {
     notifyListeners();
-    await _snackbarService.showCustomSnackBar(
-        message: widgetDescription.name, variant: SnackbarType.info);
+    _snackbarService.showCustomSnackBar(
+      message: widgetDescription.name,
+      variant: SnackbarType.info,
+    );
   }
 
   bool onClientNotifiaction(Notification notification) {

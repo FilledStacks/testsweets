@@ -22,7 +22,7 @@ class DriverLayoutView extends StatelessWidget {
     return ViewModelBuilder<DriverLayoutViewModel>.reactive(
       onViewModelReady: (model) {
         SchedulerBinding.instance
-            .addPostFrameCallback((_) => model.initialise());
+            .addPostFrameCallback((_) => model.initialise(context));
       },
       builder: (context, model, _) {
         return Scaffold(

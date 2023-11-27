@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:stacked/stacked.dart';
-import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/notification_extractor.dart';
+import 'package:testsweets/src/services/snackbar_service.dart';
 import 'package:testsweets/src/services/test_integrity.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
@@ -48,7 +48,9 @@ class DriverLayoutViewModel extends BaseViewModel {
         (element) => element.widgetType == WidgetType.view,
       );
 
-  Future<void> initialise() async {
+  Future<void> initialise(BuildContext context) async {
+    _snackbarService.setBuildContext(context);
+
     setBusy(true);
     try {
       await _widgetCaptureService.loadWidgetDescriptionsForProject();

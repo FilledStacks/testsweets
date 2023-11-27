@@ -27,6 +27,7 @@ class WidgetCaptureView extends StatelessWidget {
     return ViewModelBuilder<WidgetCaptureViewModel>.reactive(
       disposeViewModel: false,
       onViewModelReady: (model) async {
+        model.setSnackbarContext(context);
         await model.loadWidgetDescriptions();
         model.screenCenterPosition = WidgetPosition(
             capturedDeviceHeight: size.height,

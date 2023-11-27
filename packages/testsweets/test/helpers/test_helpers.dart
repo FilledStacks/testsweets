@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:stacked_services/stacked_services.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
 import 'package:testsweets/src/services/notification_extractor.dart';
 import 'package:testsweets/src/services/reactive_scrollable.dart';
 import 'package:testsweets/src/services/scroll_appliance.dart';
+import 'package:testsweets/src/services/snackbar_service.dart';
 import 'package:testsweets/src/services/test_integrity.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
