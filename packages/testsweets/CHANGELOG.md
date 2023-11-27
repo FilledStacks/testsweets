@@ -1,3 +1,8 @@
+### 1.10.0
+
+- Removes the Stacked Services package
+- Creates a custom Snackbar service to show messagees
+
 ### 1.9.0
 
 Adds constructor for `TestSweetsNavigatorObserver`. This is a fix for a bug that occurs when you add the observer to multiple navigators. The only instance of this bug happening is in `goRouter` when using `shellRoutes` and you need to add the observer to multiple places. 
