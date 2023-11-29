@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
@@ -142,6 +143,9 @@ class _Content extends StatelessWidget {
                       focusNode: widgetNameFocusNode,
                       controller: widgetNameController,
                       style: tsNormal().copyWith(color: kcPrimaryWhite),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.deny(RegExp(r'\s')),
+                      ],
                       decoration: InputDecoration(
                           hintStyle: tsNormal().copyWith(
                             color: kcSubtext,
