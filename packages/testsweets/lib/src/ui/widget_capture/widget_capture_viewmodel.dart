@@ -51,6 +51,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Interaction? inProgressInteraction;
+  bool showInteractionPonts = true;
 
   ValueNotifier<List<Interaction>> interactionsForViewNotifier =
       ValueNotifier([]);
@@ -118,8 +119,8 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   set setVisibilty(bool visible) {
     log.v(visible);
-    inProgressInteraction =
-        inProgressInteraction!.copyWith(visibility: visible);
+
+    showInteractionPonts = visible;
     notifyListeners();
   }
 

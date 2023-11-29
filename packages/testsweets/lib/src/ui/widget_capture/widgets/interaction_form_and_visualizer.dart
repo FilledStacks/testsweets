@@ -53,16 +53,17 @@ class _InteractionFormAndVisualizerState
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        if (model.captureState.showWidgets)
+        if (model.captureState.showWidgets && model.showInteractionPonts)
           InteractionsVisualizerCaptureMode(
-              captureWidgetState: model.captureState,
-              descriptionsForViewNotifier: model.interactionsForViewNotifier,
-              editActionSelected: () {
-                /// Set the value of the edited interaction to the
-                /// form textfield and show the bottomsheet.
-                widgetNameController.text = model.inProgressInteraction!.name;
-                bottomSheetController.show();
-              }),
+            captureWidgetState: model.captureState,
+            descriptionsForViewNotifier: model.interactionsForViewNotifier,
+            editActionSelected: () {
+              /// Set the value of the edited interaction to the
+              /// form textfield and show the bottomsheet.
+              widgetNameController.text = model.inProgressInteraction!.name;
+              bottomSheetController.show();
+            },
+          ),
         if (model.captureState.showWidgetForm)
           Container(
             margin: EdgeInsets.only(
@@ -178,14 +179,15 @@ class _Content extends StatelessWidget {
                     width: 8,
                   ),
                   SweetIconButton(
-                      backgroundColor: kcCard,
-                      onTap: () {
-                        model.setVisibilty = !interaction.visibility;
-                      },
-                      svgIcon: interaction.visibility
-                          ? 'packages/testsweets/assets/svgs/eye.svg'
-                          : 'packages/testsweets/assets/svgs/eye_closed.svg',
-                      svgWidth: 30),
+                    backgroundColor: kcCard,
+                    onTap: () {
+                      model.setVisibilty = !model.showInteractionPonts;
+                    },
+                    svgIcon: model.showInteractionPonts
+                        ? 'packages/testsweets/assets/svgs/eye.svg'
+                        : 'packages/testsweets/assets/svgs/eye_closed.svg',
+                    svgWidth: 30,
+                  ),
                 ],
               ),
             ],

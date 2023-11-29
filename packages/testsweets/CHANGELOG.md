@@ -1,3 +1,8 @@
+### 1.11.0
+
+- Adds `TESTSWEETS_VERBOSE_LOGS` environment variable to control TestSweets log output
+- Keeps all interaction points on screen, at 50% opacity, while adding a new one.
+
 ### 1.10.0
 
 - Removes the Stacked Services package
