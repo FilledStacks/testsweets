@@ -81,14 +81,12 @@ class _InteractionFormAndVisualizerState
               maxHeight: 300,
               body: Container(
                 decoration: kdBlackRoundedEdgeDecoration,
-                child: interaction == null
-                    ? const SizedBox.shrink()
-                    : _Content(
-                        interaction: interaction,
-                        bottomSheetController: bottomSheetController,
-                        widgetNameController: widgetNameController,
-                        widgetNameFocusNode: widgetNameFocusNode,
-                      ),
+                child: _Content(
+                  interaction: interaction,
+                  bottomSheetController: bottomSheetController,
+                  widgetNameController: widgetNameController,
+                  widgetNameFocusNode: widgetNameFocusNode,
+                ),
               ),
             ),
           ),
@@ -98,13 +96,13 @@ class _InteractionFormAndVisualizerState
 }
 
 class _Content extends StatelessWidget {
-  final Interaction interaction;
+  final Interaction? interaction;
   final FocusNode widgetNameFocusNode;
   final TextEditingController widgetNameController;
   final SolidController bottomSheetController;
   const _Content({
     Key? key,
-    required this.interaction,
+    this.interaction,
     required this.widgetNameFocusNode,
     required this.widgetNameController,
     required this.bottomSheetController,
@@ -123,7 +121,7 @@ class _Content extends StatelessWidget {
               textAlign: TextAlign.left, style: tsMedium()),
         ),
         TypeSelector(
-          selectedWidgetType: interaction.widgetType,
+          selectedWidgetType: model.inProgressInteraction?.widgetType,
           onTap: (widgetType) => model.setWidgetType = widgetType,
         ),
         Padding(
@@ -203,7 +201,7 @@ class _Content extends StatelessWidget {
               Expanded(
                 flex: 5,
                 child: CtaButton(
-                    isDisabled: interaction.name.isEmpty,
+                    isDisabled: interaction?.name.isEmpty ?? true,
                     onTap: () async {
                       await _closeBottomSheet();
 
@@ -222,7 +220,11 @@ class _Content extends StatelessWidget {
                       _clearAndUnfocusTextField();
                     },
                     fillColor: kcPrimaryPurple,
-                    title: interaction.id != null ? 'Update' : 'Create'),
+                    title: interaction == null
+                        ? 'Select Type'
+                        : interaction?.id != null
+                            ? 'Update'
+                            : 'Create'),
               ),
               const SizedBox(
                 width: 8,

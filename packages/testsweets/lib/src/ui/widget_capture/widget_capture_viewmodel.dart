@@ -60,7 +60,9 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   ValueNotifier<List<Interaction>> interactionsForViewNotifier =
       ValueNotifier([]);
+
   List<Interaction> get viewInteractions => interactionsForViewNotifier.value;
+
   set viewInteractions(List<Interaction> interactions) {
     interactionsForViewNotifier.value = interactions;
   }
@@ -74,12 +76,6 @@ class WidgetCaptureViewModel extends FormViewModel {
   /// When open the form create new instance of widgetDescription
   /// if it's null and set [CaptureWidgetState.createWidget]
   void showWidgetForm() {
-    inProgressInteraction = inProgressInteraction ??
-        Interaction(
-            position: screenCenterPosition,
-            viewName: '',
-            originalViewName: '',
-            widgetType: WidgetType.touchable);
     captureState = CaptureWidgetState.createWidget;
   }
 
@@ -118,8 +114,18 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   set setWidgetType(WidgetType widgetType) {
     log.v(widgetType);
-    inProgressInteraction =
-        inProgressInteraction!.copyWith(widgetType: widgetType);
+    if (inProgressInteraction == null) {
+      inProgressInteraction = Interaction(
+        position: screenCenterPosition,
+        viewName: '',
+        originalViewName: '',
+        widgetType: widgetType,
+      );
+    } else {
+      inProgressInteraction = inProgressInteraction?.copyWith(
+        widgetType: widgetType,
+      );
+    }
     notifyListeners();
   }
 

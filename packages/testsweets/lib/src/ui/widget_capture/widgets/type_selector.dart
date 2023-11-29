@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:testsweets/src/enums/widget_type.dart';
 
 import 'widget_card.dart';
