@@ -1,7 +1,9 @@
 ### 1.11.0
 
-- Adds `TESTSWEETS_VERBOSE_LOGS` environment variable to control TestSweets log output
-- Keeps all interaction points on screen, at 50% opacity, while adding a new one.
+- feat: Keeps all interaction points on screen, at 50% opacity, while adding a new one.
+- feat: Adds ability to hide all interaction points to allow interaction with the host app
+
+- chore: Adds `TESTSWEETS_VERBOSE_LOGS` environment variable to control TestSweets log output
 
 ### 1.10.0
 

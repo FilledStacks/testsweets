@@ -43,7 +43,12 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     _testSweetsRouteTracker.addListener(() {
       _widgetCaptureService.syncRouteInteractions(
-          _testSweetsRouteTracker.previosRoute, viewInteractions);
+        _testSweetsRouteTracker.previosRoute,
+        viewInteractions,
+      );
+
+      showInteractionPonts = true;
+
       loadCurrentRouteInteractions();
     });
 
@@ -101,7 +106,8 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void loadCurrentRouteInteractions() {
     viewInteractions = _widgetCaptureService.getDescriptionsForView(
-        currentRoute: _testSweetsRouteTracker.currentRoute);
+      currentRoute: _testSweetsRouteTracker.currentRoute,
+    );
   }
 
   set captureState(CaptureWidgetState captureWidgetStatusEnum) {
