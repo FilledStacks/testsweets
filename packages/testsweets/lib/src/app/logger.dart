@@ -9,6 +9,9 @@
 /// import 'package:customer_app/services/stackdriver/stackdriver_service.dart';
 import 'package:logger/logger.dart';
 
+const bool TESTSWEETS_VERBOSE_LOGS =
+    bool.fromEnvironment('TESTSWEETS_VERBOSE_LOGS');
+
 class SimpleLogPrinter extends LogPrinter {
   final String className;
   final bool printCallingFunctionName;
@@ -130,7 +133,7 @@ Logger getLogger(
       exludeLogsFromClasses: exludeLogsFromClasses,
     ),
     output: MultipleLoggerOutput([
-      ConsoleOutput(),
+      if (TESTSWEETS_VERBOSE_LOGS) ConsoleOutput(),
     ]),
   );
 }
