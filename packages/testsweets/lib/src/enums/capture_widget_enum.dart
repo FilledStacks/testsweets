@@ -1,4 +1,4 @@
-enum CaptureWidgetStatusEnum {
+enum CaptureWidgetState {
   idle,
   createWidget,
   editWidget,

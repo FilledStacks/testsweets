@@ -9,19 +9,25 @@ import '../interaction_circle.dart';
 import 'custom_popup_menu.dart';
 
 class InteractionCircleWithPopupMenu extends StatelessWidget {
-  const InteractionCircleWithPopupMenu(
-      {Key? key, required this.editActionSelected, required this.description})
-      : super(key: key);
-
   final Function editActionSelected;
   final Interaction description;
+  final bool editMode;
+
+  const InteractionCircleWithPopupMenu({
+    Key? key,
+    required this.editActionSelected,
+    required this.description,
+    required this.editMode,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    print('PopupMenu: ' + description.toString());
+    // print('PopupMenu: ' + description.toString());
 
     final model = context.watch<WidgetCaptureViewModel>();
     final size = MediaQuery.of(context).size;
     return CustomPopupMenu(
+      enablePassEvent: !editMode,
       onMoveStart: () => model.startQuickPositionEdit(description),
       onTap: () => model.interactionOnTap(description),
       onLongPressUp: model.onLongPressUp,

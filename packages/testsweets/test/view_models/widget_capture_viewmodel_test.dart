@@ -116,7 +116,7 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
 
         await model.updateInteraction();
 
-        expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
+        expect(model.captureState, CaptureWidgetState.idle);
       });
       test('''When in quickPositionEdit mode and user trigger onLongPressUp
        without changing the interaction position,
@@ -207,7 +207,7 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         final model = _getViewModel();
         model.showWidgetForm();
         await model.removeWidgetDescription();
-        expect(model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.idle);
+        expect(model.captureState, CaptureWidgetState.idle);
       });
     });
 
@@ -218,8 +218,7 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         final model = _getViewModel();
         model.popupMenuActionSelected(
             kGeneralInteraction, PopupMenuAction.edit);
-        expect(
-            model.captureWidgetStatusEnum, CaptureWidgetStatusEnum.editWidget);
+        expect(model.captureState, CaptureWidgetState.editWidget);
       });
       test(
           'When popupMenuAction is remove, Should call deleteWidgetDescription from captureService',

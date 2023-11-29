@@ -1,22 +1,23 @@
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 
-extension CaptureWidgetEnumUnion on CaptureWidgetStatusEnum {
-  bool get createWidgetMode => this == CaptureWidgetStatusEnum.createWidget;
+extension CaptureWidgetEnumUnion on CaptureWidgetState {
+  bool get createWidgetMode => this == CaptureWidgetState.createWidget;
 
   bool get showWidgetForm =>
-      this == CaptureWidgetStatusEnum.idle ||
-      this == CaptureWidgetStatusEnum.editWidget ||
-      this == CaptureWidgetStatusEnum.createWidget;
+      this == CaptureWidgetState.idle ||
+      this == CaptureWidgetState.editWidget ||
+      this == CaptureWidgetState.createWidget;
 
-  bool get showConnections => this == CaptureWidgetStatusEnum.idle;
+  bool get showConnections => this == CaptureWidgetState.idle;
 
   bool get showWidgets =>
-      this == CaptureWidgetStatusEnum.idle ||
-      this == CaptureWidgetStatusEnum.quickPositionEdit;
+      this == CaptureWidgetState.idle ||
+      this == CaptureWidgetState.quickPositionEdit ||
+      this == CaptureWidgetState.createWidget;
 
   bool get showDraggableWidget =>
-      this == CaptureWidgetStatusEnum.idle ||
-      this == CaptureWidgetStatusEnum.createWidget ||
-      this == CaptureWidgetStatusEnum.editWidget ||
-      this == CaptureWidgetStatusEnum.quickPositionEdit;
+      this == CaptureWidgetState.idle ||
+      this == CaptureWidgetState.createWidget ||
+      this == CaptureWidgetState.editWidget ||
+      this == CaptureWidgetState.quickPositionEdit;
 }

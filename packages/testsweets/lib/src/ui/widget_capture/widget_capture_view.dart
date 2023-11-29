@@ -41,19 +41,21 @@ class WidgetCaptureView extends StatelessWidget {
           alignment: Alignment.bottomCenter,
           children: [
             NotificationListener(
-                onNotification: (notification) {
-                  if (notification is Notification) {
-                    model.onClientNotifiaction(notification);
-                  }
-                  return false;
-                },
-                child: child),
+              onNotification: (notification) {
+                if (notification is Notification) {
+                  model.onClientNotifiaction(notification);
+                }
+                return false;
+              },
+              child: child,
+            ),
             ValueListenableBuilder(
-                valueListenable: model.interactionsForViewNotifier,
-                builder: (_, __, ___) =>
-                    RouteBannerView(isCaptured: model.currentViewCaptured)),
-            if (model.captureWidgetStatusEnum.showDraggableWidget)
-              const DraggableWidget(),
+              valueListenable: model.interactionsForViewNotifier,
+              builder: (_, __, ___) => RouteBannerView(
+                isCaptured: model.currentViewCaptured,
+              ),
+            ),
+            if (model.captureState.showDraggableWidget) const DraggableWidget(),
             const InteractionFormAndVisualizer(),
             BusyIndicator(
               center:

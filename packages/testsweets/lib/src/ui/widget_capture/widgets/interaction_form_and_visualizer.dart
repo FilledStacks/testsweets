@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
-
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/application_models.dart';
@@ -14,8 +13,8 @@ import 'package:testsweets/src/ui/shared/icon_button.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
-import 'interaction_capture_form.dart';
 import 'form_header.dart';
+import 'interaction_capture_form.dart';
 import 'interactions_visualizer_capture_mode.dart';
 import 'type_selector.dart';
 
@@ -54,8 +53,9 @@ class _InteractionFormAndVisualizerState
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        if (model.captureWidgetStatusEnum.showWidgets)
+        if (model.captureState.showWidgets)
           InteractionsVisualizerCaptureMode(
+              captureWidgetState: model.captureState,
               descriptionsForViewNotifier: model.interactionsForViewNotifier,
               editActionSelected: () {
                 /// Set the value of the edited interaction to the
@@ -63,7 +63,7 @@ class _InteractionFormAndVisualizerState
                 widgetNameController.text = model.inProgressInteraction!.name;
                 bottomSheetController.show();
               }),
-        if (model.captureWidgetStatusEnum.showWidgetForm)
+        if (model.captureState.showWidgetForm)
           Container(
             margin: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),

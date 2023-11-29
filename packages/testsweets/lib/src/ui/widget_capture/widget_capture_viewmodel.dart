@@ -29,7 +29,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _notifictionExtractor = locator<NotificationExtractor>();
 
   final _notificationController = StreamController<Notification>.broadcast();
-  var _captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+  var _captureWidgetStatusEnum = CaptureWidgetState.idle;
 
   static String sideBusyIndicator = 'sideBusyIndicator';
   static String fullScreenBusyIndicator = 'fullScreenBusyIndicator';
@@ -66,7 +66,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   late WidgetPosition screenCenterPosition;
 
   /// When open the form create new instance of widgetDescription
-  /// if it's null and set [CaptureWidgetStatusEnum.createWidget]
+  /// if it's null and set [CaptureWidgetState.createWidget]
   void showWidgetForm() {
     inProgressInteraction = inProgressInteraction ??
         Interaction(
@@ -74,7 +74,7 @@ class WidgetCaptureViewModel extends FormViewModel {
             viewName: '',
             originalViewName: '',
             widgetType: WidgetType.touchable);
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.createWidget;
+    captureState = CaptureWidgetState.createWidget;
   }
 
   void setSnackbarContext(BuildContext context) {
@@ -103,7 +103,7 @@ class WidgetCaptureViewModel extends FormViewModel {
         currentRoute: _testSweetsRouteTracker.currentRoute);
   }
 
-  set captureWidgetStatusEnum(CaptureWidgetStatusEnum captureWidgetStatusEnum) {
+  set captureState(CaptureWidgetState captureWidgetStatusEnum) {
     log.i(captureWidgetStatusEnum);
     _captureWidgetStatusEnum = captureWidgetStatusEnum;
     notifyListeners();
@@ -123,13 +123,12 @@ class WidgetCaptureViewModel extends FormViewModel {
     notifyListeners();
   }
 
-  CaptureWidgetStatusEnum get captureWidgetStatusEnum =>
-      _captureWidgetStatusEnum;
+  CaptureWidgetState get captureState => _captureWidgetStatusEnum;
 
   void clearWidgetDescriptionForm() {
     log.v('');
     inProgressInteraction = null;
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+    captureState = CaptureWidgetState.idle;
   }
 
   void updateDescriptionPosition(
@@ -187,7 +186,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     viewInteractions.add(syncedInteraction);
     inProgressInteraction = null;
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+    captureState = CaptureWidgetState.idle;
   }
 
   Future<void> updateInteraction() async {
@@ -221,7 +220,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     viewInteractions[indexToUpdate] = syncedInteraction;
     inProgressInteraction = null;
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+    captureState = CaptureWidgetState.idle;
   }
 
   Future<void> removeWidgetDescription() async {
@@ -247,7 +246,7 @@ class WidgetCaptureViewModel extends FormViewModel {
         .whereNot((widget) => inProgressInteraction == widget)
         .toList();
     inProgressInteraction = null;
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+    captureState = CaptureWidgetState.idle;
   }
 
   @override
@@ -274,7 +273,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
     switch (popupMenuAction) {
       case PopupMenuAction.edit:
-        captureWidgetStatusEnum = CaptureWidgetStatusEnum.editWidget;
+        captureState = CaptureWidgetState.editWidget;
         break;
       case PopupMenuAction.remove:
         await removeWidgetDescription();
@@ -283,9 +282,9 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<void> onLongPressUp() async {
-    log.v(captureWidgetStatusEnum);
+    log.v(captureState);
 
-    if (captureWidgetStatusEnum == CaptureWidgetStatusEnum.quickPositionEdit) {
+    if (captureState == CaptureWidgetState.quickPositionEdit) {
       final findScrollablesService = locator<FindScrollables>()
         ..searchForScrollableElements();
       final extractedScrollables =
@@ -294,7 +293,7 @@ class WidgetCaptureViewModel extends FormViewModel {
       checkForExternalities(extractedScrollables);
 
       await updateInteraction();
-      captureWidgetStatusEnum = CaptureWidgetStatusEnum.idle;
+      captureState = CaptureWidgetState.idle;
     }
     inProgressInteraction = null;
   }
@@ -304,7 +303,7 @@ class WidgetCaptureViewModel extends FormViewModel {
   ) {
     log.v(description);
     inProgressInteraction = description;
-    captureWidgetStatusEnum = CaptureWidgetStatusEnum.quickPositionEdit;
+    captureState = CaptureWidgetState.quickPositionEdit;
   }
 
   void interactionOnTap(Interaction widgetDescription) {
