@@ -4,6 +4,8 @@
 - feat: Adds ability to hide all interaction points to allow interaction with the host app
 - feat: Removes automatic interaction point add when opening `Widget Capture` bottom sheet.
 
+- fix: Don't allow spaces when naming a interaction point
+
 - chore: Adds `TESTSWEETS_VERBOSE_LOGS` environment variable to control TestSweets log output
 
 ### 1.10.0
