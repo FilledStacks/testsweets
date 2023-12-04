@@ -20,7 +20,7 @@ void main() {
         to the YTranslit if the scrollable is vertical
         ''', () async {
         registerServiceInsteadOfMockedOne(ReactiveScrollable());
-        final _service = NotificationExtractorImp();
+        final _service = NotificationExtractor();
 
         var viewInteraction = [
           kGeneralInteractionWithZeroOffset.copyWith(
@@ -48,7 +48,7 @@ void main() {
             So YTranslate not null
           ''', () async {
         registerServiceInsteadOfMockedOne(ReactiveScrollable());
-        final _service = NotificationExtractorImp();
+        final _service = NotificationExtractor();
 
         final viewInteraction = [
           kGeneralInteractionWithZeroOffset.copyWith(
@@ -76,7 +76,7 @@ void main() {
           Should add the scrollExtent once for YTranslate and once for XTranslate
           ''', () async {
         registerServiceInsteadOfMockedOne(ReactiveScrollable());
-        final _service = NotificationExtractorImp();
+        final _service = NotificationExtractor();
 
         final viewInteraction = [
           kGeneralInteractionWithZeroOffset
@@ -131,7 +131,7 @@ void main() {
         expect(horizontlScrollResult[1].position.xDeviation, 50);
       });
       test('Should save the latest scrollableDescription', () {
-        final _service = NotificationExtractorImp();
+        final _service = NotificationExtractor();
 
         _service
             .scrollInteractions(kTopLeftHorizontalScrollableDescription, []);
@@ -144,7 +144,7 @@ void main() {
       test('''
 When updateOrCreate interaction,
  Should sync it with the scrollable if its on one''', () {
-        final _service = NotificationExtractorImp();
+        final _service = NotificationExtractor();
 
         _service
             .scrollInteractions(kTopLeftHorizontalScrollableDescription, []);

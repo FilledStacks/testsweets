@@ -22,8 +22,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => ReactiveScrollable());
   locator.registerLazySingleton(() => ScrollAppliance());
   locator.registerLazySingleton<FindScrollables>(() => FindScrollablesImp());
-  locator.registerLazySingleton<NotificationExtractor>(
-      () => NotificationExtractorImp());
+  locator.registerLazySingleton(() => NotificationExtractor());
 
   locator.registerLazySingleton(() => TestIntegrity());
 

@@ -218,6 +218,8 @@ class _Content extends StatelessWidget {
 
                       final extractedScrollables = findScrollablesService
                           .convertElementsToScrollDescriptions();
+                      print(
+                          '🚗 - extractedScrollables: ${extractedScrollables.length}');
 
                       model.checkForExternalities(extractedScrollables);
                       await model.submitForm();

@@ -7,6 +7,7 @@ import 'dart:async' as _i10;
 import 'dart:ui' as _i5;
 
 import 'package:flutter/material.dart' as _i7;
+import 'package:flutter/rendering.dart' as _i18;
 import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:testsweets/src/enums/toast_type.dart' as _i8;
@@ -924,6 +925,52 @@ class MockScrollAppliance extends _i1.Mock implements _i16.ScrollAppliance {
 class MockNotificationExtractor extends _i1.Mock
     implements _i17.NotificationExtractor {
   @override
+  _i2.Logger get log => (super.noSuchMethod(
+        Invocation.getter(#log),
+        returnValue: _FakeLogger_0(
+          this,
+          Invocation.getter(#log),
+        ),
+        returnValueForMissingStub: _FakeLogger_0(
+          this,
+          Invocation.getter(#log),
+        ),
+      ) as _i2.Logger);
+  @override
+  set scrollDirection(_i18.ScrollDirection? _scrollDirection) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #scrollDirection,
+          _scrollDirection,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  set globalPosition(_i5.Offset? _globalPosition) => super.noSuchMethod(
+        Invocation.setter(
+          #globalPosition,
+          _globalPosition,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  set localPosition(_i5.Offset? _localPosition) => super.noSuchMethod(
+        Invocation.setter(
+          #localPosition,
+          _localPosition,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
+  set lastScrollEvent(_i3.ScrollableDescription? _lastScrollEvent) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #lastScrollEvent,
+          _lastScrollEvent,
+        ),
+        returnValueForMissingStub: null,
+      );
+  @override
   bool onlyScrollUpdateNotification(_i7.Notification? notification) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -933,6 +980,22 @@ class MockNotificationExtractor extends _i1.Mock
         returnValue: false,
         returnValueForMissingStub: false,
       ) as bool);
+  @override
+  List<_i3.Interaction> scrollInteractions(
+    _i3.ScrollableDescription? scrollableDescription,
+    List<_i3.Interaction>? viewInteractions,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #scrollInteractions,
+          [
+            scrollableDescription,
+            viewInteractions,
+          ],
+        ),
+        returnValue: <_i3.Interaction>[],
+        returnValueForMissingStub: <_i3.Interaction>[],
+      ) as List<_i3.Interaction>);
   @override
   _i3.ScrollableDescription notificationToScrollableDescription(
           _i7.Notification? notification) =>
@@ -956,22 +1019,6 @@ class MockNotificationExtractor extends _i1.Mock
           ),
         ),
       ) as _i3.ScrollableDescription);
-  @override
-  List<_i3.Interaction> scrollInteractions(
-    _i3.ScrollableDescription? scrollableDescription,
-    List<_i3.Interaction>? viewInteractions,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #scrollInteractions,
-          [
-            scrollableDescription,
-            viewInteractions,
-          ],
-        ),
-        returnValue: <_i3.Interaction>[],
-        returnValueForMissingStub: <_i3.Interaction>[],
-      ) as List<_i3.Interaction>);
   @override
   _i3.Interaction syncInteractionWithScrollable(_i3.Interaction? interaction) =>
       (super.noSuchMethod(

@@ -3,7 +3,6 @@ import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/enums/popup_menu_action.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 import 'package:testsweets/src/ui/widget_capture/widgets/interaction_capture_form.dart';
 
@@ -13,7 +12,6 @@ import '../helpers/test_helpers.dart';
 final _projectId = 'projectId';
 WidgetCaptureViewModel _getViewModel() {
   var model = WidgetCaptureViewModel(projectId: _projectId);
-  model.screenCenterPosition = WidgetPosition.empty();
   return model;
 }
 
@@ -36,6 +34,7 @@ void main() {
           () async {
         getAndRegisterTestSweetsRouteTracker(currentRoute: 'current route');
         final model = _getViewModel();
+        model.setWidgetType = WidgetType.input;
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
         model.showWidgetForm();
         model.captureNewInteraction();
@@ -46,6 +45,7 @@ void main() {
           () async {
         getAndRegisterTestSweetsRouteTracker(currentRoute: '/current route');
         final model = _getViewModel();
+        model.setWidgetType = WidgetType.input;
         model.formValueMap[WidgetNameValueKey] = 'myWidgetName';
         model.showWidgetForm();
         model.captureNewInteraction();
@@ -58,7 +58,7 @@ void main() {
         getAndRegisterTestSweetsRouteTracker(currentRoute: '/current route');
         final model = _getViewModel();
         model.showWidgetForm();
-
+        model.setWidgetType = WidgetType.input;
         model.formValueMap[WidgetNameValueKey] = 'login-button';
 
         model.inProgressInteraction = model.inProgressInteraction!
@@ -74,6 +74,7 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         final notificationExtractor = getAndRegisterNotificationExtractor();
         final model = _getViewModel();
         model
+          ..setWidgetType = WidgetType.input
           ..formValueMap[WidgetNameValueKey] = 'myWidgetName'
           ..showWidgetForm()
           ..viewInteractions
@@ -206,6 +207,7 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
           () async {
         final model = _getViewModel();
         model.showWidgetForm();
+        model.setWidgetType = WidgetType.input;
         await model.removeWidgetDescription();
         expect(model.captureState, CaptureWidgetState.idle);
       });

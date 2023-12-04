@@ -7,21 +7,8 @@ import 'package:testsweets/testsweets.dart';
 
 import '../locator.dart';
 
-abstract class NotificationExtractor {
-  bool onlyScrollUpdateNotification(Notification notification);
-
-  ScrollableDescription notificationToScrollableDescription(
-      Notification notification);
-
-  List<Interaction> scrollInteractions(
-      ScrollableDescription scrollableDescription,
-      List<Interaction> viewInteractions);
-
-  Interaction syncInteractionWithScrollable(Interaction interaction);
-}
-
-class NotificationExtractorImp implements NotificationExtractor {
-  final log = getLogger('NotificationExtractorImp');
+class NotificationExtractor {
+  final log = getLogger('NotificationExtractor');
   final _reactiveScrollable = locator<ReactiveScrollable>();
 
   ScrollDirection? scrollDirection;
@@ -29,7 +16,7 @@ class NotificationExtractorImp implements NotificationExtractor {
   Offset? localPosition;
 
   ScrollableDescription? lastScrollEvent;
-  @override
+
   bool onlyScrollUpdateNotification(Notification notification) {
     log.v(notification);
     _setScrollablePositionAndScrollDirection(notification);
@@ -50,10 +37,10 @@ class NotificationExtractorImp implements NotificationExtractor {
     }
   }
 
-  @override
   List<Interaction> scrollInteractions(
-      ScrollableDescription scrollableDescription,
-      List<Interaction> viewInteractions) {
+    ScrollableDescription scrollableDescription,
+    List<Interaction> viewInteractions,
+  ) {
     lastScrollEvent = scrollableDescription;
 
     _reactiveScrollable.currentScrollableDescription = scrollableDescription;
@@ -67,7 +54,6 @@ class NotificationExtractorImp implements NotificationExtractor {
     return viewInteractions.replaceInteractions(scrolledInteractions);
   }
 
-  @override
   ScrollableDescription notificationToScrollableDescription(
       Notification notification) {
     log.v(notification);
@@ -80,7 +66,6 @@ class NotificationExtractorImp implements NotificationExtractor {
     );
   }
 
-  @override
   Interaction syncInteractionWithScrollable(Interaction interaction) {
     if (lastScrollEvent != null) {
       final scrollInteractionOrEmpty =

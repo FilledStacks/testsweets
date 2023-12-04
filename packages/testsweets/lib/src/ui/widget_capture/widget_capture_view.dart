@@ -3,7 +3,6 @@ import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/extensions/capture_widget_status_enum_extension.dart';
 import 'package:testsweets/src/ui/shared/busy_indecator.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
-import 'package:testsweets/testsweets.dart';
 
 import '../route_banner/route_banner_view.dart';
 import 'widgets/draggable_widget.dart';
@@ -28,12 +27,8 @@ class WidgetCaptureView extends StatelessWidget {
       disposeViewModel: false,
       onViewModelReady: (model) async {
         model.setSnackbarContext(context);
+
         await model.loadWidgetDescriptions();
-        model.screenCenterPosition = WidgetPosition(
-            capturedDeviceHeight: size.height,
-            capturedDeviceWidth: size.width,
-            x: size.width / 2,
-            y: size.height / 2);
       },
       builder: (context, model, _) => Scaffold(
         resizeToAvoidBottomInset: false,
@@ -58,14 +53,16 @@ class WidgetCaptureView extends StatelessWidget {
             if (model.captureState.showDraggableWidget) const DraggableWidget(),
             const InteractionFormAndVisualizer(),
             BusyIndicator(
-              center:
-                  model.busy(WidgetCaptureViewModel.fullScreenBusyIndicator),
+              center: model.busy(
+                WidgetCaptureViewModel.fullScreenBusyIndicator,
+              ),
               side: model.busy(WidgetCaptureViewModel.sideBusyIndicator),
             ),
           ],
         ),
       ),
-      viewModelBuilder: () => WidgetCaptureViewModel(projectId: projectId),
+      viewModelBuilder: () =>
+          WidgetCaptureViewModel(projectId: projectId, currentScreenSize: size),
     );
   }
 }

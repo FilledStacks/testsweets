@@ -14,9 +14,11 @@ class ScrollAppliance {
   ) {
     log.v(interaction);
     final scrollablesBelowInteraction = scrollables.where(
-      (element) => element.rect.contains(
-        interaction.position.toOffset,
-      ),
+      (element) =>
+          element.rect.contains(
+            interaction.position.toOffset,
+          ) &&
+          element.maxScrollExtentByPixels != double.infinity,
     );
 
     interaction = interaction.copyWith(externalities: null);

@@ -34,7 +34,12 @@ class WidgetCaptureViewModel extends FormViewModel {
   static String sideBusyIndicator = 'sideBusyIndicator';
   static String fullScreenBusyIndicator = 'fullScreenBusyIndicator';
 
-  WidgetCaptureViewModel({required String projectId}) {
+  final Size currentScreenSize;
+
+  WidgetCaptureViewModel({
+    required String projectId,
+    this.currentScreenSize = Size.zero,
+  }) {
     _notificationController.stream
         .where(_notifictionExtractor.onlyScrollUpdateNotification)
         .map(_notifictionExtractor.notificationToScrollableDescription)
@@ -69,9 +74,6 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   bool get currentViewCaptured =>
       viewInteractions.any((element) => element.widgetType == WidgetType.view);
-
-  /// We use this position as the starter point of any new widget
-  late WidgetPosition screenCenterPosition;
 
   /// When open the form create new instance of widgetDescription
   /// if it's null and set [CaptureWidgetState.createWidget]
@@ -113,10 +115,15 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   set setWidgetType(WidgetType widgetType) {
-    log.v(widgetType);
+    log.v('widgetType: $widgetType - currentScreenSize: $currentScreenSize');
     if (inProgressInteraction == null) {
       inProgressInteraction = Interaction(
-        position: screenCenterPosition,
+        position: WidgetPosition(
+          x: currentScreenSize.width / 2,
+          y: currentScreenSize.height / 2,
+          capturedDeviceHeight: currentScreenSize.height,
+          capturedDeviceWidth: currentScreenSize.width,
+        ),
         viewName: '',
         originalViewName: '',
         widgetType: widgetType,
@@ -180,8 +187,11 @@ class WidgetCaptureViewModel extends FormViewModel {
 
       _addSavedInteractionToViewWhenSuccess(interaction);
     } catch (e) {
+      print(e.toString());
       _snackbarService.showCustomSnackBar(
-          message: e.toString(), variant: SnackbarType.failed);
+        message: e.toString(),
+        variant: SnackbarType.failed,
+      );
     }
 
     setBusyForObject(sideBusyIndicator, false);
@@ -248,7 +258,9 @@ class WidgetCaptureViewModel extends FormViewModel {
       _removeInteractionFromViewWhenSuccess();
     } catch (error) {
       _snackbarService.showCustomSnackBar(
-          message: error.toString(), variant: SnackbarType.failed);
+        message: error.toString(),
+        variant: SnackbarType.failed,
+      );
     }
 
     setBusyForObject(sideBusyIndicator, false);
@@ -258,6 +270,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     viewInteractions = viewInteractions
         .whereNot((widget) => inProgressInteraction == widget)
         .toList();
+
     inProgressInteraction = null;
     captureState = CaptureWidgetState.idle;
   }
@@ -337,14 +350,14 @@ class WidgetCaptureViewModel extends FormViewModel {
   void checkForExternalities(
     Iterable<ScrollableDescription> scrollableDescription,
   ) {
-    log.i('before:' + inProgressInteraction.toString());
+    log.i('<<<=== before:' + inProgressInteraction.toString());
 
     inProgressInteraction = _scrollAppliance.applyScrollableOnInteraction(
       scrollableDescription,
       inProgressInteraction!,
     );
 
-    log.i('after:' + inProgressInteraction.toString());
+    log.i('<<<===after:' + inProgressInteraction.toString());
   }
 
   @override

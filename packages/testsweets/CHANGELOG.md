@@ -1,3 +1,7 @@
+### 1.11.1
+
+- fix: fixes new widgets created in the top left corner of the view
+
 ### 1.11.0
 
 - feat: Keeps all interaction points on screen, at 50% opacity, while adding a new one.

@@ -27,11 +27,12 @@ import 'test_helpers.mocks.dart';
   MockSpec<ScrollAppliance>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<NotificationExtractor>(onMissingStub: OnMissingStub.returnDefault),
 ])
-MockWidgetCaptureService getAndRegisterWidgetCaptureService(
-    {List<Interaction> viewInteractions = const [],
-    Interaction? description,
-    String? projectId,
-    bool currentViewIsAlreadyCaptured = false}) {
+MockWidgetCaptureService getAndRegisterWidgetCaptureService({
+  List<Interaction> viewInteractions = const [],
+  Interaction? description,
+  String? projectId,
+  bool currentViewIsAlreadyCaptured = false,
+}) {
   _removeRegistrationIfExists<WidgetCaptureService>();
   final service = MockWidgetCaptureService();
   when(service.saveInteractionInDatabase(any))
