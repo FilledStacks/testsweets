@@ -1,3 +1,7 @@
+### 1.11.2
+
+- fix: always render widgets regardless of scroll visibility 
+
 ### 1.11.1
 
 - fix: fixes new widgets created in the top left corner of the view

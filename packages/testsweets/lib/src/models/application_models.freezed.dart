@@ -310,11 +310,6 @@ class _$_Interaction extends _Interaction {
   }
 
   @override
-  String toString() {
-    return 'Interaction(id: $id, viewName: $viewName, originalViewName: $originalViewName, name: $name, widgetType: $widgetType, position: $position, visibility: $visibility, targetIds: $targetIds, externalities: $externalities)';
-  }
-
-  @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&

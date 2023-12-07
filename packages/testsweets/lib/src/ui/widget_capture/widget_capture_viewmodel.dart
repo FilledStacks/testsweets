@@ -69,6 +69,11 @@ class WidgetCaptureViewModel extends FormViewModel {
   List<Interaction> get viewInteractions => interactionsForViewNotifier.value;
 
   set viewInteractions(List<Interaction> interactions) {
+    print('');
+    print('================= Current View Interactions ===================');
+    print(interactions.join('\n'));
+    print('===============================================================');
+    print('');
     interactionsForViewNotifier.value = interactions;
   }
 

@@ -64,7 +64,8 @@ class DriverLayoutViewModel extends BaseViewModel {
 
   void getWidgetsForRoute() {
     viewInteractions = _widgetCaptureService.getDescriptionsForView(
-        currentRoute: _testSweetsRouteTracker.currentRoute);
+      currentRoute: _testSweetsRouteTracker.currentRoute,
+    );
     notifyListeners();
   }
 

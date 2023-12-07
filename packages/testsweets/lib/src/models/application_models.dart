@@ -58,6 +58,11 @@ class Interaction with _$Interaction {
   String get automationKey => widgetType == WidgetType.view
       ? '$viewName\_${widgetType.shortName}'
       : '$viewName\_${widgetType.shortName}\_$name';
+
+  @override
+  String toString() {
+    return '$name (${widgetType.name}): (${position.x}, ${position.y}) onSrollable:${externalities != null}';
+  }
 }
 
 /// The position of the widget as we captured it on device

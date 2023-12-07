@@ -16,18 +16,25 @@ class InteractionUtils {
   }
 
   static bool visibleOnScreen(Interaction interaction, Size screenSize) {
-    final unionSd = interaction.externalities?.reduce((sd, nextSd) {
-      final result = sd.rect.expandToInclude(nextSd.rect);
-      return sd.copyWith(
-          rect: SerializableRect.fromLTWH(
-              result.left, result.top, result.width, result.height));
-    });
+    // final unionSd = interaction.externalities?.reduce((sd, nextSd) {
+    //   final result = sd.rect.expandToInclude(nextSd.rect);
+    //   return sd.copyWith(
+    //       rect: SerializableRect.fromLTWH(
+    //     result.left,
+    //     result.top,
+    //     result.width,
+    //     result.height,
+    //   ));
+    // });
 
-    final visible = unionSd?.rect.contains(
+    final visible = screenSize.contains(
         interaction.position.responsiveOffset(screenSize) +
             Offset(WIDGET_DESCRIPTION_VISUAL_SIZE / 2,
                 WIDGET_DESCRIPTION_VISUAL_SIZE / 2));
 
-    return visible ?? true;
+    print(
+        '$interaction\n ${(visible) ? 'VISIBLE' : 'NOT_VISIBLE'} on $screenSize');
+
+    return visible;
   }
 }

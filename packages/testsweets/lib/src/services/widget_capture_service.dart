@@ -100,7 +100,9 @@ class WidgetCaptureService {
 
   List<Interaction> getDescriptionsForView({required String currentRoute}) {
     var viewDescriptions = widgetDescriptionMap[currentRoute];
-    log.v('currentRoute:$currentRoute viewDescriptions:$viewDescriptions');
+    log.v(
+      'currentRoute:$currentRoute viewDescriptions:${viewDescriptions?.join('\n')}',
+    );
 
     final potentialParentRoute = currentRoute.replaceAll(RegExp('[0-9]'), '');
 
