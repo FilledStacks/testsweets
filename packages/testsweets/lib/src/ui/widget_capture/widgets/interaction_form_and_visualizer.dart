@@ -66,27 +66,29 @@ class _InteractionFormAndVisualizerState
             },
           ),
         if (model.captureState.showWidgetForm)
-          Container(
-            margin: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            width: size.width > 500 ? 500 : size.width,
-            child: CustomSolidBottomSheet(
-              controller: bottomSheetController,
-              // Closes the keyboard when you hide the bottomsheet
-              onHide: widgetNameFocusNode.unfocus,
-              onShow: model.showWidgetForm,
-              headerBar: FormHeader(
-                openBottomSheet: bottomSheetController.isOpenStream,
-              ),
-              minHeight: 0,
-              maxHeight: 300,
-              body: Container(
-                decoration: kdBlackRoundedEdgeDecoration,
-                child: _Content(
-                  interaction: interaction,
-                  bottomSheetController: bottomSheetController,
-                  widgetNameController: widgetNameController,
-                  widgetNameFocusNode: widgetNameFocusNode,
+          SafeArea(
+            child: Container(
+              margin: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
+              width: size.width > 500 ? 500 : size.width,
+              child: CustomSolidBottomSheet(
+                controller: bottomSheetController,
+                // Closes the keyboard when you hide the bottomsheet
+                onHide: widgetNameFocusNode.unfocus,
+                onShow: model.showWidgetForm,
+                headerBar: FormHeader(
+                  openBottomSheet: bottomSheetController.isOpenStream,
+                ),
+                minHeight: 0,
+                maxHeight: 300,
+                body: Container(
+                  decoration: kdBlackRoundedEdgeDecoration,
+                  child: _Content(
+                    interaction: interaction,
+                    bottomSheetController: bottomSheetController,
+                    widgetNameController: widgetNameController,
+                    widgetNameFocusNode: widgetNameFocusNode,
+                  ),
                 ),
               ),
             ),
