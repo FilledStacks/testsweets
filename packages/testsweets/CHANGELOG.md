@@ -1,10 +1,7 @@
-### 1.11.3
-
-- fix: iOS capture UI under the handlebar
-
 ### 1.11.2
 
 - fix: always render widgets regardless of scroll visibility 
+- fix: iOS capture UI under the handlebar
 
 ### 1.11.1
 
