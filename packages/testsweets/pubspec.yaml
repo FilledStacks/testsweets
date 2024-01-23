@@ -28,6 +28,7 @@ dependencies:
   solid_bottom_sheet: ^0.1.10
   flutter_svg: ^2.0.7
   collection: ^1.15.0
+  hive_flutter: ^1.1.0
   
 dev_dependencies:
   stacked_generator: ^1.5.0

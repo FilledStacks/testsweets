@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
+import 'package:testsweets/src/services/hive_service.dart';
 import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/notification_extractor.dart';
 import 'package:testsweets/src/services/reactive_scrollable.dart';
@@ -13,6 +14,10 @@ import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 GetIt locator = GetIt.asNewInstance();
 bool locatorSetup = false;
 Future<void> setupLocator() async {
+  final hiveService = HiveService();
+  await hiveService.init();
+  locator.registerSingleton(hiveService);
+
   locator.registerLazySingleton(() => CloudFunctionsService(
         httpService: HttpServiceImplementation(),
       ));
