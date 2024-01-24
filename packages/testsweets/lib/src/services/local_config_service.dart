@@ -13,7 +13,7 @@ class LocalConfigService with InitializableDependency {
   }
 
   bool get captureMode =>
-      _config.getValue<bool>(_kLocalConfigCaptureModeKey) ?? true;
+      _config.getValue<bool>(_kLocalConfigCaptureModeKey) ?? false;
 
   Future<void> setCaptureMode(bool value) async {
     await _config.setValue(_kLocalConfigCaptureModeKey, value);
