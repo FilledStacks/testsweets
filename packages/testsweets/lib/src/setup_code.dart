@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/locator.dart';
-import 'package:testsweets/src/services/hive_service.dart';
+import 'package:testsweets/src/services/local_config_service.dart';
 
 import 'services/test_integrity.dart';
 // import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
@@ -21,7 +21,7 @@ const bool DRIVE_MODE = bool.fromEnvironment(
   defaultValue: false,
 );
 
-bool get tsCaptureModeActive => locator<HiveService>().captureMode;
+bool get tsCaptureModeActive => locator<LocalConfigService>().captureMode;
 
 Future<void> setupTestSweets() async {
   await setupLocator();
