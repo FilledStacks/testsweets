@@ -1,3 +1,11 @@
+### 1.12.0
+
+New Feature: Capture and Drive mode swap functionality
+
+With this change you can now give your tester only a single build and they can swap between capturing and drive mode by tapping on the screen with three fingers and changing the mode between capture and automation. 
+
+Read the full doc [here](https://testsweets-docs.web.app/capturing/capturing-and-automating/)
+
 ### 1.11.2
 
 - fix: always render widgets regardless of scroll visibility 
