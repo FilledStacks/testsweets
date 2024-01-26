@@ -177,7 +177,7 @@ class __$$_WidgetPositionCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_WidgetPosition implements _WidgetPosition {
+class _$_WidgetPosition extends _WidgetPosition {
   _$_WidgetPosition(
       {required this.x,
       required this.y,
@@ -186,7 +186,8 @@ class _$_WidgetPosition implements _WidgetPosition {
       final List<DeviceDetails> deviceBuckets = const [],
       this.capturedDeviceWidth,
       this.capturedDeviceHeight})
-      : _deviceBuckets = deviceBuckets;
+      : _deviceBuckets = deviceBuckets,
+        super._();
 
   factory _$_WidgetPosition.fromJson(Map<String, dynamic> json) =>
       _$$_WidgetPositionFromJson(json);
@@ -264,7 +265,7 @@ class _$_WidgetPosition implements _WidgetPosition {
   }
 }
 
-abstract class _WidgetPosition implements WidgetPosition {
+abstract class _WidgetPosition extends WidgetPosition {
   factory _WidgetPosition(
       {required final double x,
       required final double y,
@@ -273,6 +274,7 @@ abstract class _WidgetPosition implements WidgetPosition {
       final List<DeviceDetails> deviceBuckets,
       final double? capturedDeviceWidth,
       final double? capturedDeviceHeight}) = _$_WidgetPosition;
+  _WidgetPosition._() : super._();
 
   factory _WidgetPosition.fromJson(Map<String, dynamic> json) =
       _$_WidgetPosition.fromJson;
