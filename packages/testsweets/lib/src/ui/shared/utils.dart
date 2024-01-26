@@ -32,9 +32,6 @@ class InteractionUtils {
             Offset(WIDGET_DESCRIPTION_VISUAL_SIZE / 2,
                 WIDGET_DESCRIPTION_VISUAL_SIZE / 2));
 
-    print(
-        '$interaction\n ${(visible) ? 'VISIBLE' : 'NOT_VISIBLE'} on $screenSize');
-
     return visible;
   }
 }

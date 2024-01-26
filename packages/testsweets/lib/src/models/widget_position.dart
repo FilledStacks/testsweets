@@ -30,6 +30,8 @@ class WidgetPosition with _$WidgetPosition {
   /// Performs a migration using the [capturedDeviceWidth] and [capturedDeviceHeight]
   /// and returns a new [WidgetPosition] to be used in the place of the original.
   WidgetPosition jitMigrate() {
+    print('Migrate: $x,$y size:$capturedDeviceWidth, $capturedDeviceHeight');
+
     final width = capturedDeviceWidth ?? -1;
     final height = capturedDeviceHeight ?? -1;
     final orientation = _getOrientationFromSize(width: width, height: height);
@@ -41,6 +43,9 @@ class WidgetPosition with _$WidgetPosition {
     );
 
     final noDeviceBucketForOriginalSize = matchingDeviceDetails == null;
+
+    print(
+        'noDeviceBucketForOriginalSize: $noDeviceBucketForOriginalSize\n Current Buckets: $deviceBuckets');
     if (noDeviceBucketForOriginalSize) {
       return copyWith(deviceBuckets: [
         ...deviceBuckets,
@@ -65,12 +70,16 @@ class WidgetPosition with _$WidgetPosition {
     required double height,
     required Orientation orientation,
   }) {
-    final matchingDeviceDetails = deviceBuckets.where((details) =>
-        details.screenWidth == width &&
-        details.screenHeight == height &&
-        details.orientation == orientation);
+    final matchingDeviceDetails = deviceBuckets.where(
+      (details) =>
+          details.screenWidth == width &&
+          details.screenHeight == height &&
+          details.orientation == orientation,
+    );
 
     if (matchingDeviceDetails.isNotEmpty) {
+      print(
+          'Has match for $width $height $orientation in ${matchingDeviceDetails.first}');
       return matchingDeviceDetails.first;
     }
 
@@ -82,12 +91,15 @@ class WidgetPosition with _$WidgetPosition {
     required double height,
     required Orientation orientation,
   }) {
-    return _getMatchingDeviceDetails(
-          width: width,
-          height: height,
-          orientation: orientation,
-        ) !=
-        null;
+    final matchingDeviceSize = _getMatchingDeviceDetails(
+      width: width,
+      height: height,
+      orientation: orientation,
+    );
+
+    print('MatchingDeviceSize is: $matchingDeviceSize');
+
+    return matchingDeviceSize != null;
   }
 
   WidgetPosition storeDeviceDetails({

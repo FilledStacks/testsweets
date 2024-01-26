@@ -71,11 +71,6 @@ class WidgetCaptureViewModel extends FormViewModel {
   List<Interaction> get viewInteractions => interactionsForViewNotifier.value;
 
   set viewInteractions(List<Interaction> interactions) {
-    print('');
-    print('================= Current View Interactions ===================');
-    print(interactions.join('\n'));
-    print('===============================================================');
-    print('');
     interactionsForViewNotifier.value = interactions;
   }
 
@@ -164,7 +159,6 @@ class WidgetCaptureViewModel extends FormViewModel {
     double capturedDeviceWidth,
     double capturedDeviceHeight,
   ) {
-    log.v('x: $x , y: $y');
     inProgressInteraction = inProgressInteraction!.copyWith(
       position: WidgetPosition(
         capturedDeviceHeight: capturedDeviceHeight,
@@ -239,6 +233,9 @@ class WidgetCaptureViewModel extends FormViewModel {
         orientation: orientation,
       );
 
+      print(
+          'hasDeviceDetailsForCurrentScreenSize: $hasDeviceDetailsForCurrentScreenSize \nwith sizes: ${updatedInteraction.position.deviceBuckets}');
+
       if (!hasDeviceDetailsForCurrentScreenSize) {
         updatedInteraction = updatedInteraction.storeDeviceDetails(
           size: currentScreenSize,
@@ -247,8 +244,8 @@ class WidgetCaptureViewModel extends FormViewModel {
       }
 
       await _widgetCaptureService.updateInteractionInDatabase(
-        oldInteraction: updatedInteraction,
-        updatedInteraction: inProgressInteraction!,
+        oldInteraction: inProgressInteraction!,
+        updatedInteraction: updatedInteraction,
       );
 
       _updateInteractionInViewWhenSuccess(inProgressInteraction!);

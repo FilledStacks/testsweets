@@ -21,7 +21,13 @@ const bool DRIVE_MODE = bool.fromEnvironment(
   defaultValue: false,
 );
 
-bool get tsCaptureModeActive => locator<LocalConfigService>().captureMode;
+const bool FORCE_CAPTURE_MODE = bool.fromEnvironment(
+  'FORCE_CAPTURE_MODE',
+  defaultValue: false,
+);
+
+bool get tsCaptureModeActive =>
+    FORCE_CAPTURE_MODE || locator<LocalConfigService>().captureMode;
 
 Future<void> setupTestSweets() async {
   await setupLocator();

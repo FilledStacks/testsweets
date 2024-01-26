@@ -60,16 +60,18 @@ class WidgetCaptureService {
     return interaction.copyWith(id: interactionId);
   }
 
-  Future<void> updateInteractionInDatabase(
-      {required Interaction updatedInteraction,
-      required Interaction oldInteraction}) async {
+  Future<void> updateInteractionInDatabase({
+    required Interaction updatedInteraction,
+    required Interaction oldInteraction,
+  }) async {
     log.i(
         'updatedinteraction:$updatedInteraction, oldinteraction:$updatedInteraction  projectId:$_projectId');
 
     await _cloudFunctionsService.updateWidgetDescription(
-        projectId: _projectId,
-        newwidgetDescription: updatedInteraction,
-        oldwidgetDescription: oldInteraction);
+      projectId: _projectId,
+      newwidgetDescription: updatedInteraction,
+      oldwidgetDescription: oldInteraction,
+    );
   }
 
   Future<void> removeInteractionFromDatabase(Interaction interaction) async {

@@ -50,7 +50,11 @@ class Interaction with _$Interaction {
       );
 
   factory Interaction.fromJson(Map<String, dynamic> json) =>
-      _$InteractionFromJson(json);
+      _interactionWithMigration(json);
+
+  static Interaction _interactionWithMigration(Map<String, dynamic> json) {
+    return _Interaction.fromJson(json).migrate();
+  }
 
   String get automationKey => widgetType == WidgetType.view
       ? '$viewName\_${widgetType.name}'
@@ -75,11 +79,17 @@ class Interaction with _$Interaction {
     required Size size,
     required Orientation orientation,
   }) {
+    print('position before deviceDetails: $position');
     final positionWithDeviceDetails = position.storeDeviceDetails(
       size: size,
       orientation: orientation,
     );
+    print('position after deviceDetails: $positionWithDeviceDetails');
 
     return copyWith(position: positionWithDeviceDetails);
+  }
+
+  Interaction migrate() {
+    return copyWith(position: position.jitMigrate());
   }
 }
