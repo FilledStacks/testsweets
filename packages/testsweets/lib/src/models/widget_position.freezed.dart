@@ -22,10 +22,12 @@ WidgetPosition _$WidgetPositionFromJson(Map<String, dynamic> json) {
 mixin _$WidgetPosition {
   double get x => throw _privateConstructorUsedError;
   double get y => throw _privateConstructorUsedError;
+  double? get yDeviation => throw _privateConstructorUsedError;
+  double? get xDeviation => throw _privateConstructorUsedError;
+  List<DeviceDetails> get deviceBuckets =>
+      throw _privateConstructorUsedError; // These values are old, but we keep it because we have a JIT migration for now
   double? get capturedDeviceWidth => throw _privateConstructorUsedError;
   double? get capturedDeviceHeight => throw _privateConstructorUsedError;
-  double? get xDeviation => throw _privateConstructorUsedError;
-  double? get yDeviation => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,10 +44,11 @@ abstract class $WidgetPositionCopyWith<$Res> {
   $Res call(
       {double x,
       double y,
-      double? capturedDeviceWidth,
-      double? capturedDeviceHeight,
+      double? yDeviation,
       double? xDeviation,
-      double? yDeviation});
+      List<DeviceDetails> deviceBuckets,
+      double? capturedDeviceWidth,
+      double? capturedDeviceHeight});
 }
 
 /// @nodoc
@@ -63,10 +66,11 @@ class _$WidgetPositionCopyWithImpl<$Res, $Val extends WidgetPosition>
   $Res call({
     Object? x = null,
     Object? y = null,
+    Object? yDeviation = freezed,
+    Object? xDeviation = freezed,
+    Object? deviceBuckets = null,
     Object? capturedDeviceWidth = freezed,
     Object? capturedDeviceHeight = freezed,
-    Object? xDeviation = freezed,
-    Object? yDeviation = freezed,
   }) {
     return _then(_value.copyWith(
       x: null == x
@@ -77,6 +81,18 @@ class _$WidgetPositionCopyWithImpl<$Res, $Val extends WidgetPosition>
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
               as double,
+      yDeviation: freezed == yDeviation
+          ? _value.yDeviation
+          : yDeviation // ignore: cast_nullable_to_non_nullable
+              as double?,
+      xDeviation: freezed == xDeviation
+          ? _value.xDeviation
+          : xDeviation // ignore: cast_nullable_to_non_nullable
+              as double?,
+      deviceBuckets: null == deviceBuckets
+          ? _value.deviceBuckets
+          : deviceBuckets // ignore: cast_nullable_to_non_nullable
+              as List<DeviceDetails>,
       capturedDeviceWidth: freezed == capturedDeviceWidth
           ? _value.capturedDeviceWidth
           : capturedDeviceWidth // ignore: cast_nullable_to_non_nullable
@@ -84,14 +100,6 @@ class _$WidgetPositionCopyWithImpl<$Res, $Val extends WidgetPosition>
       capturedDeviceHeight: freezed == capturedDeviceHeight
           ? _value.capturedDeviceHeight
           : capturedDeviceHeight // ignore: cast_nullable_to_non_nullable
-              as double?,
-      xDeviation: freezed == xDeviation
-          ? _value.xDeviation
-          : xDeviation // ignore: cast_nullable_to_non_nullable
-              as double?,
-      yDeviation: freezed == yDeviation
-          ? _value.yDeviation
-          : yDeviation // ignore: cast_nullable_to_non_nullable
               as double?,
     ) as $Val);
   }
@@ -108,10 +116,11 @@ abstract class _$$_WidgetPositionCopyWith<$Res>
   $Res call(
       {double x,
       double y,
-      double? capturedDeviceWidth,
-      double? capturedDeviceHeight,
+      double? yDeviation,
       double? xDeviation,
-      double? yDeviation});
+      List<DeviceDetails> deviceBuckets,
+      double? capturedDeviceWidth,
+      double? capturedDeviceHeight});
 }
 
 /// @nodoc
@@ -127,10 +136,11 @@ class __$$_WidgetPositionCopyWithImpl<$Res>
   $Res call({
     Object? x = null,
     Object? y = null,
+    Object? yDeviation = freezed,
+    Object? xDeviation = freezed,
+    Object? deviceBuckets = null,
     Object? capturedDeviceWidth = freezed,
     Object? capturedDeviceHeight = freezed,
-    Object? xDeviation = freezed,
-    Object? yDeviation = freezed,
   }) {
     return _then(_$_WidgetPosition(
       x: null == x
@@ -141,6 +151,18 @@ class __$$_WidgetPositionCopyWithImpl<$Res>
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
               as double,
+      yDeviation: freezed == yDeviation
+          ? _value.yDeviation
+          : yDeviation // ignore: cast_nullable_to_non_nullable
+              as double?,
+      xDeviation: freezed == xDeviation
+          ? _value.xDeviation
+          : xDeviation // ignore: cast_nullable_to_non_nullable
+              as double?,
+      deviceBuckets: null == deviceBuckets
+          ? _value._deviceBuckets
+          : deviceBuckets // ignore: cast_nullable_to_non_nullable
+              as List<DeviceDetails>,
       capturedDeviceWidth: freezed == capturedDeviceWidth
           ? _value.capturedDeviceWidth
           : capturedDeviceWidth // ignore: cast_nullable_to_non_nullable
@@ -148,14 +170,6 @@ class __$$_WidgetPositionCopyWithImpl<$Res>
       capturedDeviceHeight: freezed == capturedDeviceHeight
           ? _value.capturedDeviceHeight
           : capturedDeviceHeight // ignore: cast_nullable_to_non_nullable
-              as double?,
-      xDeviation: freezed == xDeviation
-          ? _value.xDeviation
-          : xDeviation // ignore: cast_nullable_to_non_nullable
-              as double?,
-      yDeviation: freezed == yDeviation
-          ? _value.yDeviation
-          : yDeviation // ignore: cast_nullable_to_non_nullable
               as double?,
     ));
   }
@@ -167,10 +181,12 @@ class _$_WidgetPosition implements _WidgetPosition {
   _$_WidgetPosition(
       {required this.x,
       required this.y,
-      this.capturedDeviceWidth,
-      this.capturedDeviceHeight,
+      this.yDeviation,
       this.xDeviation,
-      this.yDeviation});
+      final List<DeviceDetails> deviceBuckets = const [],
+      this.capturedDeviceWidth,
+      this.capturedDeviceHeight})
+      : _deviceBuckets = deviceBuckets;
 
   factory _$_WidgetPosition.fromJson(Map<String, dynamic> json) =>
       _$$_WidgetPositionFromJson(json);
@@ -180,17 +196,27 @@ class _$_WidgetPosition implements _WidgetPosition {
   @override
   final double y;
   @override
+  final double? yDeviation;
+  @override
+  final double? xDeviation;
+  final List<DeviceDetails> _deviceBuckets;
+  @override
+  @JsonKey()
+  List<DeviceDetails> get deviceBuckets {
+    if (_deviceBuckets is EqualUnmodifiableListView) return _deviceBuckets;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_deviceBuckets);
+  }
+
+// These values are old, but we keep it because we have a JIT migration for now
+  @override
   final double? capturedDeviceWidth;
   @override
   final double? capturedDeviceHeight;
-  @override
-  final double? xDeviation;
-  @override
-  final double? yDeviation;
 
   @override
   String toString() {
-    return 'WidgetPosition(x: $x, y: $y, capturedDeviceWidth: $capturedDeviceWidth, capturedDeviceHeight: $capturedDeviceHeight, xDeviation: $xDeviation, yDeviation: $yDeviation)';
+    return 'WidgetPosition(x: $x, y: $y, yDeviation: $yDeviation, xDeviation: $xDeviation, deviceBuckets: $deviceBuckets, capturedDeviceWidth: $capturedDeviceWidth, capturedDeviceHeight: $capturedDeviceHeight)';
   }
 
   @override
@@ -200,20 +226,29 @@ class _$_WidgetPosition implements _WidgetPosition {
             other is _$_WidgetPosition &&
             (identical(other.x, x) || other.x == x) &&
             (identical(other.y, y) || other.y == y) &&
+            (identical(other.yDeviation, yDeviation) ||
+                other.yDeviation == yDeviation) &&
+            (identical(other.xDeviation, xDeviation) ||
+                other.xDeviation == xDeviation) &&
+            const DeepCollectionEquality()
+                .equals(other._deviceBuckets, _deviceBuckets) &&
             (identical(other.capturedDeviceWidth, capturedDeviceWidth) ||
                 other.capturedDeviceWidth == capturedDeviceWidth) &&
             (identical(other.capturedDeviceHeight, capturedDeviceHeight) ||
-                other.capturedDeviceHeight == capturedDeviceHeight) &&
-            (identical(other.xDeviation, xDeviation) ||
-                other.xDeviation == xDeviation) &&
-            (identical(other.yDeviation, yDeviation) ||
-                other.yDeviation == yDeviation));
+                other.capturedDeviceHeight == capturedDeviceHeight));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, x, y, capturedDeviceWidth,
-      capturedDeviceHeight, xDeviation, yDeviation);
+  int get hashCode => Object.hash(
+      runtimeType,
+      x,
+      y,
+      yDeviation,
+      xDeviation,
+      const DeepCollectionEquality().hash(_deviceBuckets),
+      capturedDeviceWidth,
+      capturedDeviceHeight);
 
   @JsonKey(ignore: true)
   @override
@@ -233,10 +268,11 @@ abstract class _WidgetPosition implements WidgetPosition {
   factory _WidgetPosition(
       {required final double x,
       required final double y,
-      final double? capturedDeviceWidth,
-      final double? capturedDeviceHeight,
+      final double? yDeviation,
       final double? xDeviation,
-      final double? yDeviation}) = _$_WidgetPosition;
+      final List<DeviceDetails> deviceBuckets,
+      final double? capturedDeviceWidth,
+      final double? capturedDeviceHeight}) = _$_WidgetPosition;
 
   factory _WidgetPosition.fromJson(Map<String, dynamic> json) =
       _$_WidgetPosition.fromJson;
@@ -246,13 +282,15 @@ abstract class _WidgetPosition implements WidgetPosition {
   @override
   double get y;
   @override
-  double? get capturedDeviceWidth;
-  @override
-  double? get capturedDeviceHeight;
+  double? get yDeviation;
   @override
   double? get xDeviation;
   @override
-  double? get yDeviation;
+  List<DeviceDetails> get deviceBuckets;
+  @override // These values are old, but we keep it because we have a JIT migration for now
+  double? get capturedDeviceWidth;
+  @override
+  double? get capturedDeviceHeight;
   @override
   @JsonKey(ignore: true)
   _$$_WidgetPositionCopyWith<_$_WidgetPosition> get copyWith =>
