@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:testsweets/src/app/logger.dart';
-import 'package:testsweets/src/models/application_models.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:testsweets/src/app/logger.dart';
+import 'package:testsweets/src/models/serializable_rect.dart';
+
+import '../../models/scrollable_description.dart';
 
 abstract class FindScrollables {
   Iterable<Element>? foundedElements;

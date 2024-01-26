@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:testsweets/src/app/logger.dart';
-import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/testsweets.dart';
 
 import 'http_service.dart';
 

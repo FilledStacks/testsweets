@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/dart_only_locator.dart';
-import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/models/interaction.dart';
 import 'package:testsweets/src/services/automation_keys_service.dart';
 import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';

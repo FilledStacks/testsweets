@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
-import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/models/interaction.dart';
 import 'package:testsweets/src/ui/shared/popup_menu/interaction_circle_with_popup_menu.dart';
 import 'package:testsweets/src/ui/shared/utils.dart';
 

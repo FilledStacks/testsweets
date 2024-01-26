@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/models/interaction.dart';
+import 'package:testsweets/src/models/widget_position.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 
 import '../helpers/test_consts.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
-import 'package:testsweets/src/models/application_models.dart';
 import 'package:testsweets/src/models/build_info.dart';
 import 'package:testsweets/testsweets.dart';
 

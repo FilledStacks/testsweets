@@ -6,7 +6,7 @@ import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/src/enums/toast_type.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/locator.dart';
-import 'package:testsweets/src/models/application_models.dart';
+import 'package:testsweets/src/models/interaction.dart';
 import 'package:testsweets/src/services/notification_extractor.dart';
 import 'package:testsweets/src/services/snackbar_service.dart';
 import 'package:testsweets/src/services/test_integrity.dart';

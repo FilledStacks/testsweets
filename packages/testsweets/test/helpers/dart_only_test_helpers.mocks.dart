@@ -8,7 +8,6 @@ import 'dart:io' as _i4;
 
 import 'package:logger/src/logger.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:testsweets/src/models/application_models.dart' as _i13;
 import 'package:testsweets/src/models/build_info.dart' as _i3;
 import 'package:testsweets/src/services/automation_keys_service.dart' as _i16;
 import 'package:testsweets/src/services/build_service.dart' as _i8;
@@ -21,6 +20,7 @@ import 'package:testsweets/src/services/test_sweets_config_file_service.dart'
     as _i7;
 import 'package:testsweets/src/services/time_service.dart' as _i11;
 import 'package:testsweets/src/services/upload_service.dart' as _i15;
+import 'package:testsweets/testsweets.dart' as _i13;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values

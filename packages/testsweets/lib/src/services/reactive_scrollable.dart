@@ -46,7 +46,9 @@ class ReactiveScrollable {
   }
 
   Offset calculateOffsetDeviation(
-      ScrollableDescription scrollableDescription, Interaction interaction) {
+    ScrollableDescription scrollableDescription,
+    Interaction interaction,
+  ) {
     late Offset offsetDeviation;
     if (scrollableDescription.axis == Axis.vertical) {
       offsetDeviation = Offset(interaction.position.xDeviation ?? 0, 0);

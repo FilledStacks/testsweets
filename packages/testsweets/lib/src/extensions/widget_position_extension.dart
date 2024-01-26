@@ -33,6 +33,8 @@ extension WidgetPositionExtension on WidgetPosition {
 
   double responsiveXPosition(double currentScreenWidth) {
     final result = _calculateWidthRatio(currentScreenWidth) * this.x +
+
+        /// The yDeviation is set during the [applyScroll] call
         (this.xDeviation ?? 0) -
         (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
     return result;
@@ -40,6 +42,8 @@ extension WidgetPositionExtension on WidgetPosition {
 
   double responsiveYPosition(double currentScreenHeight) {
     final result = _calculateHeightRatio(currentScreenHeight) * this.y +
+
+        /// The yDeviation is set during the [applyScroll] call
         (this.yDeviation ?? 0) -
         (WIDGET_DESCRIPTION_VISUAL_SIZE / 2);
     return result;

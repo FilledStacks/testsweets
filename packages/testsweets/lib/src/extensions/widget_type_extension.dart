@@ -35,6 +35,4 @@ extension WidgetTypeExtension on WidgetType {
 
   String get returnFirstLetterOfWidgetTypeCapitalized =>
       this.toString().split('.').last[0].capitalizeFirstOfEach;
-
-  String get shortName => this.toString().split('.').last;
 }
