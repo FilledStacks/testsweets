@@ -76,4 +76,31 @@ class WidgetPosition with _$WidgetPosition {
 
     return null;
   }
+
+  bool hasDeviceDetailsForScreenSize({
+    required double width,
+    required double height,
+    required Orientation orientation,
+  }) {
+    return _getMatchingDeviceDetails(
+          width: width,
+          height: height,
+          orientation: orientation,
+        ) !=
+        null;
+  }
+
+  WidgetPosition storeDeviceDetails({
+    required Size size,
+    required Orientation orientation,
+  }) {
+    return copyWith(deviceBuckets: [
+      ...deviceBuckets,
+      DeviceDetails(
+        screenWidth: size.width,
+        screenHeight: size.height,
+        orientation: orientation,
+      )
+    ]);
+  }
 }

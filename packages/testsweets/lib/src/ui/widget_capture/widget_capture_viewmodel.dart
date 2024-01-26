@@ -35,10 +35,12 @@ class WidgetCaptureViewModel extends FormViewModel {
   static String fullScreenBusyIndicator = 'fullScreenBusyIndicator';
 
   final Size currentScreenSize;
+  final Orientation orientation;
 
   WidgetCaptureViewModel({
     required String projectId,
     this.currentScreenSize = Size.zero,
+    this.orientation = Orientation.portrait,
   }) {
     _notificationController.stream
         .where(_notifictionExtractor.onlyScrollUpdateNotification)
@@ -223,17 +225,38 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusyForObject(sideBusyIndicator, true);
 
     try {
-      final updatedInteraction = viewInteractions.firstWhere(
-          (oldInteraciton) => oldInteraciton.id == inProgressInteraction!.id);
+      var updatedInteraction = viewInteractions.firstWhere(
+        (oldInteraciton) => oldInteraciton.id == inProgressInteraction!.id,
+      );
+
+      // Refactor: I kept this outside so it's clear, but this can move into
+      // the widget itself.
+      // VIDEO IDEA: Make a video asking for opinions, this will attract some
+      // dart engineers that might work for an ICP
+      final bool hasDeviceDetailsForCurrentScreenSize =
+          updatedInteraction.hasDeviceDetailsForScreenSize(
+        size: currentScreenSize,
+        orientation: orientation,
+      );
+
+      if (!hasDeviceDetailsForCurrentScreenSize) {
+        updatedInteraction = updatedInteraction.storeDeviceDetails(
+          size: currentScreenSize,
+          orientation: orientation,
+        );
+      }
 
       await _widgetCaptureService.updateInteractionInDatabase(
-          oldInteraction: updatedInteraction,
-          updatedInteraction: inProgressInteraction!);
+        oldInteraction: updatedInteraction,
+        updatedInteraction: inProgressInteraction!,
+      );
 
       _updateInteractionInViewWhenSuccess(inProgressInteraction!);
     } catch (error) {
       _snackbarService.showCustomSnackBar(
-          message: error.toString(), variant: SnackbarType.failed);
+        message: error.toString(),
+        variant: SnackbarType.failed,
+      );
     }
 
     setBusyForObject(sideBusyIndicator, false);
@@ -313,11 +336,10 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<void> onLongPressUp() async {
-    log.v(captureState);
-
     if (captureState == CaptureWidgetState.quickPositionEdit) {
       final findScrollablesService = locator<FindScrollables>()
         ..searchForScrollableElements();
+
       final extractedScrollables =
           findScrollablesService.convertElementsToScrollDescriptions();
 
@@ -326,6 +348,7 @@ class WidgetCaptureViewModel extends FormViewModel {
       await updateInteraction();
       captureState = CaptureWidgetState.idle;
     }
+
     inProgressInteraction = null;
   }
 

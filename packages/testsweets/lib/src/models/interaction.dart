@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/testsweets.dart';
@@ -58,5 +59,27 @@ class Interaction with _$Interaction {
   @override
   String toString() {
     return '$name (${widgetType.name}): (${position.x}, ${position.y}) onSrollable:${externalities != null}';
+  }
+
+  bool hasDeviceDetailsForScreenSize({
+    required Size size,
+    required Orientation orientation,
+  }) =>
+      position.hasDeviceDetailsForScreenSize(
+        width: size.width,
+        height: size.height,
+        orientation: orientation,
+      );
+
+  Interaction storeDeviceDetails({
+    required Size size,
+    required Orientation orientation,
+  }) {
+    final positionWithDeviceDetails = position.storeDeviceDetails(
+      size: size,
+      orientation: orientation,
+    );
+
+    return copyWith(position: positionWithDeviceDetails);
   }
 }

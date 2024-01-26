@@ -22,6 +22,7 @@ class WidgetCaptureView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation;
 
     return ViewModelBuilder<WidgetCaptureViewModel>.reactive(
       disposeViewModel: false,
@@ -61,8 +62,11 @@ class WidgetCaptureView extends StatelessWidget {
           ],
         ),
       ),
-      viewModelBuilder: () =>
-          WidgetCaptureViewModel(projectId: projectId, currentScreenSize: size),
+      viewModelBuilder: () => WidgetCaptureViewModel(
+        projectId: projectId,
+        currentScreenSize: size,
+        orientation: orientation,
+      ),
     );
   }
 }
