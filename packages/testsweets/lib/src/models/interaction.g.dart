@@ -13,8 +13,14 @@ _$_Interaction _$$_InteractionFromJson(Map<String, dynamic> json) =>
       originalViewName: json['originalViewName'] as String,
       name: json['name'] as String? ?? '',
       widgetType: $enumDecode(_$WidgetTypeEnumMap, json['widgetType']),
-      position:
-          WidgetPosition.fromJson(json['position'] as Map<String, dynamic>),
+      position: json['position'] == null
+          ? const WidgetPosition(
+              x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0)
+          : WidgetPosition.fromJson(json['position'] as Map<String, dynamic>),
+      widgetPositions: (json['widgetPositions'] as List<dynamic>?)
+              ?.map((e) => WidgetPosition.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
       visibility: json['visibility'] as bool? ?? true,
       targetIds: (json['targetIds'] as List<dynamic>?)
               ?.map((e) => e as String)
@@ -34,6 +40,7 @@ Map<String, dynamic> _$$_InteractionToJson(_$_Interaction instance) =>
       'name': instance.name,
       'widgetType': _$WidgetTypeEnumMap[instance.widgetType]!,
       'position': instance.position,
+      'widgetPositions': instance.widgetPositions,
       'visibility': instance.visibility,
       'targetIds': instance.targetIds,
       'externalities': instance.externalities?.toList(),

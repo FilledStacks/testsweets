@@ -52,7 +52,13 @@ void main() {
 
         final viewInteraction = [
           kGeneralInteractionWithZeroOffset.copyWith(
-              position: WidgetPosition(x: 0, y: 0, yDeviation: 100),
+              position: WidgetPosition(
+                x: 0,
+                y: 0,
+                yDeviation: 100,
+                capturedDeviceHeight: 0,
+                capturedDeviceWidth: 0,
+              ),
               externalities: {
                 ScrollableDescription(
                   rect: SerializableRect.fromLTWH(0, 0, 0, 0),
@@ -79,26 +85,32 @@ void main() {
         final _service = NotificationExtractor();
 
         final viewInteraction = [
-          kGeneralInteractionWithZeroOffset
-              .copyWith(position: WidgetPosition(x: 21, y: 22), externalities: {
-            // captured vertical list rect
-            ScrollableDescription(
-              rect: SerializableRect.fromLTWH(0, 0, 0, 0),
-              axis: Axis.vertical,
-              maxScrollExtentByPixels: 0,
-              scrollExtentByPixels: 0,
-            ),
+          kGeneralInteractionWithZeroOffset.copyWith(
+              position: WidgetPosition(
+                x: 21,
+                y: 22,
+                capturedDeviceHeight: 0,
+                capturedDeviceWidth: 0,
+              ),
+              externalities: {
+                // captured vertical list rect
+                ScrollableDescription(
+                  rect: SerializableRect.fromLTWH(0, 0, 0, 0),
+                  axis: Axis.vertical,
+                  maxScrollExtentByPixels: 0,
+                  scrollExtentByPixels: 0,
+                ),
 
-            // captured horizontal list rect which is nested inside
-            // the virtical one
-            ScrollableDescription(
-              nested: true,
-              rect: SerializableRect.fromLTWH(0, 20, 0, 0),
-              axis: Axis.horizontal,
-              maxScrollExtentByPixels: 0,
-              scrollExtentByPixels: 0,
-            ),
-          }),
+                // captured horizontal list rect which is nested inside
+                // the virtical one
+                ScrollableDescription(
+                  nested: true,
+                  rect: SerializableRect.fromLTWH(0, 20, 0, 0),
+                  axis: Axis.horizontal,
+                  maxScrollExtentByPixels: 0,
+                  scrollExtentByPixels: 0,
+                ),
+              }),
           kGeneralInteraction
         ];
 

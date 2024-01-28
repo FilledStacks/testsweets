@@ -14,9 +14,22 @@ void main() {
           kGeneralInteraction
         ];
         final result = interactions.replaceInteractions([
-          kGeneralInteraction.copyWith(position: WidgetPosition(x: 2, y: 2))
+          kGeneralInteraction.copyWith(
+              position: WidgetPosition(
+            x: 2,
+            y: 2,
+            capturedDeviceHeight: 0,
+            capturedDeviceWidth: 0,
+          ))
         ]);
-        expect(result[1].position, WidgetPosition(x: 2, y: 2));
+        expect(
+            result[1].position,
+            WidgetPosition(
+              x: 2,
+              y: 2,
+              capturedDeviceHeight: 0,
+              capturedDeviceWidth: 0,
+            ));
       });
     });
   });

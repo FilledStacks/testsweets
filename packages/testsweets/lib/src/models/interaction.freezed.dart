@@ -36,7 +36,15 @@ mixin _$Interaction {
   WidgetType get widgetType => throw _privateConstructorUsedError;
 
   /// The position we defined for he widget
+  @Deprecated('Prefer using the new responsive position functionality')
   WidgetPosition get position => throw _privateConstructorUsedError;
+
+  /// The positions this interaction point can take up depending on the screen size.
+  ///
+  /// When adjustments are made on a screen size different than what is already in here
+  /// a new position is created with the details of the new capture size.
+  List<WidgetPosition> get widgetPositions =>
+      throw _privateConstructorUsedError;
 
   /// Whether the key will be visible to the driver or not
   bool get visibility => throw _privateConstructorUsedError;
@@ -67,7 +75,9 @@ abstract class $InteractionCopyWith<$Res> {
       String originalViewName,
       String name,
       WidgetType widgetType,
+      @Deprecated('Prefer using the new responsive position functionality')
       WidgetPosition position,
+      List<WidgetPosition> widgetPositions,
       bool visibility,
       List<String> targetIds,
       Set<ScrollableDescription>? externalities});
@@ -94,6 +104,7 @@ class _$InteractionCopyWithImpl<$Res, $Val extends Interaction>
     Object? name = null,
     Object? widgetType = null,
     Object? position = null,
+    Object? widgetPositions = null,
     Object? visibility = null,
     Object? targetIds = null,
     Object? externalities = freezed,
@@ -123,6 +134,10 @@ class _$InteractionCopyWithImpl<$Res, $Val extends Interaction>
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as WidgetPosition,
+      widgetPositions: null == widgetPositions
+          ? _value.widgetPositions
+          : widgetPositions // ignore: cast_nullable_to_non_nullable
+              as List<WidgetPosition>,
       visibility: null == visibility
           ? _value.visibility
           : visibility // ignore: cast_nullable_to_non_nullable
@@ -161,7 +176,9 @@ abstract class _$$_InteractionCopyWith<$Res>
       String originalViewName,
       String name,
       WidgetType widgetType,
+      @Deprecated('Prefer using the new responsive position functionality')
       WidgetPosition position,
+      List<WidgetPosition> widgetPositions,
       bool visibility,
       List<String> targetIds,
       Set<ScrollableDescription>? externalities});
@@ -187,6 +204,7 @@ class __$$_InteractionCopyWithImpl<$Res>
     Object? name = null,
     Object? widgetType = null,
     Object? position = null,
+    Object? widgetPositions = null,
     Object? visibility = null,
     Object? targetIds = null,
     Object? externalities = freezed,
@@ -216,6 +234,10 @@ class __$$_InteractionCopyWithImpl<$Res>
           ? _value.position
           : position // ignore: cast_nullable_to_non_nullable
               as WidgetPosition,
+      widgetPositions: null == widgetPositions
+          ? _value._widgetPositions
+          : widgetPositions // ignore: cast_nullable_to_non_nullable
+              as List<WidgetPosition>,
       visibility: null == visibility
           ? _value.visibility
           : visibility // ignore: cast_nullable_to_non_nullable
@@ -241,11 +263,15 @@ class _$_Interaction extends _Interaction {
       required this.originalViewName,
       this.name = '',
       required this.widgetType,
-      required this.position,
+      @Deprecated('Prefer using the new responsive position functionality')
+      this.position = const WidgetPosition(
+          x: 0, y: 0, capturedDeviceHeight: 0, capturedDeviceWidth: 0),
+      final List<WidgetPosition> widgetPositions = const [],
       this.visibility = true,
       final List<String> targetIds = const [],
       final Set<ScrollableDescription>? externalities})
-      : _targetIds = targetIds,
+      : _widgetPositions = widgetPositions,
+        _targetIds = targetIds,
         _externalities = externalities,
         super._();
 
@@ -275,7 +301,27 @@ class _$_Interaction extends _Interaction {
 
   /// The position we defined for he widget
   @override
+  @JsonKey()
+  @Deprecated('Prefer using the new responsive position functionality')
   final WidgetPosition position;
+
+  /// The positions this interaction point can take up depending on the screen size.
+  ///
+  /// When adjustments are made on a screen size different than what is already in here
+  /// a new position is created with the details of the new capture size.
+  final List<WidgetPosition> _widgetPositions;
+
+  /// The positions this interaction point can take up depending on the screen size.
+  ///
+  /// When adjustments are made on a screen size different than what is already in here
+  /// a new position is created with the details of the new capture size.
+  @override
+  @JsonKey()
+  List<WidgetPosition> get widgetPositions {
+    if (_widgetPositions is EqualUnmodifiableListView) return _widgetPositions;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_widgetPositions);
+  }
 
   /// Whether the key will be visible to the driver or not
   @override
@@ -324,6 +370,8 @@ class _$_Interaction extends _Interaction {
                 other.widgetType == widgetType) &&
             (identical(other.position, position) ||
                 other.position == position) &&
+            const DeepCollectionEquality()
+                .equals(other._widgetPositions, _widgetPositions) &&
             (identical(other.visibility, visibility) ||
                 other.visibility == visibility) &&
             const DeepCollectionEquality()
@@ -342,6 +390,7 @@ class _$_Interaction extends _Interaction {
       name,
       widgetType,
       position,
+      const DeepCollectionEquality().hash(_widgetPositions),
       visibility,
       const DeepCollectionEquality().hash(_targetIds),
       const DeepCollectionEquality().hash(_externalities));
@@ -367,7 +416,9 @@ abstract class _Interaction extends Interaction {
       required final String originalViewName,
       final String name,
       required final WidgetType widgetType,
-      required final WidgetPosition position,
+      @Deprecated('Prefer using the new responsive position functionality')
+      final WidgetPosition position,
+      final List<WidgetPosition> widgetPositions,
       final bool visibility,
       final List<String> targetIds,
       final Set<ScrollableDescription>? externalities}) = _$_Interaction;
@@ -399,7 +450,15 @@ abstract class _Interaction extends Interaction {
   @override
 
   /// The position we defined for he widget
+  @Deprecated('Prefer using the new responsive position functionality')
   WidgetPosition get position;
+  @override
+
+  /// The positions this interaction point can take up depending on the screen size.
+  ///
+  /// When adjustments are made on a screen size different than what is already in here
+  /// a new position is created with the details of the new capture size.
+  List<WidgetPosition> get widgetPositions;
   @override
 
   /// Whether the key will be visible to the driver or not

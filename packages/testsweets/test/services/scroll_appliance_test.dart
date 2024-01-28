@@ -135,7 +135,12 @@ the top of a list to a normal canvas,
         final touchableInteractionWithOneExternalities =
             kTouchableInteraction.copyWith(
           // Changed its position
-          position: WidgetPosition(x: 400, y: 400),
+          position: WidgetPosition(
+            x: 400,
+            y: 400,
+            capturedDeviceHeight: 0,
+            capturedDeviceWidth: 0,
+          ),
 
           // This list captured before changing the position
           externalities: {kTopLeftVerticalScrollableDescription},

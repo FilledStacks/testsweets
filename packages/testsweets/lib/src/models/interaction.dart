@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
+import 'package:testsweets/src/extensions/widget_positions_extension.dart';
 import 'package:testsweets/testsweets.dart';
 
 part 'interaction.freezed.dart';
@@ -28,7 +29,20 @@ class Interaction with _$Interaction {
     required WidgetType widgetType,
 
     /// The position we defined for he widget
-    required WidgetPosition position,
+    @Deprecated('Prefer using the new responsive position functionality')
+    @Default(const WidgetPosition(
+      x: 0,
+      y: 0,
+      capturedDeviceHeight: 0,
+      capturedDeviceWidth: 0,
+    ))
+    WidgetPosition position,
+
+    /// The positions this interaction point can take up depending on the screen size.
+    ///
+    /// When adjustments are made on a screen size different than what is already in here
+    /// a new position is created with the details of the new capture size.
+    @Default([]) List<WidgetPosition> widgetPositions,
 
     /// Whether the key will be visible to the driver or not
     @Default(true) bool visibility,
@@ -40,8 +54,11 @@ class Interaction with _$Interaction {
     /// (normally ListViews)
     Set<ScrollableDescription>? externalities,
   }) = _Interaction;
-  factory Interaction.view(
-          {required String viewName, required String originalViewName}) =>
+
+  factory Interaction.view({
+    required String viewName,
+    required String originalViewName,
+  }) =>
       Interaction(
         viewName: viewName,
         originalViewName: originalViewName,
@@ -60,36 +77,155 @@ class Interaction with _$Interaction {
       ? '$viewName\_${widgetType.name}'
       : '$viewName\_${widgetType.name}\_$name';
 
+  WidgetPosition get renderPosition =>
+      widgetPositions.firstWhere((element) => element.active);
+
   @override
   String toString() {
     return '$name (${widgetType.name}): (${position.x}, ${position.y}) onSrollable:${externalities != null}';
   }
 
+  /// Performs a migration using the [capturedDeviceWidth] and [capturedDeviceHeight]
+  /// and returns a new [WidgetPosition] to be used in the place of the original.
+  Interaction migrate() {
+    print(
+        'Migrate: ${position.x},${position.y} size:${position.capturedDeviceWidth}, ${position.capturedDeviceHeight}');
+
+    final width = position.capturedDeviceWidth;
+    final height = position.capturedDeviceHeight;
+    final x = position.x;
+    final y = position.y;
+
+    final orientation = _getOrientationFromSize(width: width, height: height);
+
+    final matchingDeviceDetails = _getMatchingInteractionPosition(
+      width: width,
+      height: height,
+      orientation: orientation,
+    );
+
+    final noPositionBucketForOriginalSize = matchingDeviceDetails == null;
+
+    print(
+        'noDeviceBucketForOriginalSize: $noPositionBucketForOriginalSize\n Current Positions: $widgetPositions');
+    if (noPositionBucketForOriginalSize) {
+      return copyWith(widgetPositions: [
+        ...widgetPositions,
+        WidgetPosition(
+          x: x,
+          y: y,
+          capturedDeviceWidth: width,
+          capturedDeviceHeight: height,
+          orientation: orientation,
+        )
+      ]);
+    }
+
+    return this;
+  }
+
+  Orientation _getOrientationFromSize(
+      {required double width, required double height}) {
+    return height > width ? Orientation.portrait : Orientation.landscape;
+  }
+
+  WidgetPosition? _getMatchingInteractionPosition({
+    required double width,
+    required double height,
+    required Orientation orientation,
+  }) {
+    final matchingDeviceDetails = widgetPositions.where(
+      (details) =>
+          details.capturedDeviceWidth == width &&
+          details.capturedDeviceHeight == height &&
+          details.orientation == orientation,
+    );
+
+    if (matchingDeviceDetails.isNotEmpty) {
+      print(
+          'Has match for $width $height $orientation in ${matchingDeviceDetails.first}');
+      return matchingDeviceDetails.first;
+    }
+
+    return null;
+  }
+
   bool hasDeviceDetailsForScreenSize({
     required Size size,
     required Orientation orientation,
-  }) =>
-      position.hasDeviceDetailsForScreenSize(
-        width: size.width,
-        height: size.height,
-        orientation: orientation,
+  }) {
+    final matchingDeviceSize = _getMatchingInteractionPosition(
+      width: size.width,
+      height: size.height,
+      orientation: orientation,
+    );
+
+    print('MatchingDeviceSize is: $matchingDeviceSize');
+
+    return matchingDeviceSize != null;
+  }
+
+  Interaction setActivePosition({
+    required Size size,
+    required Orientation orientation,
+  }) {
+    final savedPositions = List<WidgetPosition>.from(widgetPositions);
+
+    List<WidgetPosition> listToReturn;
+
+    final positionsForSpecificOrientation = savedPositions
+        .where((widgetPosition) => widgetPosition.orientation == orientation);
+
+    final hasPositionsForOrientation =
+        positionsForSpecificOrientation.isNotEmpty;
+
+    if (hasPositionsForOrientation) {
+      listToReturn = _setActivePositionInList(
+        positionsToModify: positionsForSpecificOrientation.toList(),
+        size: size,
       );
+    } else {
+      listToReturn = _setActivePositionInList(
+        positionsToModify: savedPositions,
+        size: size,
+      );
+    }
+
+    return copyWith(widgetPositions: listToReturn);
+  }
+
+  List<WidgetPosition> _setActivePositionInList({
+    required List<WidgetPosition> positionsToModify,
+    required Size size,
+  }) {
+    final closestMatchingPosition =
+        positionsToModify.getClosestWidgetBasedOnScreeSize(
+      size,
+    );
+
+    final indexToUpdate = positionsToModify.indexOf(closestMatchingPosition);
+
+    positionsToModify[indexToUpdate] = closestMatchingPosition.copyWith(
+      active: true,
+    );
+
+    return positionsToModify;
+  }
 
   Interaction storeDeviceDetails({
     required Size size,
     required Orientation orientation,
   }) {
-    print('position before deviceDetails: $position');
-    final positionWithDeviceDetails = position.storeDeviceDetails(
-      size: size,
-      orientation: orientation,
-    );
-    print('position after deviceDetails: $positionWithDeviceDetails');
-
-    return copyWith(position: positionWithDeviceDetails);
-  }
-
-  Interaction migrate() {
-    return copyWith(position: position.jitMigrate());
+    return copyWith(widgetPositions: [
+      ...widgetPositions,
+      WidgetPosition(
+        // TODO: Complete this before we're done
+        x: 0,
+        y: 0,
+        capturedDeviceWidth: size.width,
+        capturedDeviceHeight: size.height,
+        orientation: orientation,
+      )
+    ]);
   }
 }

@@ -234,7 +234,7 @@ class WidgetCaptureViewModel extends FormViewModel {
       );
 
       print(
-          'hasDeviceDetailsForCurrentScreenSize: $hasDeviceDetailsForCurrentScreenSize \nwith sizes: ${updatedInteraction.position.deviceBuckets}');
+          'hasDeviceDetailsForCurrentScreenSize: $hasDeviceDetailsForCurrentScreenSize \nwith sizes: ${updatedInteraction.widgetPositions}');
 
       if (!hasDeviceDetailsForCurrentScreenSize) {
         updatedInteraction = updatedInteraction.storeDeviceDetails(
