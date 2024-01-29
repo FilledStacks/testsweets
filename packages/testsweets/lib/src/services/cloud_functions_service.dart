@@ -99,13 +99,11 @@ class CloudFunctionsService {
     throw Exception(response.body);
   }
 
-  Future<String> updateWidgetDescription({
+  Future<String> updateInteraction({
     required String projectId,
-    required Interaction oldwidgetDescription,
-    required Interaction newwidgetDescription,
+    required Interaction interaction,
   }) async {
-    log.i(
-        'oldwidgetDescription:$oldwidgetDescription, newwidgetDescription:$newwidgetDescription, projectId:$projectId');
+    log.i('projectId:$projectId - Interaction: $interaction');
 
     final endpoint =
         'https://us-central1-testsweets-38348.cloudfunctions.net/projects-api/updateWidgetDescription';
@@ -114,8 +112,7 @@ class CloudFunctionsService {
       to: endpoint,
       body: {
         'projectId': projectId,
-        'newwidgetDescription': newwidgetDescription.toJson(),
-        'oldwidgetDescription': oldwidgetDescription.toJson(),
+        'newwidgetDescription': interaction.toJson(),
       },
     );
 

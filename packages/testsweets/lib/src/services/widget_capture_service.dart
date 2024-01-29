@@ -62,15 +62,12 @@ class WidgetCaptureService {
 
   Future<void> updateInteractionInDatabase({
     required Interaction updatedInteraction,
-    required Interaction oldInteraction,
   }) async {
-    log.i(
-        'updatedinteraction:$updatedInteraction, oldinteraction:$updatedInteraction  projectId:$_projectId');
+    log.i('updatedinteraction:$updatedInteraction projectId:$_projectId');
 
-    await _cloudFunctionsService.updateWidgetDescription(
+    await _cloudFunctionsService.updateInteraction(
       projectId: _projectId,
-      newwidgetDescription: updatedInteraction,
-      oldwidgetDescription: oldInteraction,
+      interaction: updatedInteraction,
     );
   }
 

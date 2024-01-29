@@ -545,7 +545,7 @@ class MockCloudFunctionsService extends _i1.Mock
             _i11.Future<List<_i3.Interaction>>.value(<_i3.Interaction>[]),
       ) as _i11.Future<List<_i3.Interaction>>);
   @override
-  _i11.Future<String> updateWidgetDescription({
+  _i11.Future<String> updateInteraction({
     required String? projectId,
     required _i3.Interaction? oldwidgetDescription,
     required _i3.Interaction? newwidgetDescription,

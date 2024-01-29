@@ -113,7 +113,7 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
           description: anyNamed('description')))
       .thenAnswer((realInvocation) => Future.value(deleteWidgetDescription));
 
-  when(service.updateWidgetDescription(
+  when(service.updateInteraction(
           oldwidgetDescription: anyNamed('oldwidgetDescription'),
           projectId: anyNamed('projectId'),
           newwidgetDescription: anyNamed('newwidgetDescription')))

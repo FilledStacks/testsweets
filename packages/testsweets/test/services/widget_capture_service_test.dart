@@ -590,7 +590,7 @@ void main() {
           updatedInteraction: description,
         );
 
-        verify(cloudFunctionsService.updateWidgetDescription(
+        verify(cloudFunctionsService.updateInteraction(
             projectId: 'projectId',
             oldwidgetDescription: description,
             newwidgetDescription: description));

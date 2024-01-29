@@ -215,18 +215,8 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusyForObject(sideBusyIndicator, true);
 
     try {
-      var updatedInteraction = viewInteractions.firstWhere(
-        (oldInteraciton) => oldInteraciton.id == inProgressInteraction!.id,
-      );
-
-      // Refactor: I kept this outside so it's clear, but this can move into
-      // the widget itself.
-      // VIDEO IDEA: Make a video asking for opinions, this will attract some
-      // dart engineers that might work for an ICP
-
       await _widgetCaptureService.updateInteractionInDatabase(
-        oldInteraction: inProgressInteraction!,
-        updatedInteraction: updatedInteraction,
+        updatedInteraction: inProgressInteraction!,
       );
 
       _updateInteractionInViewWhenSuccess(inProgressInteraction!);
@@ -262,7 +252,7 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   void _removeInteractionFromViewWhenSuccess() {
     viewInteractions = viewInteractions
-        .whereNot((widget) => inProgressInteraction == widget)
+        .whereNot((widget) => inProgressInteraction?.id == widget.id)
         .toList();
 
     inProgressInteraction = null;
