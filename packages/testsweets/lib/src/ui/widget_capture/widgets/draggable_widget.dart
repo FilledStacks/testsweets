@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:testsweets/src/extensions/widget_position_extension.dart';
-
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
 import '../../shared/interaction_circle.dart';
@@ -15,9 +14,9 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
     return model.inProgressInteraction == null
         ? const SizedBox()
         : Positioned(
-            top: model.inProgressInteraction!.position
+            top: model.inProgressInteraction!.renderPosition
                 .responsiveYPosition(size.height),
-            left: model.inProgressInteraction!.position
+            left: model.inProgressInteraction!.renderPosition
                 .responsiveXPosition(size.width),
             child: GestureDetector(
               onPanUpdate: (panEvent) {

@@ -12,8 +12,8 @@ class WidgetPosition with _$WidgetPosition {
   const factory WidgetPosition({
     required double x,
     required double y,
-    required double capturedDeviceWidth,
-    required double capturedDeviceHeight,
+    @Default(0) double capturedDeviceWidth,
+    @Default(0) double capturedDeviceHeight,
     @Default(Orientation.portrait) Orientation orientation,
     double? yDeviation,
     double? xDeviation,
@@ -22,12 +22,7 @@ class WidgetPosition with _$WidgetPosition {
     bool active,
   }) = _WidgetPosition;
 
-  factory WidgetPosition.empty() => const WidgetPosition(
-        x: 0,
-        y: 0,
-        capturedDeviceWidth: 0,
-        capturedDeviceHeight: 0,
-      );
+  factory WidgetPosition.empty() => const WidgetPosition(x: 0, y: 0);
 
   factory WidgetPosition.fromJson(Map<String, dynamic> json) =>
       _$WidgetPositionFromJson(json);

@@ -52,20 +52,20 @@ extension WidgetPositionExtension on WidgetPosition {
   double _calculateHeightRatio(double currentScreenHeight) {
     /// If the [capturedDeviceHeight] is null or 0 return 1
     /// which will leave the original hight unchanged
-    if (this.capturedDeviceHeight == null || this.capturedDeviceHeight == 0) {
+    if (this.capturedDeviceHeight == 0) {
       return 1;
     } else {
-      return currentScreenHeight / this.capturedDeviceHeight!;
+      return currentScreenHeight / this.capturedDeviceHeight;
     }
   }
 
   double _calculateWidthRatio(double currentScreenWidth) {
     /// If the [capturedDeviceHeight] is null or 0 return 1
     /// which will leave the original width unchanged
-    if (this.capturedDeviceWidth == null || this.capturedDeviceWidth == 0) {
+    if (this.capturedDeviceWidth == 0) {
       return 1;
     } else {
-      return currentScreenWidth / this.capturedDeviceWidth!;
+      return currentScreenWidth / this.capturedDeviceWidth;
     }
   }
 }

@@ -28,7 +28,7 @@ class InteractionUtils {
     // });
 
     final visible = screenSize.contains(
-        interaction.position.responsiveOffset(screenSize) +
+        interaction.renderPosition.responsiveOffset(screenSize) +
             Offset(WIDGET_DESCRIPTION_VISUAL_SIZE / 2,
                 WIDGET_DESCRIPTION_VISUAL_SIZE / 2));
 

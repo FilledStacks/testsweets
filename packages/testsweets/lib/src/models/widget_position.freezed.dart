@@ -194,8 +194,8 @@ class _$_WidgetPosition extends _WidgetPosition {
   const _$_WidgetPosition(
       {required this.x,
       required this.y,
-      required this.capturedDeviceWidth,
-      required this.capturedDeviceHeight,
+      this.capturedDeviceWidth = 0,
+      this.capturedDeviceHeight = 0,
       this.orientation = Orientation.portrait,
       this.yDeviation,
       this.xDeviation,
@@ -211,8 +211,10 @@ class _$_WidgetPosition extends _WidgetPosition {
   @override
   final double y;
   @override
+  @JsonKey()
   final double capturedDeviceWidth;
   @override
+  @JsonKey()
   final double capturedDeviceHeight;
   @override
   @JsonKey()
@@ -273,8 +275,8 @@ abstract class _WidgetPosition extends WidgetPosition {
   const factory _WidgetPosition(
       {required final double x,
       required final double y,
-      required final double capturedDeviceWidth,
-      required final double capturedDeviceHeight,
+      final double capturedDeviceWidth,
+      final double capturedDeviceHeight,
       final Orientation orientation,
       final double? yDeviation,
       final double? xDeviation,

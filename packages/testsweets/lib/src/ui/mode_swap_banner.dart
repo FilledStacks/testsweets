@@ -69,7 +69,6 @@ class _ModeSwapButton extends StatelessWidget {
   final Function() onModeTapped;
 
   const _ModeSwapButton({
-    super.key,
     required this.onModeTapped,
     required this.title,
     required this.active,

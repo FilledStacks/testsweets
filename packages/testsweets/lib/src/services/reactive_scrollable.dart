@@ -51,9 +51,10 @@ class ReactiveScrollable {
   ) {
     late Offset offsetDeviation;
     if (scrollableDescription.axis == Axis.vertical) {
-      offsetDeviation = Offset(interaction.position.xDeviation ?? 0, 0);
+      offsetDeviation = Offset(interaction.renderPosition.xDeviation ?? 0, 0);
     } else {
-      offsetDeviation = Offset(0, -(interaction.position.yDeviation ?? 0));
+      offsetDeviation =
+          Offset(0, -(interaction.renderPosition.yDeviation ?? 0));
     }
     return offsetDeviation;
   }
@@ -62,7 +63,7 @@ class ReactiveScrollable {
     Iterable<Interaction> affectedInteractions,
   ) {
     return affectedInteractions.map((interaction) => interaction.copyWith(
-        position:
-            interaction.position.applyScroll(currentScrollableDescription)));
+        position: interaction.renderPosition
+            .applyScroll(currentScrollableDescription)));
   }
 }

@@ -9,6 +9,13 @@
             "request": "launch",
             "type": "dart",
             "cwd": "example/",
+            "args": [
+                "-t",
+                "lib/main.dart",
+                "--debug",
+                "--dart-define=FORCE_CAPTURE_MODE=true",
+                "--dart-define=TESTSWEETS_VERBOSE_LOGS=true",
+            ],
         },
         {
             "name": "Testsweets Example Drive mode",

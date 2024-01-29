@@ -19,38 +19,45 @@ class InteractionsVisualizerCaptureMode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation;
+
     return ValueListenableBuilder<List<Interaction>>(
         valueListenable: descriptionsForViewNotifier,
         builder: (_, descriptionsForView, __) {
           return Stack(
             children: [
               ...descriptionsForView
+                  .map((interaction) => interaction.setActivePosition(
+                        orientation: orientation,
+                        size: size,
+                      ))
                   .where(InteractionUtils.notView)
                   .where((interaction) =>
                       InteractionUtils.visibleOnScreen(interaction, size))
                   .map(
-                    (description) => Positioned(
-                      top:
-                          description.position.responsiveYPosition(size.height),
-                      left:
-                          description.position.responsiveXPosition(size.width),
-                      child: Opacity(
-                        opacity: captureWidgetState ==
-                                CaptureWidgetState.createWidget
-                            ? 0.4
-                            : 1,
-                        child: InteractionCircleWithPopupMenu(
-                          key: Key(description.automationKey),
-                          description: description,
-                          editActionSelected: editActionSelected,
-                          editMode: captureWidgetState ==
-                                  CaptureWidgetState.createWidget ||
-                              captureWidgetState ==
-                                  CaptureWidgetState.editWidget,
-                        ),
+                (interaction) {
+                  return Positioned(
+                    top: interaction.renderPosition
+                        .responsiveYPosition(size.height),
+                    left: interaction.renderPosition
+                        .responsiveXPosition(size.width),
+                    child: Opacity(
+                      opacity:
+                          captureWidgetState == CaptureWidgetState.createWidget
+                              ? 0.4
+                              : 1,
+                      child: InteractionCircleWithPopupMenu(
+                        key: Key(interaction.automationKey),
+                        description: interaction,
+                        editActionSelected: editActionSelected,
+                        editMode: captureWidgetState ==
+                                CaptureWidgetState.createWidget ||
+                            captureWidgetState == CaptureWidgetState.editWidget,
                       ),
                     ),
-                  )
+                  );
+                },
+              )
             ],
           );
         });

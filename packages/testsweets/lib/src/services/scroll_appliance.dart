@@ -16,7 +16,7 @@ class ScrollAppliance {
     final scrollablesBelowInteraction = scrollables.where(
       (element) =>
           element.rect.contains(
-            interaction.position.toOffset,
+            interaction.renderPosition.toOffset,
           ) &&
           element.maxScrollExtentByPixels != double.infinity,
     );
@@ -58,7 +58,7 @@ class ScrollAppliance {
       externalities: {
         biggestScrollable.transferBy(biggestScrollable),
       },
-      position: interaction.position.withScrollable(biggestScrollable),
+      position: interaction.renderPosition.withScrollable(biggestScrollable),
     );
     return interaction;
   }
@@ -76,7 +76,7 @@ class ScrollAppliance {
           ...interaction.externalities ?? {},
           scrollable.transferBy(biggestScrollable),
         },
-        position: interaction.position.withScrollable(scrollable),
+        position: interaction.renderPosition.withScrollable(scrollable),
       );
     }
     return interaction;

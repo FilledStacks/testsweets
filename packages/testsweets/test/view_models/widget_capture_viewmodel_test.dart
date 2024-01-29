@@ -88,7 +88,7 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
     });
 
     group('updateWidgetDescription -', () {
-      test('''When change the name, should call updateWidgetDescription()
+      test('''When name changed, should call updateWidgetDescription()
               in WidgetCaptureService with the new name"''', () async {
         final service = getAndRegisterWidgetCaptureService();
 
@@ -96,17 +96,22 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         model.viewInteractions = [kGeneralInteraction];
 
         await model.popupMenuActionSelected(
-            kGeneralInteraction, PopupMenuAction.edit);
-        model.setFormStatus();
+          kGeneralInteraction,
+          PopupMenuAction.edit,
+        );
 
-        model.inProgressInteraction =
-            kGeneralInteraction.copyWith(name: 'loginButton');
+        // model.setFormStatus();
+
+        model.inProgressInteraction = kGeneralInteraction.copyWith(
+          name: 'loginButton',
+        );
+
         await model.updateInteraction();
 
         verify(service.updateInteractionInDatabase(
-            oldInteraction: kGeneralInteraction,
-            updatedInteraction:
-                kGeneralInteraction.copyWith(name: 'loginButton')));
+          oldInteraction: kGeneralInteraction,
+          updatedInteraction: kGeneralInteraction.copyWith(name: 'loginButton'),
+        ));
       });
 
       test('''When called and update was successful,
@@ -148,8 +153,8 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         model.updateDescriptionPosition(
             33,
             33,
-            kGeneralInteraction.position.capturedDeviceWidth!,
-            kGeneralInteraction.position.capturedDeviceHeight!);
+            kGeneralInteraction.position.capturedDeviceWidth,
+            kGeneralInteraction.position.capturedDeviceHeight);
 
         await model.onLongPressUp();
 
@@ -174,8 +179,8 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         model.updateDescriptionPosition(
             22,
             33,
-            kGeneralInteraction.position.capturedDeviceWidth!,
-            kGeneralInteraction.position.capturedDeviceHeight!);
+            kGeneralInteraction.position.capturedDeviceWidth,
+            kGeneralInteraction.position.capturedDeviceHeight);
 
         await model.onLongPressUp();
 

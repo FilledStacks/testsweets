@@ -91,7 +91,10 @@ class CloudFunctionsService {
       log.i('getWidgetDescriptionForProject | fetch success! Lets serialise');
       final jsonContent = response.body;
       final descriptionsJson = json.decode(jsonContent) as Iterable;
-      return descriptionsJson.map((e) => Interaction.fromJson(e)).toList();
+      return descriptionsJson.map((e) {
+        print('❤️❤️❤️❤️❤️❤️❤️❤️ ${e.toString()}');
+        return Interaction.fromJson(e);
+      }).toList();
     }
 
     throw Exception(response.body);
