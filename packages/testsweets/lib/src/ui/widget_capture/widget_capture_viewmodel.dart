@@ -15,7 +15,7 @@ import 'package:testsweets/src/services/scroll_appliance.dart';
 import 'package:testsweets/src/services/snackbar_service.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
-import 'package:testsweets/src/ui/shared/find_scrollables.dart';
+import 'package:testsweets/src/ui/shared/scrollable_finder.dart';
 import 'package:testsweets/src/ui/widget_capture/widgets/interaction_capture_form.dart';
 import 'package:testsweets/testsweets.dart';
 
@@ -295,11 +295,10 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   Future<void> onLongPressUp() async {
     if (captureState == CaptureWidgetState.quickPositionEdit) {
-      final findScrollablesService = locator<FindScrollables>()
-        ..searchForScrollableElements();
+      final findScrollablesService = locator<ScrollableFinder>();
 
       final extractedScrollables =
-          findScrollablesService.convertElementsToScrollDescriptions();
+          findScrollablesService.getAllScrollableDescriprionsOnScreen();
 
       checkForExternalities(extractedScrollables);
 

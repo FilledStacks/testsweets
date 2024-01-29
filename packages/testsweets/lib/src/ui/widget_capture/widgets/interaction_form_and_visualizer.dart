@@ -9,8 +9,8 @@ import 'package:testsweets/src/models/interaction.dart';
 import 'package:testsweets/src/ui/shared/app_colors.dart';
 import 'package:testsweets/src/ui/shared/cta_button.dart';
 import 'package:testsweets/src/ui/shared/custom_solid_controller.dart';
-import 'package:testsweets/src/ui/shared/find_scrollables.dart';
 import 'package:testsweets/src/ui/shared/icon_button.dart';
+import 'package:testsweets/src/ui/shared/scrollable_finder.dart';
 import 'package:testsweets/src/ui/shared/shared_styles.dart';
 import 'package:testsweets/src/ui/widget_capture/widget_capture_viewmodel.dart';
 
@@ -215,15 +215,17 @@ class _Content extends StatelessWidget {
                       /// form accedintally capturing any list in the bottomsheet
                       await Future.delayed(const Duration(milliseconds: 500));
 
-                      final findScrollablesService = locator<FindScrollables>()
-                        ..searchForScrollableElements();
+                      final findScrollablesService =
+                          locator<ScrollableFinder>();
 
                       final extractedScrollables = findScrollablesService
-                          .convertElementsToScrollDescriptions();
+                          .getAllScrollableDescriprionsOnScreen();
+
                       print(
                           '🚗 - extractedScrollables: ${extractedScrollables.length}');
 
                       model.checkForExternalities(extractedScrollables);
+
                       await model.submitForm();
                       _clearAndUnfocusTextField();
                     },

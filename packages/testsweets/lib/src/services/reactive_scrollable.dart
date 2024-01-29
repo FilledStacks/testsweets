@@ -12,7 +12,8 @@ class ReactiveScrollable {
   late ScrollableDescription currentScrollableDescription;
 
   Iterable<Interaction> filterAffectedInteractionsByScrollable(
-      List<Interaction> viewDescription) {
+    List<Interaction> viewDescription,
+  ) {
     return viewDescription.where(InteractionUtils.notView).where(
       (interaction) {
         if (interaction.externalities == null) return false;

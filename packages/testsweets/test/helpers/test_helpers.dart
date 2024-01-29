@@ -12,7 +12,7 @@ import 'package:testsweets/src/services/snackbar_service.dart';
 import 'package:testsweets/src/services/test_integrity.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
-import 'package:testsweets/src/ui/shared/find_scrollables.dart';
+import 'package:testsweets/src/ui/shared/scrollable_finder.dart';
 
 import 'test_consts.dart';
 import 'test_helpers.mocks.dart';
@@ -24,7 +24,7 @@ import 'test_helpers.mocks.dart';
   MockSpec<CloudFunctionsService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<TestIntegrity>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<ReactiveScrollable>(onMissingStub: OnMissingStub.returnDefault),
-  MockSpec<FindScrollables>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<ScrollableFinder>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<ScrollAppliance>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<NotificationExtractor>(onMissingStub: OnMissingStub.returnDefault),
 ])
@@ -42,9 +42,8 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService({
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
       .thenReturn(viewInteractions);
   when(service.updateInteractionInDatabase(
-          updatedInteraction: anyNamed('updatedInteraction'),
-          oldInteraction: anyNamed('oldInteraction')))
-      .thenAnswer((_) => Future.value());
+    updatedInteraction: anyNamed('updatedInteraction'),
+  )).thenAnswer((_) => Future.value());
   when(service.removeInteractionFromDatabase(any))
       .thenAnswer((_) => Future.value());
 
@@ -55,13 +54,13 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService({
   return service;
 }
 
-FindScrollables getAndRegisterFindScrollables(
-    {Iterable<ScrollableDescription>? sds}) {
-  _removeRegistrationIfExists<FindScrollables>();
-  final service = MockFindScrollables();
-  when(service.convertElementsToScrollDescriptions()).thenReturn(sds ?? []);
-  when(service.searchForScrollableElements()).thenReturn(null);
-  locator.registerSingleton<FindScrollables>(service);
+ScrollableFinder getAndRegisterFindScrollables({
+  Iterable<ScrollableDescription>? sds,
+}) {
+  _removeRegistrationIfExists<ScrollableFinder>();
+  final service = MockScrollableFinder();
+  when(service.getAllScrollableDescriprionsOnScreen()).thenReturn(sds ?? []);
+  locator.registerSingleton<ScrollableFinder>(service);
   return service;
 }
 
@@ -114,10 +113,9 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
       .thenAnswer((realInvocation) => Future.value(deleteWidgetDescription));
 
   when(service.updateInteraction(
-          oldwidgetDescription: anyNamed('oldwidgetDescription'),
-          projectId: anyNamed('projectId'),
-          newwidgetDescription: anyNamed('newwidgetDescription')))
-      .thenAnswer((realInvocation) => Future.value(updateWidgetDescription));
+    interaction: anyNamed('interaction'),
+    projectId: anyNamed('projectId'),
+  )).thenAnswer((realInvocation) => Future.value(updateWidgetDescription));
 
   locator.registerSingleton<CloudFunctionsService>(service);
   return service;
@@ -192,7 +190,7 @@ void unregisterServices() {
   _removeRegistrationIfExists<CloudFunctionsService>();
   _removeRegistrationIfExists<SnackbarService>();
   _removeRegistrationIfExists<ReactiveScrollable>();
-  _removeRegistrationIfExists<FindScrollables>();
+  _removeRegistrationIfExists<ScrollableFinder>();
   _removeRegistrationIfExists<ScrollAppliance>();
   _removeRegistrationIfExists<NotificationExtractor>();
   _removeRegistrationIfExists<TestIntegrity>();

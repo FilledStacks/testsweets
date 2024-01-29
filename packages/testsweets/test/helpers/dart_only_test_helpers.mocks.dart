@@ -540,17 +540,15 @@ class MockCloudFunctionsService extends _i1.Mock
   @override
   _i9.Future<String> updateInteraction({
     required String? projectId,
-    required _i13.Interaction? oldwidgetDescription,
-    required _i13.Interaction? newwidgetDescription,
+    required _i13.Interaction? interaction,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
-          #updateWidgetDescription,
+          #updateInteraction,
           [],
           {
             #projectId: projectId,
-            #oldwidgetDescription: oldwidgetDescription,
-            #newwidgetDescription: newwidgetDescription,
+            #interaction: interaction,
           },
         ),
         returnValue: _i9.Future<String>.value(''),

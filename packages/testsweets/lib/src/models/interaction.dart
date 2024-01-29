@@ -144,8 +144,6 @@ class Interaction with _$Interaction {
       orientation: orientation,
     );
 
-    print('MatchingDeviceSize is: $matchingDeviceSize');
-
     return matchingDeviceSize != null;
   }
 
@@ -253,8 +251,6 @@ class Interaction with _$Interaction {
     );
 
     if (matchingDeviceDetails.isNotEmpty) {
-      print(
-          'Has match for $width $height $orientation in ${matchingDeviceDetails.first}');
       return matchingDeviceDetails.first;
     }
 

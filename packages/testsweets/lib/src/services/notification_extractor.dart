@@ -18,7 +18,6 @@ class NotificationExtractor {
   ScrollableDescription? lastScrollEvent;
 
   bool onlyScrollUpdateNotification(Notification notification) {
-    log.v(notification);
     _setScrollablePositionAndScrollDirection(notification);
 
     if (notification is ScrollUpdateNotification) {
@@ -55,9 +54,8 @@ class NotificationExtractor {
   }
 
   ScrollableDescription notificationToScrollableDescription(
-      Notification notification) {
-    log.v(notification);
-
+    Notification notification,
+  ) {
     return ScrollableDescription.fromNotification(
       globalPosition: globalPosition!,
       localPosition: localPosition!,
@@ -68,8 +66,10 @@ class NotificationExtractor {
 
   Interaction syncInteractionWithScrollable(Interaction interaction) {
     if (lastScrollEvent != null) {
-      final scrollInteractionOrEmpty =
-          scrollInteractions(lastScrollEvent!, [interaction]);
+      final scrollInteractionOrEmpty = scrollInteractions(
+        lastScrollEvent!,
+        [interaction],
+      );
       return scrollInteractionOrEmpty.isNotEmpty
           ? scrollInteractionOrEmpty.first
           : interaction;

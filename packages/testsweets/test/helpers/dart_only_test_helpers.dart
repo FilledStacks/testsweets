@@ -183,9 +183,8 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
       .thenAnswer((realInvocation) => Future.value(deleteWidgetDescription));
 
   when(service.updateInteraction(
-          oldwidgetDescription: anyNamed('oldwidgetDescription'),
           projectId: anyNamed('projectId'),
-          newwidgetDescription: anyNamed('newwidgetDescription')))
+          interaction: anyNamed('interaction')))
       .thenAnswer((realInvocation) => Future.value(updateWidgetDescription));
 
   dartOnlyLocator.registerSingleton<CloudFunctionsService>(service);

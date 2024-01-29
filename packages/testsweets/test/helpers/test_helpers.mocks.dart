@@ -21,7 +21,7 @@ import 'package:testsweets/src/services/snackbar_service.dart' as _i7;
 import 'package:testsweets/src/services/test_integrity.dart' as _i14;
 import 'package:testsweets/src/services/testsweets_route_tracker.dart' as _i12;
 import 'package:testsweets/src/services/widget_capture_service.dart' as _i10;
-import 'package:testsweets/src/ui/shared/find_scrollables.dart' as _i16;
+import 'package:testsweets/src/ui/shared/scrollable_finder.dart' as _i16;
 import 'package:testsweets/testsweets.dart' as _i5;
 
 // ignore_for_file: type=lint
@@ -197,18 +197,13 @@ class MockWidgetCaptureService extends _i1.Mock
         )),
       ) as _i11.Future<_i3.Interaction>);
   @override
-  _i11.Future<void> updateInteractionInDatabase({
-    required _i3.Interaction? updatedInteraction,
-    required _i3.Interaction? oldInteraction,
-  }) =>
+  _i11.Future<void> updateInteractionInDatabase(
+          {required _i3.Interaction? updatedInteraction}) =>
       (super.noSuchMethod(
         Invocation.method(
           #updateInteractionInDatabase,
           [],
-          {
-            #updatedInteraction: updatedInteraction,
-            #oldInteraction: oldInteraction,
-          },
+          {#updatedInteraction: updatedInteraction},
         ),
         returnValue: _i11.Future<void>.value(),
         returnValueForMissingStub: _i11.Future<void>.value(),
@@ -547,17 +542,15 @@ class MockCloudFunctionsService extends _i1.Mock
   @override
   _i11.Future<String> updateInteraction({
     required String? projectId,
-    required _i3.Interaction? oldwidgetDescription,
-    required _i3.Interaction? newwidgetDescription,
+    required _i3.Interaction? interaction,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
-          #updateWidgetDescription,
+          #updateInteraction,
           [],
           {
             #projectId: projectId,
-            #oldwidgetDescription: oldwidgetDescription,
-            #newwidgetDescription: newwidgetDescription,
+            #interaction: interaction,
           },
         ),
         returnValue: _i11.Future<String>.value(''),
@@ -744,32 +737,27 @@ class MockReactiveScrollable extends _i1.Mock
       ) as Iterable<_i3.Interaction>);
 }
 
-/// A class which mocks [FindScrollables].
+/// A class which mocks [ScrollableFinder].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFindScrollables extends _i1.Mock implements _i16.FindScrollables {
+class MockScrollableFinder extends _i1.Mock implements _i16.ScrollableFinder {
   @override
-  set foundedElements(Iterable<_i8.Element>? _foundedElements) =>
-      super.noSuchMethod(
-        Invocation.setter(
-          #foundedElements,
-          _foundedElements,
+  _i2.Logger get log => (super.noSuchMethod(
+        Invocation.getter(#log),
+        returnValue: _FakeLogger_0(
+          this,
+          Invocation.getter(#log),
         ),
-        returnValueForMissingStub: null,
-      );
-  @override
-  void searchForScrollableElements() => super.noSuchMethod(
-        Invocation.method(
-          #searchForScrollableElements,
-          [],
+        returnValueForMissingStub: _FakeLogger_0(
+          this,
+          Invocation.getter(#log),
         ),
-        returnValueForMissingStub: null,
-      );
+      ) as _i2.Logger);
   @override
-  Iterable<_i5.ScrollableDescription> convertElementsToScrollDescriptions() =>
+  Iterable<_i5.ScrollableDescription> getAllScrollableDescriprionsOnScreen() =>
       (super.noSuchMethod(
         Invocation.method(
-          #convertElementsToScrollDescriptions,
+          #getAllScrollableDescriprionsOnScreen,
           [],
         ),
         returnValue: <_i5.ScrollableDescription>[],

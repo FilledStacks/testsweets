@@ -110,7 +110,6 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         await model.updateInteraction();
 
         verify(service.updateInteractionInDatabase(
-          oldInteraction: kGeneralInteraction,
           updatedInteraction: kGeneralInteraction.copyWith(name: 'loginButton'),
         ));
       });
@@ -138,8 +137,8 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         await model.onLongPressUp();
 
         verify(service.updateInteractionInDatabase(
-            oldInteraction: kGeneralInteraction,
-            updatedInteraction: kGeneralInteraction));
+          updatedInteraction: kGeneralInteraction,
+        ));
       });
 
       test('''When in quickPositionEdit mode and user trigger onLongPressUp
@@ -169,8 +168,8 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         );
 
         verify(service.updateInteractionInDatabase(
-            updatedInteraction: updatedInteraction,
-            oldInteraction: kGeneralInteraction));
+          updatedInteraction: updatedInteraction,
+        ));
       });
       test('''
             When update interaction position,

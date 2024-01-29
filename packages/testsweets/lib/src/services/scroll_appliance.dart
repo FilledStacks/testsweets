@@ -83,7 +83,8 @@ class ScrollAppliance {
   }
 
   ScrollableDescription findBiggestScrollable(
-      Iterable<ScrollableDescription> scrollablesBelowInteraction) {
+    Iterable<ScrollableDescription> scrollablesBelowInteraction,
+  ) {
     return scrollablesBelowInteraction.reduce(
       (curr, next) => curr.rect.biggerThan(next.rect) ? curr : next,
     );
