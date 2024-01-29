@@ -177,7 +177,7 @@ void main() {
         final result = service.moveInteractionsWithScrollable([
           kScrollableInteraction,
         ]);
-        expect(result.first.position.yDeviation, 100);
+        expect(result.first.renderPosition.yDeviation, 100);
       });
     });
   });

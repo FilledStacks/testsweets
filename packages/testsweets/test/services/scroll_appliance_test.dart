@@ -18,7 +18,8 @@ void main() {
           [kTopLeftVerticalScrollableDescription],
           kTouchableInteraction,
         );
-        expect(result.position.y, kTouchableInteraction.position.y + 100);
+        expect(result.renderPosition.y,
+            kTouchableInteraction.renderPosition.y + 100);
       });
 
       test('''
@@ -44,8 +45,10 @@ void main() {
           ],
           kTouchableInteraction,
         );
-        expect(result.position.y, kTouchableInteraction.position.y + 100);
-        expect(result.position.x, kTouchableInteraction.position.x + 50);
+        expect(result.renderPosition.y,
+            kTouchableInteraction.renderPosition.y + 100);
+        expect(result.renderPosition.x,
+            kTouchableInteraction.renderPosition.x + 50);
       });
       test('''When we capture an interaction located inside a horizontal  
       list which also located inside a bigger vertical list,

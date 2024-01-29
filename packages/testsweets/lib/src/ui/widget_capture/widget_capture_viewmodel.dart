@@ -162,8 +162,20 @@ class WidgetCaptureViewModel extends FormViewModel {
     captureState = CaptureWidgetState.idle;
   }
 
-  void updateDescriptionPosition(double x, double y) {
-    inProgressInteraction = inProgressInteraction!.updatePosition(x: x, y: y);
+  void updateDescriptionPosition({
+    required double x,
+    required double y,
+    required double currentWidth,
+    required double currentHeight,
+    required Orientation orientation,
+  }) {
+    inProgressInteraction = inProgressInteraction!.updatePosition(
+      x: x,
+      y: y,
+      currentWidth: currentWidth,
+      currentHeight: currentHeight,
+      orientation: orientation,
+    );
     notifyListeners();
   }
 
@@ -211,21 +223,6 @@ class WidgetCaptureViewModel extends FormViewModel {
       // the widget itself.
       // VIDEO IDEA: Make a video asking for opinions, this will attract some
       // dart engineers that might work for an ICP
-      final bool hasDeviceDetailsForCurrentScreenSize =
-          updatedInteraction.hasDeviceDetailsForScreenSize(
-        size: currentScreenSize,
-        orientation: orientation,
-      );
-
-      print(
-          'hasDeviceDetailsForCurrentScreenSize: $hasDeviceDetailsForCurrentScreenSize \nwith sizes: ${updatedInteraction.widgetPositions}');
-
-      if (!hasDeviceDetailsForCurrentScreenSize) {
-        updatedInteraction = updatedInteraction.storeDeviceDetails(
-          size: currentScreenSize,
-          orientation: orientation,
-        );
-      }
 
       await _widgetCaptureService.updateInteractionInDatabase(
         oldInteraction: inProgressInteraction!,

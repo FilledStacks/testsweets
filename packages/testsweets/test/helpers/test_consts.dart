@@ -78,15 +78,22 @@ final kGeneralInteractionWithZeroOffset = Interaction(
     originalViewName: 'originalViewName',
     name: 'widgetName',
     widgetType: WidgetType.general,
-    position: WidgetPosition.empty());
+    widgetPositions: [WidgetPosition.empty()]);
 
 final kGeneralInteraction = Interaction(
   originalViewName: '/',
   viewName: 'login',
   id: 'generalId',
   name: 'email',
-  position: WidgetPosition(
-      x: 100.0, y: 199.0, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
+  widgetPositions: [
+    WidgetPosition(
+      x: 100.0,
+      y: 199.0,
+      capturedDeviceWidth: 0,
+      capturedDeviceHeight: 0,
+      active: true,
+    )
+  ],
   widgetType: WidgetType.general,
 );
 final kTouchableInteraction = Interaction(
@@ -94,8 +101,15 @@ final kTouchableInteraction = Interaction(
   viewName: 'initial',
   id: 'kWidgetDescriptionTypeScrollId1',
   name: 'ScrollId1',
-  position: WidgetPosition(
-      x: 20, y: 20, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
+  widgetPositions: [
+    WidgetPosition(
+      x: 20,
+      y: 20,
+      capturedDeviceWidth: 0,
+      capturedDeviceHeight: 0,
+      active: true,
+    )
+  ],
   widgetType: WidgetType.touchable,
 );
 final kScrollableInteraction = Interaction(
@@ -103,8 +117,14 @@ final kScrollableInteraction = Interaction(
   viewName: 'initial',
   id: 'kWidgetDescriptionTypeScrollId1',
   name: 'ScrollId1',
-  position: WidgetPosition(
-      x: 20, y: 20, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
+  widgetPositions: [
+    WidgetPosition(
+      x: 20,
+      y: 20,
+      capturedDeviceWidth: 0,
+      capturedDeviceHeight: 0,
+    )
+  ],
   widgetType: WidgetType.scrollable,
 );
 final kScrollableInteraction2 = Interaction(
@@ -112,8 +132,14 @@ final kScrollableInteraction2 = Interaction(
   viewName: 'initial',
   id: 'kWidgetDescriptionTypeScroll2',
   name: 'ScrollId2',
-  position: WidgetPosition(
-      x: 25, y: 25, capturedDeviceWidth: 0, capturedDeviceHeight: 0),
+  widgetPositions: [
+    WidgetPosition(
+      x: 25,
+      y: 25,
+      capturedDeviceWidth: 0,
+      capturedDeviceHeight: 0,
+    )
+  ],
   widgetType: WidgetType.scrollable,
 );
 final kViewInteraction = Interaction(
@@ -121,7 +147,7 @@ final kViewInteraction = Interaction(
   viewName: 'login',
   id: 'viewId',
   name: '',
-  position: WidgetPosition.empty(),
+  widgetPositions: [WidgetPosition.empty()],
   widgetType: WidgetType.view,
 );
 

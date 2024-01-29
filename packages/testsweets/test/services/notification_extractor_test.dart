@@ -37,11 +37,13 @@ void main() {
         ];
 
         final result = _service.scrollInteractions(
-            kTopLeftVerticalScrollableDescription, viewInteraction);
+          kTopLeftVerticalScrollableDescription,
+          viewInteraction,
+        );
 
         /// It should be the first item not the second but replaceing
         /// widget adds the widget at the end of the list
-        expect(result[1].position.yDeviation, 100);
+        expect(result[1].renderPosition.yDeviation, 100);
       });
       test('''
             When repeating the same scroll but now the interaction is already scrolled vertically
@@ -75,7 +77,7 @@ void main() {
 
         /// It should be the first item not the second but replaceing
         /// widget adds the widget at the end of the list
-        expect(result[1].position.yDeviation, 100);
+        expect(result[1].renderPosition.yDeviation, 100);
       });
       test('''
           When called two times(one vertical list and one horizontal) on one interaction,
@@ -139,8 +141,8 @@ void main() {
 
         /// It should be the first index(0) not the second(1) but when
         /// replacing an interaciton it adds it at the end of the list
-        expect(horizontlScrollResult[1].position.yDeviation, 100);
-        expect(horizontlScrollResult[1].position.xDeviation, 50);
+        expect(horizontlScrollResult[1].renderPosition.yDeviation, 100);
+        expect(horizontlScrollResult[1].renderPosition.xDeviation, 50);
       });
       test('Should save the latest scrollableDescription', () {
         final _service = NotificationExtractor();

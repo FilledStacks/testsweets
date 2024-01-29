@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:testsweets/src/extensions/widgets_description_list_extensions.dart';
 import 'package:testsweets/testsweets.dart';
@@ -14,16 +15,16 @@ void main() {
           kGeneralInteraction
         ];
         final result = interactions.replaceInteractions([
-          kGeneralInteraction.copyWith(
-              position: WidgetPosition(
+          kGeneralInteraction.updatePosition(
             x: 2,
             y: 2,
-            capturedDeviceHeight: 0,
-            capturedDeviceWidth: 0,
-          ))
+            currentWidth: 0,
+            currentHeight: 0,
+            orientation: Orientation.landscape,
+          )
         ]);
         expect(
-            result[1].position,
+            result[1].renderPosition,
             WidgetPosition(
               x: 2,
               y: 2,

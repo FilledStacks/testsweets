@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/enums/capture_widget_enum.dart';
@@ -150,12 +151,18 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         final model = _getViewModel();
         model.startQuickPositionEdit(kGeneralInteraction);
         model.viewInteractions = [kGeneralInteraction];
-        model.updateDescriptionPosition(33, 33);
+        model.updateDescriptionPosition(
+          x: 33,
+          y: 33,
+          currentHeight: 0,
+          currentWidth: 0,
+          orientation: Orientation.portrait,
+        );
 
         await model.onLongPressUp();
 
         final updatedInteraction = kGeneralInteraction.copyWith(
-          position: kGeneralInteraction.position.copyWith(
+          position: kGeneralInteraction.renderPosition.copyWith(
             x: 33.0,
             y: 33.0,
           ),
@@ -172,13 +179,19 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         final model = _getViewModel();
         model.startQuickPositionEdit(kGeneralInteraction);
         model.viewInteractions = [kGeneralInteraction];
-        model.updateDescriptionPosition(22, 33);
+        model.updateDescriptionPosition(
+          x: 22,
+          y: 33,
+          currentHeight: 0,
+          currentWidth: 0,
+          orientation: Orientation.portrait,
+        );
 
         await model.onLongPressUp();
 
         final updatedInteractionPosition = model.viewInteractions
             .firstWhere((element) => element.id == kGeneralInteraction.id)
-            .position;
+            .renderPosition;
 
         expect(updatedInteractionPosition.x, 22);
         expect(updatedInteractionPosition.y, 33);

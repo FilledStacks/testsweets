@@ -11,6 +11,7 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
   @override
   Widget build(BuildContext context, WidgetCaptureViewModel model) {
     final size = MediaQuery.of(context).size;
+    final orientation = MediaQuery.of(context).orientation;
     return model.inProgressInteraction == null
         ? const SizedBox()
         : Positioned(
@@ -22,7 +23,12 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
               onPanUpdate: (panEvent) {
                 final x = panEvent.globalPosition.dx;
                 final y = panEvent.globalPosition.dy;
-                model.updateDescriptionPosition(x, y);
+                model.updateDescriptionPosition(
+                    x: x,
+                    y: y,
+                    currentWidth: size.width,
+                    currentHeight: size.height,
+                    orientation: orientation);
               },
               child: InteractionCircle(
                 transparency: model.inProgressInteraction!.visibility ? 1 : 0.5,

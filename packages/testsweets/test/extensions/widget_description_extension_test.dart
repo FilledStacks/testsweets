@@ -10,17 +10,21 @@ void main() {
    and new screenWidth is 500, Should adjust the position to x=250
    ''', () {
         final description = Interaction(
-            name: 'name',
-            originalViewName: '',
-            viewName: '',
-            widgetType: WidgetType.general,
-            position: WidgetPosition(
+          name: 'name',
+          originalViewName: '',
+          viewName: '',
+          widgetType: WidgetType.general,
+          widgetPositions: [
+            WidgetPosition(
               x: 100,
               y: 0,
               capturedDeviceWidth: 200,
               capturedDeviceHeight: 0,
-            ));
-        expect(description.position.responsiveXPosition(500), 229);
+              active: true,
+            )
+          ],
+        );
+        expect(description.renderPosition.responsiveXPosition(500), 229);
       });
     });
     group('responsiveYPosition -', () {
@@ -28,17 +32,21 @@ void main() {
    and new screenWidth is 500, Should adjust the position to y=250
    ''', () {
         final description = Interaction(
-            name: 'name',
-            originalViewName: '',
-            viewName: '',
-            widgetType: WidgetType.general,
-            position: WidgetPosition(
+          name: 'name',
+          originalViewName: '',
+          viewName: '',
+          widgetType: WidgetType.general,
+          widgetPositions: [
+            WidgetPosition(
               y: 100,
               x: 0,
               capturedDeviceWidth: 0,
               capturedDeviceHeight: 200,
-            ));
-        expect(description.position.responsiveYPosition(500), 229);
+              active: true,
+            )
+          ],
+        );
+        expect(description.renderPosition.responsiveYPosition(500), 229);
       });
     });
   });

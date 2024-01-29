@@ -63,7 +63,7 @@ class Interaction with _$Interaction {
         viewName: viewName,
         originalViewName: originalViewName,
         widgetType: WidgetType.view,
-        position: WidgetPosition.empty(),
+        widgetPositions: [WidgetPosition.empty()],
       );
 
   factory Interaction.fromJson(Map<String, dynamic> json) =>
@@ -107,7 +107,7 @@ class Interaction with _$Interaction {
 
     final orientation = _getOrientationFromSize(width: width, height: height);
 
-    final matchingDeviceDetails = _getMatchingInteractionPosition(
+    final matchingDeviceDetails = _getMatchingPositionForSizeAndOrientation(
       width: width,
       height: height,
       orientation: orientation,
@@ -134,12 +134,13 @@ class Interaction with _$Interaction {
   }
 
   bool hasDeviceDetailsForScreenSize({
-    required Size size,
+    required double width,
+    required double height,
     required Orientation orientation,
   }) {
-    final matchingDeviceSize = _getMatchingInteractionPosition(
-      width: size.width,
-      height: size.height,
+    final matchingDeviceSize = _getMatchingPositionForSizeAndOrientation(
+      width: width,
+      height: height,
       orientation: orientation,
     );
 
@@ -177,28 +178,59 @@ class Interaction with _$Interaction {
     return copyWith(widgetPositions: listToReturn);
   }
 
-  Interaction storeDeviceDetails({
-    required Size size,
+  Interaction addNewScreenDetailsAndPosition({
+    required double x,
+    required double y,
+    required double width,
+    required double height,
     required Orientation orientation,
   }) {
     return copyWith(widgetPositions: [
-      ...widgetPositions,
+      ...widgetPositions.map((e) => e.copyWith(active: false)),
       WidgetPosition(
-        // TODO: Complete this before we're done
-        x: 0,
-        y: 0,
-        capturedDeviceWidth: size.width,
-        capturedDeviceHeight: size.height,
+        x: x,
+        y: y,
+        capturedDeviceWidth: width,
+        capturedDeviceHeight: height,
         orientation: orientation,
+        active: true,
       )
     ]);
   }
 
-  Interaction updatePosition({required double x, required double y}) {
+  Interaction updatePosition({
+    required double x,
+    required double y,
+    required double currentWidth,
+    required double currentHeight,
+    required Orientation orientation,
+  }) {
     final mutablePositions = List<WidgetPosition>.from(widgetPositions);
     final positionIndex = mutablePositions.indexOf(renderPosition);
 
-    mutablePositions[positionIndex] = renderPosition.copyWith(x: x, y: y);
+    final bool hasDeviceDetailsForCurrentScreenSize =
+        hasDeviceDetailsForScreenSize(
+      width: currentWidth,
+      height: currentHeight,
+      orientation: orientation,
+    );
+
+    if (!hasDeviceDetailsForCurrentScreenSize) {
+      for (int i = 0; i < mutablePositions.length; i++) {
+        mutablePositions[i] = mutablePositions[i].copyWith(active: false);
+      }
+
+      mutablePositions.add(WidgetPosition(
+        x: x,
+        y: y,
+        capturedDeviceWidth: currentWidth,
+        capturedDeviceHeight: currentHeight,
+        orientation: orientation,
+        active: true,
+      ));
+    } else {
+      mutablePositions[positionIndex] = renderPosition.copyWith(x: x, y: y);
+    }
 
     return copyWith(widgetPositions: mutablePositions);
   }
@@ -208,7 +240,7 @@ class Interaction with _$Interaction {
     return height > width ? Orientation.portrait : Orientation.landscape;
   }
 
-  WidgetPosition? _getMatchingInteractionPosition({
+  WidgetPosition? _getMatchingPositionForSizeAndOrientation({
     required double width,
     required double height,
     required Orientation orientation,
