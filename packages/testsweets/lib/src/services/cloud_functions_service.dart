@@ -92,7 +92,6 @@ class CloudFunctionsService {
       final jsonContent = response.body;
       final descriptionsJson = json.decode(jsonContent) as Iterable;
       return descriptionsJson.map((e) {
-        print('❤️❤️❤️❤️❤️❤️❤️❤️ ${e.toString()}');
         return Interaction.fromJson(e);
       }).toList();
     }

@@ -22,7 +22,7 @@ class DraggableWidget extends ViewModelWidget<WidgetCaptureViewModel> {
               onPanUpdate: (panEvent) {
                 final x = panEvent.globalPosition.dx;
                 final y = panEvent.globalPosition.dy;
-                model.updateDescriptionPosition(x, y, size.width, size.height);
+                model.updateDescriptionPosition(x, y);
               },
               child: InteractionCircle(
                 transparency: model.inProgressInteraction!.visibility ? 1 : 0.5,

@@ -150,11 +150,7 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         final model = _getViewModel();
         model.startQuickPositionEdit(kGeneralInteraction);
         model.viewInteractions = [kGeneralInteraction];
-        model.updateDescriptionPosition(
-            33,
-            33,
-            kGeneralInteraction.position.capturedDeviceWidth,
-            kGeneralInteraction.position.capturedDeviceHeight);
+        model.updateDescriptionPosition(33, 33);
 
         await model.onLongPressUp();
 
@@ -176,11 +172,7 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         final model = _getViewModel();
         model.startQuickPositionEdit(kGeneralInteraction);
         model.viewInteractions = [kGeneralInteraction];
-        model.updateDescriptionPosition(
-            22,
-            33,
-            kGeneralInteraction.position.capturedDeviceWidth,
-            kGeneralInteraction.position.capturedDeviceHeight);
+        model.updateDescriptionPosition(22, 33);
 
         await model.onLongPressUp();
 

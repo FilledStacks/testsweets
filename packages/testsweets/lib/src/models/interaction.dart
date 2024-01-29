@@ -82,18 +82,27 @@ class Interaction with _$Interaction {
 
   @override
   String toString() {
-    return '$name (${widgetType.name}): (${position.x}, ${position.y}) onSrollable:${externalities != null}';
+    if (widgetPositions.any((element) => element.active)) {
+      return '$name (${widgetType.name}): (${renderPosition.x}, ${renderPosition.y})\n';
+    } else {
+      return '$name (${widgetType.name}): Active position not set yet';
+    }
   }
 
   /// Performs a migration using the [capturedDeviceWidth] and [capturedDeviceHeight]
   /// and returns a new [WidgetPosition] to be used in the place of the original.
   Interaction migrate() {
     print(
+        // ignore: deprecated_member_use_from_same_package
         'Migrate: ${position.x},${position.y} size:${position.capturedDeviceWidth}, ${position.capturedDeviceHeight}');
 
+    // ignore: deprecated_member_use_from_same_package
     final width = position.capturedDeviceWidth;
+    // ignore: deprecated_member_use_from_same_package
     final height = position.capturedDeviceHeight;
+    // ignore: deprecated_member_use_from_same_package
     final x = position.x;
+    // ignore: deprecated_member_use_from_same_package
     final y = position.y;
 
     final orientation = _getOrientationFromSize(width: width, height: height);
@@ -122,32 +131,6 @@ class Interaction with _$Interaction {
     }
 
     return this;
-  }
-
-  Orientation _getOrientationFromSize(
-      {required double width, required double height}) {
-    return height > width ? Orientation.portrait : Orientation.landscape;
-  }
-
-  WidgetPosition? _getMatchingInteractionPosition({
-    required double width,
-    required double height,
-    required Orientation orientation,
-  }) {
-    final matchingDeviceDetails = widgetPositions.where(
-      (details) =>
-          details.capturedDeviceWidth == width &&
-          details.capturedDeviceHeight == height &&
-          details.orientation == orientation,
-    );
-
-    if (matchingDeviceDetails.isNotEmpty) {
-      print(
-          'Has match for $width $height $orientation in ${matchingDeviceDetails.first}');
-      return matchingDeviceDetails.first;
-    }
-
-    return null;
   }
 
   bool hasDeviceDetailsForScreenSize({
@@ -194,6 +177,58 @@ class Interaction with _$Interaction {
     return copyWith(widgetPositions: listToReturn);
   }
 
+  Interaction storeDeviceDetails({
+    required Size size,
+    required Orientation orientation,
+  }) {
+    return copyWith(widgetPositions: [
+      ...widgetPositions,
+      WidgetPosition(
+        // TODO: Complete this before we're done
+        x: 0,
+        y: 0,
+        capturedDeviceWidth: size.width,
+        capturedDeviceHeight: size.height,
+        orientation: orientation,
+      )
+    ]);
+  }
+
+  Interaction updatePosition({required double x, required double y}) {
+    final mutablePositions = List<WidgetPosition>.from(widgetPositions);
+    final positionIndex = mutablePositions.indexOf(renderPosition);
+
+    mutablePositions[positionIndex] = renderPosition.copyWith(x: x, y: y);
+
+    return copyWith(widgetPositions: mutablePositions);
+  }
+
+  Orientation _getOrientationFromSize(
+      {required double width, required double height}) {
+    return height > width ? Orientation.portrait : Orientation.landscape;
+  }
+
+  WidgetPosition? _getMatchingInteractionPosition({
+    required double width,
+    required double height,
+    required Orientation orientation,
+  }) {
+    final matchingDeviceDetails = widgetPositions.where(
+      (details) =>
+          details.capturedDeviceWidth == width &&
+          details.capturedDeviceHeight == height &&
+          details.orientation == orientation,
+    );
+
+    if (matchingDeviceDetails.isNotEmpty) {
+      print(
+          'Has match for $width $height $orientation in ${matchingDeviceDetails.first}');
+      return matchingDeviceDetails.first;
+    }
+
+    return null;
+  }
+
   List<WidgetPosition> _setActivePositionInList({
     required List<WidgetPosition> positionsToModify,
     required Size size,
@@ -210,22 +245,5 @@ class Interaction with _$Interaction {
     );
 
     return positionsToModify;
-  }
-
-  Interaction storeDeviceDetails({
-    required Size size,
-    required Orientation orientation,
-  }) {
-    return copyWith(widgetPositions: [
-      ...widgetPositions,
-      WidgetPosition(
-        // TODO: Complete this before we're done
-        x: 0,
-        y: 0,
-        capturedDeviceWidth: size.width,
-        capturedDeviceHeight: size.height,
-        orientation: orientation,
-      )
-    ]);
   }
 }

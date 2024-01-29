@@ -31,6 +31,12 @@ class WidgetCaptureViewModel extends FormViewModel {
   final _notificationController = StreamController<Notification>.broadcast();
   var _captureWidgetStatusEnum = CaptureWidgetState.idle;
 
+  Interaction? inProgressInteraction;
+  bool showInteractionPonts = true;
+
+  ValueNotifier<List<Interaction>> interactionsForViewNotifier =
+      ValueNotifier([]);
+
   static String sideBusyIndicator = 'sideBusyIndicator';
   static String fullScreenBusyIndicator = 'fullScreenBusyIndicator';
 
@@ -62,12 +68,6 @@ class WidgetCaptureViewModel extends FormViewModel {
     _widgetCaptureService.projectId = projectId;
   }
 
-  Interaction? inProgressInteraction;
-  bool showInteractionPonts = true;
-
-  ValueNotifier<List<Interaction>> interactionsForViewNotifier =
-      ValueNotifier([]);
-
   List<Interaction> get viewInteractions => interactionsForViewNotifier.value;
 
   set viewInteractions(List<Interaction> interactions) {
@@ -76,6 +76,52 @@ class WidgetCaptureViewModel extends FormViewModel {
 
   bool get currentViewCaptured =>
       viewInteractions.any((element) => element.widgetType == WidgetType.view);
+
+  Interaction get fullInteraction => inProgressInteraction!.copyWith(
+        name: widgetNameValue!.convertWidgetNameToValidFormat,
+        viewName: _testSweetsRouteTracker.formatedCurrentRoute,
+        originalViewName: _testSweetsRouteTracker.currentRoute,
+      );
+
+  set captureState(CaptureWidgetState captureWidgetStatusEnum) {
+    log.i(captureWidgetStatusEnum);
+    _captureWidgetStatusEnum = captureWidgetStatusEnum;
+    notifyListeners();
+  }
+
+  set setWidgetType(WidgetType widgetType) {
+    log.v('widgetType: $widgetType - currentScreenSize: $currentScreenSize');
+    if (inProgressInteraction == null) {
+      inProgressInteraction = Interaction(
+        widgetPositions: [
+          WidgetPosition(
+            x: currentScreenSize.width / 2,
+            y: currentScreenSize.height / 2,
+            capturedDeviceHeight: currentScreenSize.height,
+            capturedDeviceWidth: currentScreenSize.width,
+            active: true,
+          )
+        ],
+        viewName: '',
+        originalViewName: '',
+        widgetType: widgetType,
+      );
+    } else {
+      inProgressInteraction = inProgressInteraction?.copyWith(
+        widgetType: widgetType,
+      );
+    }
+    notifyListeners();
+  }
+
+  set setVisibilty(bool visible) {
+    log.v(visible);
+
+    showInteractionPonts = visible;
+    notifyListeners();
+  }
+
+  CaptureWidgetState get captureState => _captureWidgetStatusEnum;
 
   /// When open the form create new instance of widgetDescription
   /// if it's null and set [CaptureWidgetState.createWidget]
@@ -110,63 +156,14 @@ class WidgetCaptureViewModel extends FormViewModel {
     );
   }
 
-  set captureState(CaptureWidgetState captureWidgetStatusEnum) {
-    log.i(captureWidgetStatusEnum);
-    _captureWidgetStatusEnum = captureWidgetStatusEnum;
-    notifyListeners();
-  }
-
-  set setWidgetType(WidgetType widgetType) {
-    log.v('widgetType: $widgetType - currentScreenSize: $currentScreenSize');
-    if (inProgressInteraction == null) {
-      inProgressInteraction = Interaction(
-        position: WidgetPosition(
-          x: currentScreenSize.width / 2,
-          y: currentScreenSize.height / 2,
-          capturedDeviceHeight: currentScreenSize.height,
-          capturedDeviceWidth: currentScreenSize.width,
-        ),
-        viewName: '',
-        originalViewName: '',
-        widgetType: widgetType,
-      );
-    } else {
-      inProgressInteraction = inProgressInteraction?.copyWith(
-        widgetType: widgetType,
-      );
-    }
-    notifyListeners();
-  }
-
-  set setVisibilty(bool visible) {
-    log.v(visible);
-
-    showInteractionPonts = visible;
-    notifyListeners();
-  }
-
-  CaptureWidgetState get captureState => _captureWidgetStatusEnum;
-
   void clearWidgetDescriptionForm() {
     log.v('');
     inProgressInteraction = null;
     captureState = CaptureWidgetState.idle;
   }
 
-  void updateDescriptionPosition(
-    double x,
-    double y,
-    double capturedDeviceWidth,
-    double capturedDeviceHeight,
-  ) {
-    inProgressInteraction = inProgressInteraction!.copyWith(
-      position: WidgetPosition(
-        capturedDeviceHeight: capturedDeviceHeight,
-        capturedDeviceWidth: capturedDeviceWidth,
-        x: x,
-        y: y,
-      ),
-    );
+  void updateDescriptionPosition(double x, double y) {
+    inProgressInteraction = inProgressInteraction!.updatePosition(x: x, y: y);
     notifyListeners();
   }
 
@@ -183,8 +180,10 @@ class WidgetCaptureViewModel extends FormViewModel {
 
         viewInteractions.add(capturedView);
       }
-      final interaction = await _widgetCaptureService
-          .saveInteractionInDatabase(fullInteraction);
+
+      final interaction = await _widgetCaptureService.saveInteractionInDatabase(
+        fullInteraction,
+      );
 
       _addSavedInteractionToViewWhenSuccess(interaction);
     } catch (e) {
@@ -198,23 +197,8 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusyForObject(sideBusyIndicator, false);
   }
 
-  Interaction get fullInteraction => inProgressInteraction!.copyWith(
-        name: widgetNameValue!.convertWidgetNameToValidFormat,
-        viewName: _testSweetsRouteTracker.formatedCurrentRoute,
-        originalViewName: _testSweetsRouteTracker.currentRoute,
-      );
-
-  void _addSavedInteractionToViewWhenSuccess(Interaction createdInteraction) {
-    final syncedInteraction =
-        _notifictionExtractor.syncInteractionWithScrollable(createdInteraction);
-
-    viewInteractions.add(syncedInteraction);
-    inProgressInteraction = null;
-    captureState = CaptureWidgetState.idle;
-  }
-
   Future<void> updateInteraction() async {
-    log.i(inProgressInteraction);
+    log.i('InProgressInteraction: $inProgressInteraction');
 
     setBusyForObject(sideBusyIndicator, true);
 
@@ -257,18 +241,6 @@ class WidgetCaptureViewModel extends FormViewModel {
     }
 
     setBusyForObject(sideBusyIndicator, false);
-  }
-
-  void _updateInteractionInViewWhenSuccess(Interaction updatedInteraction) {
-    final syncedInteraction =
-        _notifictionExtractor.syncInteractionWithScrollable(updatedInteraction);
-
-    final indexToUpdate = viewInteractions
-        .indexWhere((element) => syncedInteraction.id == element.id);
-
-    viewInteractions[indexToUpdate] = syncedInteraction;
-    inProgressInteraction = null;
-    captureState = CaptureWidgetState.idle;
   }
 
   Future<void> removeWidgetDescription() async {
@@ -318,7 +290,9 @@ class WidgetCaptureViewModel extends FormViewModel {
   }
 
   Future<void> popupMenuActionSelected(
-      Interaction description, PopupMenuAction popupMenuAction) async {
+    Interaction description,
+    PopupMenuAction popupMenuAction,
+  ) async {
     log.v(popupMenuAction, description);
     inProgressInteraction = description;
 
@@ -389,5 +363,26 @@ class WidgetCaptureViewModel extends FormViewModel {
   void dispose() {
     _notificationController.close();
     super.dispose();
+  }
+
+  void _addSavedInteractionToViewWhenSuccess(Interaction createdInteraction) {
+    final syncedInteraction =
+        _notifictionExtractor.syncInteractionWithScrollable(createdInteraction);
+
+    viewInteractions.add(syncedInteraction);
+    inProgressInteraction = null;
+    captureState = CaptureWidgetState.idle;
+  }
+
+  void _updateInteractionInViewWhenSuccess(Interaction updatedInteraction) {
+    final syncedInteraction =
+        _notifictionExtractor.syncInteractionWithScrollable(updatedInteraction);
+
+    final indexToUpdate = viewInteractions
+        .indexWhere((element) => syncedInteraction.id == element.id);
+
+    viewInteractions[indexToUpdate] = syncedInteraction;
+    inProgressInteraction = null;
+    captureState = CaptureWidgetState.idle;
   }
 }

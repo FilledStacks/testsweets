@@ -25,7 +25,6 @@ class InteractionCircleWithPopupMenu extends StatelessWidget {
     // print('PopupMenu: ' + description.toString());
 
     final model = context.watch<WidgetCaptureViewModel>();
-    final size = MediaQuery.of(context).size;
     return CustomPopupMenu(
       onMoveStart: () => model.startQuickPositionEdit(description),
       onTap: () => model.interactionOnTap(description),
@@ -33,7 +32,7 @@ class InteractionCircleWithPopupMenu extends StatelessWidget {
       onLongPressMoveUpdate: (position) {
         final x = position.globalPosition.dx;
         final y = position.globalPosition.dy;
-        model.updateDescriptionPosition(x, y, size.width, size.height);
+        model.updateDescriptionPosition(x, y);
       },
       menuBuilder: () => PopupMenuContent(
         onMenuAction: (popupMenuAction) async {

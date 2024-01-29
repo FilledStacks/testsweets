@@ -87,8 +87,9 @@ class WidgetCaptureService {
     log.i('originalViewName:$originalViewName projectId:$_projectId');
 
     final viewInteraction = Interaction.view(
-        viewName: originalViewName.convertViewNameToValidFormat,
-        originalViewName: originalViewName);
+      viewName: originalViewName.convertViewNameToValidFormat,
+      originalViewName: originalViewName,
+    );
 
     final interactionId =
         await _cloudFunctionsService.uploadWidgetDescriptionToProject(
