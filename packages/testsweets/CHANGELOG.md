@@ -1,6 +1,21 @@
+### 1.13.0
+
+**New Feature: Responsive bucket based interaction placement**
+
+With this change you now have the ability to explicitly specify interaction points to be at a position based on the screen size and orientation.
+
+If you place your interaction points on a device screen that is 800x1280 then open on a device that's 1024x1800 we will responsively scale your interaction. 
+
+If you find the placement of your responsive scaling not to be accurate enough you can long tap on the interaction and move it to the desired location. This will create a new bucket for 1024x1800 with the updated position. This allows the point to be exactly at the placed position in bucket 1 (800x1280) and bucket 2(1024x1800). 
+
+When you then run the tests on a new device we will find the closest bucket to the `currentScreenSize` and use that bucket to responsively scale the interaction as explained in the beginning. 
+
+Read the full guide [here](.../)
+
+
 ### 1.12.0
 
-New Feature: Capture and Drive mode swap functionality
+**New Feature: Capture and Drive mode swap functionality**
 
 With this change you can now give your tester only a single build and they can swap between capturing and drive mode by tapping on the screen with three fingers and changing the mode between capture and automation. 
 
