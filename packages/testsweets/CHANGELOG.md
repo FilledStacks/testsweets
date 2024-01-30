@@ -10,7 +10,7 @@ If you find the placement of your responsive scaling not to be accurate enough y
 
 When you then run the tests on a new device we will find the closest bucket to the `currentScreenSize` and use that bucket to responsively scale the interaction as explained in the beginning. 
 
-Read the full guide [here](.../)
+Read the full guide [here](https://testsweets-docs.web.app/capturing/dealing-with-different-screen-sizes/)
 
 
 ### 1.12.0
