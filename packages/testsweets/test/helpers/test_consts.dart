@@ -78,7 +78,11 @@ final kGeneralInteractionWithZeroOffset = Interaction(
     originalViewName: 'originalViewName',
     name: 'widgetName',
     widgetType: WidgetType.general,
-    widgetPositions: [WidgetPosition.empty()]);
+    widgetPositions: [
+      WidgetPosition.empty().copyWith(
+        active: true,
+      )
+    ]);
 
 final kGeneralInteraction = Interaction(
   originalViewName: '/',
@@ -123,6 +127,7 @@ final kScrollableInteraction = Interaction(
       y: 20,
       capturedDeviceWidth: 0,
       capturedDeviceHeight: 0,
+      active: true,
     )
   ],
   widgetType: WidgetType.scrollable,
@@ -138,6 +143,7 @@ final kScrollableInteraction2 = Interaction(
       y: 25,
       capturedDeviceWidth: 0,
       capturedDeviceHeight: 0,
+      active: true,
     )
   ],
   widgetType: WidgetType.scrollable,
@@ -166,7 +172,12 @@ final kTopLeftVerticalScrollableDescription = ScrollableDescription(
     axis: Axis.vertical,
     maxScrollExtentByPixels: 0,
     scrollExtentByPixels: 100,
-    rect: SerializableRect.fromPoints(Offset(0, 0), Offset(22, 22)));
+    rect: SerializableRect.fromPoints(
+        Offset(0, 0),
+        Offset(
+          22,
+          22,
+        )));
 final kFullScreenVerticalScrollableDescription = ScrollableDescription(
     axis: Axis.vertical,
     maxScrollExtentByPixels: 2000,

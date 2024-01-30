@@ -24,13 +24,16 @@ void main() {
           )
         ]);
         expect(
-            result[1].renderPosition,
-            WidgetPosition(
-              x: 2,
-              y: 2,
-              capturedDeviceHeight: 0,
-              capturedDeviceWidth: 0,
-            ));
+          result[1].renderPosition,
+          WidgetPosition(
+            x: 2,
+            y: 2,
+            capturedDeviceHeight: 0,
+            capturedDeviceWidth: 0,
+            orientation: Orientation.landscape,
+            active: true,
+          ),
+        );
       });
     });
   });

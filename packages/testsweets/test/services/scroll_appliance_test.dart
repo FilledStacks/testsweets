@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:testsweets/src/services/scroll_appliance.dart';
 import 'package:testsweets/testsweets.dart';
@@ -130,24 +131,21 @@ void main() {
         expect(biggestScroll, kFullScreenVerticalScrollableDescription);
       });
 
-      test('''
-When moving a touchable that have one externalities from 
-the top of a list to a normal canvas,
- Should remove its externalities''', () {
+      test(
+          'When moving a touchable that have one externalities from the top of a list to a normal canvas, Should remove its externalities',
+          () {
         final service = ScrollAppliance();
-        final touchableInteractionWithOneExternalities =
-            kTouchableInteraction.copyWith(
-          // Changed its position
-          position: WidgetPosition(
-            x: 400,
-            y: 400,
-            capturedDeviceHeight: 0,
-            capturedDeviceWidth: 0,
-          ),
-
-          // This list captured before changing the position
-          externalities: {kTopLeftVerticalScrollableDescription},
-        );
+        final touchableInteractionWithOneExternalities = kTouchableInteraction
+            .updatePosition(
+          x: 400,
+          y: 400,
+          currentWidth: 0,
+          currentHeight: 0,
+          orientation: Orientation.portrait,
+        )
+            .copyWith(
+                // This list captured before changing the position
+                externalities: {kTopLeftVerticalScrollableDescription});
 
         final result = service.applyScrollableOnInteraction(
           [kTopLeftVerticalScrollableDescription],

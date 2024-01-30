@@ -124,10 +124,9 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
 
         expect(model.captureState, CaptureWidgetState.idle);
       });
-      test('''When in quickPositionEdit mode and user trigger onLongPressUp
-       without changing the interaction position,
-       Should call updateWidgetDescription from WidgetCaptureService 
-       with the same interaction without changing its position''', () async {
+      test(
+          'When in quickPositionEdit mode and user trigger onLongPressUp without changing the interaction position, Should call updateWidgetDescription from WidgetCaptureService with the same interaction without changing its position',
+          () async {
         final service = getAndRegisterWidgetCaptureService();
 
         final model = _getViewModel();
@@ -141,10 +140,9 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
         ));
       });
 
-      test('''When in quickPositionEdit mode and user trigger onLongPressUp
-       while changeing the widget position to new place,
-       Should call updateWidgetDescription from WidgetCaptureService 
-       with the interaction new position''', () async {
+      test(
+          'When in quickPositionEdit mode and user trigger onLongPressUp while changeing the widget position to new place,Should call updateWidgetDescription from WidgetCaptureService with the interaction new position',
+          () async {
         final service = getAndRegisterWidgetCaptureService();
 
         final model = _getViewModel();
@@ -160,11 +158,12 @@ When capture a new intercation, Should sync with any scrollable underneath it ''
 
         await model.onLongPressUp();
 
-        final updatedInteraction = kGeneralInteraction.copyWith(
-          position: kGeneralInteraction.renderPosition.copyWith(
-            x: 33.0,
-            y: 33.0,
-          ),
+        final updatedInteraction = kGeneralInteraction.updatePosition(
+          x: 33,
+          y: 33,
+          currentWidth: 0,
+          currentHeight: 0,
+          orientation: Orientation.portrait,
         );
 
         verify(service.updateInteractionInDatabase(
