@@ -12,39 +12,45 @@ class ScrollableFinder {
     final scrollablesOnScreen =
         find.byType(Scrollable).hitTestable().evaluate();
 
-    log.v('scrollablesOnScreen: $scrollablesOnScreen');
+    log.v('scrollablesFound: ${scrollablesOnScreen.length}');
     final extractedScrollableDescriptions = scrollablesOnScreen
         .map((item) {
           try {
             RenderBox renderBox = item.findRenderObject() as RenderBox;
 
-            log.v('RenderBox: $renderBox');
+            // log.v('RenderBox: $renderBox');
             Offset globalPostion = renderBox.localToGlobal(Offset.zero);
 
-            log.v('globalPosition: $globalPostion');
+            // log.v('globalPosition: $globalPostion');
 
-            final position = (item.widget as Scrollable).controller?.position;
+            final position =
+                (item.widget as Scrollable).controller?.positions.first ??
+                    (item.widget as Scrollable).controller?.position;
 
             if (position != null) {
               final scrollExtentByPixels = position.pixels;
               final maxScrollExtentByPixels = position.maxScrollExtent;
               final axis = position.axis;
               final rect = SerializableRect.fromPoints(
-                  globalPostion,
-                  globalPostion.translate(
-                    renderBox.size.width,
-                    renderBox.size.height,
-                  ));
+                globalPostion,
+                globalPostion.translate(
+                  renderBox.size.width,
+                  renderBox.size.height,
+                ),
+              );
+
+              log.v('Scrollable found ✅');
 
               return ScrollableDescription(
-                  axis: axis,
-                  rect: rect,
-                  scrollExtentByPixels: scrollExtentByPixels,
-                  maxScrollExtentByPixels: maxScrollExtentByPixels);
-            } else {
-              log.v(
-                'scroll controller is null, how are we gonna get past this?',
+                axis: axis,
+                rect: rect,
+                scrollExtentByPixels: scrollExtentByPixels,
+                maxScrollExtentByPixels: maxScrollExtentByPixels,
               );
+            } else {
+              log.v('Scrollable failed ❌');
+
+              return null;
             }
           } catch (e) {
             log.e(e);

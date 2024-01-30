@@ -4,6 +4,7 @@ import 'package:testsweets/testsweets.dart';
 
 extension WidgetPositionExtension on WidgetPosition {
   Offset get toOffset => Offset(x, y);
+
   WidgetPosition withScrollable(ScrollableDescription scrollable) {
     final scrollingPixels = scrollable.scrollExtentByPixels;
 
@@ -11,17 +12,6 @@ extension WidgetPositionExtension on WidgetPosition {
       return this.copyWith(x: x, y: y + scrollingPixels);
     } else {
       return this.copyWith(x: x + scrollingPixels, y: y);
-    }
-  }
-
-  WidgetPosition applyScroll(ScrollableDescription scrollableDescription) {
-    switch (scrollableDescription.axis) {
-      case Axis.vertical:
-        return this
-            .copyWith(yDeviation: scrollableDescription.scrollExtentByPixels);
-      case Axis.horizontal:
-        return this
-            .copyWith(xDeviation: scrollableDescription.scrollExtentByPixels);
     }
   }
 

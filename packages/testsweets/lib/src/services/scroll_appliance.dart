@@ -12,7 +12,6 @@ class ScrollAppliance {
     Iterable<ScrollableDescription> scrollables,
     Interaction interaction,
   ) {
-    log.v(interaction);
     final scrollablesBelowInteraction = scrollables.where(
       (element) =>
           element.rect.contains(
@@ -20,6 +19,10 @@ class ScrollAppliance {
           ) &&
           element.maxScrollExtentByPixels != double.infinity,
     );
+
+    log.v(
+        '💡💡 Interaction at (${interaction.renderPosition.x}, ${interaction.renderPosition.y}) overlaps no scroll views.');
+    log.v('👉 Scrollables are 👉 ---------- \n${scrollables.join('\n')}');
 
     interaction = interaction.copyWith(externalities: null);
 
@@ -34,7 +37,9 @@ class ScrollAppliance {
       );
     } else {
       return storeDescriptionInExternalities(
-          scrollablesBelowInteraction, interaction);
+        scrollablesBelowInteraction,
+        interaction,
+      );
     }
   }
 
@@ -51,14 +56,17 @@ class ScrollAppliance {
       return interaction;
     }
 
-    final biggestScrollable =
-        findBiggestScrollable(scrollablesBelowInteraction);
+    final biggestScrollable = findBiggestScrollable(
+      scrollablesBelowInteraction,
+    );
 
     interaction = interaction.copyWith(
       externalities: {
         biggestScrollable.transferBy(biggestScrollable),
       },
-      position: interaction.renderPosition.withScrollable(biggestScrollable),
+      widgetPositions: [
+        interaction.renderPosition.withScrollable(biggestScrollable)
+      ],
     );
     return interaction;
   }
@@ -76,7 +84,9 @@ class ScrollAppliance {
           ...interaction.externalities ?? {},
           scrollable.transferBy(biggestScrollable),
         },
-        position: interaction.renderPosition.withScrollable(scrollable),
+        widgetPositions: [
+          interaction.renderPosition.withScrollable(scrollable)
+        ],
       );
     }
     return interaction;

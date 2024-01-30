@@ -48,12 +48,18 @@ class DriverLayoutViewModel extends BaseViewModel {
         (element) => element.widgetType == WidgetType.view,
       );
 
+  // TODO (Refactor): This is absolutely terrible, I should not be doing this
+  // but until Stacked gets a better snack bar implementation I can't do it any
+  // other way.
   Future<void> initialise(BuildContext context) async {
     _snackbarService.setBuildContext(context);
 
     setBusy(true);
     try {
-      await _widgetCaptureService.loadWidgetDescriptionsForProject();
+      await _widgetCaptureService.loadWidgetDescriptionsForProject(
+        size: MediaQuery.of(context).size,
+        orientation: MediaQuery.of(context).orientation,
+      );
     } catch (e) {
       log.e('Could not get widgetDescriptions: $e');
     }

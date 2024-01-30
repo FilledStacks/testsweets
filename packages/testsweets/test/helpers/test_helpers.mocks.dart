@@ -155,23 +155,31 @@ class MockWidgetCaptureService extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
-  set addWidgetDescriptionToMap(_i3.Interaction? description) =>
-      super.noSuchMethod(
-        Invocation.setter(
-          #addWidgetDescriptionToMap,
-          description,
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
-  _i11.Future<void> loadWidgetDescriptionsForProject() => (super.noSuchMethod(
+  _i11.Future<void> loadWidgetDescriptionsForProject({
+    required _i6.Size? size,
+    required _i8.Orientation? orientation,
+  }) =>
+      (super.noSuchMethod(
         Invocation.method(
           #loadWidgetDescriptionsForProject,
           [],
+          {
+            #size: size,
+            #orientation: orientation,
+          },
         ),
         returnValue: _i11.Future<void>.value(),
         returnValueForMissingStub: _i11.Future<void>.value(),
       ) as _i11.Future<void>);
+  @override
+  void addWidgetDescriptionToMap(_i3.Interaction? description) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #addWidgetDescriptionToMap,
+          [description],
+        ),
+        returnValueForMissingStub: null,
+      );
   @override
   _i11.Future<_i3.Interaction> saveInteractionInDatabase(
           _i3.Interaction? interaction) =>

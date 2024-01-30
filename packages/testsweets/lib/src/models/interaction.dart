@@ -83,7 +83,7 @@ class Interaction with _$Interaction {
   @override
   String toString() {
     if (widgetPositions.any((element) => element.active)) {
-      return '$name (${widgetType.name}): (${renderPosition.x}, ${renderPosition.y})\n';
+      return '$name (${widgetType.name}): (${renderPosition.x}, ${renderPosition.y}) - $externalities\n';
     } else {
       return '$name (${widgetType.name}): Active position not set yet';
     }
@@ -151,11 +151,11 @@ class Interaction with _$Interaction {
     required Size size,
     required Orientation orientation,
   }) {
-    final savedPositions = List<WidgetPosition>.from(widgetPositions);
+    final mutablePositions = List<WidgetPosition>.from(widgetPositions);
 
     List<WidgetPosition> listToReturn;
 
-    final positionsForSpecificOrientation = savedPositions
+    final positionsForSpecificOrientation = mutablePositions
         .where((widgetPosition) => widgetPosition.orientation == orientation);
 
     final hasPositionsForOrientation =
@@ -168,7 +168,7 @@ class Interaction with _$Interaction {
       );
     } else {
       listToReturn = _setActivePositionInList(
-        positionsToModify: savedPositions,
+        positionsToModify: mutablePositions,
         size: size,
       );
     }
@@ -194,6 +194,32 @@ class Interaction with _$Interaction {
         active: true,
       )
     ]);
+  }
+
+  Interaction applyScroll({
+    required ScrollableDescription scrollableDescription,
+  }) {
+    final mutablePositions = List<WidgetPosition>.from(widgetPositions);
+    final positionIndex = mutablePositions.indexOf(renderPosition);
+
+    WidgetPosition positionWithScrollApplied;
+
+    switch (scrollableDescription.axis) {
+      case Axis.vertical:
+        positionWithScrollApplied = renderPosition.copyWith(
+          yDeviation: scrollableDescription.scrollExtentByPixels,
+        );
+        break;
+      case Axis.horizontal:
+        positionWithScrollApplied = renderPosition.copyWith(
+          xDeviation: scrollableDescription.scrollExtentByPixels,
+        );
+        break;
+    }
+
+    mutablePositions[positionIndex] = positionWithScrollApplied;
+
+    return copyWith(widgetPositions: mutablePositions);
   }
 
   Interaction updatePosition({

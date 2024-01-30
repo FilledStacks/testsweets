@@ -40,6 +40,8 @@ class NotificationExtractor {
     ScrollableDescription scrollableDescription,
     List<Interaction> viewInteractions,
   ) {
+    log.i(
+        'scrollableDescription: ${scrollableDescription.toJson()}\n${viewInteractions.join('\n')} ---------- \n\n ');
     lastScrollEvent = scrollableDescription;
 
     _reactiveScrollable.currentScrollableDescription = scrollableDescription;

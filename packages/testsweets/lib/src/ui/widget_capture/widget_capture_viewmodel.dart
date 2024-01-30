@@ -129,6 +129,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     captureState = CaptureWidgetState.createWidget;
   }
 
+  // TODO (Refactor): The fuck out of there with this nonsense!
   void setSnackbarContext(BuildContext context) {
     _snackbarService.setBuildContext(context);
   }
@@ -138,7 +139,10 @@ class WidgetCaptureViewModel extends FormViewModel {
     setBusyForObject(fullScreenBusyIndicator, true);
 
     try {
-      await _widgetCaptureService.loadWidgetDescriptionsForProject();
+      await _widgetCaptureService.loadWidgetDescriptionsForProject(
+        size: currentScreenSize,
+        orientation: orientation,
+      );
       loadCurrentRouteInteractions();
     } catch (error) {
       log.e('Could not get widgetDescriptions: $error');

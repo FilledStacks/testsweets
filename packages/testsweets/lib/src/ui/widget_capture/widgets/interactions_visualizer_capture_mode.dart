@@ -19,7 +19,6 @@ class InteractionsVisualizerCaptureMode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final orientation = MediaQuery.of(context).orientation;
 
     return ValueListenableBuilder<List<Interaction>>(
         valueListenable: descriptionsForViewNotifier,
@@ -27,10 +26,6 @@ class InteractionsVisualizerCaptureMode extends StatelessWidget {
           return Stack(
             children: [
               ...descriptionsForView
-                  .map((interaction) => interaction.setActivePosition(
-                        orientation: orientation,
-                        size: size,
-                      ))
                   .where(InteractionUtils.notView)
                   .where((interaction) =>
                       InteractionUtils.visibleOnScreen(interaction, size))

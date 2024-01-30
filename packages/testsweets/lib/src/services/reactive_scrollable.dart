@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
-import 'package:testsweets/src/extensions/widget_position_extension.dart';
 import 'package:testsweets/src/ui/shared/utils.dart';
 import 'package:testsweets/testsweets.dart';
 
@@ -20,14 +19,20 @@ class ReactiveScrollable {
 
         /// This fixes the nested scrollables issue where the first scrollable
         /// deviate the second one's offset
-        Offset offsetDeviation =
-            calculateOffsetDeviation(currentScrollableDescription, interaction);
+        Offset offsetDeviation = calculateOffsetDeviation(
+          currentScrollableDescription,
+          interaction,
+        );
+
         return interaction.externalities!
             .where((sd) => sd.axis == currentScrollableDescription.axis)
             .any(
           (interacrionSd) {
             final distance = _distanceSquaredBetweenScrollableAndExternal(
-                interacrionSd, offsetDeviation, currentScrollableDescription);
+              interacrionSd,
+              offsetDeviation,
+              currentScrollableDescription,
+            );
 
             final included = distance < SCROLLABLE_DETECTION_FORGIVENESS;
             return included;
@@ -63,8 +68,10 @@ class ReactiveScrollable {
   Iterable<Interaction> moveInteractionsWithScrollable(
     Iterable<Interaction> affectedInteractions,
   ) {
-    return affectedInteractions.map((interaction) => interaction.copyWith(
-        position: interaction.renderPosition
-            .applyScroll(currentScrollableDescription)));
+    return affectedInteractions.map((interaction) {
+      return interaction.applyScroll(
+        scrollableDescription: currentScrollableDescription,
+      );
+    });
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/enums/widget_type.dart';
@@ -29,7 +30,10 @@ void main() {
         final cloudFunctionsService = getAndRegisterCloudFunctionsService();
         final _service = _getService;
 
-        await _service.loadWidgetDescriptionsForProject();
+        await _service.loadWidgetDescriptionsForProject(
+          size: Size.zero,
+          orientation: Orientation.portrait,
+        );
         verify(cloudFunctionsService.getWidgetDescriptionForProject(
             projectId: 'projectId'));
       });
@@ -69,7 +73,10 @@ void main() {
             ]);
         final _service = _getService;
 
-        await _service.loadWidgetDescriptionsForProject();
+        await _service.loadWidgetDescriptionsForProject(
+          size: Size.zero,
+          orientation: Orientation.portrait,
+        );
 
         expect(_service.widgetDescriptionMap.containsKey('login_view'), true);
         expect(_service.widgetDescriptionMap.containsKey('signup_view'), true);
@@ -109,7 +116,10 @@ void main() {
             ]);
         final _service = _getService;
 
-        await _service.loadWidgetDescriptionsForProject();
+        await _service.loadWidgetDescriptionsForProject(
+          size: Size.zero,
+          orientation: Orientation.portrait,
+        );
 
         expect(_service.widgetDescriptionMap['login_view']?.length, 2);
       });
@@ -136,9 +146,10 @@ void main() {
 
         final cloudFunctionsService = getAndRegisterCloudFunctionsService();
         final _service = _getService;
-        _service.addWidgetDescriptionToMap = Interaction.view(
-            viewName: 'OriginalLoginView',
-            originalViewName: 'OriginalLoginView');
+        _service.addWidgetDescriptionToMap(Interaction.view(
+          viewName: 'OriginalLoginView',
+          originalViewName: 'OriginalLoginView',
+        ));
         await _service.saveInteractionInDatabase(description);
 
         verify(cloudFunctionsService.uploadWidgetDescriptionToProject(
@@ -193,7 +204,10 @@ void main() {
             ]);
         final _service = _getService;
 
-        await _service.loadWidgetDescriptionsForProject();
+        await _service.loadWidgetDescriptionsForProject(
+          size: Size.zero,
+          orientation: Orientation.portrait,
+        );
 
         bool isViewAlreadyExist =
             _service.checkCurrentViewIfAlreadyCaptured('/');
@@ -206,19 +220,21 @@ void main() {
           () {
         final _service = _getService;
 
-        _service.addWidgetDescriptionToMap = Interaction(
-          originalViewName: '/new_view',
-          viewName: 'newView',
-          name: 'button',
-          widgetType: WidgetType.touchable,
-          widgetPositions: [
-            WidgetPosition(
-              x: 0,
-              y: 0,
-              capturedDeviceHeight: 0,
-              capturedDeviceWidth: 0,
-            )
-          ],
+        _service.addWidgetDescriptionToMap(
+          Interaction(
+            originalViewName: '/new_view',
+            viewName: 'newView',
+            name: 'button',
+            widgetType: WidgetType.touchable,
+            widgetPositions: [
+              WidgetPosition(
+                x: 0,
+                y: 0,
+                capturedDeviceHeight: 0,
+                capturedDeviceWidth: 0,
+              )
+            ],
+          ),
         );
         expect(_service.widgetDescriptionMap['/new_view']!.length, 1);
       });
@@ -227,19 +243,21 @@ void main() {
           () {
         final _service = _getService;
 
-        _service.addWidgetDescriptionToMap = Interaction(
-          originalViewName: '/new_view',
-          viewName: 'newView',
-          name: 'button',
-          widgetType: WidgetType.touchable,
-          widgetPositions: [
-            WidgetPosition(
-              x: 0,
-              y: 0,
-              capturedDeviceHeight: 0,
-              capturedDeviceWidth: 0,
-            )
-          ],
+        _service.addWidgetDescriptionToMap(
+          Interaction(
+            originalViewName: '/new_view',
+            viewName: 'newView',
+            name: 'button',
+            widgetType: WidgetType.touchable,
+            widgetPositions: [
+              WidgetPosition(
+                x: 0,
+                y: 0,
+                capturedDeviceHeight: 0,
+                capturedDeviceWidth: 0,
+              )
+            ],
+          ),
         );
         expect(_service.widgetDescriptionMap['/new_view']!.length, 1);
       });
@@ -248,7 +266,7 @@ void main() {
           () {
         final _service = _getService;
 
-        _service.addWidgetDescriptionToMap = Interaction(
+        _service.addWidgetDescriptionToMap(Interaction(
           originalViewName: '/new_view',
           viewName: 'newView',
           name: 'button',
@@ -261,8 +279,9 @@ void main() {
               capturedDeviceWidth: 0,
             )
           ],
-        );
-        _service.addWidgetDescriptionToMap = Interaction(
+        ));
+
+        _service.addWidgetDescriptionToMap(Interaction(
           originalViewName: '/new_view',
           viewName: 'newView',
           name: 'inputField',
@@ -275,7 +294,7 @@ void main() {
               capturedDeviceWidth: 0,
             )
           ],
-        );
+        ));
         expect(_service.widgetDescriptionMap['/new_view']!.length, 2);
       });
     });
@@ -402,7 +421,10 @@ void main() {
             ]);
         final _service = _getService;
 
-        await _service.loadWidgetDescriptionsForProject();
+        await _service.loadWidgetDescriptionsForProject(
+          size: Size.zero,
+          orientation: Orientation.portrait,
+        );
 
         final result =
             _service.getDescriptionsForView(currentRoute: '/home_view');
@@ -470,7 +492,10 @@ void main() {
             ]);
         final _service = _getService;
 
-        await _service.loadWidgetDescriptionsForProject();
+        await _service.loadWidgetDescriptionsForProject(
+          size: Size.zero,
+          orientation: Orientation.portrait,
+        );
 
         final result =
             _service.getDescriptionsForView(currentRoute: '/home_view0');
@@ -555,7 +580,10 @@ void main() {
             ]);
         final _service = _getService;
 
-        await _service.loadWidgetDescriptionsForProject();
+        await _service.loadWidgetDescriptionsForProject(
+          size: Size.zero,
+          orientation: Orientation.portrait,
+        );
 
         final result =
             _service.getDescriptionsForView(currentRoute: '/home_view1');
@@ -606,7 +634,10 @@ void main() {
         final _service = _getService;
 
         // load the project keys first
-        await _service.loadWidgetDescriptionsForProject();
+        await _service.loadWidgetDescriptionsForProject(
+          size: Size.zero,
+          orientation: Orientation.portrait,
+        );
 
         // update [kWidgetDescription] key
         await _service.updateInteractionInDatabase(

@@ -27,18 +27,26 @@ class WidgetCaptureService {
   }
 
   /// Gets all the widget descriptions the project and stores them in a map
-  Future<void> loadWidgetDescriptionsForProject() async {
-    final widgetDescriptions = await _cloudFunctionsService
-        .getWidgetDescriptionForProject(projectId: _projectId);
+  Future<void> loadWidgetDescriptionsForProject({
+    required Size size,
+    required Orientation orientation,
+  }) async {
+    final widgetDescriptions =
+        await _cloudFunctionsService.getWidgetDescriptionForProject(
+      projectId: _projectId,
+    );
 
     widgetDescriptionMap.clear();
 
     for (final description in widgetDescriptions) {
-      addWidgetDescriptionToMap = description;
+      addWidgetDescriptionToMap(description.setActivePosition(
+        size: size,
+        orientation: orientation,
+      ));
     }
   }
 
-  set addWidgetDescriptionToMap(Interaction description) {
+  void addWidgetDescriptionToMap(Interaction description) {
     log.v(description);
     if (widgetDescriptionMap.containsKey(description.originalViewName)) {
       widgetDescriptionMap[description.originalViewName]?.add(description);
