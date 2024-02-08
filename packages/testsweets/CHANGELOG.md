@@ -1,3 +1,8 @@
+### 1.14.0
+
+Adds a double tap on the route banner th bring up the mode swap UI
+
+
 ### 1.13.0
 
 **New Feature: Responsive bucket based interaction placement**

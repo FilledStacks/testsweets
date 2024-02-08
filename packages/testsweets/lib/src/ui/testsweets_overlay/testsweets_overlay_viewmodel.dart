@@ -38,4 +38,9 @@ class TestSweetsOverlayViewModel extends BaseViewModel {
     _localConfigService.setCaptureMode(value);
     rebuildUi();
   }
+
+  void toggleOverlayUI() {
+    _showModeSwapUI = !_showModeSwapUI;
+    rebuildUi();
+  }
 }

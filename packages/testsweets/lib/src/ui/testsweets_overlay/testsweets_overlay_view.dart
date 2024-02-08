@@ -43,11 +43,20 @@ class TestSweetsOverlayView extends StackedView<TestSweetsOverlayViewModel> {
               initialEntries: [
                 OverlayEntry(
                     builder: (_) => tsCaptureModeActive
-                        ? WidgetCaptureView(child: child, projectId: projectId)
-                        : DriverLayoutView(child: child, projectId: projectId)),
+                        ? WidgetCaptureView(
+                            child: child,
+                            projectId: projectId,
+                            onRouteBannerLongPress: viewModel.toggleOverlayUI,
+                          )
+                        : DriverLayoutView(
+                            child: child,
+                            projectId: projectId,
+                            onRouteBannerLongPress: viewModel.toggleOverlayUI,
+                          )),
                 OverlayEntry(
                   builder: (_) => viewModel.showModeSwapUI
                       ? ModeSwapBanner(
+                          onClosePressed: viewModel.toggleOverlayUI,
                           onCaptureMode: viewModel.setCaptureMode,
                           captureModeActive: viewModel.captureMode,
                           showRestartMessage: viewModel.showRestartMessage,

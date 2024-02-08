@@ -4,12 +4,14 @@ import 'package:testsweets/src/ui/shared/shared_styles.dart';
 
 class ModeSwapBanner extends StatelessWidget {
   final Function(bool) onCaptureMode;
+  final Function()? onClosePressed;
   final bool captureModeActive;
   final bool showRestartMessage;
   const ModeSwapBanner({
     Key? key,
     required this.onCaptureMode,
     required this.captureModeActive,
+    required this.onClosePressed,
     this.showRestartMessage = false,
   }) : super(key: key);
 
@@ -28,6 +30,23 @@ class ModeSwapBanner extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: onClosePressed,
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 10, top: 10),
+                      decoration: BoxDecoration(
+                        color: kcSubtext,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 4),
+                      child:
+                          Text('Close', style: TextStyle(color: Colors.white)),
+                    ),
+                  ),
+                ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
