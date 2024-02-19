@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:testsweets/src/locator.dart';
+import 'package:testsweets/src/services/local_config_service.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 
 class TestSweetsNavigatorObserver extends NavigatorObserver {
-  final routeTracker = locator<TestSweetsRouteTracker>();
+  final _localConfigService = locator<LocalConfigService>();
+  final _routeTracker = locator<TestSweetsRouteTracker>();
 
   /// Used with multiple navigators to indicate which navigator
   /// is performig navigations at this point.
@@ -20,26 +22,35 @@ class TestSweetsNavigatorObserver extends NavigatorObserver {
 
   @override
   void didPop(Route route, Route? previousRoute) {
-    routeTracker.setCurrentRoute(_getRouteName(
+    if (!_localConfigService.enabled) return;
+
+    _routeTracker.setCurrentRoute(_getRouteName(
       previousRoute,
       callingFunction: 'didPop',
     ));
+
     super.didPop(route, previousRoute);
   }
 
   @override
   void didPush(Route route, Route? previousRoute) {
-    routeTracker.setCurrentRoute(
+    if (!_localConfigService.enabled) return;
+
+    _routeTracker.setCurrentRoute(
       _getRouteName(route, callingFunction: 'didPush'),
     );
+
     super.didPush(route, previousRoute);
   }
 
   @override
   void didReplace({Route? newRoute, Route? oldRoute}) {
-    routeTracker.setCurrentRoute(
+    if (!_localConfigService.enabled) return;
+
+    _routeTracker.setCurrentRoute(
       _getRouteName(newRoute, callingFunction: 'didReplace'),
     );
+
     super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
   }
 
@@ -49,10 +60,14 @@ class TestSweetsNavigatorObserver extends NavigatorObserver {
     required int index,
     required String viewName,
   }) {
-    routeTracker.changeRouteIndex(viewName, index);
+    if (!_localConfigService.enabled) return;
+
+    _routeTracker.changeRouteIndex(viewName, index);
   }
 
   String _getRouteName(Route? route, {required String callingFunction}) {
+    if (!_localConfigService.enabled) return 'NoView';
+
     final routeName = route?.settings.name;
     print('🚂 ${source ?? ''} - $callingFunction - routeName: $routeName');
     return routeName ?? 'NoView';

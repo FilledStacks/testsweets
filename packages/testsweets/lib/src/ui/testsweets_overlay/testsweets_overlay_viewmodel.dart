@@ -11,6 +11,8 @@ class TestSweetsOverlayViewModel extends BaseViewModel {
   final bool startingCaptureValue;
   TestSweetsOverlayViewModel({required this.startingCaptureValue});
 
+  bool get enabled => _localConfigService.enabled;
+
   bool _showModeSwapUI = false;
   bool get showModeSwapUI => _showModeSwapUI;
 

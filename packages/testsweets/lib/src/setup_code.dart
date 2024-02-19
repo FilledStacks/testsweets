@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
@@ -26,37 +27,43 @@ const bool FORCE_CAPTURE_MODE = bool.fromEnvironment(
   defaultValue: false,
 );
 
+const bool TEST_SWEETS_ENABLED = bool.fromEnvironment(
+  'TEST_SWEETS_ENABLED',
+  defaultValue: !kReleaseMode,
+);
+
 bool get tsCaptureModeActive =>
     FORCE_CAPTURE_MODE || locator<LocalConfigService>().captureMode;
 
-Future<void> setupTestSweets() async {
+Future<void> setupTestSweets({bool enabled = TEST_SWEETS_ENABLED}) async {
   await setupLocator();
 
-  if (!tsCaptureModeActive) {
-    enableFlutterDriverExtension(
-      handler: (message) async {
-        ///
-        /// take this message and await till the appropriate notification
-        /// arrives to the  notification listener of the driver layout
-        ///
-        if (message != null) {
-          final testIntegrity = locator<TestIntegrity>();
+  await locator<LocalConfigService>().setEnable(enabled);
 
-          testIntegrity.triggeringNotificationType =
-              _getNotificationTypeFromCommandMessage(message);
+  if (!enabled || tsCaptureModeActive) return;
 
-          return await testIntegrity
-              .trueIfCommandVerifiedOrFalseIfTimeout(
-                TEST_INTEGRITY_TIMEOUT,
-              )
-              .then<String>(
-                (value) => value.toString(),
-              );
-        }
-        return 'message is null $message';
-      },
-    );
-  }
+  enableFlutterDriverExtension(
+    handler: (message) async {
+      ///
+      /// take this message and await till the appropriate notification
+      /// arrives to the  notification listener of the driver layout
+      ///
+      if (message == null) return 'message is null $message';
+
+      final testIntegrity = locator<TestIntegrity>();
+
+      testIntegrity.triggeringNotificationType =
+          _getNotificationTypeFromCommandMessage(message);
+
+      return await testIntegrity
+          .trueIfCommandVerifiedOrFalseIfTimeout(
+            TEST_INTEGRITY_TIMEOUT,
+          )
+          .then<String>(
+            (value) => value.toString(),
+          );
+    },
+  );
 }
 
 Type _getNotificationTypeFromCommandMessage(String message) {
@@ -70,6 +77,7 @@ Type _getNotificationTypeFromCommandMessage(String message) {
       return KeepAliveNotification;
     default:
       throw Exception(
-          'We couldn\'t extract the command from this message: $message');
+        'We couldn\'t extract the command from this message: $message',
+      );
   }
 }

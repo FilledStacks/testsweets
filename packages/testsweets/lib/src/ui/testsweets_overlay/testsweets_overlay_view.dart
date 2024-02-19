@@ -24,8 +24,10 @@ class TestSweetsOverlayView extends StackedView<TestSweetsOverlayViewModel> {
     required this.child,
     required this.projectId,
     @Deprecated(
-        'Capture mode can be updated by tapping on screen with 3 fingers. This property is not required anymore.')
+      'Capture mode can be updated by tapping on screen with 3 fingers. This property is not required anymore.',
+    )
     this.captureWidgets,
+    @Deprecated('Now we get this value from setupTestSweets function.')
     this.enabled = kDebugMode,
   }) : super(key: key);
 
@@ -35,7 +37,7 @@ class TestSweetsOverlayView extends StackedView<TestSweetsOverlayViewModel> {
     TestSweetsOverlayViewModel viewModel,
     Widget? _,
   ) {
-    return enabled
+    return viewModel.enabled
         ? Listener(
             onPointerDown: (_) => viewModel.addTouchPointer(),
             onPointerUp: (_) => viewModel.removeTouchPointer(),
