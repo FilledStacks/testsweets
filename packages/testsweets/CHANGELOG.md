@@ -1,6 +1,11 @@
+### 1.15.0
+
+- Allows you to set `enabled` on the `setupTestSweets` function
+- Adds a new `dart-define` for `TEST_SWEETS_ENABLED`
+
 ### 1.14.0
 
-Adds a double tap on the route banner th bring up the mode swap UI
+Adds a long-tap on the route banner th bring up the mode swap UI
 
 
 ### 1.13.0
