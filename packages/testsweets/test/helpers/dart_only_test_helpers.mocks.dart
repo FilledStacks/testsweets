@@ -134,6 +134,7 @@ class MockTestSweetsConfigFileService extends _i1.Mock
           Invocation.getter(#fileSystemService),
         ),
       ) as _i2.FileSystemServiceImplementation);
+
   @override
   String getValueFromConfigFileByKey(_i7.ConfigFileKeyType? keyType) =>
       (super.noSuchMethod(
@@ -207,6 +208,7 @@ class MockFileSystemService extends _i1.Mock implements _i2.FileSystemService {
         returnValue: false,
         returnValueForMissingStub: false,
       ) as bool);
+
   @override
   String readFileAsStringSync(String? path) => (super.noSuchMethod(
         Invocation.method(
@@ -216,6 +218,7 @@ class MockFileSystemService extends _i1.Mock implements _i2.FileSystemService {
         returnValue: '',
         returnValueForMissingStub: '',
       ) as String);
+
   @override
   _i9.Stream<List<int>> openFileForReading(String? path) => (super.noSuchMethod(
         Invocation.method(
@@ -225,6 +228,7 @@ class MockFileSystemService extends _i1.Mock implements _i2.FileSystemService {
         returnValue: _i9.Stream<List<int>>.empty(),
         returnValueForMissingStub: _i9.Stream<List<int>>.empty(),
       ) as _i9.Stream<List<int>>);
+
   @override
   int getFileSizeInBytes(String? path) => (super.noSuchMethod(
         Invocation.method(
@@ -234,6 +238,7 @@ class MockFileSystemService extends _i1.Mock implements _i2.FileSystemService {
         returnValue: 0,
         returnValueForMissingStub: 0,
       ) as int);
+
   @override
   String fullPathToWorkingDirectory({String? fileName}) => (super.noSuchMethod(
         Invocation.method(
@@ -256,6 +261,7 @@ class MockFlutterProcess extends _i1.Mock implements _i10.FlutterProcess {
         returnValue: '',
         returnValueForMissingStub: '',
       ) as String);
+
   @override
   _i9.Future<_i4.Process> startWith({required List<String>? args}) =>
       (super.noSuchMethod(
@@ -334,6 +340,7 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
           ),
         )),
       ) as _i9.Future<_i5.SimpleHttpResponse>);
+
   @override
   _i9.Future<_i5.SimpleHttpResponse> postJson({
     required String? to,
@@ -377,6 +384,7 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
           ),
         )),
       ) as _i9.Future<_i5.SimpleHttpResponse>);
+
   @override
   _i9.Future<_i5.SimpleHttpResponse> get({
     required String? to,
@@ -462,6 +470,7 @@ class MockCloudFunctionsService extends _i1.Mock
           Invocation.getter(#log),
         ),
       ) as _i6.Logger);
+
   @override
   _i5.HttpService get httpService => (super.noSuchMethod(
         Invocation.getter(#httpService),
@@ -474,6 +483,7 @@ class MockCloudFunctionsService extends _i1.Mock
           Invocation.getter(#httpService),
         ),
       ) as _i5.HttpService);
+
   @override
   _i9.Future<String> getV4BuildUploadSignedUrl(
     String? projectId,
@@ -492,6 +502,7 @@ class MockCloudFunctionsService extends _i1.Mock
         returnValue: _i9.Future<String>.value(''),
         returnValueForMissingStub: _i9.Future<String>.value(''),
       ) as _i9.Future<String>);
+
   @override
   _i9.Future<bool> doesBuildExistInProject(
     String? projectId, {
@@ -506,6 +517,7 @@ class MockCloudFunctionsService extends _i1.Mock
         returnValue: _i9.Future<bool>.value(false),
         returnValueForMissingStub: _i9.Future<bool>.value(false),
       ) as _i9.Future<bool>);
+
   @override
   _i9.Future<String> uploadWidgetDescriptionToProject({
     required String? projectId,
@@ -523,6 +535,7 @@ class MockCloudFunctionsService extends _i1.Mock
         returnValue: _i9.Future<String>.value(''),
         returnValueForMissingStub: _i9.Future<String>.value(''),
       ) as _i9.Future<String>);
+
   @override
   _i9.Future<List<_i13.Interaction>> getWidgetDescriptionForProject(
           {required String? projectId}) =>
@@ -537,6 +550,7 @@ class MockCloudFunctionsService extends _i1.Mock
         returnValueForMissingStub:
             _i9.Future<List<_i13.Interaction>>.value(<_i13.Interaction>[]),
       ) as _i9.Future<List<_i13.Interaction>>);
+
   @override
   _i9.Future<String> updateInteraction({
     required String? projectId,
@@ -554,6 +568,7 @@ class MockCloudFunctionsService extends _i1.Mock
         returnValue: _i9.Future<String>.value(''),
         returnValueForMissingStub: _i9.Future<String>.value(''),
       ) as _i9.Future<String>);
+
   @override
   _i9.Future<String> deleteWidgetDescription({
     required String? projectId,
@@ -590,6 +605,7 @@ class MockDynamicKeysGenerator extends _i1.Mock
           Invocation.getter(#fileSystemService),
         ),
       ) as _i2.FileSystemService);
+
   @override
   List<String> generateAutomationKeysForDynamicKey({
     required String? key,
@@ -607,6 +623,7 @@ class MockDynamicKeysGenerator extends _i1.Mock
         returnValue: <String>[],
         returnValueForMissingStub: <String>[],
       ) as List<String>);
+
   @override
   List<String> generateAutomationKeysFromDynamicKeysFile(
           String? dynamicKeysFilePath) =>
