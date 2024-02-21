@@ -23,12 +23,11 @@ class TestSweetsRouteTracker extends ChangeNotifier {
 
   String previosRoute = '';
   int _previousLevel = 0;
-  String _currentRoute = '';
 
   String get currentRoute => _joinedRoutePath;
 
-  String get formatedCurrentRoute => _currentRoute.isNotEmpty
-      ? _currentRoute.convertViewNameToValidFormat
+  String get formatedCurrentRoute => _joinedRoutePath.isNotEmpty
+      ? _joinedRoutePath.convertViewNameToValidFormat
       : '';
 
   final _isTest = Platform.environment.containsKey('FLUTTER_TEST');

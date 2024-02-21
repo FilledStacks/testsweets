@@ -1,3 +1,7 @@
+### 1.16.1
+
+- fix: Null exception on route tracker
+
 ### 1.16.0
 
 - Adds new `TestSweetsNestedNavigatorObserver` to create segmented paths for capturing
