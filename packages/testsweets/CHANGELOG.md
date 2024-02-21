@@ -1,3 +1,7 @@
+### 1.16.0
+
+- Adds new `TestSweetsNestedNavigatorObserver` to create segmented paths for capturing
+
 ### 1.15.0
 
 - Allows you to set `enabled` on the `setupTestSweets` function

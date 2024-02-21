@@ -3,50 +3,125 @@ import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 
 import '../helpers/test_helpers.dart';
 
-final testSweetsRouteTrackerService = TestSweetsRouteTracker();
+TestSweetsRouteTracker get _service => TestSweetsRouteTracker();
 void main() {
   group('RouteTrackerServiceTest -', () {
     setUp(() {
       registerServices();
-      testSweetsRouteTrackerService.setCurrentRoute('currentRoute');
     });
     tearDown(unregisterServices);
-    testSweetsRouteTrackerService.testMode = true;
 
-    group('setCurrentRoute -', () {
+    group('setRoute -', () {
+      test('When called, should set the current route', () {
+        final service = _service;
+        service.setRoute('currentRoute');
+        expect(service.currentRoute, 'currentRoute');
+      });
+
       test(
-          'When called, Should set the current route and clear the child route',
+          'When called, Should set the current route and change previous route to the previous call',
           () {
-        testSweetsRouteTrackerService.setCurrentRoute('currentRoute');
-        expect(testSweetsRouteTrackerService.currentRoute, 'currentRoute');
+        final service = _service;
+        service.setRoute('currentRoute');
+        service.setRoute('currentRoute2');
+
+        expect(service.currentRoute, 'currentRoute2');
+        expect(service.previosRoute, 'currentRoute');
+      });
+
+      test(
+          'When called with level=1, should append the new route onto the previous route',
+          () {
+        final service = _service;
+        service.setRoute('currentRoute');
+        service.setRoute('nestedRoute', level: 1);
+
+        expect(
+          service.currentRoute,
+          'currentRoute/nestedRoute',
+        );
+      });
+
+      test(
+          'When called twice with level=1, should change the route after / to the new route',
+          () {
+        final service = _service;
+        service.setRoute('currentRoute');
+        service.setRoute('nestedRoute', level: 1);
+        service.setRoute('nestedRoute2', level: 1);
+
+        expect(
+          service.currentRoute,
+          'currentRoute/nestedRoute2',
+        );
+      });
+
+      test(
+          'When called with level 1, then level 0, should clear everything after level 0',
+          () {
+        final service = _service;
+        service.setRoute('currentRoute');
+        service.setRoute('nestedRoute', level: 1);
+        service.setRoute('newRootRoute');
+
+        expect(
+          service.currentRoute,
+          'newRootRoute',
+        );
+      });
+
+      test(
+          'When called with level 0,1,2, then 1, should clear everything after level 1',
+          () {
+        final service = _service;
+        service.setRoute('currentRoute');
+        service.setRoute('nestedRoute', level: 1);
+        service.setRoute('doubleNestedRoute', level: 2);
+        service.setRoute('newNestedRoute', level: 1);
+
+        expect(
+          service.currentRoute,
+          'currentRoute/newNestedRoute',
+        );
       });
     });
 
     group('changeRouteIndex -', () {
-      test('''When called, Should set the current route and set the ''', () {
-        testSweetsRouteTrackerService.changeRouteIndex('viewName', 1);
-        expect(testSweetsRouteTrackerService.currentRoute, 'viewName1');
-        expect(testSweetsRouteTrackerService.indexedRouteStateMap,
-            {'viewName': 1});
-      });
-    });
-    group('saveRouteIndex -', () {
-      test('''
-              When we set route index, Should save it to a map where key is parentViewName
-              and value is the last setted index 
-          ''', () {
-        testSweetsRouteTrackerService.saveRouteIndex('viewName', 2);
-        expect(
-            testSweetsRouteTrackerService.indexedRouteStateMap['viewName'], 2);
-      });
-    });
-    group('loadRouteIndexIfExist -', () {
-      test(
-          'When called, Should check for history of this current route and load it',
+      test('When called, should append the index onto the matching route name',
           () {
-        testSweetsRouteTrackerService.saveRouteIndex('viewName', 2);
-        testSweetsRouteTrackerService.setCurrentRoute('viewName');
-        expect(testSweetsRouteTrackerService.currentRoute, 'viewName2');
+        final service = _service;
+        service.setRoute('currentRoute');
+        service.changeRouteIndex('currentRoute', 1);
+        expect(service.currentRoute, 'currentRoute1');
+      });
+
+      test(
+          'When called and we have nested a route, should append the index onto the matching nested route',
+          () {
+        final service = _service;
+        service.setRoute('currentRoute');
+        service.setRoute('nestedRoute', level: 1);
+        service.changeRouteIndex('nestedRoute', 1);
+        expect(service.currentRoute, 'currentRoute/nestedRoute1');
+      });
+
+      test(
+          'When called and route already has an index, should only swap out the index and keep the route',
+          () {
+        final service = _service;
+        service.setRoute('currentRoute1');
+        service.changeRouteIndex('currentRoute', 2);
+        expect(service.currentRoute, 'currentRoute2');
+      });
+
+      test(
+          'When called and nested route already has an index, should only swap out the index and keep the route',
+          () {
+        final service = _service;
+        service.setRoute('root');
+        service.setRoute('nestedRoute1', level: 1);
+        service.changeRouteIndex('nestedRoute', 2);
+        expect(service.currentRoute, 'root/nestedRoute2');
       });
     });
   });

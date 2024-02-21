@@ -98,7 +98,6 @@ class MockSnackbarService extends _i1.Mock implements _i7.SnackbarService {
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   void showCustomSnackBar({
     required String? message,
@@ -134,7 +133,6 @@ class MockWidgetCaptureService extends _i1.Mock
           Invocation.getter(#log),
         ),
       ) as _i2.Logger);
-
   @override
   Map<String, List<_i3.Interaction>> get widgetDescriptionMap =>
       (super.noSuchMethod(
@@ -142,14 +140,12 @@ class MockWidgetCaptureService extends _i1.Mock
         returnValue: <String, List<_i3.Interaction>>{},
         returnValueForMissingStub: <String, List<_i3.Interaction>>{},
       ) as Map<String, List<_i3.Interaction>>);
-
   @override
   bool get verbose => (super.noSuchMethod(
         Invocation.getter(#verbose),
         returnValue: false,
         returnValueForMissingStub: false,
       ) as bool);
-
   @override
   set projectId(String? projectId) => super.noSuchMethod(
         Invocation.setter(
@@ -158,7 +154,6 @@ class MockWidgetCaptureService extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   _i11.Future<void> loadWidgetDescriptionsForProject({
     required _i6.Size? size,
@@ -176,7 +171,6 @@ class MockWidgetCaptureService extends _i1.Mock
         returnValue: _i11.Future<void>.value(),
         returnValueForMissingStub: _i11.Future<void>.value(),
       ) as _i11.Future<void>);
-
   @override
   void addWidgetDescriptionToMap(_i3.Interaction? description) =>
       super.noSuchMethod(
@@ -186,7 +180,6 @@ class MockWidgetCaptureService extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   _i11.Future<_i3.Interaction> saveInteractionInDatabase(
           _i3.Interaction? interaction) =>
@@ -211,7 +204,6 @@ class MockWidgetCaptureService extends _i1.Mock
           ),
         )),
       ) as _i11.Future<_i3.Interaction>);
-
   @override
   _i11.Future<void> updateInteractionInDatabase(
           {required _i3.Interaction? updatedInteraction}) =>
@@ -224,7 +216,6 @@ class MockWidgetCaptureService extends _i1.Mock
         returnValue: _i11.Future<void>.value(),
         returnValueForMissingStub: _i11.Future<void>.value(),
       ) as _i11.Future<void>);
-
   @override
   _i11.Future<void> removeInteractionFromDatabase(
           _i3.Interaction? interaction) =>
@@ -236,7 +227,6 @@ class MockWidgetCaptureService extends _i1.Mock
         returnValue: _i11.Future<void>.value(),
         returnValueForMissingStub: _i11.Future<void>.value(),
       ) as _i11.Future<void>);
-
   @override
   _i11.Future<_i3.Interaction> captureView(String? originalViewName) =>
       (super.noSuchMethod(
@@ -260,7 +250,6 @@ class MockWidgetCaptureService extends _i1.Mock
           ),
         )),
       ) as _i11.Future<_i3.Interaction>);
-
   @override
   List<_i3.Interaction> getDescriptionsForView(
           {required String? currentRoute}) =>
@@ -273,7 +262,6 @@ class MockWidgetCaptureService extends _i1.Mock
         returnValue: <_i3.Interaction>[],
         returnValueForMissingStub: <_i3.Interaction>[],
       ) as List<_i3.Interaction>);
-
   @override
   bool checkCurrentViewIfAlreadyCaptured(String? originalViewName) =>
       (super.noSuchMethod(
@@ -284,7 +272,6 @@ class MockWidgetCaptureService extends _i1.Mock
         returnValue: false,
         returnValueForMissingStub: false,
       ) as bool);
-
   @override
   void syncRouteInteractions(
     String? routeName,
@@ -319,14 +306,12 @@ class MockTestSweetsRouteTracker extends _i1.Mock
           Invocation.getter(#log),
         ),
       ) as _i2.Logger);
-
   @override
   bool get testMode => (super.noSuchMethod(
         Invocation.getter(#testMode),
         returnValue: false,
         returnValueForMissingStub: false,
       ) as bool);
-
   @override
   set testMode(bool? _testMode) => super.noSuchMethod(
         Invocation.setter(
@@ -335,14 +320,12 @@ class MockTestSweetsRouteTracker extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   Map<String, int> get indexedRouteStateMap => (super.noSuchMethod(
         Invocation.getter(#indexedRouteStateMap),
         returnValue: <String, int>{},
         returnValueForMissingStub: <String, int>{},
       ) as Map<String, int>);
-
   @override
   set indexedRouteStateMap(Map<String, int>? _indexedRouteStateMap) =>
       super.noSuchMethod(
@@ -352,14 +335,12 @@ class MockTestSweetsRouteTracker extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   String get previosRoute => (super.noSuchMethod(
         Invocation.getter(#previosRoute),
         returnValue: '',
         returnValueForMissingStub: '',
       ) as String);
-
   @override
   set previosRoute(String? _previosRoute) => super.noSuchMethod(
         Invocation.setter(
@@ -368,46 +349,50 @@ class MockTestSweetsRouteTracker extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   String get currentRoute => (super.noSuchMethod(
         Invocation.getter(#currentRoute),
         returnValue: '',
         returnValueForMissingStub: '',
       ) as String);
-
   @override
   String get formatedCurrentRoute => (super.noSuchMethod(
         Invocation.getter(#formatedCurrentRoute),
         returnValue: '',
         returnValueForMissingStub: '',
       ) as String);
-
   @override
   bool get hasListeners => (super.noSuchMethod(
         Invocation.getter(#hasListeners),
         returnValue: false,
         returnValueForMissingStub: false,
       ) as bool);
-
   @override
-  void setCurrentRoute(String? route) => super.noSuchMethod(
+  void setCurrentRoute(
+    String? route, {
+    int? level = 1,
+  }) =>
+      super.noSuchMethod(
         Invocation.method(
           #setCurrentRoute,
           [route],
+          {#level: level},
         ),
         returnValueForMissingStub: null,
       );
-
   @override
-  void setRoute(String? route) => super.noSuchMethod(
+  void setRoute(
+    String? route, {
+    int? level = 1,
+  }) =>
+      super.noSuchMethod(
         Invocation.method(
           #setRoute,
           [route],
+          {#level: level},
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   void changeRouteIndex(
     String? viewName,
@@ -423,7 +408,6 @@ class MockTestSweetsRouteTracker extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   void saveRouteIndex(
     String? viewName,
@@ -439,7 +423,6 @@ class MockTestSweetsRouteTracker extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   void loadRouteIndexIfExist(String? viewName) => super.noSuchMethod(
         Invocation.method(
@@ -448,7 +431,6 @@ class MockTestSweetsRouteTracker extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   void addListener(_i6.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
@@ -457,7 +439,6 @@ class MockTestSweetsRouteTracker extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   void removeListener(_i6.VoidCallback? listener) => super.noSuchMethod(
         Invocation.method(
@@ -466,7 +447,6 @@ class MockTestSweetsRouteTracker extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   void dispose() => super.noSuchMethod(
         Invocation.method(
@@ -475,7 +455,6 @@ class MockTestSweetsRouteTracker extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   void notifyListeners() => super.noSuchMethod(
         Invocation.method(
@@ -503,7 +482,6 @@ class MockCloudFunctionsService extends _i1.Mock
           Invocation.getter(#log),
         ),
       ) as _i2.Logger);
-
   @override
   _i4.HttpService get httpService => (super.noSuchMethod(
         Invocation.getter(#httpService),
@@ -516,7 +494,6 @@ class MockCloudFunctionsService extends _i1.Mock
           Invocation.getter(#httpService),
         ),
       ) as _i4.HttpService);
-
   @override
   _i11.Future<String> getV4BuildUploadSignedUrl(
     String? projectId,
@@ -535,7 +512,6 @@ class MockCloudFunctionsService extends _i1.Mock
         returnValue: _i11.Future<String>.value(''),
         returnValueForMissingStub: _i11.Future<String>.value(''),
       ) as _i11.Future<String>);
-
   @override
   _i11.Future<bool> doesBuildExistInProject(
     String? projectId, {
@@ -550,7 +526,6 @@ class MockCloudFunctionsService extends _i1.Mock
         returnValue: _i11.Future<bool>.value(false),
         returnValueForMissingStub: _i11.Future<bool>.value(false),
       ) as _i11.Future<bool>);
-
   @override
   _i11.Future<String> uploadWidgetDescriptionToProject({
     required String? projectId,
@@ -568,7 +543,6 @@ class MockCloudFunctionsService extends _i1.Mock
         returnValue: _i11.Future<String>.value(''),
         returnValueForMissingStub: _i11.Future<String>.value(''),
       ) as _i11.Future<String>);
-
   @override
   _i11.Future<List<_i3.Interaction>> getWidgetDescriptionForProject(
           {required String? projectId}) =>
@@ -583,7 +557,6 @@ class MockCloudFunctionsService extends _i1.Mock
         returnValueForMissingStub:
             _i11.Future<List<_i3.Interaction>>.value(<_i3.Interaction>[]),
       ) as _i11.Future<List<_i3.Interaction>>);
-
   @override
   _i11.Future<String> updateInteraction({
     required String? projectId,
@@ -601,7 +574,6 @@ class MockCloudFunctionsService extends _i1.Mock
         returnValue: _i11.Future<String>.value(''),
         returnValueForMissingStub: _i11.Future<String>.value(''),
       ) as _i11.Future<String>);
-
   @override
   _i11.Future<String> deleteWidgetDescription({
     required String? projectId,
@@ -637,7 +609,6 @@ class MockTestIntegrity extends _i1.Mock implements _i14.TestIntegrity {
           Invocation.getter(#log),
         ),
       ) as _i2.Logger);
-
   @override
   set triggeringNotificationType(Type? _triggeringNotificationType) =>
       super.noSuchMethod(
@@ -647,7 +618,6 @@ class MockTestIntegrity extends _i1.Mock implements _i14.TestIntegrity {
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   void failCommand() => super.noSuchMethod(
         Invocation.method(
@@ -656,7 +626,6 @@ class MockTestIntegrity extends _i1.Mock implements _i14.TestIntegrity {
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   void confirmCommand() => super.noSuchMethod(
         Invocation.method(
@@ -665,7 +634,6 @@ class MockTestIntegrity extends _i1.Mock implements _i14.TestIntegrity {
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   void whenNotificationTypeMatchesConfirmCommand(
           _i8.Notification? notification) =>
@@ -676,7 +644,6 @@ class MockTestIntegrity extends _i1.Mock implements _i14.TestIntegrity {
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   _i11.Future<bool> trueIfCommandVerifiedOrFalseIfTimeout(
           Duration? timeoutDuration) =>
@@ -707,7 +674,6 @@ class MockReactiveScrollable extends _i1.Mock
           Invocation.getter(#log),
         ),
       ) as _i2.Logger);
-
   @override
   _i5.ScrollableDescription get currentScrollableDescription =>
       (super.noSuchMethod(
@@ -721,7 +687,6 @@ class MockReactiveScrollable extends _i1.Mock
           Invocation.getter(#currentScrollableDescription),
         ),
       ) as _i5.ScrollableDescription);
-
   @override
   set currentScrollableDescription(
           _i5.ScrollableDescription? _currentScrollableDescription) =>
@@ -732,7 +697,6 @@ class MockReactiveScrollable extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   Iterable<_i3.Interaction> filterAffectedInteractionsByScrollable(
           List<_i3.Interaction>? viewDescription) =>
@@ -744,7 +708,6 @@ class MockReactiveScrollable extends _i1.Mock
         returnValue: <_i3.Interaction>[],
         returnValueForMissingStub: <_i3.Interaction>[],
       ) as Iterable<_i3.Interaction>);
-
   @override
   _i6.Offset calculateOffsetDeviation(
     _i5.ScrollableDescription? scrollableDescription,
@@ -779,7 +742,6 @@ class MockReactiveScrollable extends _i1.Mock
           ),
         ),
       ) as _i6.Offset);
-
   @override
   Iterable<_i3.Interaction> moveInteractionsWithScrollable(
           Iterable<_i3.Interaction>? affectedInteractions) =>
@@ -809,7 +771,6 @@ class MockScrollableFinder extends _i1.Mock implements _i16.ScrollableFinder {
           Invocation.getter(#log),
         ),
       ) as _i2.Logger);
-
   @override
   Iterable<_i5.ScrollableDescription> getAllScrollableDescriprionsOnScreen() =>
       (super.noSuchMethod(
@@ -838,7 +799,6 @@ class MockScrollAppliance extends _i1.Mock implements _i17.ScrollAppliance {
           Invocation.getter(#log),
         ),
       ) as _i2.Logger);
-
   @override
   _i3.Interaction applyScrollableOnInteraction(
     Iterable<_i5.ScrollableDescription>? scrollables,
@@ -873,7 +833,6 @@ class MockScrollAppliance extends _i1.Mock implements _i17.ScrollAppliance {
           ),
         ),
       ) as _i3.Interaction);
-
   @override
   _i3.Interaction storeDescriptionInScrollableExternalities(
     Iterable<_i5.ScrollableDescription>? scrollablesBelowInteraction,
@@ -908,7 +867,6 @@ class MockScrollAppliance extends _i1.Mock implements _i17.ScrollAppliance {
           ),
         ),
       ) as _i3.Interaction);
-
   @override
   _i3.Interaction storeDescriptionInExternalities(
     Iterable<_i5.ScrollableDescription>? scrollablesBelowInteraction,
@@ -943,7 +901,6 @@ class MockScrollAppliance extends _i1.Mock implements _i17.ScrollAppliance {
           ),
         ),
       ) as _i3.Interaction);
-
   @override
   _i5.ScrollableDescription findBiggestScrollable(
           Iterable<_i5.ScrollableDescription>? scrollablesBelowInteraction) =>
@@ -986,7 +943,6 @@ class MockNotificationExtractor extends _i1.Mock
           Invocation.getter(#log),
         ),
       ) as _i2.Logger);
-
   @override
   set scrollDirection(_i19.ScrollDirection? _scrollDirection) =>
       super.noSuchMethod(
@@ -996,7 +952,6 @@ class MockNotificationExtractor extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   set globalPosition(_i6.Offset? _globalPosition) => super.noSuchMethod(
         Invocation.setter(
@@ -1005,7 +960,6 @@ class MockNotificationExtractor extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   set localPosition(_i6.Offset? _localPosition) => super.noSuchMethod(
         Invocation.setter(
@@ -1014,7 +968,6 @@ class MockNotificationExtractor extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   set lastScrollEvent(_i5.ScrollableDescription? _lastScrollEvent) =>
       super.noSuchMethod(
@@ -1024,7 +977,6 @@ class MockNotificationExtractor extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
-
   @override
   bool onlyScrollUpdateNotification(_i8.Notification? notification) =>
       (super.noSuchMethod(
@@ -1035,7 +987,6 @@ class MockNotificationExtractor extends _i1.Mock
         returnValue: false,
         returnValueForMissingStub: false,
       ) as bool);
-
   @override
   List<_i3.Interaction> scrollInteractions(
     _i5.ScrollableDescription? scrollableDescription,
@@ -1052,7 +1003,6 @@ class MockNotificationExtractor extends _i1.Mock
         returnValue: <_i3.Interaction>[],
         returnValueForMissingStub: <_i3.Interaction>[],
       ) as List<_i3.Interaction>);
-
   @override
   _i5.ScrollableDescription notificationToScrollableDescription(
           _i8.Notification? notification) =>
@@ -1076,7 +1026,6 @@ class MockNotificationExtractor extends _i1.Mock
           ),
         ),
       ) as _i5.ScrollableDescription);
-
   @override
   _i3.Interaction syncInteractionWithScrollable(_i3.Interaction? interaction) =>
       (super.noSuchMethod(
