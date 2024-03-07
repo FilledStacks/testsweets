@@ -9,6 +9,7 @@ import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/notification_extractor.dart';
 import 'package:testsweets/src/services/old_http_service.dart';
 import 'package:testsweets/src/services/reactive_scrollable.dart';
+import 'package:testsweets/src/services/run_configuration_service.dart';
 import 'package:testsweets/src/services/scroll_appliance.dart';
 import 'package:testsweets/src/services/snackbar_service.dart';
 import 'package:testsweets/src/services/test_integrity.dart';
@@ -31,7 +32,15 @@ import 'test_helpers.mocks.dart';
   MockSpec<NotificationExtractor>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<OldHttpService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<HttpService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<RunConfigurationService>(onMissingStub: OnMissingStub.returnDefault),
 ])
+MockRunConfigurationService getAndRegisterRunConfigurationService() {
+  _removeRegistrationIfExists<RunConfigurationService>();
+  final service = MockRunConfigurationService();
+  locator.registerSingleton<RunConfigurationService>(service);
+  return service;
+}
+
 MockHttpService getAndRegisterHttpService() {
   _removeRegistrationIfExists<HttpService>();
   final service = MockHttpService();
@@ -207,6 +216,7 @@ void registerServices() {
   getAndRegisterTestIntegrity();
   getAndRegisterOldHttpService();
   getAndRegisterHttpService();
+  getAndRegisterRunConfigurationService();
 }
 
 void unregisterServices() {
@@ -221,6 +231,7 @@ void unregisterServices() {
   _removeRegistrationIfExists<TestIntegrity>();
   _removeRegistrationIfExists<OldHttpService>();
   _removeRegistrationIfExists<HttpService>();
+  _removeRegistrationIfExists<RunConfigurationService>();
 }
 
 T registerServiceInsteadOfMockedOne<T extends Object>(T instance) {

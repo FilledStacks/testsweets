@@ -7,6 +7,8 @@ import 'package:flutter_driver/driver_extension.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/services/local_config_service.dart';
+import 'package:testsweets/src/services/run_configuration_service.dart';
+import 'package:testsweets_shared/testsweets_shared.dart';
 
 import 'services/test_integrity.dart';
 // import 'package:testsweets/src/services/widget_visibilty_changer_service.dart';
@@ -50,18 +52,50 @@ Future<void> setupTestSweets({bool enabled = TEST_SWEETS_ENABLED}) async {
       ///
       if (message == null) return 'message is null $message';
 
-      final testIntegrity = locator<TestIntegrity>();
+      // Expect command updates
+      // 1. Create DriverCommand model
+      // - type: expectEvent, testIntegrity
+      // - data: Map<String, dynamic>
+      //    - testIntegrity: { name: string }
+      //    - exptectEvent: { name: string, value: dynamic }
 
-      testIntegrity.triggeringNotificationType =
-          _getNotificationTypeFromCommandMessage(message);
+      final driverCommand = DriverCommand.fromJson(json.decode(message));
 
-      return await testIntegrity
-          .trueIfCommandVerifiedOrFalseIfTimeout(
+      switch (driverCommand.type) {
+        case DriverCommandType.testIntegrity:
+          final testIntegrity = locator<TestIntegrity>();
+
+          testIntegrity.triggeringNotificationType =
+              _getNotificationTypeFromCommandMessage(message);
+
+          return await testIntegrity
+              .trueIfCommandVerifiedOrFalseIfTimeout(
             TEST_INTEGRITY_TIMEOUT,
           )
-          .then<String>(
-            (value) => value.toString(),
+              .then<String>(
+            (value) {
+              final commandResult = DriverCommandResult(
+                success: value,
+                type: DriverCommandType.testIntegrity,
+              );
+
+              return json.encode(commandResult);
+            },
           );
+        case DriverCommandType.expectEvent:
+          return '';
+
+        case DriverCommandType.modeUpdate:
+          locator<RunConfigurationService>().driveModeActive =
+              driverCommand.value;
+
+          final commandResult = DriverCommandResult(
+            type: DriverCommandType.modeUpdate,
+            success: true,
+          );
+
+          return json.encode(commandResult);
+      }
     },
   );
 }

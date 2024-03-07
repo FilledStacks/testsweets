@@ -4,6 +4,7 @@ import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/local_config_service.dart';
 import 'package:testsweets/src/services/notification_extractor.dart';
 import 'package:testsweets/src/services/reactive_scrollable.dart';
+import 'package:testsweets/src/services/run_configuration_service.dart';
 import 'package:testsweets/src/services/scroll_appliance.dart';
 import 'package:testsweets/src/services/snackbar_service.dart';
 import 'package:testsweets/src/services/test_integrity.dart';
@@ -35,6 +36,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => HttpService());
 
   locator.registerLazySingleton(() => TestIntegrity());
+  locator.registerLazySingleton(() => RunConfigurationService());
 
   locatorSetup = true;
 }

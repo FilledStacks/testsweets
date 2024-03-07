@@ -9,9 +9,7 @@ import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/time_service.dart';
 
 import 'services/automation_keys_service.dart';
-import 'services/build_service.dart';
 import 'services/cloud_functions_service.dart';
-import 'services/upload_service.dart';
 
 GetIt dartOnlyLocator = GetIt.asNewInstance();
 bool dartOnlyLocatorSetup = false;
@@ -37,14 +35,8 @@ Future<void> setupDartOnlyLocator() async {
 
   dartOnlyLocator.registerLazySingleton(() => TimeService());
 
-  dartOnlyLocator.registerLazySingleton<UploadService>(
-      () => UploadServiceImplementation());
-
   dartOnlyLocator.registerLazySingleton<FlutterProcess>(
       () => FlutterProcess(Platform.isWindows ? 'flutter.bat' : 'flutter'));
-
-  dartOnlyLocator
-      .registerLazySingleton<BuildService>(() => BuildServiceImplementation());
 
   dartOnlyLocatorSetup = true;
 }

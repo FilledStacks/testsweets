@@ -18,6 +18,7 @@ import 'package:testsweets/src/services/http_service.dart' as _i20;
 import 'package:testsweets/src/services/notification_extractor.dart' as _i18;
 import 'package:testsweets/src/services/old_http_service.dart' as _i4;
 import 'package:testsweets/src/services/reactive_scrollable.dart' as _i15;
+import 'package:testsweets/src/services/run_configuration_service.dart' as _i22;
 import 'package:testsweets/src/services/scroll_appliance.dart' as _i17;
 import 'package:testsweets/src/services/snackbar_service.dart' as _i7;
 import 'package:testsweets/src/services/test_integrity.dart' as _i14;
@@ -1174,4 +1175,25 @@ class MockHttpService extends _i1.Mock implements _i20.HttpService {
         returnValue: _i11.Future<void>.value(),
         returnValueForMissingStub: _i11.Future<void>.value(),
       ) as _i11.Future<void>);
+}
+
+/// A class which mocks [RunConfigurationService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockRunConfigurationService extends _i1.Mock
+    implements _i22.RunConfigurationService {
+  @override
+  bool get driveModeActive => (super.noSuchMethod(
+        Invocation.getter(#driveModeActive),
+        returnValue: false,
+        returnValueForMissingStub: false,
+      ) as bool);
+  @override
+  set driveModeActive(bool? _driveModeActive) => super.noSuchMethod(
+        Invocation.setter(
+          #driveModeActive,
+          _driveModeActive,
+        ),
+        returnValueForMissingStub: null,
+      );
 }
