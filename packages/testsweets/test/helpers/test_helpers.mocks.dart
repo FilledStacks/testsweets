@@ -12,9 +12,11 @@ import 'package:logger/src/logger.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:testsweets/src/enums/toast_type.dart' as _i9;
 import 'package:testsweets/src/models/interaction.dart' as _i3;
+import 'package:testsweets/src/models/outgoing_event.dart' as _i21;
 import 'package:testsweets/src/services/cloud_functions_service.dart' as _i13;
-import 'package:testsweets/src/services/http_service.dart' as _i4;
+import 'package:testsweets/src/services/http_service.dart' as _i20;
 import 'package:testsweets/src/services/notification_extractor.dart' as _i18;
+import 'package:testsweets/src/services/old_http_service.dart' as _i4;
 import 'package:testsweets/src/services/reactive_scrollable.dart' as _i15;
 import 'package:testsweets/src/services/scroll_appliance.dart' as _i17;
 import 'package:testsweets/src/services/snackbar_service.dart' as _i7;
@@ -55,8 +57,9 @@ class _FakeInteraction_1 extends _i1.SmartFake implements _i3.Interaction {
         );
 }
 
-class _FakeHttpService_2 extends _i1.SmartFake implements _i4.HttpService {
-  _FakeHttpService_2(
+class _FakeOldHttpService_2 extends _i1.SmartFake
+    implements _i4.OldHttpService {
+  _FakeOldHttpService_2(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -78,6 +81,17 @@ class _FakeScrollableDescription_3 extends _i1.SmartFake
 
 class _FakeOffset_4 extends _i1.SmartFake implements _i6.Offset {
   _FakeOffset_4(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeOldSimpleHttpResponse_5 extends _i1.SmartFake
+    implements _i4.OldSimpleHttpResponse {
+  _FakeOldSimpleHttpResponse_5(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -154,6 +168,12 @@ class MockWidgetCaptureService extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
+  @override
+  String get projectId => (super.noSuchMethod(
+        Invocation.getter(#projectId),
+        returnValue: '',
+        returnValueForMissingStub: '',
+      ) as String);
   @override
   _i11.Future<void> loadWidgetDescriptionsForProject({
     required _i6.Size? size,
@@ -307,35 +327,6 @@ class MockTestSweetsRouteTracker extends _i1.Mock
         ),
       ) as _i2.Logger);
   @override
-  bool get testMode => (super.noSuchMethod(
-        Invocation.getter(#testMode),
-        returnValue: false,
-        returnValueForMissingStub: false,
-      ) as bool);
-  @override
-  set testMode(bool? _testMode) => super.noSuchMethod(
-        Invocation.setter(
-          #testMode,
-          _testMode,
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
-  Map<String, int> get indexedRouteStateMap => (super.noSuchMethod(
-        Invocation.getter(#indexedRouteStateMap),
-        returnValue: <String, int>{},
-        returnValueForMissingStub: <String, int>{},
-      ) as Map<String, int>);
-  @override
-  set indexedRouteStateMap(Map<String, int>? _indexedRouteStateMap) =>
-      super.noSuchMethod(
-        Invocation.setter(
-          #indexedRouteStateMap,
-          _indexedRouteStateMap,
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
   String get previosRoute => (super.noSuchMethod(
         Invocation.getter(#previosRoute),
         returnValue: '',
@@ -370,7 +361,7 @@ class MockTestSweetsRouteTracker extends _i1.Mock
   @override
   void setCurrentRoute(
     String? route, {
-    int? level = 1,
+    int? level = 0,
   }) =>
       super.noSuchMethod(
         Invocation.method(
@@ -383,7 +374,7 @@ class MockTestSweetsRouteTracker extends _i1.Mock
   @override
   void setRoute(
     String? route, {
-    int? level = 1,
+    int? level = 0,
   }) =>
       super.noSuchMethod(
         Invocation.method(
@@ -405,29 +396,6 @@ class MockTestSweetsRouteTracker extends _i1.Mock
             viewName,
             index,
           ],
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
-  void saveRouteIndex(
-    String? viewName,
-    int? index,
-  ) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #saveRouteIndex,
-          [
-            viewName,
-            index,
-          ],
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
-  void loadRouteIndexIfExist(String? viewName) => super.noSuchMethod(
-        Invocation.method(
-          #loadRouteIndexIfExist,
-          [viewName],
         ),
         returnValueForMissingStub: null,
       );
@@ -483,17 +451,17 @@ class MockCloudFunctionsService extends _i1.Mock
         ),
       ) as _i2.Logger);
   @override
-  _i4.HttpService get httpService => (super.noSuchMethod(
+  _i4.OldHttpService get httpService => (super.noSuchMethod(
         Invocation.getter(#httpService),
-        returnValue: _FakeHttpService_2(
+        returnValue: _FakeOldHttpService_2(
           this,
           Invocation.getter(#httpService),
         ),
-        returnValueForMissingStub: _FakeHttpService_2(
+        returnValueForMissingStub: _FakeOldHttpService_2(
           this,
           Invocation.getter(#httpService),
         ),
-      ) as _i4.HttpService);
+      ) as _i4.OldHttpService);
   @override
   _i11.Future<String> getV4BuildUploadSignedUrl(
     String? projectId,
@@ -1048,4 +1016,162 @@ class MockNotificationExtractor extends _i1.Mock
           ),
         ),
       ) as _i3.Interaction);
+}
+
+/// A class which mocks [OldHttpService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockOldHttpService extends _i1.Mock implements _i4.OldHttpService {
+  @override
+  _i11.Future<_i4.OldSimpleHttpResponse> putBinary({
+    required String? to,
+    required _i11.Stream<List<int>>? data,
+    required int? contentLength,
+    Map<String, String>? headers,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #putBinary,
+          [],
+          {
+            #to: to,
+            #data: data,
+            #contentLength: contentLength,
+            #headers: headers,
+          },
+        ),
+        returnValue: _i11.Future<_i4.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_5(
+          this,
+          Invocation.method(
+            #putBinary,
+            [],
+            {
+              #to: to,
+              #data: data,
+              #contentLength: contentLength,
+              #headers: headers,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i11.Future<_i4.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_5(
+          this,
+          Invocation.method(
+            #putBinary,
+            [],
+            {
+              #to: to,
+              #data: data,
+              #contentLength: contentLength,
+              #headers: headers,
+            },
+          ),
+        )),
+      ) as _i11.Future<_i4.OldSimpleHttpResponse>);
+  @override
+  _i11.Future<_i4.OldSimpleHttpResponse> postJson({
+    required String? to,
+    required Map<String, dynamic>? body,
+    Map<String, String>? headers,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #postJson,
+          [],
+          {
+            #to: to,
+            #body: body,
+            #headers: headers,
+          },
+        ),
+        returnValue: _i11.Future<_i4.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_5(
+          this,
+          Invocation.method(
+            #postJson,
+            [],
+            {
+              #to: to,
+              #body: body,
+              #headers: headers,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i11.Future<_i4.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_5(
+          this,
+          Invocation.method(
+            #postJson,
+            [],
+            {
+              #to: to,
+              #body: body,
+              #headers: headers,
+            },
+          ),
+        )),
+      ) as _i11.Future<_i4.OldSimpleHttpResponse>);
+  @override
+  _i11.Future<_i4.OldSimpleHttpResponse> get({
+    required String? to,
+    Map<String, String>? headers,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #get,
+          [],
+          {
+            #to: to,
+            #headers: headers,
+          },
+        ),
+        returnValue: _i11.Future<_i4.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_5(
+          this,
+          Invocation.method(
+            #get,
+            [],
+            {
+              #to: to,
+              #headers: headers,
+            },
+          ),
+        )),
+        returnValueForMissingStub: _i11.Future<_i4.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_5(
+          this,
+          Invocation.method(
+            #get,
+            [],
+            {
+              #to: to,
+              #headers: headers,
+            },
+          ),
+        )),
+      ) as _i11.Future<_i4.OldSimpleHttpResponse>);
+}
+
+/// A class which mocks [HttpService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockHttpService extends _i1.Mock implements _i20.HttpService {
+  @override
+  _i11.Future<void> captureEvents({
+    required String? projectId,
+    required List<_i21.OutgoingEvent>? events,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #captureEvents,
+          [],
+          {
+            #projectId: projectId,
+            #events: events,
+          },
+        ),
+        returnValue: _i11.Future<void>.value(),
+        returnValueForMissingStub: _i11.Future<void>.value(),
+      ) as _i11.Future<void>);
 }

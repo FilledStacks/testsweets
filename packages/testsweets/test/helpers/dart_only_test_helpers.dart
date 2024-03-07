@@ -9,7 +9,7 @@ import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
 import 'package:testsweets/src/services/dynamic_keys_generator.dart';
 import 'package:testsweets/src/services/file_system_service.dart';
-import 'package:testsweets/src/services/http_service.dart';
+import 'package:testsweets/src/services/old_http_service.dart';
 import 'package:testsweets/src/services/runnable_process.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/time_service.dart';
@@ -25,7 +25,7 @@ import 'test_consts.dart';
   MockSpec<BuildService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<FileSystemService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<FlutterProcess>(onMissingStub: OnMissingStub.returnDefault),
-  MockSpec<HttpService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<OldHttpService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<TimeService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<CloudFunctionsService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<DynamicKeysGenerator>(onMissingStub: OnMissingStub.returnDefault),
@@ -108,18 +108,18 @@ MockDynamicKeysGenerator getAndRegisterDynamicKeysGeneratorService(
   return service;
 }
 
-MockHttpService getAndRegisterHttpService() {
-  _removeRegistrationIfExists<HttpService>();
-  final service = MockHttpService();
+MockOldHttpService getAndRegisterHttpService() {
+  _removeRegistrationIfExists<OldHttpService>();
+  final service = MockOldHttpService();
 
   when(service.putBinary(
     to: anyNamed('to'),
     data: anyNamed('data'),
     headers: anyNamed('headers'),
     contentLength: anyNamed('contentLength'),
-  )).thenAnswer((_) async => SimpleHttpResponse(200, ''));
+  )).thenAnswer((_) async => OldSimpleHttpResponse(200, ''));
 
-  dartOnlyLocator.registerSingleton<HttpService>(service);
+  dartOnlyLocator.registerSingleton<OldHttpService>(service);
   return service;
 }
 
@@ -224,7 +224,7 @@ void registerDartOnlyServices() {
 void unregisterDartOnlyServices() {
   _removeRegistrationIfExists<FileSystemService>();
   _removeRegistrationIfExists<FlutterProcess>();
-  _removeRegistrationIfExists<HttpService>();
+  _removeRegistrationIfExists<OldHttpService>();
   _removeRegistrationIfExists<TimeService>();
   _removeRegistrationIfExists<CloudFunctionsService>();
   _removeRegistrationIfExists<DynamicKeysGenerator>();

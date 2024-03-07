@@ -11,15 +11,19 @@ import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/ui/shared/scrollable_finder.dart';
 
+import 'services/old_http_service.dart';
+
 GetIt locator = GetIt.asNewInstance();
+
 bool locatorSetup = false;
+
 Future<void> setupLocator() async {
   final localConfigService = LocalConfigService();
   await localConfigService.init();
   locator.registerSingleton(localConfigService);
 
   locator.registerLazySingleton(() => CloudFunctionsService(
-        httpService: HttpServiceImplementation(),
+        httpService: OldHttpServiceImplementation(),
       ));
   locator.registerLazySingleton(() => TestSweetsRouteTracker());
   locator.registerLazySingleton(() => SnackbarService());
@@ -28,6 +32,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => ScrollAppliance());
   locator.registerLazySingleton(() => ScrollableFinder());
   locator.registerLazySingleton(() => NotificationExtractor());
+  locator.registerLazySingleton(() => HttpService());
 
   locator.registerLazySingleton(() => TestIntegrity());
 

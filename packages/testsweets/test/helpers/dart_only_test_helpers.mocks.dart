@@ -14,7 +14,7 @@ import 'package:testsweets/src/services/build_service.dart' as _i8;
 import 'package:testsweets/src/services/cloud_functions_service.dart' as _i12;
 import 'package:testsweets/src/services/dynamic_keys_generator.dart' as _i14;
 import 'package:testsweets/src/services/file_system_service.dart' as _i2;
-import 'package:testsweets/src/services/http_service.dart' as _i5;
+import 'package:testsweets/src/services/old_http_service.dart' as _i5;
 import 'package:testsweets/src/services/runnable_process.dart' as _i10;
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart'
     as _i7;
@@ -64,9 +64,9 @@ class _FakeProcess_2 extends _i1.SmartFake implements _i4.Process {
         );
 }
 
-class _FakeSimpleHttpResponse_3 extends _i1.SmartFake
-    implements _i5.SimpleHttpResponse {
-  _FakeSimpleHttpResponse_3(
+class _FakeOldSimpleHttpResponse_3 extends _i1.SmartFake
+    implements _i5.OldSimpleHttpResponse {
+  _FakeOldSimpleHttpResponse_3(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -95,8 +95,9 @@ class _FakeLogger_5 extends _i1.SmartFake implements _i6.Logger {
         );
 }
 
-class _FakeHttpService_6 extends _i1.SmartFake implements _i5.HttpService {
-  _FakeHttpService_6(
+class _FakeOldHttpService_6 extends _i1.SmartFake
+    implements _i5.OldHttpService {
+  _FakeOldHttpService_6(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -283,12 +284,12 @@ class MockFlutterProcess extends _i1.Mock implements _i10.FlutterProcess {
       ) as _i9.Future<_i4.Process>);
 }
 
-/// A class which mocks [HttpService].
+/// A class which mocks [OldHttpService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockHttpService extends _i1.Mock implements _i5.HttpService {
+class MockOldHttpService extends _i1.Mock implements _i5.OldHttpService {
   @override
-  _i9.Future<_i5.SimpleHttpResponse> putBinary({
+  _i9.Future<_i5.OldSimpleHttpResponse> putBinary({
     required String? to,
     required _i9.Stream<List<int>>? data,
     required int? contentLength,
@@ -305,8 +306,8 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             #headers: headers,
           },
         ),
-        returnValue:
-            _i9.Future<_i5.SimpleHttpResponse>.value(_FakeSimpleHttpResponse_3(
+        returnValue: _i9.Future<_i5.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_3(
           this,
           Invocation.method(
             #putBinary,
@@ -319,8 +320,8 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             },
           ),
         )),
-        returnValueForMissingStub:
-            _i9.Future<_i5.SimpleHttpResponse>.value(_FakeSimpleHttpResponse_3(
+        returnValueForMissingStub: _i9.Future<_i5.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_3(
           this,
           Invocation.method(
             #putBinary,
@@ -333,9 +334,9 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             },
           ),
         )),
-      ) as _i9.Future<_i5.SimpleHttpResponse>);
+      ) as _i9.Future<_i5.OldSimpleHttpResponse>);
   @override
-  _i9.Future<_i5.SimpleHttpResponse> postJson({
+  _i9.Future<_i5.OldSimpleHttpResponse> postJson({
     required String? to,
     required Map<String, dynamic>? body,
     Map<String, String>? headers,
@@ -350,8 +351,8 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             #headers: headers,
           },
         ),
-        returnValue:
-            _i9.Future<_i5.SimpleHttpResponse>.value(_FakeSimpleHttpResponse_3(
+        returnValue: _i9.Future<_i5.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_3(
           this,
           Invocation.method(
             #postJson,
@@ -363,8 +364,8 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             },
           ),
         )),
-        returnValueForMissingStub:
-            _i9.Future<_i5.SimpleHttpResponse>.value(_FakeSimpleHttpResponse_3(
+        returnValueForMissingStub: _i9.Future<_i5.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_3(
           this,
           Invocation.method(
             #postJson,
@@ -376,9 +377,9 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             },
           ),
         )),
-      ) as _i9.Future<_i5.SimpleHttpResponse>);
+      ) as _i9.Future<_i5.OldSimpleHttpResponse>);
   @override
-  _i9.Future<_i5.SimpleHttpResponse> get({
+  _i9.Future<_i5.OldSimpleHttpResponse> get({
     required String? to,
     Map<String, String>? headers,
   }) =>
@@ -391,8 +392,8 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             #headers: headers,
           },
         ),
-        returnValue:
-            _i9.Future<_i5.SimpleHttpResponse>.value(_FakeSimpleHttpResponse_3(
+        returnValue: _i9.Future<_i5.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_3(
           this,
           Invocation.method(
             #get,
@@ -403,8 +404,8 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             },
           ),
         )),
-        returnValueForMissingStub:
-            _i9.Future<_i5.SimpleHttpResponse>.value(_FakeSimpleHttpResponse_3(
+        returnValueForMissingStub: _i9.Future<_i5.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_3(
           this,
           Invocation.method(
             #get,
@@ -415,7 +416,7 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             },
           ),
         )),
-      ) as _i9.Future<_i5.SimpleHttpResponse>);
+      ) as _i9.Future<_i5.OldSimpleHttpResponse>);
 }
 
 /// A class which mocks [TimeService].
@@ -463,17 +464,17 @@ class MockCloudFunctionsService extends _i1.Mock
         ),
       ) as _i6.Logger);
   @override
-  _i5.HttpService get httpService => (super.noSuchMethod(
+  _i5.OldHttpService get httpService => (super.noSuchMethod(
         Invocation.getter(#httpService),
-        returnValue: _FakeHttpService_6(
+        returnValue: _FakeOldHttpService_6(
           this,
           Invocation.getter(#httpService),
         ),
-        returnValueForMissingStub: _FakeHttpService_6(
+        returnValueForMissingStub: _FakeOldHttpService_6(
           this,
           Invocation.getter(#httpService),
         ),
-      ) as _i5.HttpService);
+      ) as _i5.OldHttpService);
   @override
   _i9.Future<String> getV4BuildUploadSignedUrl(
     String? projectId,

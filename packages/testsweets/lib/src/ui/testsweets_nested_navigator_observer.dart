@@ -25,9 +25,9 @@ class TestSweetsNestedNavigatorObserver extends NavigatorObserver {
       TestSweetsNestedNavigatorObserver._internal(source: 'root');
 
   TestSweetsNestedNavigatorObserver._internal({
-    this.source,
     this.verbose = false,
     this.level = 1,
+    this.source,
   });
 
   static TestSweetsNestedNavigatorObserver get instance => _instance;

@@ -19,6 +19,8 @@ class WidgetCaptureService {
     _projectId = projectId;
   }
 
+  String get projectId => _projectId;
+
   final bool verbose;
   WidgetCaptureService({this.verbose = false}) {
     if (verbose) {

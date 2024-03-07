@@ -1,118 +1,115 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
+import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
+import 'package:testsweets/src/models/outgoing_event.dart';
 
-import 'package:http/http.dart' as http;
+const _baseUrl = String.fromEnvironment(
+  'TESTSWEETS_BASE_URL',
+  defaultValue: _useFirebaseEmulator
+      ? 'http://10.0.2.2:5001/sessionmate-93c0e/us-central1'
+      : 'https://us-central1-sessionmate-93c0e.cloudfunctions.net',
+);
+const _useFirebaseEmulator =
+    bool.fromEnvironment('TESTSWEETS_USE_FIREBASE_EMULATOR');
+const _idToken = String.fromEnvironment('TESTSWEETS_ID_TOKEN');
 
-abstract class HttpService {
-  /// Makes a PUT request to the endpoint given by [to].
-  Future<SimpleHttpResponse> putBinary(
-      {required String to,
-      required Stream<List<int>> data,
-      required int contentLength,
-      Map<String, String>? headers});
-
-  Future<SimpleHttpResponse> postJson(
-      {required String to,
-      required Map<String, dynamic> body,
-      Map<String, String>? headers});
-
-  Future<SimpleHttpResponse> get(
-      {required String to, Map<String, String>? headers});
+enum _HttpMethod {
+  get,
+  post,
+  put,
+  delete,
 }
 
-class SimpleHttpResponse {
-  final int statusCode;
-  final String body;
-  SimpleHttpResponse(this.statusCode, this.body);
+class HttpService {
+  late final Dio _httpClient;
 
-  Map<String, dynamic> parseBodyAsJsonMap() {
-    return json.decode(body) as Map<String, dynamic>;
-  }
-}
-
-class HttpServiceImplementation implements HttpService {
-  @override
-  Future<SimpleHttpResponse> putBinary(
-      {required String to,
-      required Stream<List<int>> data,
-      required int contentLength,
-      Map<String, String>? headers}) async {
-    headers = headers ?? <String, String>{};
-
-    // TODO (Refactor): This is a terrible implementation, it needs to be changed
-    // ignore: close_sinks
-    final request = await HttpClient().putUrl(Uri.parse(to));
-    headers.forEach((key, value) => request.headers.set(key, value));
-
-    print('');
-
-    int numberOfBytesWritten = 0;
-    Stopwatch counter = Stopwatch();
-    final response = await data.map((chunk) {
-      counter.start();
-
-      numberOfBytesWritten += chunk.length;
-
-      if (counter.elapsed > Duration(seconds: 1)) {
-        counter.reset();
-        //remove old progress print to the console
-        stdout.write("\r\x1b[K");
-        var progress = ((numberOfBytesWritten / contentLength) * 100).ceil();
-        stdout.write("Uploaded $progress% of $contentLength ...");
-      }
-
-      return chunk;
-    }).pipe(StreamConsumerWithCallbacks(request, onFinalise: () {
-      print('Finalising upload...');
-    }));
-
-    return SimpleHttpResponse(
-        response.statusCode, await response.transform(utf8.decoder).join());
-  }
-
-  @override
-  Future<SimpleHttpResponse> postJson(
-      {required String to,
-      required Map<String, dynamic> body,
-      Map<String, String>? headers}) async {
-    headers = headers ?? <String, String>{};
-    headers.putIfAbsent(
-        HttpHeaders.contentTypeHeader, () => 'application/json');
-    final response = await http.post(
-      Uri.parse(to),
-      body: json.encode(body),
-      headers: headers,
+  HttpService() {
+    _httpClient = Dio(
+      BaseOptions(
+        receiveDataWhenStatusError: true,
+        baseUrl: _baseUrl,
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $_idToken',
+        },
+      ),
     );
 
-    print(
-        'postJson | response - statuscode:${response.statusCode} body:${response.body} headers:${response.headers}');
-
-    return SimpleHttpResponse(response.statusCode, response.body);
+    _httpClient.interceptors.add(TalkerDioLogger(
+      settings: TalkerDioLoggerSettings(
+        printRequestData: true,
+        printResponseData: false,
+      ),
+    ));
   }
 
-  @override
-  Future<SimpleHttpResponse> get(
-      {required String to, Map<String, String>? headers}) async {
-    final response = await http.get(Uri.parse(to), headers: headers);
-
-    return SimpleHttpResponse(response.statusCode, response.body);
-  }
-}
-
-class StreamConsumerWithCallbacks implements StreamConsumer<List<int>> {
-  final void Function() onFinalise;
-  final StreamConsumer relayTo;
-  StreamConsumerWithCallbacks(this.relayTo, {required this.onFinalise});
-
-  @override
-  Future addStream(Stream stream) {
-    return relayTo.addStream(stream);
+  Future<void> captureEvents({
+    required String projectId,
+    required List<OutgoingEvent> events,
+  }) async {
+    await _makeHttpRequest(
+      method: _HttpMethod.get,
+      path: '/events-api/submitEvents',
+      body: {
+        'projectId': projectId,
+        'events': events,
+      },
+    );
   }
 
-  @override
-  Future close() {
-    onFinalise();
-    return relayTo.close();
+  Future<Response?> _makeHttpRequest({
+    required _HttpMethod method,
+    required String path,
+    Map<String, dynamic> queryParameteres = const {},
+    Map<String, dynamic> body = const {},
+  }) async {
+    Response? response;
+    final requestOptions = Options(
+      // headers: await _getHeaders(),
+      // We don't throw exceptions for anything under 500
+      // we need to handle it
+      validateStatus: (status) =>
+          (status ?? 500) < 500 || (status ?? 500) == 505,
+    );
+    try {
+      switch (method) {
+        case _HttpMethod.post:
+          response = await _httpClient.post(
+            path,
+            queryParameters: queryParameteres,
+            data: body,
+            options: requestOptions,
+          );
+          break;
+        case _HttpMethod.put:
+          response = await _httpClient.put(
+            path,
+            queryParameters: queryParameteres,
+            data: body,
+            options: requestOptions,
+          );
+          break;
+        case _HttpMethod.delete:
+          response = await _httpClient.delete(
+            path,
+            queryParameters: queryParameteres,
+            options: requestOptions,
+          );
+          break;
+        case _HttpMethod.get:
+        default:
+          response = await _httpClient.get(
+            path,
+            queryParameters: queryParameteres,
+            options: requestOptions,
+          );
+      }
+    } on DioException catch (e) {
+      print('🔴 DioError: $e');
+    } catch (e) {
+      print('🔴 HttpService exception: $e');
+    }
+
+    return response;
   }
 }
