@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:testsweets/src/constants/app_constants.dart';
 import 'package:testsweets/src/locator.dart';
+import 'package:testsweets/src/services/events_service.dart';
 import 'package:testsweets/src/services/local_config_service.dart';
 import 'package:testsweets/src/services/run_configuration_service.dart';
 import 'package:testsweets_shared/testsweets_shared.dart';
@@ -83,7 +84,22 @@ Future<void> setupTestSweets({bool enabled = TEST_SWEETS_ENABLED}) async {
             },
           );
         case DriverCommandType.expectEvent:
-          return '';
+          final eventService = locator<EventsService>();
+          final expectEventData = ExpectEventDataModel.fromJson(
+              driverCommand.value as Map<String, dynamic>);
+
+          final eventMatch = eventService.matchEvent(
+            name: driverCommand.name,
+            key: expectEventData.key,
+            value: expectEventData.value,
+          );
+
+          final commandResult = DriverCommandResult(
+            type: DriverCommandType.expectEvent,
+            success: eventMatch,
+          );
+
+          return json.encode(commandResult);
 
         case DriverCommandType.modeUpdate:
           locator<RunConfigurationService>().driveModeActive =

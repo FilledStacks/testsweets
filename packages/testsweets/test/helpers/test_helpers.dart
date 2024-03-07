@@ -34,9 +34,14 @@ import 'test_helpers.mocks.dart';
   MockSpec<HttpService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<RunConfigurationService>(onMissingStub: OnMissingStub.returnDefault),
 ])
-MockRunConfigurationService getAndRegisterRunConfigurationService() {
+MockRunConfigurationService getAndRegisterRunConfigurationService({
+  bool driveModeActive = false,
+}) {
   _removeRegistrationIfExists<RunConfigurationService>();
   final service = MockRunConfigurationService();
+
+  when(service.driveModeActive).thenReturn(driveModeActive);
+
   locator.registerSingleton<RunConfigurationService>(service);
   return service;
 }

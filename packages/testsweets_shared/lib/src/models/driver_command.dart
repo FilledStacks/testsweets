@@ -15,3 +15,14 @@ class DriverCommand with _$DriverCommand {
   factory DriverCommand.fromJson(Map<String, dynamic> json) =>
       _$DriverCommandFromJson(json);
 }
+
+@freezed
+class ExpectEventDataModel with _$ExpectEventDataModel {
+  factory ExpectEventDataModel({
+    required String key,
+    required dynamic value,
+  }) = _ExpectEventDataModel;
+
+  factory ExpectEventDataModel.fromJson(Map<String, dynamic> json) =>
+      _$ExpectEventDataModelFromJson(json);
+}

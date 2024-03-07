@@ -185,3 +185,161 @@ abstract class _DriverCommand implements DriverCommand {
   _$$DriverCommandImplCopyWith<_$DriverCommandImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+ExpectEventDataModel _$ExpectEventDataModelFromJson(Map<String, dynamic> json) {
+  return _ExpectEventDataModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ExpectEventDataModel {
+  String get key => throw _privateConstructorUsedError;
+  dynamic get value => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ExpectEventDataModelCopyWith<ExpectEventDataModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ExpectEventDataModelCopyWith<$Res> {
+  factory $ExpectEventDataModelCopyWith(ExpectEventDataModel value,
+          $Res Function(ExpectEventDataModel) then) =
+      _$ExpectEventDataModelCopyWithImpl<$Res, ExpectEventDataModel>;
+  @useResult
+  $Res call({String key, dynamic value});
+}
+
+/// @nodoc
+class _$ExpectEventDataModelCopyWithImpl<$Res,
+        $Val extends ExpectEventDataModel>
+    implements $ExpectEventDataModelCopyWith<$Res> {
+  _$ExpectEventDataModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? key = null,
+    Object? value = freezed,
+  }) {
+    return _then(_value.copyWith(
+      key: null == key
+          ? _value.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as String,
+      value: freezed == value
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ExpectEventDataModelImplCopyWith<$Res>
+    implements $ExpectEventDataModelCopyWith<$Res> {
+  factory _$$ExpectEventDataModelImplCopyWith(_$ExpectEventDataModelImpl value,
+          $Res Function(_$ExpectEventDataModelImpl) then) =
+      __$$ExpectEventDataModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String key, dynamic value});
+}
+
+/// @nodoc
+class __$$ExpectEventDataModelImplCopyWithImpl<$Res>
+    extends _$ExpectEventDataModelCopyWithImpl<$Res, _$ExpectEventDataModelImpl>
+    implements _$$ExpectEventDataModelImplCopyWith<$Res> {
+  __$$ExpectEventDataModelImplCopyWithImpl(_$ExpectEventDataModelImpl _value,
+      $Res Function(_$ExpectEventDataModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? key = null,
+    Object? value = freezed,
+  }) {
+    return _then(_$ExpectEventDataModelImpl(
+      key: null == key
+          ? _value.key
+          : key // ignore: cast_nullable_to_non_nullable
+              as String,
+      value: freezed == value
+          ? _value.value
+          : value // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ExpectEventDataModelImpl implements _ExpectEventDataModel {
+  _$ExpectEventDataModelImpl({required this.key, required this.value});
+
+  factory _$ExpectEventDataModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ExpectEventDataModelImplFromJson(json);
+
+  @override
+  final String key;
+  @override
+  final dynamic value;
+
+  @override
+  String toString() {
+    return 'ExpectEventDataModel(key: $key, value: $value)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ExpectEventDataModelImpl &&
+            (identical(other.key, key) || other.key == key) &&
+            const DeepCollectionEquality().equals(other.value, value));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, key, const DeepCollectionEquality().hash(value));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ExpectEventDataModelImplCopyWith<_$ExpectEventDataModelImpl>
+      get copyWith =>
+          __$$ExpectEventDataModelImplCopyWithImpl<_$ExpectEventDataModelImpl>(
+              this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ExpectEventDataModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ExpectEventDataModel implements ExpectEventDataModel {
+  factory _ExpectEventDataModel(
+      {required final String key,
+      required final dynamic value}) = _$ExpectEventDataModelImpl;
+
+  factory _ExpectEventDataModel.fromJson(Map<String, dynamic> json) =
+      _$ExpectEventDataModelImpl.fromJson;
+
+  @override
+  String get key;
+  @override
+  dynamic get value;
+  @override
+  @JsonKey(ignore: true)
+  _$$ExpectEventDataModelImplCopyWith<_$ExpectEventDataModelImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}

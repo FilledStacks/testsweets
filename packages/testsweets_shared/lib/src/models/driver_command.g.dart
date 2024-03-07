@@ -25,3 +25,17 @@ const _$DriverCommandTypeEnumMap = {
   DriverCommandType.expectEvent: 'expectEvent',
   DriverCommandType.modeUpdate: 'modeUpdate',
 };
+
+_$ExpectEventDataModelImpl _$$ExpectEventDataModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ExpectEventDataModelImpl(
+      key: json['key'] as String,
+      value: json['value'],
+    );
+
+Map<String, dynamic> _$$ExpectEventDataModelImplToJson(
+        _$ExpectEventDataModelImpl instance) =>
+    <String, dynamic>{
+      'key': instance.key,
+      'value': instance.value,
+    };

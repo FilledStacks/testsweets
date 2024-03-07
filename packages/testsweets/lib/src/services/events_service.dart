@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 import 'package:testsweets/src/locator.dart';
@@ -13,7 +14,7 @@ class EventsService {
   final runConfigurationService = locator<RunConfigurationService>();
 
   List<OutgoingEvent> events = [];
-  List<OutgoingEvent> eventsForTestSweets = [];
+  Queue<OutgoingEvent> eventsForTestSweets = Queue<OutgoingEvent>();
 
   void captureEvent({
     required String name,
@@ -24,6 +25,7 @@ class EventsService {
     }
 
     if (runConfigurationService.driveModeActive) {
+      _captureEventsForTestSweetsApp(name: name, properties: properties);
     } else {
       _captureEventsForBackend(name: name, properties: properties);
     }
@@ -32,7 +34,12 @@ class EventsService {
   void _captureEventsForTestSweetsApp({
     required String name,
     required Map<String, dynamic> properties,
-  }) {}
+  }) {
+    eventsForTestSweets.add(OutgoingEvent(
+      name: name,
+      properties: properties,
+    ));
+  }
 
   void _captureEventsForBackend({
     required String name,
@@ -60,5 +67,23 @@ class EventsService {
       projectId: widgetCaptureService.projectId,
       events: eventsToSubmit,
     );
+  }
+
+  bool matchEvent({
+    required String name,
+    required String key,
+    required String value,
+  }) {
+    while (eventsForTestSweets.isNotEmpty) {
+      final item = eventsForTestSweets.removeFirst();
+
+      if (item.name == name &&
+          item.properties.containsKey(key) &&
+          item.properties[key] == value) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
