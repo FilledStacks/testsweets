@@ -45,6 +45,7 @@ class EventsService {
     required String name,
     required Map<String, dynamic> properties,
   }) {
+    print('🍬 TESTSWEETS :: _captureEventsForBackend');
     Timer _batchTimer = Timer(Duration(milliseconds: 500), _submitBatch);
 
     events.add(OutgoingEvent(
@@ -59,6 +60,7 @@ class EventsService {
   }
 
   void _submitBatch() {
+    print('🍬 TESTSWEETS :: Submit batch to backend');
     final eventsToSubmit = List<OutgoingEvent>.from(events.take(5));
     final endRange = events.length > 4 ? 5 : events.length;
     events.removeRange(0, endRange);

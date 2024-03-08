@@ -8,7 +8,6 @@ import 'package:testsweets/src/services/runnable_process.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/time_service.dart';
 
-import 'services/automation_keys_service.dart';
 import 'services/cloud_functions_service.dart';
 
 GetIt dartOnlyLocator = GetIt.asNewInstance();
@@ -16,9 +15,6 @@ bool dartOnlyLocatorSetup = false;
 Future<void> setupDartOnlyLocator() async {
   dartOnlyLocator.registerLazySingleton<TestSweetsConfigFileService>(
       () => TestSweetsConfigFileService());
-
-  dartOnlyLocator.registerLazySingleton<AutomationKeysService>(
-      () => AutomationKeysServiceImplementation());
 
   dartOnlyLocator.registerLazySingleton<OldHttpService>(
       () => OldHttpServiceImplementation());

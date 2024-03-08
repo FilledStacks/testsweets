@@ -2,7 +2,6 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/dart_only_locator.dart';
 import 'package:testsweets/src/models/interaction.dart';
-import 'package:testsweets/src/services/automation_keys_service.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
 import 'package:testsweets/src/services/dynamic_keys_generator.dart';
 import 'package:testsweets/src/services/file_system_service.dart';
@@ -23,7 +22,6 @@ import 'test_consts.dart';
   MockSpec<TimeService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<CloudFunctionsService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<DynamicKeysGenerator>(onMissingStub: OnMissingStub.returnDefault),
-  MockSpec<AutomationKeysService>(onMissingStub: OnMissingStub.returnDefault),
 ])
 MockFileSystemService getAndRegisterFileSystemService({
   bool doesFileExist = false,
@@ -153,14 +151,6 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
   return service;
 }
 
-AutomationKeysService getAndRegisterAutomationKeysService() {
-  _removeRegistrationIfExists<AutomationKeysService>();
-  final service = MockAutomationKeysService();
-  when(service.extractKeysListFromJson()).thenReturn(testAutomationKeys);
-  dartOnlyLocator.registerSingleton<AutomationKeysService>(service);
-  return service;
-}
-
 void registerDartOnlyServices() {
   getAndRegisterFileSystemService();
   getAndRegisterHttpService();
@@ -168,7 +158,6 @@ void registerDartOnlyServices() {
   getAndRegisterCloudFunctionsService();
   getAndRegisterDynamicKeysGeneratorService();
   getAndRegisterTestSweetsConfigFileService();
-  getAndRegisterAutomationKeysService();
 }
 
 void unregisterDartOnlyServices() {
@@ -179,7 +168,6 @@ void unregisterDartOnlyServices() {
   _removeRegistrationIfExists<CloudFunctionsService>();
   _removeRegistrationIfExists<DynamicKeysGenerator>();
   _removeRegistrationIfExists<TestSweetsConfigFileService>();
-  _removeRegistrationIfExists<AutomationKeysService>();
 }
 
 // Call this before any service registration helper. This is to ensure that if there

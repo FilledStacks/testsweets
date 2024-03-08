@@ -92,9 +92,9 @@ class Interaction with _$Interaction {
   /// Performs a migration using the [capturedDeviceWidth] and [capturedDeviceHeight]
   /// and returns a new [WidgetPosition] to be used in the place of the original.
   Interaction migrate() {
-    print(
-        // ignore: deprecated_member_use_from_same_package
-        'Migrate: ${position.x},${position.y} size:${position.capturedDeviceWidth}, ${position.capturedDeviceHeight}');
+    // print(
+    //     // ignore: deprecated_member_use_from_same_package
+    //     'Migrate: ${position.x},${position.y} size:${position.capturedDeviceWidth}, ${position.capturedDeviceHeight}');
 
     // ignore: deprecated_member_use_from_same_package
     final width = position.capturedDeviceWidth;
@@ -115,8 +115,8 @@ class Interaction with _$Interaction {
 
     final noPositionBucketForOriginalSize = matchingDeviceDetails == null;
 
-    print(
-        'noDeviceBucketForOriginalSize: $noPositionBucketForOriginalSize\n Current Positions: $widgetPositions');
+    // print(
+    //     'noDeviceBucketForOriginalSize: $noPositionBucketForOriginalSize\n Current Positions: $widgetPositions');
     if (noPositionBucketForOriginalSize) {
       return copyWith(widgetPositions: [
         ...widgetPositions,

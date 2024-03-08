@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
+import 'package:testsweets/src/services/events_service.dart';
 import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/local_config_service.dart';
 import 'package:testsweets/src/services/notification_extractor.dart';
@@ -36,6 +37,7 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => HttpService());
 
   locator.registerLazySingleton(() => TestIntegrity());
+  locator.registerLazySingleton(() => EventsService());
   locator.registerLazySingleton(() => RunConfigurationService());
 
   locatorSetup = true;

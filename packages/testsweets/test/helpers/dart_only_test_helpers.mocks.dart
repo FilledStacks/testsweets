@@ -8,7 +8,6 @@ import 'dart:io' as _i3;
 
 import 'package:logger/src/logger.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:testsweets/src/services/automation_keys_service.dart' as _i13;
 import 'package:testsweets/src/services/cloud_functions_service.dart' as _i10;
 import 'package:testsweets/src/services/dynamic_keys_generator.dart' as _i12;
 import 'package:testsweets/src/services/file_system_service.dart' as _i2;
@@ -554,22 +553,6 @@ class MockDynamicKeysGenerator extends _i1.Mock
         Invocation.method(
           #generateAutomationKeysFromDynamicKeysFile,
           [dynamicKeysFilePath],
-        ),
-        returnValue: <String>[],
-        returnValueForMissingStub: <String>[],
-      ) as List<String>);
-}
-
-/// A class which mocks [AutomationKeysService].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockAutomationKeysService extends _i1.Mock
-    implements _i13.AutomationKeysService {
-  @override
-  List<String> extractKeysListFromJson() => (super.noSuchMethod(
-        Invocation.method(
-          #extractKeysListFromJson,
-          [],
         ),
         returnValue: <String>[],
         returnValueForMissingStub: <String>[],

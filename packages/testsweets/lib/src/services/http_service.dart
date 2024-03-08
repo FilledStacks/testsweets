@@ -6,12 +6,11 @@ import 'package:testsweets/src/models/outgoing_event.dart';
 const _baseUrl = String.fromEnvironment(
   'TESTSWEETS_BASE_URL',
   defaultValue: _useFirebaseEmulator
-      ? 'http://10.0.2.2:5001/sessionmate-93c0e/us-central1'
-      : 'https://us-central1-sessionmate-93c0e.cloudfunctions.net',
+      ? 'https://us-central1-testsweets-38348.cloudfunctions.net'
+      : 'https://us-central1-testsweets-38348.cloudfunctions.net',
 );
 const _useFirebaseEmulator =
     bool.fromEnvironment('TESTSWEETS_USE_FIREBASE_EMULATOR');
-const _idToken = String.fromEnvironment('TESTSWEETS_ID_TOKEN');
 
 enum _HttpMethod {
   get,
@@ -30,7 +29,6 @@ class HttpService {
         baseUrl: _baseUrl,
         headers: {
           "Content-Type": "application/json",
-          'Authorization': 'Bearer $_idToken',
         },
       ),
     );
@@ -38,7 +36,7 @@ class HttpService {
     _httpClient.interceptors.add(TalkerDioLogger(
       settings: TalkerDioLoggerSettings(
         printRequestData: true,
-        printResponseData: false,
+        printResponseData: true,
       ),
     ));
   }
@@ -48,7 +46,7 @@ class HttpService {
     required List<OutgoingEvent> events,
   }) async {
     await _makeHttpRequest(
-      method: _HttpMethod.get,
+      method: _HttpMethod.post,
       path: '/events-api/submitEvents',
       body: {
         'projectId': projectId,
@@ -105,9 +103,10 @@ class HttpService {
           );
       }
     } on DioException catch (e) {
-      print('🔴 DioError: $e');
+      print(
+          '🔴 🍬 TESTSWEETS ::  DioError: $e \n method:$method \n path:$path \n queryParams:$queryParameteres \n body: $body');
     } catch (e) {
-      print('🔴 HttpService exception: $e');
+      print('🔴 🍬 TESTSWEETS ::  HttpService exception: $e');
     }
 
     return response;
