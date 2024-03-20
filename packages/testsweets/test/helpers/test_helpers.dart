@@ -16,6 +16,7 @@ import 'package:testsweets/src/services/test_integrity.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/ui/shared/scrollable_finder.dart';
+import 'package:testsweets/src/utils/batch_processing/batch_processors.dart';
 
 import 'test_consts.dart';
 import 'test_helpers.mocks.dart';
@@ -33,7 +34,23 @@ import 'test_helpers.mocks.dart';
   MockSpec<OldHttpService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<HttpService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<RunConfigurationService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<EventsProcessor>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<InteractionsProcessor>(onMissingStub: OnMissingStub.returnDefault),
 ])
+MockInteractionsProcessor getAndRegisterInteractionsProcessor() {
+  _removeRegistrationIfExists<InteractionsProcessor>();
+  final service = MockInteractionsProcessor();
+  locator.registerSingleton<InteractionsProcessor>(service);
+  return service;
+}
+
+MockEventsProcessor getAndRegisterEventsProcessor() {
+  _removeRegistrationIfExists<EventsProcessor>();
+  final service = MockEventsProcessor();
+  locator.registerSingleton<EventsProcessor>(service);
+  return service;
+}
+
 MockRunConfigurationService getAndRegisterRunConfigurationService({
   bool driveModeActive = false,
 }) {
@@ -222,6 +239,8 @@ void registerServices() {
   getAndRegisterOldHttpService();
   getAndRegisterHttpService();
   getAndRegisterRunConfigurationService();
+  getAndRegisterEventsProcessor();
+  getAndRegisterInteractionsProcessor();
 }
 
 void unregisterServices() {
@@ -237,6 +256,8 @@ void unregisterServices() {
   _removeRegistrationIfExists<OldHttpService>();
   _removeRegistrationIfExists<HttpService>();
   _removeRegistrationIfExists<RunConfigurationService>();
+  _removeRegistrationIfExists<InteractionsProcessor>();
+  _removeRegistrationIfExists<EventsProcessor>();
 }
 
 T registerServiceInsteadOfMockedOne<T extends Object>(T instance) {

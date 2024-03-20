@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
@@ -7,14 +6,27 @@ import 'package:testsweets/src/models/outgoing_event.dart';
 import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/run_configuration_service.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
+import 'package:testsweets/src/utils/batch_processing/batch_processors.dart';
 
 class EventsService {
   final httpService = locator<HttpService>();
   final widgetCaptureService = locator<WidgetCaptureService>();
   final runConfigurationService = locator<RunConfigurationService>();
+  final eventsProcessor = locator<EventsProcessor>();
 
   List<OutgoingEvent> events = [];
   Queue<OutgoingEvent> eventsForTestSweets = Queue<OutgoingEvent>();
+
+  EventsService() {
+    if (!kReleaseMode) {
+      eventsProcessor.batchProcessingStream.listen((eventsToProcess) {
+        httpService.captureEvents(
+          projectId: widgetCaptureService.projectId,
+          events: eventsToProcess,
+        );
+      });
+    }
+  }
 
   void captureEvent({
     required String name,
@@ -23,6 +35,9 @@ class EventsService {
     if (kReleaseMode) {
       return;
     }
+
+    print(
+        '🍬 TESTSWEETS :: captureEvent driveMode: ${runConfigurationService.driveModeActive}');
 
     if (runConfigurationService.driveModeActive) {
       _captureEventsForTestSweetsApp(name: name, properties: properties);
@@ -46,29 +61,11 @@ class EventsService {
     required Map<String, dynamic> properties,
   }) {
     print('🍬 TESTSWEETS :: _captureEventsForBackend');
-    Timer _batchTimer = Timer(Duration(milliseconds: 500), _submitBatch);
 
-    events.add(OutgoingEvent(
+    eventsProcessor.addItem(OutgoingEvent(
       name: name,
       properties: properties,
     ));
-
-    if (events.length > 4) {
-      _batchTimer.cancel();
-      _submitBatch();
-    }
-  }
-
-  void _submitBatch() {
-    print('🍬 TESTSWEETS :: Submit batch to backend');
-    final eventsToSubmit = List<OutgoingEvent>.from(events.take(5));
-    final endRange = events.length > 4 ? 5 : events.length;
-    events.removeRange(0, endRange);
-
-    httpService.captureEvents(
-      projectId: widgetCaptureService.projectId,
-      events: eventsToSubmit,
-    );
   }
 
   bool matchEvent({
@@ -76,15 +73,20 @@ class EventsService {
     required String key,
     required String value,
   }) {
+    print('🍬 TESTSWEETS :: matchEvent name:$name, key:$key, value:$value');
     while (eventsForTestSweets.isNotEmpty) {
       final item = eventsForTestSweets.removeFirst();
 
+      print('🍬 TESTSWEETS :: matchEvent - item:${item}');
       if (item.name == name &&
           item.properties.containsKey(key) &&
           item.properties[key] == value) {
         return true;
       }
     }
+
+    print(
+        '🍬 TESTSWEETS :: matchEvent failed. no match for name:$name, key:$key, value:$value');
 
     return false;
   }

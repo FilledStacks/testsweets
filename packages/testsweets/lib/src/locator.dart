@@ -12,6 +12,7 @@ import 'package:testsweets/src/services/test_integrity.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/ui/shared/scrollable_finder.dart';
+import 'package:testsweets/src/utils/batch_processing/batch_processors.dart';
 
 import 'services/old_http_service.dart';
 
@@ -39,6 +40,9 @@ Future<void> setupLocator() async {
   locator.registerLazySingleton(() => TestIntegrity());
   locator.registerLazySingleton(() => EventsService());
   locator.registerLazySingleton(() => RunConfigurationService());
+
+  locator.registerFactory(() => EventsProcessor());
+  locator.registerFactory(() => InteractionsProcessor());
 
   locatorSetup = true;
 }
