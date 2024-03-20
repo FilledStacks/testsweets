@@ -5,7 +5,9 @@ import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
+import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
+import 'package:testsweets/src/utils/batch_processing/batch_processors.dart';
 import 'package:testsweets/testsweets.dart';
 
 /// A service that facilitates the capturing of widgets on device
@@ -14,6 +16,8 @@ class WidgetCaptureService {
 
   final _cloudFunctionsService = locator<CloudFunctionsService>();
   final _testSweetRouteTracker = locator<TestSweetsRouteTracker>();
+  final _interactionsProcess = locator<InteractionsProcessor>();
+  final _httpService = locator<HttpService>();
 
   @visibleForTesting
   final widgetDescriptionMap = Map<String, List<Interaction>>();
@@ -26,11 +30,13 @@ class WidgetCaptureService {
 
   String get projectId => _projectId;
 
-  final bool verbose;
-  WidgetCaptureService({this.verbose = false}) {
-    if (verbose) {
-      projectId = 'projectId';
-    }
+  WidgetCaptureService() {
+    _interactionsProcess.batchProcessingStream.listen((eventsToProcess) {
+      _httpService.captureInteractions(
+        projectId: projectId,
+        events: eventsToProcess,
+      );
+    });
   }
 
   /// Gets all the widget descriptions the project and stores them in a map
@@ -84,6 +90,8 @@ class WidgetCaptureService {
         )
       ],
     );
+
+    _interactionsProcess.addItem(interaction);
   }
 
   Future<Interaction> saveInteractionInDatabase(Interaction interaction) async {

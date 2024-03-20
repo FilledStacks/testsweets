@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
 import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
 import 'package:testsweets/src/models/outgoing_event.dart';
+import 'package:testsweets/testsweets.dart';
 
 const _baseUrl = String.fromEnvironment(
   'TESTSWEETS_BASE_URL',
@@ -44,6 +45,20 @@ class HttpService {
   Future<void> captureEvents({
     required String projectId,
     required List<OutgoingEvent> events,
+  }) async {
+    await _makeHttpRequest(
+      method: _HttpMethod.post,
+      path: '/events-api/submitEvents',
+      body: {
+        'projectId': projectId,
+        'events': events,
+      },
+    );
+  }
+
+  Future<void> captureInteractions({
+    required String projectId,
+    required List<Interaction> events,
   }) async {
     await _makeHttpRequest(
       method: _HttpMethod.post,
