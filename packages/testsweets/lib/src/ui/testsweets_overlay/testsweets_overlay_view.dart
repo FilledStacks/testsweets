@@ -53,10 +53,12 @@ class _TestSweetsOverlayViewState extends State<TestSweetsOverlayView>
   void initState() {
     super.initState();
 
-    _orientation = MediaQuery.of(context).orientation;
-    _screenSize = MediaQuery.of(context).size;
-
     _setupPeriodicScanner();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _orientation = MediaQuery.of(context).orientation;
+      _screenSize = MediaQuery.of(context).size;
+    });
   }
 
   @override

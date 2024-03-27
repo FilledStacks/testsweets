@@ -32,10 +32,11 @@ class WidgetCaptureService {
 
   WidgetCaptureService() {
     _interactionsProcess.batchProcessingStream.listen((eventsToProcess) {
-      _httpService.captureInteractions(
-        projectId: projectId,
-        events: eventsToProcess,
-      );
+      print('🍬 TESTSWEETS - Submit interactions $eventsToProcess');
+      // _httpService.captureInteractions(
+      //   projectId: projectId,
+      //   events: eventsToProcess,
+      // );
     });
   }
 
@@ -74,12 +75,10 @@ class WidgetCaptureService {
     required Size size,
     required Orientation orientation,
   }) async {
-    final currentView = _testSweetRouteTracker.currentRoute;
-
     final interaction = Interaction(
       widgetType: type,
-      originalViewName: '',
-      viewName: currentView,
+      originalViewName: _testSweetRouteTracker.currentRoute,
+      viewName: _testSweetRouteTracker.formatedCurrentRoute,
       widgetPositions: [
         WidgetPosition(
           x: position.dx,
@@ -91,7 +90,10 @@ class WidgetCaptureService {
       ],
     );
 
-    _interactionsProcess.addItem(interaction);
+    _interactionsProcess.addItem(interaction.setActivePosition(
+      size: size,
+      orientation: orientation,
+    ));
   }
 
   Future<Interaction> saveInteractionInDatabase(Interaction interaction) async {

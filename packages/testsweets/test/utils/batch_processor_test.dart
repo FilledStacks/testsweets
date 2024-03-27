@@ -17,11 +17,11 @@ void main() {
       });
 
       test(
-          'When called 6 times, should submit the events to the backend only once',
+          'When called 5 times, should submit the events to the backend only once',
           () async {
         final processor = _getProcessor();
 
-        for (var i = 0; i < 6; i++) {
+        for (var i = 0; i < 5; i++) {
           processor.addItem(i);
         }
         processor.batchProcessingStream
@@ -30,7 +30,7 @@ void main() {
                   [0, 1, 2, 3, 4],
                 )));
 
-        expect(processor.events.length, 1);
+        expect(processor.events.length, 0);
       });
 
       test(

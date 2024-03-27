@@ -158,12 +158,6 @@ class MockWidgetCaptureService extends _i1.Mock
         returnValueForMissingStub: <String, List<_i3.Interaction>>{},
       ) as Map<String, List<_i3.Interaction>>);
   @override
-  bool get verbose => (super.noSuchMethod(
-        Invocation.getter(#verbose),
-        returnValue: false,
-        returnValueForMissingStub: false,
-      ) as bool);
-  @override
   set projectId(String? projectId) => super.noSuchMethod(
         Invocation.setter(
           #projectId,
@@ -386,12 +380,16 @@ class MockTestSweetsRouteTracker extends _i1.Mock
   void setCurrentRoute(
     String? route, {
     int? level = 0,
+    bool? isTest = false,
   }) =>
       super.noSuchMethod(
         Invocation.method(
           #setCurrentRoute,
           [route],
-          {#level: level},
+          {
+            #level: level,
+            #isTest: isTest,
+          },
         ),
         returnValueForMissingStub: null,
       );
@@ -1198,6 +1196,23 @@ class MockHttpService extends _i1.Mock implements _i20.HttpService {
         returnValue: _i10.Future<void>.value(),
         returnValueForMissingStub: _i10.Future<void>.value(),
       ) as _i10.Future<void>);
+  @override
+  _i10.Future<void> captureInteractions({
+    required String? projectId,
+    required List<_i3.Interaction>? events,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #captureInteractions,
+          [],
+          {
+            #projectId: projectId,
+            #events: events,
+          },
+        ),
+        returnValue: _i10.Future<void>.value(),
+        returnValueForMissingStub: _i10.Future<void>.value(),
+      ) as _i10.Future<void>);
 }
 
 /// A class which mocks [RunConfigurationService].
@@ -1240,20 +1255,18 @@ class MockEventsProcessor extends _i1.Mock implements _i23.EventsProcessor {
         returnValueForMissingStub: null,
       );
   @override
+  _i10.Stream<List<_i21.OutgoingEvent>> get batchProcessingStream =>
+      (super.noSuchMethod(
+        Invocation.getter(#batchProcessingStream),
+        returnValue: _i10.Stream<List<_i21.OutgoingEvent>>.empty(),
+        returnValueForMissingStub:
+            _i10.Stream<List<_i21.OutgoingEvent>>.empty(),
+      ) as _i10.Stream<List<_i21.OutgoingEvent>>);
+  @override
   void addItem(_i21.OutgoingEvent? item) => super.noSuchMethod(
         Invocation.method(
           #addItem,
           [item],
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
-  void registerBatchCallback(
-          dynamic Function(List<_i21.OutgoingEvent>)? onProcessBatch) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #registerBatchCallback,
-          [onProcessBatch],
         ),
         returnValueForMissingStub: null,
       );
@@ -1279,20 +1292,17 @@ class MockInteractionsProcessor extends _i1.Mock
         returnValueForMissingStub: null,
       );
   @override
+  _i10.Stream<List<_i3.Interaction>> get batchProcessingStream =>
+      (super.noSuchMethod(
+        Invocation.getter(#batchProcessingStream),
+        returnValue: _i10.Stream<List<_i3.Interaction>>.empty(),
+        returnValueForMissingStub: _i10.Stream<List<_i3.Interaction>>.empty(),
+      ) as _i10.Stream<List<_i3.Interaction>>);
+  @override
   void addItem(_i3.Interaction? item) => super.noSuchMethod(
         Invocation.method(
           #addItem,
           [item],
-        ),
-        returnValueForMissingStub: null,
-      );
-  @override
-  void registerBatchCallback(
-          dynamic Function(List<_i3.Interaction>)? onProcessBatch) =>
-      super.noSuchMethod(
-        Invocation.method(
-          #registerBatchCallback,
-          [onProcessBatch],
         ),
         returnValueForMissingStub: null,
       );

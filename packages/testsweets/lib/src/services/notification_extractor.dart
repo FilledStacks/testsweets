@@ -29,8 +29,8 @@ class NotificationExtractor {
 
   void _setScrollablePositionAndScrollDirection(Notification notification) {
     if (notification is ScrollStartNotification) {
-      globalPosition = notification.dragDetails!.globalPosition;
-      localPosition = notification.dragDetails!.localPosition;
+      globalPosition = notification.dragDetails?.globalPosition;
+      localPosition = notification.dragDetails?.localPosition;
     } else if (notification is UserScrollNotification) {
       scrollDirection = notification.direction;
     }
@@ -59,8 +59,8 @@ class NotificationExtractor {
     Notification notification,
   ) {
     return ScrollableDescription.fromNotification(
-      globalPosition: globalPosition!,
-      localPosition: localPosition!,
+      globalPosition: globalPosition ?? Offset.zero,
+      localPosition: localPosition ?? Offset.zero,
       metrics: (notification as ScrollUpdateNotification).metrics,
       scrollDirection: scrollDirection!,
     );

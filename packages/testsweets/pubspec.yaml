@@ -35,6 +35,7 @@ dependencies:
 
   testsweets_shared:
     path: ../testsweets_shared
+  universal_io: ^2.2.2
   
 dev_dependencies:
   stacked_generator: ^1.5.0

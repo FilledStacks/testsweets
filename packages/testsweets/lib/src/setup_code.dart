@@ -43,9 +43,10 @@ Future<void> setupTestSweets({bool enabled = TEST_SWEETS_ENABLED}) async {
 
   await locator<LocalConfigService>().setEnable(enabled);
 
-  if (!enabled || tsCaptureModeActive) return;
+  if (!enabled) return;
 
   enableFlutterDriverExtension(
+    enableTextEntryEmulation: false,
     handler: (message) async {
       ///
       /// take this message and await till the appropriate notification

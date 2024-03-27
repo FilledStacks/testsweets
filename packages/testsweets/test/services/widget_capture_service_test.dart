@@ -9,7 +9,12 @@ import 'package:testsweets/src/services/widget_capture_service.dart';
 import '../helpers/test_consts.dart';
 import '../helpers/test_helpers.dart';
 
-WidgetCaptureService get _getService => WidgetCaptureService(verbose: true);
+WidgetCaptureService get _getService {
+  final service = WidgetCaptureService();
+  service.projectId = 'projectId';
+  return service;
+}
+
 void main() {
   group('WidgetCaptureServiceTest -', () {
     setUp(() {
@@ -19,7 +24,7 @@ void main() {
     group('initialised -', () {
       test('When initialised, widgetDescriptionMap Should be empty', () {
         final _service = _getService;
-        _service.projectId = 'PrjectId';
+        _service.projectId = 'ProjectId';
         expect(_service.widgetDescriptionMap, isEmpty);
       });
     });
