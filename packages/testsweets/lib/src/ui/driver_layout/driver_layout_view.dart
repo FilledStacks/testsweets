@@ -11,13 +11,11 @@ import 'widgets/interaction_visualizer_driver_mode.dart';
 class DriverLayoutView extends StatelessWidget {
   final Widget child;
   final String projectId;
-  final Function()? onRouteBannerLongPress;
 
   const DriverLayoutView({
     Key? key,
     required this.child,
     required this.projectId,
-    required this.onRouteBannerLongPress,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -34,10 +32,7 @@ class DriverLayoutView extends StatelessWidget {
                 onNotification: model.onClientNotifiaction,
                 child: child,
               ),
-              RouteBannerView(
-                isCaptured: model.currentViewCaptured,
-                onLongPress: onRouteBannerLongPress,
-              ),
+              RouteBannerView(isCaptured: model.currentViewCaptured),
               const InteractionsVisualizerDriverMode(),
               BusyIndicator(
                 center: model.isBusy,

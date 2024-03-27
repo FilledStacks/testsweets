@@ -35,9 +35,6 @@ const bool TEST_SWEETS_ENABLED = bool.fromEnvironment(
   defaultValue: !kReleaseMode,
 );
 
-bool get tsCaptureModeActive =>
-    FORCE_CAPTURE_MODE || locator<LocalConfigService>().captureMode;
-
 Future<void> setupTestSweets({bool enabled = TEST_SWEETS_ENABLED}) async {
   await setupLocator();
 

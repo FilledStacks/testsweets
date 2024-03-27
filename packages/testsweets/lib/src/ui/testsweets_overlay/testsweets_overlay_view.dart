@@ -7,7 +7,6 @@ import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/ui/driver_layout/driver_layout_view.dart';
-import 'package:testsweets/src/ui/mode_swap_banner.dart';
 import 'package:testsweets/src/ui/testsweets_overlay/testsweets_overlay_viewmodel.dart';
 import 'package:testsweets/testsweets.dart';
 
@@ -53,7 +52,7 @@ class _TestSweetsOverlayViewState extends State<TestSweetsOverlayView>
   void initState() {
     super.initState();
 
-    _setupPeriodicScanner();
+    // _setupPeriodicScanner();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _orientation = MediaQuery.of(context).orientation;
@@ -64,42 +63,23 @@ class _TestSweetsOverlayViewState extends State<TestSweetsOverlayView>
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<TestSweetsOverlayViewModel>.reactive(
-        viewModelBuilder: () => TestSweetsOverlayViewModel(
-            startingCaptureValue: tsCaptureModeActive),
+        viewModelBuilder: () => TestSweetsOverlayViewModel(),
         builder: (context, viewModel, _) {
           return viewModel.enabled
-              ? Listener(
-                  onPointerDown: (_) => viewModel.addTouchPointer(),
-                  onPointerUp: (_) => viewModel.removeTouchPointer(),
-                  child: Overlay(
-                    initialEntries: [
-                      OverlayEntry(
-                          builder: (_) => tsCaptureModeActive
-                              ? WidgetCaptureView(
-                                  child: widget.child,
-                                  projectId: widget.projectId,
-                                  onRouteBannerLongPress:
-                                      viewModel.toggleOverlayUI,
-                                )
-                              : DriverLayoutView(
-                                  child: widget.child,
-                                  projectId: widget.projectId,
-                                  onRouteBannerLongPress:
-                                      viewModel.toggleOverlayUI,
-                                )),
-                      OverlayEntry(
-                        builder: (_) => viewModel.showModeSwapUI
-                            ? ModeSwapBanner(
-                                onClosePressed: viewModel.toggleOverlayUI,
-                                onCaptureMode: viewModel.setCaptureMode,
-                                captureModeActive: viewModel.captureMode,
-                                showRestartMessage:
-                                    viewModel.showRestartMessage,
-                              )
-                            : SizedBox.shrink(),
-                      )
-                    ],
-                  ),
+              ? Overlay(
+                  initialEntries: [
+                    OverlayEntry(
+                      builder: (_) => !viewModel.driveModeActive
+                          ? WidgetCaptureView(
+                              child: widget.child,
+                              projectId: widget.projectId,
+                            )
+                          : DriverLayoutView(
+                              child: widget.child,
+                              projectId: widget.projectId,
+                            ),
+                    ),
+                  ],
                 )
               : widget.child;
         });
