@@ -12,12 +12,10 @@ class WidgetCaptureView extends StatelessWidget {
   final String projectId;
   final String? apiKey;
   final Widget child;
-  final Function()? onRouteBannerLongPress;
 
   WidgetCaptureView({
     required this.child,
     required this.projectId,
-    required this.onRouteBannerLongPress,
     this.apiKey,
   });
 
@@ -51,7 +49,6 @@ class WidgetCaptureView extends StatelessWidget {
               valueListenable: model.interactionsForViewNotifier,
               builder: (_, __, ___) => RouteBannerView(
                 isCaptured: model.currentViewCaptured,
-                onLongPress: onRouteBannerLongPress,
               ),
             ),
             if (model.captureState.showDraggableWidget) const DraggableWidget(),

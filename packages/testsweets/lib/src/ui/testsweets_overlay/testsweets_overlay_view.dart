@@ -1,11 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:testsweets/src/setup_code.dart';
 import 'package:testsweets/src/ui/driver_layout/driver_layout_view.dart';
-import 'package:testsweets/src/ui/mode_swap_banner.dart';
 import 'package:testsweets/src/ui/testsweets_overlay/testsweets_overlay_viewmodel.dart';
-import 'package:testsweets/src/ui/widget_capture/widget_capture_view.dart';
+import 'package:testsweets/testsweets.dart';
 
 class TestSweetsOverlayView extends StackedView<TestSweetsOverlayViewModel> {
   final Widget child;
@@ -18,8 +17,7 @@ class TestSweetsOverlayView extends StackedView<TestSweetsOverlayViewModel> {
 
   /// When true we add the TestSweets overlay, default is true
   final bool enabled;
-
-  const TestSweetsOverlayView({
+  TestSweetsOverlayView({
     Key? key,
     required this.child,
     required this.projectId,
@@ -33,48 +31,28 @@ class TestSweetsOverlayView extends StackedView<TestSweetsOverlayViewModel> {
 
   @override
   Widget builder(
-    BuildContext context,
-    TestSweetsOverlayViewModel viewModel,
-    Widget? _,
-  ) {
+      BuildContext context, TestSweetsOverlayViewModel viewModel, Widget? _) {
     return viewModel.enabled
-        ? Listener(
-            onPointerDown: (_) => viewModel.addTouchPointer(),
-            onPointerUp: (_) => viewModel.removeTouchPointer(),
-            child: Overlay(
-              initialEntries: [
-                OverlayEntry(
-                    builder: (_) => tsCaptureModeActive
-                        ? WidgetCaptureView(
-                            child: child,
-                            projectId: projectId,
-                            onRouteBannerLongPress: viewModel.toggleOverlayUI,
-                          )
-                        : DriverLayoutView(
-                            child: child,
-                            projectId: projectId,
-                            onRouteBannerLongPress: viewModel.toggleOverlayUI,
-                          )),
-                OverlayEntry(
-                  builder: (_) => viewModel.showModeSwapUI
-                      ? ModeSwapBanner(
-                          onClosePressed: viewModel.toggleOverlayUI,
-                          onCaptureMode: viewModel.setCaptureMode,
-                          captureModeActive: viewModel.captureMode,
-                          showRestartMessage: viewModel.showRestartMessage,
-                        )
-                      : SizedBox.shrink(),
-                )
-              ],
-            ),
+        ? Overlay(
+            initialEntries: [
+              OverlayEntry(
+                builder: (_) => !viewModel.driveModeActive
+                    ? WidgetCaptureView(
+                        child: child,
+                        projectId: projectId,
+                      )
+                    : DriverLayoutView(
+                        child: child,
+                        projectId: projectId,
+                      ),
+              ),
+            ],
           )
         : child;
   }
 
   @override
   TestSweetsOverlayViewModel viewModelBuilder(BuildContext context) {
-    return TestSweetsOverlayViewModel(
-      startingCaptureValue: tsCaptureModeActive,
-    );
+    return TestSweetsOverlayViewModel();
   }
 }

@@ -3,24 +3,20 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i9;
-import 'dart:io' as _i4;
+import 'dart:async' as _i7;
+import 'dart:io' as _i3;
 
-import 'package:logger/src/logger.dart' as _i6;
+import 'package:logger/src/logger.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:testsweets/src/models/build_info.dart' as _i3;
-import 'package:testsweets/src/services/automation_keys_service.dart' as _i16;
-import 'package:testsweets/src/services/build_service.dart' as _i8;
-import 'package:testsweets/src/services/cloud_functions_service.dart' as _i12;
-import 'package:testsweets/src/services/dynamic_keys_generator.dart' as _i14;
+import 'package:testsweets/src/services/cloud_functions_service.dart' as _i10;
+import 'package:testsweets/src/services/dynamic_keys_generator.dart' as _i12;
 import 'package:testsweets/src/services/file_system_service.dart' as _i2;
-import 'package:testsweets/src/services/http_service.dart' as _i5;
-import 'package:testsweets/src/services/runnable_process.dart' as _i10;
+import 'package:testsweets/src/services/old_http_service.dart' as _i4;
+import 'package:testsweets/src/services/runnable_process.dart' as _i8;
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart'
-    as _i7;
-import 'package:testsweets/src/services/time_service.dart' as _i11;
-import 'package:testsweets/src/services/upload_service.dart' as _i15;
-import 'package:testsweets/testsweets.dart' as _i13;
+    as _i6;
+import 'package:testsweets/src/services/time_service.dart' as _i9;
+import 'package:testsweets/testsweets.dart' as _i11;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -44,8 +40,8 @@ class _FakeFileSystemServiceImplementation_0 extends _i1.SmartFake
         );
 }
 
-class _FakeBuildInfo_1 extends _i1.SmartFake implements _i3.BuildInfo {
-  _FakeBuildInfo_1(
+class _FakeProcess_1 extends _i1.SmartFake implements _i3.Process {
+  _FakeProcess_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -54,8 +50,9 @@ class _FakeBuildInfo_1 extends _i1.SmartFake implements _i3.BuildInfo {
         );
 }
 
-class _FakeProcess_2 extends _i1.SmartFake implements _i4.Process {
-  _FakeProcess_2(
+class _FakeOldSimpleHttpResponse_2 extends _i1.SmartFake
+    implements _i4.OldSimpleHttpResponse {
+  _FakeOldSimpleHttpResponse_2(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -64,9 +61,8 @@ class _FakeProcess_2 extends _i1.SmartFake implements _i4.Process {
         );
 }
 
-class _FakeSimpleHttpResponse_3 extends _i1.SmartFake
-    implements _i5.SimpleHttpResponse {
-  _FakeSimpleHttpResponse_3(
+class _FakeDateTime_3 extends _i1.SmartFake implements DateTime {
+  _FakeDateTime_3(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -75,8 +71,8 @@ class _FakeSimpleHttpResponse_3 extends _i1.SmartFake
         );
 }
 
-class _FakeDateTime_4 extends _i1.SmartFake implements DateTime {
-  _FakeDateTime_4(
+class _FakeLogger_4 extends _i1.SmartFake implements _i5.Logger {
+  _FakeLogger_4(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -85,8 +81,9 @@ class _FakeDateTime_4 extends _i1.SmartFake implements DateTime {
         );
 }
 
-class _FakeLogger_5 extends _i1.SmartFake implements _i6.Logger {
-  _FakeLogger_5(
+class _FakeOldHttpService_5 extends _i1.SmartFake
+    implements _i4.OldHttpService {
+  _FakeOldHttpService_5(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -95,19 +92,9 @@ class _FakeLogger_5 extends _i1.SmartFake implements _i6.Logger {
         );
 }
 
-class _FakeHttpService_6 extends _i1.SmartFake implements _i5.HttpService {
-  _FakeHttpService_6(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
-class _FakeFileSystemService_7 extends _i1.SmartFake
+class _FakeFileSystemService_6 extends _i1.SmartFake
     implements _i2.FileSystemService {
-  _FakeFileSystemService_7(
+  _FakeFileSystemService_6(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -120,7 +107,7 @@ class _FakeFileSystemService_7 extends _i1.SmartFake
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockTestSweetsConfigFileService extends _i1.Mock
-    implements _i7.TestSweetsConfigFileService {
+    implements _i6.TestSweetsConfigFileService {
   @override
   _i2.FileSystemServiceImplementation get fileSystemService =>
       (super.noSuchMethod(
@@ -135,7 +122,7 @@ class MockTestSweetsConfigFileService extends _i1.Mock
         ),
       ) as _i2.FileSystemServiceImplementation);
   @override
-  String getValueFromConfigFileByKey(_i7.ConfigFileKeyType? keyType) =>
+  String getValueFromConfigFileByKey(_i6.ConfigFileKeyType? keyType) =>
       (super.noSuchMethod(
         Invocation.method(
           #getValueFromConfigFileByKey,
@@ -144,54 +131,6 @@ class MockTestSweetsConfigFileService extends _i1.Mock
         returnValue: '',
         returnValueForMissingStub: '',
       ) as String);
-}
-
-/// A class which mocks [BuildService].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockBuildService extends _i1.Mock implements _i8.BuildService {
-  @override
-  _i9.Future<_i3.BuildInfo> build({
-    required String? appType,
-    List<String>? extraFlutterProcessArgs,
-    String? pathToBuild,
-  }) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #build,
-          [],
-          {
-            #appType: appType,
-            #extraFlutterProcessArgs: extraFlutterProcessArgs,
-            #pathToBuild: pathToBuild,
-          },
-        ),
-        returnValue: _i9.Future<_i3.BuildInfo>.value(_FakeBuildInfo_1(
-          this,
-          Invocation.method(
-            #build,
-            [],
-            {
-              #appType: appType,
-              #extraFlutterProcessArgs: extraFlutterProcessArgs,
-              #pathToBuild: pathToBuild,
-            },
-          ),
-        )),
-        returnValueForMissingStub:
-            _i9.Future<_i3.BuildInfo>.value(_FakeBuildInfo_1(
-          this,
-          Invocation.method(
-            #build,
-            [],
-            {
-              #appType: appType,
-              #extraFlutterProcessArgs: extraFlutterProcessArgs,
-              #pathToBuild: pathToBuild,
-            },
-          ),
-        )),
-      ) as _i9.Future<_i3.BuildInfo>);
 }
 
 /// A class which mocks [FileSystemService].
@@ -217,14 +156,14 @@ class MockFileSystemService extends _i1.Mock implements _i2.FileSystemService {
         returnValueForMissingStub: '',
       ) as String);
   @override
-  _i9.Stream<List<int>> openFileForReading(String? path) => (super.noSuchMethod(
+  _i7.Stream<List<int>> openFileForReading(String? path) => (super.noSuchMethod(
         Invocation.method(
           #openFileForReading,
           [path],
         ),
-        returnValue: _i9.Stream<List<int>>.empty(),
-        returnValueForMissingStub: _i9.Stream<List<int>>.empty(),
-      ) as _i9.Stream<List<int>>);
+        returnValue: _i7.Stream<List<int>>.empty(),
+        returnValueForMissingStub: _i7.Stream<List<int>>.empty(),
+      ) as _i7.Stream<List<int>>);
   @override
   int getFileSizeInBytes(String? path) => (super.noSuchMethod(
         Invocation.method(
@@ -249,7 +188,7 @@ class MockFileSystemService extends _i1.Mock implements _i2.FileSystemService {
 /// A class which mocks [FlutterProcess].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFlutterProcess extends _i1.Mock implements _i10.FlutterProcess {
+class MockFlutterProcess extends _i1.Mock implements _i8.FlutterProcess {
   @override
   String get path => (super.noSuchMethod(
         Invocation.getter(#path),
@@ -257,14 +196,14 @@ class MockFlutterProcess extends _i1.Mock implements _i10.FlutterProcess {
         returnValueForMissingStub: '',
       ) as String);
   @override
-  _i9.Future<_i4.Process> startWith({required List<String>? args}) =>
+  _i7.Future<_i3.Process> startWith({required List<String>? args}) =>
       (super.noSuchMethod(
         Invocation.method(
           #startWith,
           [],
           {#args: args},
         ),
-        returnValue: _i9.Future<_i4.Process>.value(_FakeProcess_2(
+        returnValue: _i7.Future<_i3.Process>.value(_FakeProcess_1(
           this,
           Invocation.method(
             #startWith,
@@ -272,7 +211,7 @@ class MockFlutterProcess extends _i1.Mock implements _i10.FlutterProcess {
             {#args: args},
           ),
         )),
-        returnValueForMissingStub: _i9.Future<_i4.Process>.value(_FakeProcess_2(
+        returnValueForMissingStub: _i7.Future<_i3.Process>.value(_FakeProcess_1(
           this,
           Invocation.method(
             #startWith,
@@ -280,17 +219,17 @@ class MockFlutterProcess extends _i1.Mock implements _i10.FlutterProcess {
             {#args: args},
           ),
         )),
-      ) as _i9.Future<_i4.Process>);
+      ) as _i7.Future<_i3.Process>);
 }
 
-/// A class which mocks [HttpService].
+/// A class which mocks [OldHttpService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockHttpService extends _i1.Mock implements _i5.HttpService {
+class MockOldHttpService extends _i1.Mock implements _i4.OldHttpService {
   @override
-  _i9.Future<_i5.SimpleHttpResponse> putBinary({
+  _i7.Future<_i4.OldSimpleHttpResponse> putBinary({
     required String? to,
-    required _i9.Stream<List<int>>? data,
+    required _i7.Stream<List<int>>? data,
     required int? contentLength,
     Map<String, String>? headers,
   }) =>
@@ -305,8 +244,8 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             #headers: headers,
           },
         ),
-        returnValue:
-            _i9.Future<_i5.SimpleHttpResponse>.value(_FakeSimpleHttpResponse_3(
+        returnValue: _i7.Future<_i4.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_2(
           this,
           Invocation.method(
             #putBinary,
@@ -319,8 +258,8 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             },
           ),
         )),
-        returnValueForMissingStub:
-            _i9.Future<_i5.SimpleHttpResponse>.value(_FakeSimpleHttpResponse_3(
+        returnValueForMissingStub: _i7.Future<_i4.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_2(
           this,
           Invocation.method(
             #putBinary,
@@ -333,9 +272,9 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             },
           ),
         )),
-      ) as _i9.Future<_i5.SimpleHttpResponse>);
+      ) as _i7.Future<_i4.OldSimpleHttpResponse>);
   @override
-  _i9.Future<_i5.SimpleHttpResponse> postJson({
+  _i7.Future<_i4.OldSimpleHttpResponse> postJson({
     required String? to,
     required Map<String, dynamic>? body,
     Map<String, String>? headers,
@@ -350,8 +289,8 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             #headers: headers,
           },
         ),
-        returnValue:
-            _i9.Future<_i5.SimpleHttpResponse>.value(_FakeSimpleHttpResponse_3(
+        returnValue: _i7.Future<_i4.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_2(
           this,
           Invocation.method(
             #postJson,
@@ -363,8 +302,8 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             },
           ),
         )),
-        returnValueForMissingStub:
-            _i9.Future<_i5.SimpleHttpResponse>.value(_FakeSimpleHttpResponse_3(
+        returnValueForMissingStub: _i7.Future<_i4.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_2(
           this,
           Invocation.method(
             #postJson,
@@ -376,9 +315,9 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             },
           ),
         )),
-      ) as _i9.Future<_i5.SimpleHttpResponse>);
+      ) as _i7.Future<_i4.OldSimpleHttpResponse>);
   @override
-  _i9.Future<_i5.SimpleHttpResponse> get({
+  _i7.Future<_i4.OldSimpleHttpResponse> get({
     required String? to,
     Map<String, String>? headers,
   }) =>
@@ -391,8 +330,8 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             #headers: headers,
           },
         ),
-        returnValue:
-            _i9.Future<_i5.SimpleHttpResponse>.value(_FakeSimpleHttpResponse_3(
+        returnValue: _i7.Future<_i4.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_2(
           this,
           Invocation.method(
             #get,
@@ -403,8 +342,8 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             },
           ),
         )),
-        returnValueForMissingStub:
-            _i9.Future<_i5.SimpleHttpResponse>.value(_FakeSimpleHttpResponse_3(
+        returnValueForMissingStub: _i7.Future<_i4.OldSimpleHttpResponse>.value(
+            _FakeOldSimpleHttpResponse_2(
           this,
           Invocation.method(
             #get,
@@ -415,27 +354,27 @@ class MockHttpService extends _i1.Mock implements _i5.HttpService {
             },
           ),
         )),
-      ) as _i9.Future<_i5.SimpleHttpResponse>);
+      ) as _i7.Future<_i4.OldSimpleHttpResponse>);
 }
 
 /// A class which mocks [TimeService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTimeService extends _i1.Mock implements _i11.TimeService {
+class MockTimeService extends _i1.Mock implements _i9.TimeService {
   @override
   DateTime now() => (super.noSuchMethod(
         Invocation.method(
           #now,
           [],
         ),
-        returnValue: _FakeDateTime_4(
+        returnValue: _FakeDateTime_3(
           this,
           Invocation.method(
             #now,
             [],
           ),
         ),
-        returnValueForMissingStub: _FakeDateTime_4(
+        returnValueForMissingStub: _FakeDateTime_3(
           this,
           Invocation.method(
             #now,
@@ -449,33 +388,33 @@ class MockTimeService extends _i1.Mock implements _i11.TimeService {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockCloudFunctionsService extends _i1.Mock
-    implements _i12.CloudFunctionsService {
+    implements _i10.CloudFunctionsService {
   @override
-  _i6.Logger get log => (super.noSuchMethod(
+  _i5.Logger get log => (super.noSuchMethod(
         Invocation.getter(#log),
-        returnValue: _FakeLogger_5(
+        returnValue: _FakeLogger_4(
           this,
           Invocation.getter(#log),
         ),
-        returnValueForMissingStub: _FakeLogger_5(
+        returnValueForMissingStub: _FakeLogger_4(
           this,
           Invocation.getter(#log),
         ),
-      ) as _i6.Logger);
+      ) as _i5.Logger);
   @override
-  _i5.HttpService get httpService => (super.noSuchMethod(
+  _i4.OldHttpService get httpService => (super.noSuchMethod(
         Invocation.getter(#httpService),
-        returnValue: _FakeHttpService_6(
+        returnValue: _FakeOldHttpService_5(
           this,
           Invocation.getter(#httpService),
         ),
-        returnValueForMissingStub: _FakeHttpService_6(
+        returnValueForMissingStub: _FakeOldHttpService_5(
           this,
           Invocation.getter(#httpService),
         ),
-      ) as _i5.HttpService);
+      ) as _i4.OldHttpService);
   @override
-  _i9.Future<String> getV4BuildUploadSignedUrl(
+  _i7.Future<String> getV4BuildUploadSignedUrl(
     String? projectId,
     String? apiKey, [
     Map<dynamic, dynamic>? extensionHeaders = const {},
@@ -489,11 +428,11 @@ class MockCloudFunctionsService extends _i1.Mock
             extensionHeaders,
           ],
         ),
-        returnValue: _i9.Future<String>.value(''),
-        returnValueForMissingStub: _i9.Future<String>.value(''),
-      ) as _i9.Future<String>);
+        returnValue: _i7.Future<String>.value(''),
+        returnValueForMissingStub: _i7.Future<String>.value(''),
+      ) as _i7.Future<String>);
   @override
-  _i9.Future<bool> doesBuildExistInProject(
+  _i7.Future<bool> doesBuildExistInProject(
     String? projectId, {
     required String? withVersion,
   }) =>
@@ -503,13 +442,13 @@ class MockCloudFunctionsService extends _i1.Mock
           [projectId],
           {#withVersion: withVersion},
         ),
-        returnValue: _i9.Future<bool>.value(false),
-        returnValueForMissingStub: _i9.Future<bool>.value(false),
-      ) as _i9.Future<bool>);
+        returnValue: _i7.Future<bool>.value(false),
+        returnValueForMissingStub: _i7.Future<bool>.value(false),
+      ) as _i7.Future<bool>);
   @override
-  _i9.Future<String> uploadWidgetDescriptionToProject({
+  _i7.Future<String> uploadWidgetDescriptionToProject({
     required String? projectId,
-    required _i13.Interaction? description,
+    required _i11.Interaction? description,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -520,11 +459,11 @@ class MockCloudFunctionsService extends _i1.Mock
             #description: description,
           },
         ),
-        returnValue: _i9.Future<String>.value(''),
-        returnValueForMissingStub: _i9.Future<String>.value(''),
-      ) as _i9.Future<String>);
+        returnValue: _i7.Future<String>.value(''),
+        returnValueForMissingStub: _i7.Future<String>.value(''),
+      ) as _i7.Future<String>);
   @override
-  _i9.Future<List<_i13.Interaction>> getWidgetDescriptionForProject(
+  _i7.Future<List<_i11.Interaction>> getWidgetDescriptionForProject(
           {required String? projectId}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -533,14 +472,14 @@ class MockCloudFunctionsService extends _i1.Mock
           {#projectId: projectId},
         ),
         returnValue:
-            _i9.Future<List<_i13.Interaction>>.value(<_i13.Interaction>[]),
+            _i7.Future<List<_i11.Interaction>>.value(<_i11.Interaction>[]),
         returnValueForMissingStub:
-            _i9.Future<List<_i13.Interaction>>.value(<_i13.Interaction>[]),
-      ) as _i9.Future<List<_i13.Interaction>>);
+            _i7.Future<List<_i11.Interaction>>.value(<_i11.Interaction>[]),
+      ) as _i7.Future<List<_i11.Interaction>>);
   @override
-  _i9.Future<String> updateInteraction({
+  _i7.Future<String> updateInteraction({
     required String? projectId,
-    required _i13.Interaction? interaction,
+    required _i11.Interaction? interaction,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -551,13 +490,13 @@ class MockCloudFunctionsService extends _i1.Mock
             #interaction: interaction,
           },
         ),
-        returnValue: _i9.Future<String>.value(''),
-        returnValueForMissingStub: _i9.Future<String>.value(''),
-      ) as _i9.Future<String>);
+        returnValue: _i7.Future<String>.value(''),
+        returnValueForMissingStub: _i7.Future<String>.value(''),
+      ) as _i7.Future<String>);
   @override
-  _i9.Future<String> deleteWidgetDescription({
+  _i7.Future<String> deleteWidgetDescription({
     required String? projectId,
-    required _i13.Interaction? description,
+    required _i11.Interaction? description,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -568,24 +507,24 @@ class MockCloudFunctionsService extends _i1.Mock
             #description: description,
           },
         ),
-        returnValue: _i9.Future<String>.value(''),
-        returnValueForMissingStub: _i9.Future<String>.value(''),
-      ) as _i9.Future<String>);
+        returnValue: _i7.Future<String>.value(''),
+        returnValueForMissingStub: _i7.Future<String>.value(''),
+      ) as _i7.Future<String>);
 }
 
 /// A class which mocks [DynamicKeysGenerator].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDynamicKeysGenerator extends _i1.Mock
-    implements _i14.DynamicKeysGenerator {
+    implements _i12.DynamicKeysGenerator {
   @override
   _i2.FileSystemService get fileSystemService => (super.noSuchMethod(
         Invocation.getter(#fileSystemService),
-        returnValue: _FakeFileSystemService_7(
+        returnValue: _FakeFileSystemService_6(
           this,
           Invocation.getter(#fileSystemService),
         ),
-        returnValueForMissingStub: _FakeFileSystemService_7(
+        returnValueForMissingStub: _FakeFileSystemService_6(
           this,
           Invocation.getter(#fileSystemService),
         ),
@@ -614,46 +553,6 @@ class MockDynamicKeysGenerator extends _i1.Mock
         Invocation.method(
           #generateAutomationKeysFromDynamicKeysFile,
           [dynamicKeysFilePath],
-        ),
-        returnValue: <String>[],
-        returnValueForMissingStub: <String>[],
-      ) as List<String>);
-}
-
-/// A class which mocks [UploadService].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockUploadService extends _i1.Mock implements _i15.UploadService {
-  @override
-  _i9.Future<void> uploadBuild(
-    _i3.BuildInfo? buildInfo,
-    String? projectId,
-    String? apiKey,
-  ) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #uploadBuild,
-          [
-            buildInfo,
-            projectId,
-            apiKey,
-          ],
-        ),
-        returnValue: _i9.Future<void>.value(),
-        returnValueForMissingStub: _i9.Future<void>.value(),
-      ) as _i9.Future<void>);
-}
-
-/// A class which mocks [AutomationKeysService].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockAutomationKeysService extends _i1.Mock
-    implements _i16.AutomationKeysService {
-  @override
-  List<String> extractKeysListFromJson() => (super.noSuchMethod(
-        Invocation.method(
-          #extractKeysListFromJson,
-          [],
         ),
         returnValue: <String>[],
         returnValueForMissingStub: <String>[],

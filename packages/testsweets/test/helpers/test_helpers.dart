@@ -5,14 +5,18 @@ import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/models/interaction.dart';
 import 'package:testsweets/src/models/scrollable_description.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
+import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/notification_extractor.dart';
+import 'package:testsweets/src/services/old_http_service.dart';
 import 'package:testsweets/src/services/reactive_scrollable.dart';
+import 'package:testsweets/src/services/run_configuration_service.dart';
 import 'package:testsweets/src/services/scroll_appliance.dart';
 import 'package:testsweets/src/services/snackbar_service.dart';
 import 'package:testsweets/src/services/test_integrity.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/services/widget_capture_service.dart';
 import 'package:testsweets/src/ui/shared/scrollable_finder.dart';
+import 'package:testsweets/src/utils/batch_processing/batch_processors.dart';
 
 import 'test_consts.dart';
 import 'test_helpers.mocks.dart';
@@ -27,7 +31,52 @@ import 'test_helpers.mocks.dart';
   MockSpec<ScrollableFinder>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<ScrollAppliance>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<NotificationExtractor>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<OldHttpService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<HttpService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<RunConfigurationService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<EventsProcessor>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<InteractionsProcessor>(onMissingStub: OnMissingStub.returnDefault),
 ])
+MockInteractionsProcessor getAndRegisterInteractionsProcessor() {
+  _removeRegistrationIfExists<InteractionsProcessor>();
+  final service = MockInteractionsProcessor();
+  locator.registerSingleton<InteractionsProcessor>(service);
+  return service;
+}
+
+MockEventsProcessor getAndRegisterEventsProcessor() {
+  _removeRegistrationIfExists<EventsProcessor>();
+  final service = MockEventsProcessor();
+  locator.registerSingleton<EventsProcessor>(service);
+  return service;
+}
+
+MockRunConfigurationService getAndRegisterRunConfigurationService({
+  bool driveModeActive = false,
+}) {
+  _removeRegistrationIfExists<RunConfigurationService>();
+  final service = MockRunConfigurationService();
+
+  when(service.driveModeActive).thenReturn(driveModeActive);
+
+  locator.registerSingleton<RunConfigurationService>(service);
+  return service;
+}
+
+MockHttpService getAndRegisterHttpService() {
+  _removeRegistrationIfExists<HttpService>();
+  final service = MockHttpService();
+  locator.registerSingleton<HttpService>(service);
+  return service;
+}
+
+MockOldHttpService getAndRegisterOldHttpService() {
+  _removeRegistrationIfExists<OldHttpService>();
+  final service = MockOldHttpService();
+  locator.registerSingleton<OldHttpService>(service);
+  return service;
+}
+
 MockWidgetCaptureService getAndRegisterWidgetCaptureService({
   List<Interaction> viewInteractions = const [],
   Interaction? description,
@@ -36,19 +85,24 @@ MockWidgetCaptureService getAndRegisterWidgetCaptureService({
 }) {
   _removeRegistrationIfExists<WidgetCaptureService>();
   final service = MockWidgetCaptureService();
+
   when(service.saveInteractionInDatabase(any))
       .thenAnswer((_) => Future.value(kGeneralInteraction));
 
   when(service.getDescriptionsForView(currentRoute: anyNamed('currentRoute')))
       .thenReturn(viewInteractions);
+
   when(service.updateInteractionInDatabase(
     updatedInteraction: anyNamed('updatedInteraction'),
   )).thenAnswer((_) => Future.value());
+
   when(service.removeInteractionFromDatabase(any))
       .thenAnswer((_) => Future.value());
 
   when(service.checkCurrentViewIfAlreadyCaptured(any))
       .thenReturn(currentViewIsAlreadyCaptured);
+
+  when(service.projectId).thenReturn(projectId ?? 'testId');
 
   locator.registerSingleton<WidgetCaptureService>(service);
   return service;
@@ -182,6 +236,11 @@ void registerServices() {
   getAndRegisterScrollAppliance();
   getAndRegisterNotificationExtractor();
   getAndRegisterTestIntegrity();
+  getAndRegisterOldHttpService();
+  getAndRegisterHttpService();
+  getAndRegisterRunConfigurationService();
+  getAndRegisterEventsProcessor();
+  getAndRegisterInteractionsProcessor();
 }
 
 void unregisterServices() {
@@ -194,6 +253,11 @@ void unregisterServices() {
   _removeRegistrationIfExists<ScrollAppliance>();
   _removeRegistrationIfExists<NotificationExtractor>();
   _removeRegistrationIfExists<TestIntegrity>();
+  _removeRegistrationIfExists<OldHttpService>();
+  _removeRegistrationIfExists<HttpService>();
+  _removeRegistrationIfExists<RunConfigurationService>();
+  _removeRegistrationIfExists<InteractionsProcessor>();
+  _removeRegistrationIfExists<EventsProcessor>();
 }
 
 T registerServiceInsteadOfMockedOne<T extends Object>(T instance) {

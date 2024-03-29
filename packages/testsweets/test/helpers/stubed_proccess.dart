@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:testsweets/src/services/runnable_process.dart';
-
 class StubbedProcess implements Process {
   final int sExitCode;
   final String sStdErr;
@@ -32,21 +30,5 @@ class StubbedProcess implements Process {
   @override
   Stream<List<int>> get stdout async* {
     yield utf8.encode(sStdOut);
-  }
-}
-
-class StubbedRunnableProcess implements RunnableProcess {
-  final Process main;
-  StubbedRunnableProcess(this.main);
-
-  List<String> startedWithArgs = [];
-
-  @override
-  String get path => 'flutter';
-
-  @override
-  Future<Process> startWith({required List<String> args}) async {
-    startedWithArgs = args;
-    return main;
   }
 }

@@ -1,36 +1,27 @@
-import 'dart:io';
-
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:testsweets/src/dart_only_locator.dart';
 import 'package:testsweets/src/models/interaction.dart';
-import 'package:testsweets/src/services/automation_keys_service.dart';
-import 'package:testsweets/src/services/build_service.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
 import 'package:testsweets/src/services/dynamic_keys_generator.dart';
 import 'package:testsweets/src/services/file_system_service.dart';
-import 'package:testsweets/src/services/http_service.dart';
+import 'package:testsweets/src/services/old_http_service.dart';
 import 'package:testsweets/src/services/runnable_process.dart';
 import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/src/services/time_service.dart';
-import 'package:testsweets/src/services/upload_service.dart';
 
 import 'dart_only_test_helpers.mocks.dart';
-import 'stubed_proccess.dart';
 import 'test_consts.dart';
 
 @GenerateMocks([], customMocks: [
   MockSpec<TestSweetsConfigFileService>(
       onMissingStub: OnMissingStub.returnDefault),
-  MockSpec<BuildService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<FileSystemService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<FlutterProcess>(onMissingStub: OnMissingStub.returnDefault),
-  MockSpec<HttpService>(onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<OldHttpService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<TimeService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<CloudFunctionsService>(onMissingStub: OnMissingStub.returnDefault),
   MockSpec<DynamicKeysGenerator>(onMissingStub: OnMissingStub.returnDefault),
-  MockSpec<UploadService>(onMissingStub: OnMissingStub.returnDefault),
-  MockSpec<AutomationKeysService>(onMissingStub: OnMissingStub.returnDefault),
 ])
 MockFileSystemService getAndRegisterFileSystemService({
   bool doesFileExist = false,
@@ -66,22 +57,6 @@ MockFileSystemService getAndRegisterFileSystemService({
   return service;
 }
 
-MockFlutterProcess getAndRegisterFlutterProcess() {
-  _removeRegistrationIfExists<FlutterProcess>();
-  final service = MockFlutterProcess();
-  when(service.startWith(args: anyNamed('args'))).thenAnswer((_) {
-    return Future.value(StubbedProcess(
-        sExitCode: 0,
-        sStdErr: '',
-        sStdOut: !Platform.isWindows
-            ? 'build\/app\/outputs\/flutter-apk\/abc.apk'
-            : 'build\\app\\outputs\\flutter-apk\\abc.apk'));
-  });
-
-  dartOnlyLocator.registerSingleton<FlutterProcess>(service);
-  return service;
-}
-
 MockTestSweetsConfigFileService getAndRegisterTestSweetsConfigFileService(
     {String? valueFromConfigFileByKey}) {
   _removeRegistrationIfExists<TestSweetsConfigFileService>();
@@ -108,18 +83,18 @@ MockDynamicKeysGenerator getAndRegisterDynamicKeysGeneratorService(
   return service;
 }
 
-MockHttpService getAndRegisterHttpService() {
-  _removeRegistrationIfExists<HttpService>();
-  final service = MockHttpService();
+MockOldHttpService getAndRegisterHttpService() {
+  _removeRegistrationIfExists<OldHttpService>();
+  final service = MockOldHttpService();
 
   when(service.putBinary(
     to: anyNamed('to'),
     data: anyNamed('data'),
     headers: anyNamed('headers'),
     contentLength: anyNamed('contentLength'),
-  )).thenAnswer((_) async => SimpleHttpResponse(200, ''));
+  )).thenAnswer((_) async => OldSimpleHttpResponse(200, ''));
 
-  dartOnlyLocator.registerSingleton<HttpService>(service);
+  dartOnlyLocator.registerSingleton<OldHttpService>(service);
   return service;
 }
 
@@ -128,21 +103,6 @@ MockTimeService getAndRegisterTimeService() {
   final service = MockTimeService();
   when(service.now()).thenReturn(testDateTime);
   dartOnlyLocator.registerSingleton<TimeService>(service);
-  return service;
-}
-
-BuildService getAndRegisterBuildServiceService() {
-  _removeRegistrationIfExists<BuildService>();
-  final service = MockBuildService();
-  when(service.build(
-          pathToBuild: anyNamed('pathToBuild'),
-          appType: anyNamed('appType'),
-          extraFlutterProcessArgs: anyNamed('extraFlutterProcessArgs')))
-      .thenAnswer(
-    (_) => Future.value(testBuildInfo),
-  );
-
-  dartOnlyLocator.registerSingleton<BuildService>(service);
   return service;
 }
 
@@ -191,47 +151,23 @@ MockCloudFunctionsService getAndRegisterCloudFunctionsService({
   return service;
 }
 
-UploadService getAndRegisterUploadService() {
-  _removeRegistrationIfExists<UploadService>();
-  final service = MockUploadService();
-  when(service.uploadBuild(any, any, any))
-      .thenAnswer((realInvocation) => Future.value());
-  dartOnlyLocator.registerSingleton<UploadService>(service);
-  return service;
-}
-
-AutomationKeysService getAndRegisterAutomationKeysService() {
-  _removeRegistrationIfExists<AutomationKeysService>();
-  final service = MockAutomationKeysService();
-  when(service.extractKeysListFromJson()).thenReturn(testAutomationKeys);
-  dartOnlyLocator.registerSingleton<AutomationKeysService>(service);
-  return service;
-}
-
 void registerDartOnlyServices() {
   getAndRegisterFileSystemService();
-  getAndRegisterFlutterProcess();
   getAndRegisterHttpService();
   getAndRegisterTimeService();
   getAndRegisterCloudFunctionsService();
   getAndRegisterDynamicKeysGeneratorService();
-  getAndRegisterBuildServiceService();
   getAndRegisterTestSweetsConfigFileService();
-  getAndRegisterUploadService();
-  getAndRegisterAutomationKeysService();
 }
 
 void unregisterDartOnlyServices() {
   _removeRegistrationIfExists<FileSystemService>();
   _removeRegistrationIfExists<FlutterProcess>();
-  _removeRegistrationIfExists<HttpService>();
+  _removeRegistrationIfExists<OldHttpService>();
   _removeRegistrationIfExists<TimeService>();
   _removeRegistrationIfExists<CloudFunctionsService>();
   _removeRegistrationIfExists<DynamicKeysGenerator>();
-  _removeRegistrationIfExists<BuildService>();
   _removeRegistrationIfExists<TestSweetsConfigFileService>();
-  _removeRegistrationIfExists<UploadService>();
-  _removeRegistrationIfExists<AutomationKeysService>();
 }
 
 // Call this before any service registration helper. This is to ensure that if there

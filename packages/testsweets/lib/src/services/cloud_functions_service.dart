@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:testsweets/src/app/logger.dart';
 import 'package:testsweets/testsweets.dart';
 
-import 'http_service.dart';
+import 'old_http_service.dart';
 
 class CloudFunctionsService {
   final log = getLogger('CloudFunctionsService');
@@ -11,7 +11,7 @@ class CloudFunctionsService {
   // This service is being passed in here because we can't get it from the locator
   // given that when running the command we need the dartOnlyLocator and when running
   // and using the package we need the normal flutter locator
-  final HttpService httpService;
+  final OldHttpService httpService;
   CloudFunctionsService({required this.httpService});
 
   Future<String> getV4BuildUploadSignedUrl(String projectId, String apiKey,
