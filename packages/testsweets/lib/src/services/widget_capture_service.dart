@@ -5,7 +5,6 @@ import 'package:testsweets/src/enums/widget_type.dart';
 import 'package:testsweets/src/extensions/string_extension.dart';
 import 'package:testsweets/src/locator.dart';
 import 'package:testsweets/src/services/cloud_functions_service.dart';
-import 'package:testsweets/src/services/http_service.dart';
 import 'package:testsweets/src/services/testsweets_route_tracker.dart';
 import 'package:testsweets/src/utils/batch_processing/batch_processors.dart';
 import 'package:testsweets/testsweets.dart';
@@ -17,7 +16,6 @@ class WidgetCaptureService {
   final _cloudFunctionsService = locator<CloudFunctionsService>();
   final _testSweetRouteTracker = locator<TestSweetsRouteTracker>();
   final _interactionsProcess = locator<InteractionsProcessor>();
-  final _httpService = locator<HttpService>();
 
   @visibleForTesting
   final widgetDescriptionMap = Map<String, List<Interaction>>();

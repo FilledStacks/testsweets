@@ -73,7 +73,6 @@ class __AutoCaptureCodeState extends State<_AutoCaptureCode>
       if (renderObject case RenderBox(hasSize: true)
           when !renderObject.paintBounds.isEmpty) {
         final Offset position = renderObject.localToGlobal(Offset.zero);
-        final Size size = renderObject.size;
 
         // Check the widget type
         WidgetType? type;

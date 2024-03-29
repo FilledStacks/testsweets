@@ -1,9 +1,7 @@
 import 'package:testsweets/src/dart_only_locator.dart';
 import 'package:testsweets/src/models/build_error.dart';
-import 'package:testsweets/src/services/test_sweets_config_file_service.dart';
 import 'package:testsweets/utils/error_messages.dart';
 
-TestSweetsConfigFileService? _testSweetsConfigFileService;
 Future<void> quit(
   String errorMsg,
 ) =>
@@ -25,7 +23,6 @@ Future<void> main(
   }
 
   if (!isMocking) await setupDartOnlyLocator();
-  _testSweetsConfigFileService = dartOnlyLocator<TestSweetsConfigFileService>();
 
   print("Done!");
 }

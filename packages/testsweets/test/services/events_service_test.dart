@@ -1,6 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
-import 'package:testsweets/src/models/outgoing_event.dart';
 import 'package:testsweets/src/services/events_service.dart';
 
 import '../helpers/test_helpers.dart';
