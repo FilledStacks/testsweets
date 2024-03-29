@@ -1,6 +1,6 @@
 name: testsweets
 description: A no-code test automation tool that turns any tester into an automation engineer
-version: 1.16.1
+version: 2.0.0
 homepage: https://github.com/FilledStacks/testsweets
 
 environment:
@@ -34,7 +34,6 @@ dependencies:
   talker_dio_logger: ^4.0.3
 
   testsweets_shared:
-    path: ../testsweets_shared
   universal_io: ^2.2.2
   
 dev_dependencies:

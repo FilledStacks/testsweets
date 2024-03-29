@@ -1,3 +1,10 @@
+### 2.0.0
+
+- feat: Adds TestStweets event system
+- feat: Removes all build mode requirements
+
+- breaking: Removes `tsCapture` property
+
 ### 1.16.1
 
 - fix: Null exception on route tracker
