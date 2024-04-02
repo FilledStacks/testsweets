@@ -1,6 +1,6 @@
 name: testsweets_shared
 description: Shared models between the TestSweets application and the package
-version: 1.0.0
+version: 1.0.1
 repository: https://github.com/FilledStacks/testsweets
 homepage: https://www.testsweets.com/
 
