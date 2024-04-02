@@ -33,18 +33,19 @@ class TestSweetsRouteTracker extends ChangeNotifier {
   final _isTest = Platform.environment.containsKey('FLUTTER_TEST');
 
   void setCurrentRoute(String route, {int level = 0}) {
+    print('🚂🚂 - setCurrentRoute - $route level:$level');
+    setRoute(route, level: level);
     if (_isTest) {
-      setRoute(route, level: level);
       return;
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      setRoute(route, level: level);
       notifyListeners();
     });
   }
 
   void setRoute(String route, {int level = 0}) {
+    print('🚂🚂  setRoute - $route level:$level');
     previosRoute = _joinedRoutePath;
 
     final clearAllNestedRoutesAfterCurrentLevel = _previousLevel > level;
@@ -63,6 +64,8 @@ class TestSweetsRouteTracker extends ChangeNotifier {
   void changeRouteIndex(String viewName, int index) {
     final hasViewNameInSegments =
         _routeSegments.any((element) => element.contains(viewName));
+
+    print('chageRouteIndex - viewName:$viewName routeSegments:$_routeSegments');
 
     if (!hasViewNameInSegments) {
       print('''
