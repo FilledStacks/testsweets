@@ -63,6 +63,54 @@ void main() {
       });
 
       test(
+          'When called, with number value in properry, should return true if value compared is a string',
+          () {
+        getAndRegisterRunConfigurationService(driveModeActive: true);
+
+        final service = _getService();
+
+        service.captureEvent(
+          name: 'Button Tap',
+          properties: {
+            'total': 10,
+          },
+        );
+
+        final result = service.matchEvent(
+          name: 'Button Tap',
+          key: 'total',
+          value: '10',
+        );
+
+        expect(result, true);
+        expect(service.eventsForTestSweets.length, 0);
+      });
+
+      test(
+          'When called, with bool value in properry, should return true if value compared is a string',
+          () {
+        getAndRegisterRunConfigurationService(driveModeActive: true);
+
+        final service = _getService();
+
+        service.captureEvent(
+          name: 'Button Tap',
+          properties: {
+            'checkout': true,
+          },
+        );
+
+        final result = service.matchEvent(
+          name: 'Button Tap',
+          key: 'checkout',
+          value: 'true',
+        );
+
+        expect(result, true);
+        expect(service.eventsForTestSweets.length, 0);
+      });
+
+      test(
           'When called and queue has matching event in 2nd position should return true and event list should have 1 item left',
           () {
         getAndRegisterRunConfigurationService(driveModeActive: true);

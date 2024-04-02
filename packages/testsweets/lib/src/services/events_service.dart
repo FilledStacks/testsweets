@@ -78,9 +78,28 @@ class EventsService {
       final item = eventsForTestSweets.removeFirst();
 
       print('🍬 TESTSWEETS :: matchEvent - item:${item}');
-      if (item.name == name &&
-          item.properties.containsKey(key) &&
-          item.properties[key] == value) {
+      if (item.name == name && item.properties.containsKey(key)) {
+        final isString = item.properties[key] is String;
+
+        if (isString) {
+          return item.properties[key] == value;
+        }
+
+        final isBool = item.properties[key] is bool;
+        if (isBool) {
+          return item.properties[key] == bool.parse(value);
+        }
+
+        final isDouble = item.properties[key] is double;
+        if (isDouble) {
+          return item.properties[key] == double.parse(value);
+        }
+
+        final isInt = item.properties[key] is int;
+        if (isInt) {
+          return item.properties[key] == int.parse(value);
+        }
+
         return true;
       }
     }

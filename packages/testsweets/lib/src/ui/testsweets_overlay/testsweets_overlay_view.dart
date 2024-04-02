@@ -22,7 +22,7 @@ class TestSweetsOverlayView extends StackedView<TestSweetsOverlayViewModel> {
     required this.child,
     required this.projectId,
     @Deprecated(
-      'Capture mode can be updated by tapping on screen with 3 fingers. This property is not required anymore.',
+      'TestSweets will manage captureMode. This value is not used anymore',
     )
     this.captureWidgets,
     @Deprecated('Now we get this value from setupTestSweets function.')
