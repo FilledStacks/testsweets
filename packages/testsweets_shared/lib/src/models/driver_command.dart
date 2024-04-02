@@ -20,7 +20,7 @@ class DriverCommand with _$DriverCommand {
 class ExpectEventDataModel with _$ExpectEventDataModel {
   factory ExpectEventDataModel({
     required String key,
-    required dynamic value,
+    required String value,
   }) = _ExpectEventDataModel;
 
   factory ExpectEventDataModel.fromJson(Map<String, dynamic> json) =>

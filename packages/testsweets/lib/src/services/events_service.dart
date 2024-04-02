@@ -36,8 +36,8 @@ class EventsService {
       return;
     }
 
-    print(
-        '🍬 TESTSWEETS :: captureEvent driveMode: ${runConfigurationService.driveModeActive}');
+    // print(
+    //     '🍬 TESTSWEETS :: captureEvent driveMode: ${runConfigurationService.driveModeActive}');
 
     if (runConfigurationService.driveModeActive) {
       _captureEventsForTestSweetsApp(name: name, properties: properties);
@@ -60,7 +60,8 @@ class EventsService {
     required String name,
     required Map<String, dynamic> properties,
   }) {
-    print('🍬 TESTSWEETS :: _captureEventsForBackend');
+    // print(
+    //     '🍬 TESTSWEETS :: _captureEventsForBackend name:$name properties:$properties');
 
     eventsProcessor.addItem(OutgoingEvent(
       name: name,
@@ -73,39 +74,23 @@ class EventsService {
     required String key,
     required String value,
   }) {
-    print('🍬 TESTSWEETS :: matchEvent name:$name, key:$key, value:$value');
+    // print(
+    //     '🍬🍬🍬🍬🍬🍬 TESTSWEETS :: matchEvent name:$name, key:$key, value:$value');
+    // print(
+    //     '🍬🍬🍬🍬🍬🍬 TESTSWEETS :: eventsForTestSweets ${eventsForTestSweets.join('\n')}');
     while (eventsForTestSweets.isNotEmpty) {
       final item = eventsForTestSweets.removeFirst();
 
-      print('🍬 TESTSWEETS :: matchEvent - item:${item}');
-      if (item.name == name && item.properties.containsKey(key)) {
-        final isString = item.properties[key] is String;
-
-        if (isString) {
-          return item.properties[key] == value;
-        }
-
-        final isBool = item.properties[key] is bool;
-        if (isBool) {
-          return item.properties[key] == bool.parse(value);
-        }
-
-        final isDouble = item.properties[key] is double;
-        if (isDouble) {
-          return item.properties[key] == double.parse(value);
-        }
-
-        final isInt = item.properties[key] is int;
-        if (isInt) {
-          return item.properties[key] == int.parse(value);
-        }
-
+      // print('🍬🍬🍬🍬🍬🍬 TESTSWEETS :: matchEvent - item:${item}');
+      if (item.name == name &&
+          item.properties.containsKey(key) &&
+          item.properties[key].toString() == value) {
         return true;
       }
     }
 
-    print(
-        '🍬 TESTSWEETS :: matchEvent failed. no match for name:$name, key:$key, value:$value');
+    // print(
+    //     '🍬🍬🍬🍬🍬🍬 TESTSWEETS :: matchEvent failed. no match for name:$name, key:$key, value:$value');
 
     return false;
   }

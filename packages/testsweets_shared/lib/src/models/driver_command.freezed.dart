@@ -193,7 +193,7 @@ ExpectEventDataModel _$ExpectEventDataModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ExpectEventDataModel {
   String get key => throw _privateConstructorUsedError;
-  dynamic get value => throw _privateConstructorUsedError;
+  String get value => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -207,7 +207,7 @@ abstract class $ExpectEventDataModelCopyWith<$Res> {
           $Res Function(ExpectEventDataModel) then) =
       _$ExpectEventDataModelCopyWithImpl<$Res, ExpectEventDataModel>;
   @useResult
-  $Res call({String key, dynamic value});
+  $Res call({String key, String value});
 }
 
 /// @nodoc
@@ -225,17 +225,17 @@ class _$ExpectEventDataModelCopyWithImpl<$Res,
   @override
   $Res call({
     Object? key = null,
-    Object? value = freezed,
+    Object? value = null,
   }) {
     return _then(_value.copyWith(
       key: null == key
           ? _value.key
           : key // ignore: cast_nullable_to_non_nullable
               as String,
-      value: freezed == value
+      value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String,
     ) as $Val);
   }
 }
@@ -248,7 +248,7 @@ abstract class _$$ExpectEventDataModelImplCopyWith<$Res>
       __$$ExpectEventDataModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String key, dynamic value});
+  $Res call({String key, String value});
 }
 
 /// @nodoc
@@ -263,17 +263,17 @@ class __$$ExpectEventDataModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? key = null,
-    Object? value = freezed,
+    Object? value = null,
   }) {
     return _then(_$ExpectEventDataModelImpl(
       key: null == key
           ? _value.key
           : key // ignore: cast_nullable_to_non_nullable
               as String,
-      value: freezed == value
+      value: null == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String,
     ));
   }
 }
@@ -289,7 +289,7 @@ class _$ExpectEventDataModelImpl implements _ExpectEventDataModel {
   @override
   final String key;
   @override
-  final dynamic value;
+  final String value;
 
   @override
   String toString() {
@@ -302,13 +302,12 @@ class _$ExpectEventDataModelImpl implements _ExpectEventDataModel {
         (other.runtimeType == runtimeType &&
             other is _$ExpectEventDataModelImpl &&
             (identical(other.key, key) || other.key == key) &&
-            const DeepCollectionEquality().equals(other.value, value));
+            (identical(other.value, value) || other.value == value));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, key, const DeepCollectionEquality().hash(value));
+  int get hashCode => Object.hash(runtimeType, key, value);
 
   @JsonKey(ignore: true)
   @override
@@ -329,7 +328,7 @@ class _$ExpectEventDataModelImpl implements _ExpectEventDataModel {
 abstract class _ExpectEventDataModel implements ExpectEventDataModel {
   factory _ExpectEventDataModel(
       {required final String key,
-      required final dynamic value}) = _$ExpectEventDataModelImpl;
+      required final String value}) = _$ExpectEventDataModelImpl;
 
   factory _ExpectEventDataModel.fromJson(Map<String, dynamic> json) =
       _$ExpectEventDataModelImpl.fromJson;
@@ -337,7 +336,7 @@ abstract class _ExpectEventDataModel implements ExpectEventDataModel {
   @override
   String get key;
   @override
-  dynamic get value;
+  String get value;
   @override
   @JsonKey(ignore: true)
   _$$ExpectEventDataModelImplCopyWith<_$ExpectEventDataModelImpl>

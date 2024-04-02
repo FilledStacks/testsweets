@@ -82,22 +82,33 @@ Future<void> setupTestSweets({bool enabled = TEST_SWEETS_ENABLED}) async {
             },
           );
         case DriverCommandType.expectEvent:
-          final eventService = locator<EventsService>();
-          final expectEventData = ExpectEventDataModel.fromJson(
-              driverCommand.value as Map<String, dynamic>);
+          try {
+            final eventService = locator<EventsService>();
+            final expectEventData = ExpectEventDataModel.fromJson(
+              driverCommand.value as Map<String, dynamic>,
+            );
 
-          final eventMatch = eventService.matchEvent(
-            name: driverCommand.name,
-            key: expectEventData.key,
-            value: expectEventData.value,
-          );
+            final eventMatch = eventService.matchEvent(
+              name: driverCommand.name,
+              key: expectEventData.key,
+              value: expectEventData.value,
+            );
 
-          final commandResult = DriverCommandResult(
-            type: DriverCommandType.expectEvent,
-            success: eventMatch,
-          );
+            final commandResult = DriverCommandResult(
+              type: DriverCommandType.expectEvent,
+              success: eventMatch,
+            );
 
-          return json.encode(commandResult);
+            return json.encode(commandResult);
+          } catch (e) {
+            print('🛑🛑🛑🛑🛑 ERROR: $e ');
+            final commandResult = DriverCommandResult(
+              type: DriverCommandType.expectEvent,
+              success: false,
+            );
+
+            return json.encode(commandResult);
+          }
 
         case DriverCommandType.modeUpdate:
           locator<RunConfigurationService>().driveModeActive =

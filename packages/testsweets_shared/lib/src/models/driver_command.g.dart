@@ -30,7 +30,7 @@ _$ExpectEventDataModelImpl _$$ExpectEventDataModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ExpectEventDataModelImpl(
       key: json['key'] as String,
-      value: json['value'],
+      value: json['value'] as String,
     );
 
 Map<String, dynamic> _$$ExpectEventDataModelImplToJson(
