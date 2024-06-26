@@ -23,7 +23,7 @@ dependencies:
   freezed_annotation: ^2.4.1 
   json_annotation: ^4.8.1
   stacked: ^3.4.1
-  logger: ^1.1.0
+  logger: ^2.3.0
   recase: ^4.0.0
   solid_bottom_sheet: ^0.1.10
   flutter_svg: ^2.0.7
@@ -33,11 +33,11 @@ dependencies:
   dio: ^5.4.1
   talker_dio_logger: ^4.0.3
 
-  testsweets_shared: ^1.0.0
+  testsweets_shared: ^1.0.1
   universal_io: ^2.2.2
   
 dev_dependencies:
-  stacked_generator: ^1.5.0
+  stacked_generator: ^2.0.0-pre.1
   build_runner: ^2.0.5
   freezed: ^2.4.1
   json_serializable: 
