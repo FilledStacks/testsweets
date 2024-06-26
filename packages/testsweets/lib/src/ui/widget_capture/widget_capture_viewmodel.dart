@@ -284,7 +284,7 @@ class WidgetCaptureViewModel extends FormViewModel {
     Interaction description,
     PopupMenuAction popupMenuAction,
   ) async {
-    log.v(popupMenuAction, description);
+    log.v(popupMenuAction, error: description);
     inProgressInteraction = description;
 
     switch (popupMenuAction) {

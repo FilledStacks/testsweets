@@ -29,7 +29,7 @@ class SimpleLogPrinter extends LogPrinter {
 
   @override
   List<String> log(LogEvent event) {
-    var emoji = PrettyPrinter.levelEmojis[event.level];
+    var emoji = PrettyPrinter.defaultLevelEmojis[event.level];
     var methodName = _getMethodName();
 
     var methodNameSection =
